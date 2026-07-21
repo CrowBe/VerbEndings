@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://cvbendplayer01"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_player"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.45
+height = 1.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_blob"]
+radius = 0.45
+height = 1.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_fist"]
+radius = 0.35
+height = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
+size = Vector3(1.4, 1.4, 1.8)
+
+[node name="Player" type="CharacterBody3D" groups=["players"]]
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="BlobMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("CapsuleMesh_blob")
+
+[node name="FistPivot" type="Node3D" parent="BlobMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.3)
+
+[node name="FistMesh" type="MeshInstance3D" parent="BlobMesh/FistPivot"]
+visible = false
+mesh = SubResource("SphereMesh_fist")
+
+[node name="HitBox" type="Area3D" parent="BlobMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BlobMesh/HitBox"]
+shape = SubResource("BoxShape3D_hitbox")
+
+[node name="CameraRig" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0, 0)
+spring_length = 4.5
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
+current = true

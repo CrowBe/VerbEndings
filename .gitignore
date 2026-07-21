@@ -1,0 +1,5 @@
+# Godot 4 default ignores
+.godot/
+*.translation
+export.cfg
+export_credentials.cfg
