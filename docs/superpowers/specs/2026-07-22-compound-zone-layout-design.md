@@ -323,6 +323,48 @@ Connect every sector and validate fair scatter sockets, two-route connectivity,
 hazard telegraphs and deterministic state order. Profile 24 networked actors
 with representative hazards before visual polish or broader event authoring.
 
+## Automated Multiplayer Validation Workstream
+
+Automated testing runs alongside every production phase rather than beginning
+after the compound is assembled. The harness grows in three layers:
+
+1. **Synthetic crowd:** lightweight scripted bodies run inside one process to
+   test spatial density, traversal, insertion sockets, knockback clearance and
+   hazard throughput. This layer supports fast layout iteration but does not
+   make networking claims.
+2. **Headless peers:** independent Godot processes join through the real
+   multiplayer protocol and control normal player bodies through scripted
+   intents. They test authority, replication, disconnect handling and
+   deterministic state transitions.
+3. **Scenario runner:** one command launches a server and configurable client
+   count, applies a known seed, runs a named scenario and records failures and
+   performance evidence.
+
+Human and bot control share an input-command boundary such as move intent,
+target point, verb activation and basic hit. Bots must not fake raw keyboard or
+mouse events. Gameplay scenarios therefore exercise the same player actions
+while remaining deterministic and scriptable.
+
+Each production phase adds and runs the smallest relevant automated scenario:
+
+- **Scale proof:** synthetic 8-, 12- and 24-body occupancy and traversal runs;
+- **Kit proof:** scene-load, collision and navigation smoke tests after GLB
+  import;
+- **Vertical slice:** scripted insertion, landing and apparatus traversal with
+  synthetic crowds, followed by an initial multi-peer smoke test;
+- **State proof:** seeded headless-peer checks for the two inter-round events,
+  persistent damage and separator-route transitions;
+- **Compound expansion:** cross-sector navigation and round-lifecycle scenarios;
+  and
+- **Full Collapse proof:** repeated 24-peer scatter-to-winner soak tests with
+  state-ledger, route-fairness and performance assertions.
+
+The scenario runner records at least client connection failures, authoritative
+state divergence, round completion, physics frame time and server frame time.
+RPC volume and bandwidth are added when the multiplayer transport is mature
+enough to measure them consistently. A 24-peer headless soak run is required
+before the project claims 24-player support.
+
 ## Production Gates
 
 Work advances only when the preceding proof answers its main risk:
@@ -333,6 +375,8 @@ Work advances only when the preceding proof answers its main risk:
 - **State gate:** persistent damage and route transitions replicate correctly.
 - **Collapse gate:** the connected compound remains fair, readable and within
   performance targets at 24 players.
+- **Automation gate:** the scenarios introduced by the completed phase run from
+  one documented command and retain deterministic seeds for failures.
 
 ## Out of Scope
 
