@@ -2,9 +2,8 @@
 """Static validation for the Godot project layout.
 
 This is intentionally engine-light: it catches missing main scenes and broken
-resource paths in text scenes/scripts before a full Godot or Summer Engine smoke
-test runs. Runtime validation should still be done in Summer Engine/Godot when a
-binary is available.
+resource paths in text scenes/scripts before a full native Godot smoke test
+runs. Runtime validation should still be done with the matching Godot binary.
 """
 from __future__ import annotations
 
