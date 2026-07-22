@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "summer-engine": {
+      "command": "npx",
+      "args": ["-y", "summer-engine@latest", "mcp"]
+    }
+  }
+}
