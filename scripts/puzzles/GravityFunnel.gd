@@ -42,9 +42,10 @@ func _apply_interaction(power: float, direction: Vector3) -> void:
 
 
 func _on_basin_entered(body: Node3D) -> void:
-	if is_completed or body not in _balls:
+	var ball := body as RigidBody3D
+	if is_completed or ball == null or ball not in _balls:
 		return
-	_balls.erase(body)
+	_balls.erase(ball)
 	_banked_count += 1
 	_set_progress(float(_banked_count) / BALLS_NEEDED)
 
