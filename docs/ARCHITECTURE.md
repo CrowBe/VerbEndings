@@ -1,5 +1,7 @@
 # Verb Endings Architecture Notes
 
+> Domain language and gameplay relationships are defined in [`CONTEXT.md`](../CONTEXT.md). This document predates parts of that agreement; where terminology conflicts, `CONTEXT.md` is authoritative and migration is tracked in [`docs/IMPLEMENTATION_ALIGNMENT.md`](IMPLEMENTATION_ALIGNMENT.md).
+
 ## Current evaluation
 
 The initial commit is a strong graybox: the core verbs, chain scoring,
