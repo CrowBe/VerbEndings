@@ -26,7 +26,12 @@
 
 ## Tracked Work
 
-GitHub issue links will be added after the audit issues are created.
+- [#5 — Align Trial scoring, Round pairing, and Collapse resolution](https://github.com/CrowBe/VerbEndings/issues/5)
+- [#6 — Replace health and Verb Activation with Stability and Verb Expression](https://github.com/CrowBe/VerbEndings/issues/6)
+- [#7 — Reduce Overdrive to the canonical cooldown rule](https://github.com/CrowBe/VerbEndings/issues/7)
+- [#8 — Rename PVE monsters as Residuals without spoiling the reveal](https://github.com/CrowBe/VerbEndings/issues/8)
+- [#9 — Implement Laboratory Entry, Drop, and Recall in the Compound greybox](https://github.com/CrowBe/VerbEndings/issues/9)
+- [#10 — Add deterministic multiplayer scenarios for the canonical Trial lifecycle](https://github.com/CrowBe/VerbEndings/issues/10)
 
 ## Recommended Sequence
 
