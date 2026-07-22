@@ -1,52 +1,45 @@
 # Validation Notes
 
-## Summer Engine setup
+Verb Endings targets Godot 4.3. Use the matching native Godot release for
+imports, runtime checks, and exports; a newer engine may rewrite scenes or
+resources in a format that 4.3 cannot read.
 
-Summer Engine is the preferred interactive validation path for this project
-because it can open a Godot 4-compatible project, inspect live scene trees, run
-the game, and surface console errors through its MCP/CLI workflow. The repo
-keeps shared project-scoped MCP config in `.agents/mcp.json`, pointing at
-`npx -y summer-engine@latest mcp`. Client-specific directories `.cursor`,
-`.windsurf`, and `.claude` are symlinks to `.agents` so clients that look for
-their own folder still read the same config file.
+## Static validation
 
-For local setup, run:
+Run the repository validator first:
 
 ```bash
-tools/setup_summer_engine.sh codex
+python3 tools/validate_project.py
 ```
 
-Replace `codex` with your client if needed, for example `claude-code`,
-`cursor`, `windsurf`, `cline`, `roo-code`, `gemini`, `github-copilot`,
-`vscode-copilot`, or `opencode`. The script runs Summer's setup command and
-prints the follow-up `install`, `login`, and `run .` commands when your machine
-needs them.
+It checks the configured main scene and every `res://` resource reference in
+`.tscn` and `.gd` files. This catches common structural mistakes but does not
+execute GDScript, physics, signals, or deferred callbacks.
 
-For this review environment, Summer Engine could not be executed because the
-engine is not installed/running and `npx --yes summer-engine run` failed with an
-npm registry `403 Forbidden` response. The Summer Engine docs require an
-installed, running engine with the project open, or running `npx summer-engine
-run` from the project directory, before MCP tools can connect.
+## Native Godot import and parse check
 
-## Commands to run when Summer Engine is available
+From the repository root, run:
 
 ```bash
-npx -y summer-engine@latest run .
+godot4.3 --headless --editor --path . --quit
 ```
 
-Then, through the Summer Engine MCP tools:
+The command imports resources and catches script parse errors, missing
+resources, and invalid scene data. Treat any `ERROR`, `SCRIPT ERROR`, parse
+error, or non-zero exit as a failed check.
 
-1. Open `/workspace/VerbEndings`.
-2. Run the project from `res://scenes/core/Game.tscn`.
-3. Confirm the scene tree contains `Game/World/Players/LocalPlayer` and
-   `Game/World/Round/PuzzleRound` for the default graybox boot.
-4. Verify the console has no script parse errors, missing resource errors, or
-   invalid node-path errors.
-5. Capture a screenshot if visible gameplay changes are being reviewed.
+## Runtime smoke test
 
-## Static fallback used in this repository
+Run the main scene long enough to exercise startup, physics, and deferred work:
 
-`tools/validate_project.py` checks the main scene and every `res://` resource
-reference found in `.tscn` and `.gd` files. It does not replace a Summer Engine
-or Godot runtime smoke test, but it catches the most common structural mistakes
-while this container lacks an engine binary.
+```bash
+timeout --signal=INT --kill-after=3s 8s godot4.3 --headless --path .
+```
+
+Exit code 124 is expected when `timeout` stops an otherwise running game. Read
+the complete output for errors and warnings; process lifetime alone is not a
+passing result.
+
+For graphical review, run `godot4.3 --path .` in a desktop session. A clean
+headless smoke test does not prove visuals, controls, gameplay flows,
+multiplayer behaviour, or representative rendering performance.
