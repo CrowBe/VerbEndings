@@ -63,6 +63,7 @@ A Pair and its Verb Chain end after the Experiment. Points belong to Subjects, n
 - **Stability** is a Subject's current capacity to maintain its form and is the visible gameplay resource.
 - **Stability Loss** is a reduction caused by an Impact, hazard or Protocol-specific effect.
 - **Restabilisation** restores Stability where an effect permits it.
+- **Stabilisation Rate** is the small, always-on Restabilisation every Subject receives, expressed as a percentage of baseline Stability. It cannot raise Stability above baseline.
 - **Critical Stability** is single-digit Stability. It receives strong visual and audio deformation cues, but no additional movement or power penalty by default.
 - An **Impact** is an external force or hazard capable of reducing Stability to zero.
 - **Destabilisation** is the physical failure state reached at zero Stability.
@@ -73,6 +74,15 @@ Every Subject uses the same baseline Stability. A Verb uses the same Base Expres
 During a normal Experiment, a Destabilised Subject is Eliminated from that Experiment and automatically Recalled. It returns in the next Round. During the Collapse, Recall is unavailable and Elimination is permanent for the remainder of the Trial.
 
 `Health`, `hit points`, `damage`, `alive`, `death` and `killed` are not canonical UI or narrative terms. **Disposal** is reserved for the hidden fate of failed earlier Droplets.
+
+### Material
+
+- **Material** is the substrate resource a Subject **absorbs** to Restabilise. It is the only such resource.
+- Material has two sources: it is **shed on Impact** by a Residual or Subject, and it is **dispensed** by the Semantic Engine as an environmental supply.
+- Absorbing Material Restabilises the Subject and cannot raise Stability above baseline. The Material shed by an Impact and the amount each unit restores are configurable balance values.
+- During the Collapse the Semantic Engine is offline and dispenses no Material. Material shed on Impact still appears, constrained by the pace of Residual activity during the Collapse.
+
+Capitalised **Material** always means this substrate resource. Lower-case "material" is reserved for surface and rendering description and never refers to the resource.
 
 ### Overdrive Rules
 
