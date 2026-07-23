@@ -147,6 +147,15 @@ Partners travel in adjacent tubes, independently coordinate their Releases and s
 
 The Residual reveal occurs through the environment first, then is accidentally confirmed by the Researcher during a Thematic Moment.
 
+### Residual Grammar
+
+- **Assumption** is a Residual taking the Verb of a Subject it Destabilises. An assumed Verb is always taken, never self-developed.
+- An **Adverb** is the unsanctioned modifier a Residual develops itself after surviving long enough. The survival threshold is a configurable balance value.
+- A Residual's Adverb modifies every action it performs, including ordinary movement, attacks and an assumed Verb.
+- A Residual holds at most one assumed Verb and at most one Adverb.
+- Assumption and Adverb development strengthen a Residual. The magnitude of any strengthening is a configurable balance value, not a domain rule.
+- The Semantic Engine issues only Verbs. No Subject holds an Adverb, and no facility system sanctions one.
+
 ## Institutional Voices
 
 - The **Semantic Engine** is the authoritative facility system. It selects Experiment Protocols, issues Experiment Briefs, records scores, presents Result Announcements and issues `SURVIVE`.
@@ -171,3 +180,5 @@ The Residual reveal occurs through the environment first, then is accidentally c
 > Round Three ended with three Subjects tied for First Place, so the Semantic Engine initiated the Collapse and issued SURVIVE.
 
 > The Researcher called the Subjects "blobs" before accidentally revealing that the creatures were Residuals.
+
+> The oldest Residual developed the Adverb VIOLENTLY, then assumed BURN from the Subject it Destabilised.
