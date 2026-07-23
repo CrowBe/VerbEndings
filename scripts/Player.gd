@@ -43,6 +43,9 @@ const CHAIN_SYNC_REGEN_RATE: float = 0.10
 
 const BASELINE_STABILITY: float = 100.0
 const CRITICAL_STABILITY_MAX: float = 9.0
+## Percentage of baseline Stability restored each second. This is balance
+## data and may be overridden per Subject.
+@export_range(0.0, 100.0, 0.1) var stabilisation_rate: float = 1.0
 
 ## Basic hit: the big fist.
 const HIT_COOLDOWN: float = 0.6
@@ -167,6 +170,7 @@ func _physics_process(delta: float) -> void:
 	if is_destabilised:
 		return
 
+	_apply_stabilisation(delta)
 	_tick_combat_timers(delta)
 	_record_rewind_breadcrumb()
 
@@ -259,6 +263,16 @@ func restabilise() -> void:
 	is_destabilised = false
 	_set_stability(BASELINE_STABILITY)
 	_clear_buffs()
+
+
+## Applies the universal, always-on Restabilisation as a percentage of
+## baseline per second. Destabilised Subjects recover only through Recall.
+func _apply_stabilisation(delta: float) -> void:
+	if is_destabilised or stability >= BASELINE_STABILITY:
+		return
+	var recovery: float = BASELINE_STABILITY * maxf(stabilisation_rate, 0.0) \
+			* 0.01 * delta
+	_set_stability(stability + recovery)
 
 
 ## --- Basic hit: the BIG FIST -------------------------------------------
