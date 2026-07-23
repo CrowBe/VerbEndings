@@ -62,7 +62,7 @@ Both Round controllers emit an ordered list when asked to end. Neither controls 
 
 The repository provides a locally runnable gameplay greybox and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
 
-- canonical Stability, Expression Cost, and Impact-only Destabilisation are not implemented;
+- the Stabilisation Rate and the Material Restabilisation economy are design contracts only;
 - the Pair Draft supports only Round One and Round Two entry points;
 - the insertion platform is not the canonical Drop sequence;
 - Trial resolution uses pair totals and a non-canonical solo state;
