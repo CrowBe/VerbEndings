@@ -22,7 +22,7 @@ func _run() -> void:
 			first.get_verb_cooldown(),
 			first.VERB_COOLDOWN * 0.5),
 			"Overdrive cooldown is exactly half the baseline")
-	_expect(is_equal_approx(first.health, first.MAX_HEALTH),
+	_expect(is_equal_approx(first.stability, first.BASELINE_STABILITY),
 			"Self-Chain does not change survivability")
 
 	VerbChainManager.establish_verb_chain(11, 12)

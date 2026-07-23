@@ -3,10 +3,10 @@ extends CharacterBody3D
 ##
 ## Movement: camera orbits via a yaw pivot (CameraRig) + pitched SpringArm3D;
 ## WASD is camera-relative and the blob mesh turns to face travel.
-## Combat: a comical BIG FIST punch (left mouse) is the universal move — it
-## damages residuals, damages players (PVP rounds only), and drives puzzle
-## units. Verb activation (right mouse, 5s cooldown) fires the verb's unique
-## move with its own placeholder animation; not all of them deal damage.
+## Combat: a comical BIG FIST punch (left mouse) is the universal Impact —
+## it destabilises residuals, affects Subjects in PVP rounds, and drives
+## puzzle units. Verb Expression (right mouse, 5s cooldown) fires the Verb's
+## unique move and spends Stability.
 ## A loose "Tether Check" penalizes drifting too far from the chain partner.
 ##
 ## All "animations" here are procedural Tween gags on the graybox meshes —
@@ -16,15 +16,14 @@ extends CharacterBody3D
 ## Variables marked with "@rpc replication hook" are the ones that need
 ## MultiplayerSynchronizer entries (or explicit RPCs) once netcode lands.
 
-## Fired on death. `killer` is the Node that landed the last hit (a residual,
-## another player, or null for environment hazards). PVERound listens to
-## this to hand the killing residual the victim's verb.
-## NETWORK: @rpc replication hook — server decides deaths, then broadcasts.
-signal died(player: Node, killer: Node)
+## Fired when an external Impact reduces Stability to zero.
+## NETWORK: @rpc replication hook — server decides, then broadcasts.
+signal destabilised(player: Node, source: Node)
+signal critical_stability_changed(is_critical: bool)
 ## NETWORK: @rpc replication hook — broadcast so remote peers play the
-## punch/activation animation on their copy of this body.
+## punch/Expression animation on their copy of this body.
 signal hit_performed
-signal verb_activated(verb: Enums.VerbType)
+signal verb_expressed(verb: Enums.VerbType)
 
 const MOUSE_SENSITIVITY: float = 0.003
 const CAMERA_PITCH_MIN: float = deg_to_rad(-75.0)
@@ -42,7 +41,8 @@ const TETHER_SPEED_PENALTY: float = 0.6
 const CHAIN_SYNC_DRAIN_RATE: float = 0.25
 const CHAIN_SYNC_REGEN_RATE: float = 0.10
 
-const MAX_HEALTH: float = 100.0
+const BASELINE_STABILITY: float = 100.0
+const CRITICAL_STABILITY_MAX: float = 9.0
 
 ## Basic hit: the big fist.
 const HIT_COOLDOWN: float = 0.6
@@ -50,8 +50,20 @@ const HIT_DAMAGE: float = 10.0
 ## Reach for driving puzzle units with a punch.
 const PUZZLE_REACH: float = 4.0
 
-## Verb activation: deliberately low cooldown so verbs stay the core loop.
+## Verb Expression: deliberately low cooldown so Verbs stay the core loop.
 const VERB_COOLDOWN: float = 5.0
+## Base Expression Costs are balance data and can be overridden per Subject.
+@export var expression_costs: Dictionary = {
+	Enums.VerbType.BURN: 10.0,
+	Enums.VerbType.SHIELD: 10.0,
+	Enums.VerbType.GROW: 10.0,
+	Enums.VerbType.STRETCH: 10.0,
+	Enums.VerbType.ROLL: 10.0,
+	Enums.VerbType.JUMP: 10.0,
+	Enums.VerbType.BOUNCE: 10.0,
+	Enums.VerbType.FREEZE: 10.0,
+	Enums.VerbType.REWIND: 10.0,
+}
 ## Overdrive changes exactly one value: Verb Expression cooldown.
 const OVERDRIVE_COOLDOWN_MULTIPLIER: float = 0.5
 ## How long timed verb buffs (SHIELD/GROW/ROLL) last.
@@ -89,11 +101,12 @@ var chain_sync: float = 1.0
 var is_overdrive: bool = false
 
 ## NETWORK: @rpc replication hook — server-authoritative, sync to all peers.
-var health: float = MAX_HEALTH
+var stability: float = BASELINE_STABILITY
 ## NETWORK: @rpc replication hook — server-authoritative, sync to all peers.
-var is_alive: bool = true
+var is_destabilised: bool = false
+var is_critical_stability: bool = false
 
-## SHIELD activation: absorbs all damage while true.
+## SHIELD Expression: absorbs external Stability loss while true.
 ## NETWORK: @rpc replication hook — server-authoritative, sync to peers.
 var shield_active: bool = false
 
@@ -109,7 +122,7 @@ var _verb_timer: float = 0.0
 var _buff_time_left: float = 0.0
 var _speed_buff: float = 1.0
 var _power_buff: float = 1.0
-## BOUNCE activation: landings re-launch while charges remain.
+## BOUNCE Expression: landings re-launch while charges remain.
 var _bounce_charges: int = 0
 var _was_on_floor: bool = true
 ## Position breadcrumbs for REWIND: [{time, pos}], trimmed to a few seconds.
@@ -151,7 +164,7 @@ func _physics_process(delta: float) -> void:
 	# The top-level rig follows the body's position but keeps its own yaw.
 	camera_rig.global_position = global_position + Vector3.UP * 1.2
 
-	if not is_alive:
+	if is_destabilised:
 		return
 
 	_tick_combat_timers(delta)
@@ -166,8 +179,8 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 	if Input.is_action_just_pressed("basic_hit"):
 		basic_hit()
-	if Input.is_action_just_pressed("verb_activate"):
-		activate_verb()
+	if Input.is_action_just_pressed("verb_expression"):
+		express_verb()
 
 	var speed: float = WALK_SPEED * _speed_buff * _tether_check(delta)
 
@@ -225,42 +238,39 @@ func exit_overdrive(partner_id = -1) -> void:
 	_partner_body = null
 
 
-## Applies damage from any source. Player-on-player damage is silently
-## ignored outside PVP rounds — RoundManager.is_pvp_enabled() is the single
-## gate that turns PVP off for PUZZLE and PVE. An active SHIELD absorbs
-## everything.
-## NETWORK: @rpc replication hook — server-side only; clients request hits,
-## the server validates and applies, then broadcasts health.
-func take_damage(amount: float, source: Node = null) -> void:
-	if not is_alive or shield_active:
+## Applies external Stability loss. Subject-on-Subject Impacts are ignored
+## outside Competitive Stress Experiments. Expression spend uses a separate
+## path and can never Destabilise a Subject.
+func apply_impact(amount: float, source: Node = null) -> void:
+	if is_destabilised or shield_active:
 		return
 	if source != null and source.is_in_group("players") \
 			and not RoundManager.is_pvp_enabled():
 		return
-	health = maxf(health - amount, 0.0)
-	if health == 0.0:
-		is_alive = false
-		died.emit(self, source)
+	_set_stability(maxf(stability - amount, 0.0))
+	if stability == 0.0:
+		is_destabilised = true
+		destabilised.emit(self, source)
 
 
-## Restores the player for the next round.
+## Restabilises a Subject during normal Experiment Recall.
 ## NETWORK: @rpc replication hook — server-side, at round transitions.
-func revive() -> void:
-	health = MAX_HEALTH
-	is_alive = true
+func restabilise() -> void:
+	is_destabilised = false
+	_set_stability(BASELINE_STABILITY)
 	_clear_buffs()
 
 
 ## --- Basic hit: the BIG FIST -------------------------------------------
 
-## Comical punch: an oversized fist pops out of the blob, damage lands at
-## full extension, then it snaps back in. One move drives everything —
-## residuals take damage, players take PVP-gated damage, and the nearest
+## Comical punch: an oversized fist pops out of the blob, the Impact lands
+## at full extension, then it snaps back in. One move drives everything —
+## residuals take hits, Subjects take PVP-gated Stability loss, and the nearest
 ## puzzle unit within reach gets a verb-scaled interaction.
 ## NETWORK: @rpc replication hook — authority requests, server resolves
 ## the hit, hit_performed replicates the animation to remote peers.
 func basic_hit() -> void:
-	if _hit_timer > 0.0 or not is_alive:
+	if _hit_timer > 0.0 or is_destabilised:
 		return
 	_hit_timer = HIT_COOLDOWN
 	hit_performed.emit()
@@ -269,7 +279,7 @@ func basic_hit() -> void:
 
 ## Damage/interaction resolution, fired by the animation at full extension.
 func _resolve_hit() -> void:
-	if not is_alive:
+	if is_destabilised:
 		return
 	var facing: Vector3 = blob_mesh.global_transform.basis * Vector3(0, 0, 1)
 	for body: Node3D in hit_box.get_overlapping_bodies():
@@ -278,7 +288,7 @@ func _resolve_hit() -> void:
 		if body.is_in_group("residuals"):
 			body.take_hit(HIT_DAMAGE * _power_buff, get_multiplayer_authority())
 		elif body.is_in_group("players"):
-			body.take_damage(HIT_DAMAGE * _power_buff, self)
+			body.apply_impact(HIT_DAMAGE * _power_buff, self)
 	var unit: PuzzleUnit = _nearest_puzzle_unit()
 	if unit != null:
 		unit.interact(get_multiplayer_authority(), assigned_verb, facing)
@@ -306,20 +316,21 @@ func _play_fist_animation() -> void:
 	tween.tween_callback(func() -> void: fist_mesh.visible = false)
 
 
-## --- Verb activation ---------------------------------------------------
+## --- Verb Expression ---------------------------------------------------
 
-## Fires this player's verb move (5s cooldown). Effects are deliberately
-## mixed — some damage, some buff, some reposition — and each has its own
+## Fires this Subject's Verb move (5s cooldown). Effects are deliberately
+## mixed — some Impacts, some buffs, some reposition — and each has its own
 ## placeholder animation.
 ## NETWORK: @rpc replication hook — authority requests, server validates
-## cooldown and resolves; verb_activated replicates the animation.
-func activate_verb() -> void:
-	if _verb_timer > 0.0 or not is_alive:
+## cooldown and resolves; verb_expressed replicates the animation.
+func express_verb() -> void:
+	if _verb_timer > 0.0 or is_destabilised:
 		return
 	if assigned_verb == Enums.VerbType.NONE:
 		return
+	_spend_expression_cost()
 	_verb_timer = get_verb_cooldown()
-	verb_activated.emit(assigned_verb)
+	verb_expressed.emit(assigned_verb)
 	_play_verb_animation(assigned_verb)
 
 	match assigned_verb:
@@ -327,7 +338,7 @@ func activate_verb() -> void:
 			# Damaging: flame nova around the blob.
 			_area_hit(BURN_NOVA_DAMAGE)
 		Enums.VerbType.SHIELD:
-			# Not damaging: brief total damage immunity.
+			# Brief immunity to external Stability loss.
 			shield_active = true
 			_buff_time_left = BUFF_DURATION
 		Enums.VerbType.GROW:
@@ -366,7 +377,23 @@ func _area_hit(damage: float) -> void:
 			residual.take_hit(damage, get_multiplayer_authority())
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		if body != self and _in_verb_radius(body):
-			body.take_damage(damage, self)
+			body.apply_impact(damage, self)
+
+
+func get_expression_cost() -> float:
+	return maxf(float(expression_costs.get(assigned_verb, 0.0)), 0.0)
+
+
+func _spend_expression_cost() -> void:
+	_set_stability(maxf(stability - get_expression_cost(), 1.0))
+
+
+func _set_stability(value: float) -> void:
+	stability = clampf(value, 0.0, BASELINE_STABILITY)
+	var was_critical := is_critical_stability
+	is_critical_stability = stability >= 1.0 and stability <= CRITICAL_STABILITY_MAX
+	if is_critical_stability != was_critical:
+		critical_stability_changed.emit(is_critical_stability)
 
 
 func _in_verb_radius(body: Node3D) -> bool:

@@ -40,6 +40,15 @@ It verifies Self-Chain entry, Collapse-wide entry, the exact 50% Verb
 Expression cooldown, and cleanup when normal Pairing or Collapse resolution
 ends Overdrive.
 
+Run the Stability and Verb Expression suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestStability.tscn
+```
+
+It verifies configurable Expression cost, the 1-Stability self-spend floor,
+Critical Stability, external-Impact Destabilisation and Restabilisation.
+
 For graphical inspection, run:
 
 ```bash
