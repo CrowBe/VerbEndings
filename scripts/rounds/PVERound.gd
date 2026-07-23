@@ -57,7 +57,7 @@ var _evolution_timer: float = 0.0
 
 func _ready() -> void:
 	for body: Node in get_tree().get_nodes_in_group("players"):
-		body.died.connect(_on_player_died)
+		body.destabilised.connect(_on_player_destabilised)
 
 
 func _physics_process(delta: float) -> void:
@@ -98,7 +98,7 @@ func end_round() -> void:
 ## One residual per living player, on that player's spawn ring.
 func _spawn_wave() -> void:
 	for body: Node in get_tree().get_nodes_in_group("players"):
-		if not body.is_alive:
+		if body.is_destabilised:
 			continue
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
 		residual.setup(_current_strength_multiplier())
@@ -131,7 +131,7 @@ func _current_strength_multiplier() -> float:
 
 func _award_survival_ticks() -> void:
 	for body: Node in get_tree().get_nodes_in_group("players"):
-		if not body.is_alive:
+		if body.is_destabilised:
 			continue
 		var player_id: int = body.get_multiplayer_authority()
 		survival_ticks[player_id] = survival_ticks.get(player_id, 0) + 1
@@ -153,9 +153,11 @@ func _on_residual_died(_residual: Residual, killer_player_id: int) -> void:
 
 ## Last-hit verb inheritance: the killing residual preemptively takes the
 ## victim's verb, overriding any pending random evolution.
-func _on_player_died(player: Node, killer: Node) -> void:
-	if killer is Residual:
-		killer.assume_verb(player.assigned_verb)
+func _on_player_destabilised(player: Node, source: Node) -> void:
+	if source is Residual:
+		source.assume_verb(player.assigned_verb)
+	if not SuddenDeathManager.is_active:
+		player.call_deferred("restabilise")
 
 
 func _round_score(player_id: int) -> float:

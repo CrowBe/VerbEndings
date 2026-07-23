@@ -107,9 +107,9 @@ func is_match_complete() -> bool:
 	return current_round_index >= TOTAL_ROUNDS
 
 
-## Player-versus-player damage is only legal during a PVP round; PUZZLE and
-## PVE rounds disable all player-on-player interference. Damage systems
-## (see Player.take_damage) consult this before applying anything.
+## Subject-versus-Subject Impacts are only legal during a PVP round; PUZZLE
+## and PVE rounds disable all Subject-on-Subject interference. Impact systems
+## (see Player.apply_impact) consult this before applying anything.
 func is_pvp_enabled() -> bool:
 	return current_round_type == "PVP"
 
