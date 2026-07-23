@@ -28,7 +28,7 @@ These are stateful in-process services. Comments identify intended RPC and repli
 
 `Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, timed buffs, and procedural tween animation. Its implemented resource model uses `health`, `damage`, `died`, and `revive`; Verb use is cooldown-only. The scene is directly coupled to its primitive visual children and camera rig.
 
-`SwarmMonster.gd` is a pursuing `CharacterBody3D`. It finds the nearest living Player, attacks in range, scales over time, can evolve, and can assume the Verb of a defeated Player. PVE code addresses these actors through the `monsters` group.
+`Residual.gd` is a pursuing `CharacterBody3D`. It finds the nearest living Player, attacks in range, scales over time, can evolve, and can assume the Verb of a defeated Player. PVE code addresses these actors through the `residuals` group.
 
 The implemented input map is WASD movement, Space jump, left mouse basic hit, right mouse Verb use, and Escape mouse capture.
 

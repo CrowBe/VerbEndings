@@ -4,7 +4,7 @@ extends CharacterBody3D
 ## Movement: camera orbits via a yaw pivot (CameraRig) + pitched SpringArm3D;
 ## WASD is camera-relative and the blob mesh turns to face travel.
 ## Combat: a comical BIG FIST punch (left mouse) is the universal move — it
-## damages monsters, damages players (PVP rounds only), and drives puzzle
+## damages residuals, damages players (PVP rounds only), and drives puzzle
 ## units. Verb activation (right mouse, 5s cooldown) fires the verb's unique
 ## move with its own placeholder animation; not all of them deal damage.
 ## A loose "Tether Check" penalizes drifting too far from the chain partner.
@@ -16,9 +16,9 @@ extends CharacterBody3D
 ## Variables marked with "@rpc replication hook" are the ones that need
 ## MultiplayerSynchronizer entries (or explicit RPCs) once netcode lands.
 
-## Fired on death. `killer` is the Node that landed the last hit (a monster,
+## Fired on death. `killer` is the Node that landed the last hit (a residual,
 ## another player, or null for environment hazards). PVERound listens to
-## this to hand the killing monster the victim's verb.
+## this to hand the killing residual the victim's verb.
 ## NETWORK: @rpc replication hook — server decides deaths, then broadcasts.
 signal died(player: Node, killer: Node)
 ## NETWORK: @rpc replication hook — broadcast so remote peers play the
@@ -251,7 +251,7 @@ func revive() -> void:
 
 ## Comical punch: an oversized fist pops out of the blob, damage lands at
 ## full extension, then it snaps back in. One move drives everything —
-## monsters take damage, players take PVP-gated damage, and the nearest
+## residuals take damage, players take PVP-gated damage, and the nearest
 ## puzzle unit within reach gets a verb-scaled interaction.
 ## NETWORK: @rpc replication hook — authority requests, server resolves
 ## the hit, hit_performed replicates the animation to remote peers.
@@ -271,7 +271,7 @@ func _resolve_hit() -> void:
 	for body: Node3D in hit_box.get_overlapping_bodies():
 		if body == self:
 			continue
-		if body.is_in_group("monsters"):
+		if body.is_in_group("residuals"):
 			body.take_hit(HIT_DAMAGE * _power_buff, get_multiplayer_authority())
 		elif body.is_in_group("players"):
 			body.take_damage(HIT_DAMAGE * _power_buff, self)
@@ -346,20 +346,20 @@ func activate_verb() -> void:
 			# Not damaging: the next three landings re-launch the blob.
 			_bounce_charges = 3
 		Enums.VerbType.FREEZE:
-			# Control: frost ring slows every monster in the radius.
-			for monster: Node in get_tree().get_nodes_in_group("monsters"):
-				if _in_verb_radius(monster):
-					monster.apply_slow(FREEZE_SLOW_FACTOR, BUFF_DURATION)
+			# Control: frost ring slows every residual in the radius.
+			for residual: Node in get_tree().get_nodes_in_group("residuals"):
+				if _in_verb_radius(residual):
+					residual.apply_slow(FREEZE_SLOW_FACTOR, BUFF_DURATION)
 		Enums.VerbType.REWIND:
 			# Not damaging: snap back to where you were 4 seconds ago.
 			_teleport_to_breadcrumb()
 
 
-## Damage every monster (and player, PVP-gated) inside the verb radius.
+## Damage every residual (and player, PVP-gated) inside the verb radius.
 func _area_hit(damage: float) -> void:
-	for monster: Node in get_tree().get_nodes_in_group("monsters"):
-		if _in_verb_radius(monster):
-			monster.take_hit(damage, get_multiplayer_authority())
+	for residual: Node in get_tree().get_nodes_in_group("residuals"):
+		if _in_verb_radius(residual):
+			residual.take_hit(damage, get_multiplayer_authority())
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		if body != self and _in_verb_radius(body):
 			body.take_damage(damage, self)
