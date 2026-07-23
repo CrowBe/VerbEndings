@@ -1,6 +1,6 @@
 # VerbEndings Context
 
-This document is the canonical source of truth for VerbEndings domain language and agreed gameplay relationships. Code, UI, narrative text, tests and future design documents should use it. Historical specifications remain useful for design intent, but this document supersedes conflicting terminology. Balance values remain configurable unless a relationship is explicitly stated here.
+This document is the canonical source of truth for VerbEndings domain language and gameplay relationships. Code, UI, narrative text, tests and design documents use it. Balance values remain configurable unless a relationship is explicitly stated here.
 
 ## Domain Model
 
@@ -56,7 +56,7 @@ A Pair and its Verb Chain end after the Experiment. Points belong to Subjects, n
 - An **Expression Cost** is the Stability consumed by an Expression.
 - Each Verb has a configurable **Base Expression Cost**.
 
-Verb Expression replaces `Verb Activation`, `ability use` and `cast` in canonical language.
+`Verb Activation`, `ability use` and `cast` are not domain terms.
 
 ### Stability
 
@@ -72,7 +72,7 @@ Every Subject uses the same baseline Stability. A Verb uses the same Base Expres
 
 During a normal Experiment, a Destabilised Subject is Eliminated from that Experiment and automatically Recalled. It returns in the next Round. During the Collapse, Recall is unavailable and Elimination is permanent for the remainder of the Trial.
 
-`Health`, `hit points`, `damage`, `alive`, `death` and `killed` may appear as low-level development shorthand while migration is underway, but they are not canonical UI or narrative terms. **Disposal** is reserved for the hidden fate of failed earlier Droplets.
+`Health`, `hit points`, `damage`, `alive`, `death` and `killed` are not canonical UI or narrative terms. **Disposal** is reserved for the hidden fate of failed earlier Droplets.
 
 ### Overdrive Rules
 
@@ -95,7 +95,7 @@ Any further multiplier requires playtest evidence rather than being part of the 
 
 If exactly one Subject holds First Place after Round Three, that Subject wins. If two or more Subjects tie for First Place, the Trial triggers **the Collapse**. The Semantic Engine issues **SURVIVE**, all Pairs dissolve, all survivors enter Overdrive and the last remaining Subject wins.
 
-`Pair Score`, `team score`, `ladder` and `Sudden Death` are retired domain terms. **Finale** may be descriptive prose, but is not a lifecycle state.
+`Pair Score`, `team score`, `ladder` and `Sudden Death` are not domain terms. **Finale** may be descriptive prose, but is not a lifecycle state.
 
 ## Experiments And The Compound
 
@@ -122,7 +122,7 @@ The three Laboratories are:
 - **Competitive Stress Laboratory** — measures dominance, displacement and resilience.
 - **Adaptive Containment Laboratory** — tests survival against contained creatures and failed predecessors.
 
-`Arena` and `chamber` are retired when they mean Laboratory or Test Floor. Use Australian/British **greybox** in prose; legacy code identifiers may be migrated separately.
+`Arena` and `chamber` do not mean Laboratory or Test Floor. Use Australian/British **greybox** in prose.
 
 ### Laboratory Entry And Recall
 
@@ -145,7 +145,7 @@ Partners travel in adjacent tubes, independently coordinate their Releases and s
 - **Swarm** describes group behaviour or encounter shape, not a species.
 - **Enemy** and **hostile** describe gameplay relationships only.
 
-`Monster` is retired. The Residual reveal occurs through the environment first, then is accidentally confirmed by the Researcher during a Thematic Moment.
+The Residual reveal occurs through the environment first, then is accidentally confirmed by the Researcher during a Thematic Moment.
 
 ## Institutional Voices
 
@@ -158,7 +158,7 @@ Partners travel in adjacent tubes, independently coordinate their Releases and s
 - A **Result Announcement** is the Semantic Engine's formal presentation of Round Score and Trial Ranking.
 - A **Thematic Moment** is an optional post-announcement narrative beat delivered through dialogue, an environmental event or a short staged sequence.
 
-`Announcer` and `host` are retired character roles. `Cinematic` describes a possible production format for a Thematic Moment, not a domain event.
+`Announcer` and `host` are not character roles. `Cinematic` describes a possible production format for a Thematic Moment, not a domain event.
 
 ## Canonical Usage Examples
 
@@ -171,17 +171,3 @@ Partners travel in adjacent tubes, independently coordinate their Releases and s
 > Round Three ended with three Subjects tied for First Place, so the Semantic Engine initiated the Collapse and issued SURVIVE.
 
 > The Researcher called the Subjects "blobs" before accidentally revealing that the creatures were Residuals.
-
-## Implementation Direction
-
-The current prototype predates much of this language and intentionally contains drift. Migration should preserve playable behaviour while moving domain-facing code towards these concepts. The highest-risk corrections are:
-
-1. Replace Pair-summed Trial resolution with individual Trial Scores and Rankings.
-2. Replace Sudden Death with the Collapse and its canonical Overdrive rules.
-3. Replace health/activation semantics with Stability, Verb Expression and Expression Cost.
-4. Make Verb Selection Trial-scoped and Pair Draft/Verb Chain lifecycle Round-scoped.
-5. Replace monster terminology and assets with Residual terminology without spoiling the narrative reveal.
-6. Add the agreed Laboratory Entry, Drop and Recall lifecycle.
-7. Validate odd rosters, Round transitions and the Collapse through deterministic multiplayer scenarios.
-
-The tracked GitHub issues linked from `docs/IMPLEMENTATION_ALIGNMENT.md` define the delivery sequence.
