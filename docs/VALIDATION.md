@@ -28,6 +28,18 @@ timeout --signal=INT --kill-after=3s 8s godot4.3 --headless --path .
 
 Exit status 124 is expected when `timeout` stops a healthy running process. The complete output must contain no runtime errors or unexpected warnings.
 
+## Gameplay Tests
+
+Run the focused Overdrive lifecycle suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestOverdrive.tscn
+```
+
+It verifies Self-Chain entry, Collapse-wide entry, the exact 50% Verb
+Expression cooldown, and cleanup when normal Pairing or Collapse resolution
+ends Overdrive.
+
 For graphical inspection, run:
 
 ```bash
