@@ -102,6 +102,8 @@ Subject identity and Verb state remain separate. Identity uses a stable suit tre
 
 Each Verb reads from silhouette or motion within roughly 150 ms, keeps effects close to the Subject, and explains the physical interaction without obscuring it.
 
+An assumed Verb on a Residual uses the same per-Verb treatment so learned readability transfers. A Residual's Adverb reads as a separate behavioural and material overlay that modifies motion without imitating any Verb treatment, so unsanctioned grammar is never mistaken for a tenth Verb.
+
 ### Lighting
 
 Large warm-white overhead fixtures and neutral-cool ambient light provide party-game readability. Cyan indicates normal operation, amber staging, and coral danger. Contact shadows and moderate SSAO ground actors and machinery. Glow is limited to indicators and active effects. Volumetric fog is reserved for selected breaches and Collapse events.
