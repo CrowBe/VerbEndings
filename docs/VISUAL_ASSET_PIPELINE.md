@@ -1,81 +1,67 @@
-# Visual Asset and Animation Pipeline
+# Visual Asset And Animation Pipeline
 
-## Goals
+## Asset Boundary
 
-The game should keep graybox scenes playable while art improves in parallel.
-Every production asset should be replaceable without changing gameplay scripts,
-and every animation should have a clear hook from the current procedural gags to
-future authored animation clips.
+Gameplay scenes own root node types, collision, signals, and behaviour. Imported assets provide presentation behind those interfaces. Replacing a primitive or proxy does not require changes to gameplay logic.
 
-## Directory plan
+The repository currently contains primitive Godot meshes and procedural tweens. Production assets use this layout:
 
 ```text
 assets/
-  source/            # Blender/Krita/Aseprite/etc. working files, not loaded at runtime
+  source/              # Editable Blender, Krita, or Aseprite files
   exports/
-    characters/      # GLB/PNG exports consumed by Godot
-    enemies/
+    subjects/          # Runtime GLB and texture exports
+    residuals/
     props/
     vfx/
-  materials/         # Godot material resources shared by imported meshes
-  animation/         # AnimationLibrary resources when split from scenes
-docs/
-  art/               # Briefs, style guide, contact sheets, naming references
+  materials/           # Shared Godot material resources
+  animation/           # Shared AnimationLibrary resources
+docs/art/               # Art bible, briefs, contact sheets, naming references
 ```
 
-Use lowercase snake_case filenames. Keep source files and exported runtime files
-side by side by concept name, for example `assets/source/player_blob.blend` and
-`assets/exports/characters/player_blob.glb`.
+Use lowercase snake_case filenames and matching concept names between source and export files. Runtime scenes reference exported files, never source files.
 
-## Asset states
+## Asset Readiness
 
-1. **Graybox**: primitive meshes and procedural tweens in gameplay scenes.
-2. **Proxy art**: rough exported meshes preserve collision sizes and origin
-   points. Gameplay scripts should not change during this step.
-3. **Production art**: final model/material pass with stable skeletons and named
-   animation clips.
-4. **Polish**: particles, shader variants, impact frames, camera shake, audio
-   sync markers, and accessibility color checks.
+An asset has one of four readiness levels:
 
-## Character and enemy animation contract
+1. **Greybox** — primitive geometry validates scale, collision, and gameplay.
+2. **Proxy** — exported geometry preserves the approved dimensions, origin, and collision envelope.
+3. **Production** — final geometry, materials, skeleton, and required animation clips use stable interfaces.
+4. **Polish** — VFX, impact frames, camera response, audio markers, and accessibility checks are integrated.
 
-Future character scenes should expose these stable animation names so gameplay
-code can call one semantic layer instead of individual clips:
+## Animation Contract
 
-| State/action | Clip name | Trigger source |
+Subject and Residual scenes expose semantic animation names through an `AnimationPlayer` or `AnimationTree` adapter:
+
+| State or action | Clip name | Gameplay trigger |
 | --- | --- | --- |
-| Idle | `idle` | No movement input |
-| Move | `move` | Character velocity above dead zone |
-| Jump | `jump_start` | Jump input accepted |
+| Idle | `idle` | Movement below the dead zone |
+| Move | `move` | Movement above the dead zone |
+| Jump | `jump_start` | Accepted jump input |
 | Land | `land` | Floor contact after airtime |
-| Basic hit | `basic_hit` | `Player.hit_performed` |
-| Verb activate | `verb_activate_<verb_name>` | `Player.verb_activated` |
-| Damage | `damage` | Health reduced |
-| Death | `death` | `Player.died` or `SwarmMonster.monster_died` |
+| Basic Impact | `basic_hit` | Basic-Impact signal |
+| Verb Expression | `verb_expression_<verb_name>` | Verb-Expression signal |
+| Stability Loss | `stability_loss` | Stability decreases |
+| Destabilisation | `destabilise` | Stability reaches zero from an Impact |
 
-Bridge this through an `AnimationPlayer` or `AnimationTree` child under each
-actor scene. Keep collision shapes authored in Godot and preserve the current
-root-node types (`CharacterBody3D`, `Area3D`, `Node3D`) so code keeps working.
+The adapter translates literal gameplay-code signals into this semantic contract. Gameplay code does not address skeleton bones or imported mesh descendants directly.
 
-## Import settings
+## Import Contract
 
-- Export animated 3D assets as `.glb` from Blender using meter scale and +Y up
-  conventions compatible with Godot's importer.
-- Apply transforms before export; actor feet or base contact should sit at the
-  scene origin.
-- Put armatures and meshes under a single named root per asset.
-- Keep collision separate from render meshes; gameplay collision remains in
-  `.tscn` files unless a prop needs authored static collision.
-- Use shared materials for verb readability: burn, shield, grow, stretch, roll,
-  jump, bounce, freeze, and rewind should each have a consistent color/VFX key.
+- Export animated 3D assets as GLB at metre scale with transforms applied.
+- Place an actor's feet or a prop's contact surface at the scene origin.
+- Use one predictably named root per exported asset.
+- Keep collision in `.tscn` scenes except for intentionally authored static prop collision.
+- Use shared materials for facility surfaces and consistent per-Verb readability.
+- Track large editable source files with Git LFS when ordinary Git becomes impractical.
 
-## Review checklist
+## Acceptance Checks
 
-- The graybox scene still runs if the imported mesh is temporarily hidden.
-- Mesh origin, scale, and facing direction match the old primitive placeholder.
-- Animation clip names match the contract table exactly.
-- No gameplay script depends on a mesh node path deeper than the actor's visual
-  adapter node.
-- Materials pass a colorblind/readability check against floor and enemy colors.
-- Exported files are committed; heavyweight editable source files can be tracked
-  with Git LFS if they become large.
+- Hiding the imported visual leaves gameplay collision and logic functional.
+- Origin, scale, facing direction, and collision envelope match the approved greybox.
+- Required animation names exist and trigger through the adapter.
+- No gameplay script depends on an imported node path.
+- Silhouette and motion communicate state without relying on colour alone.
+- Materials remain readable against each Laboratory floor and hostile presentation.
+- Exported runtime assets are committed alongside any required import metadata.
