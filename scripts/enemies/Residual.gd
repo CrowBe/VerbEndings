@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 		velocity.z = 0.0
 		if _attack_timer == 0.0:
 			_attack_timer = ATTACK_COOLDOWN
-			target.take_damage(get_damage(), self)
+			target.apply_impact(get_damage(), self)
 	move_and_slide()
 
 
@@ -156,7 +156,7 @@ func _nearest_living_player() -> Node3D:
 	var best: Node3D = null
 	var best_distance: float = INF
 	for body: Node in get_tree().get_nodes_in_group("players"):
-		if not body.is_alive:
+		if body.is_destabilised:
 			continue
 		var distance: float = global_position.distance_to(body.global_position)
 		if distance < best_distance:

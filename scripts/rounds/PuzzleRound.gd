@@ -4,7 +4,7 @@ extends Node3D
 ## race to rack up the highest COMPLETION COUNT before the timer ends.
 ##
 ## PVP is disabled for this round — RoundManager.is_pvp_enabled() returns
-## false whenever the current round type is not "PVP", and Player.take_damage
+## false whenever the current round type is not "PVP", and Player.apply_impact
 ## drops player-on-player hits accordingly. Nothing here needs to opt out.
 ##
 ## NETWORK: The server owns unit placement (positions must be rolled once
