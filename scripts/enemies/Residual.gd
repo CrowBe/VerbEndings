@@ -1,21 +1,21 @@
-class_name SwarmMonster
+class_name Residual
 extends CharacterBody3D
 ## Basic PVE swarm enemy. Chases the nearest living player and bites on
 ## contact. Spawned by PVERound at a ring around each player and scaled by
 ## the round's strength multiplier.
 ##
-## Verbs: monsters start verbless. After the round's evolution timer they
-## may evolve a random verb — but a monster that lands the LAST HIT on a
+## Verbs: residuals start verbless. After the round's evolution timer they
+## may evolve a random verb — but a residual that lands the LAST HIT on a
 ## player preemptively takes the victim's verb instead, locking out the
 ## random roll. A verb applies the stat mutation from VERB_MUTATIONS.
 ##
-## NETWORK: Monsters are server-owned. Spawns, evolutions, hits, and deaths
+## NETWORK: Residuals are server-owned. Spawns, evolutions, hits, and deaths
 ## all originate server-side and broadcast via the RPC hooks below.
 
 ## NETWORK: @rpc replication hook — broadcast; PVERound scores the kill.
-signal monster_died(monster: SwarmMonster, killer_player_id: int)
+signal residual_died(residual: Residual, killer_player_id: int)
 ## NETWORK: @rpc replication hook — broadcast for evolution VFX/nameplate.
-signal evolved(monster: SwarmMonster, verb: Enums.VerbType)
+signal evolved(residual: Residual, verb: Enums.VerbType)
 
 const BASE_HEALTH: float = 20.0
 const BASE_DAMAGE: float = 6.0
@@ -23,7 +23,7 @@ const BASE_SPEED: float = 3.0
 const ATTACK_RANGE: float = 1.6
 const ATTACK_COOLDOWN: float = 1.2
 
-## Stat mutations applied when a monster takes on a verb.
+## Stat mutations applied when a residual takes on a verb.
 const VERB_MUTATIONS: Dictionary = {
 	Enums.VerbType.NONE: {"health": 1.0, "damage": 1.0, "speed": 1.0},
 	Enums.VerbType.BURN: {"health": 1.0, "damage": 1.5, "speed": 1.1},
@@ -101,7 +101,7 @@ func take_hit(amount: float, attacker_player_id: int) -> void:
 		return
 	health -= amount
 	if health <= 0.0:
-		monster_died.emit(self, attacker_player_id)
+		residual_died.emit(self, attacker_player_id)
 		queue_free()
 
 
@@ -114,7 +114,7 @@ func apply_slow(factor: float, duration: float) -> void:
 
 
 ## Random evolution roll (PVERound calls this after the evolution timer).
-## A monster that already inherited a verb via last hit is locked out.
+## A residual that already inherited a verb via last hit is locked out.
 func evolve_random() -> void:
 	if has_evolved:
 		return
@@ -123,7 +123,7 @@ func evolve_random() -> void:
 	_take_on_verb(candidates.pick_random())
 
 
-## Last-hit inheritance: this monster killed a player, so it preemptively
+## Last-hit inheritance: this residual killed a player, so it preemptively
 ## takes the victim's verb — overriding and locking out the random roll.
 ## NETWORK: @rpc replication hook — server-side, from PVERound's death hook.
 func assume_verb(victim_verb: Enums.VerbType) -> void:
