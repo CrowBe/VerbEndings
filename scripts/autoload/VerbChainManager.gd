@@ -115,6 +115,7 @@ func establish_verb_chain(player_a_id: int, player_b_id: int) -> Dictionary:
 	if chain.is_self_chain:
 		self_chain_triggered.emit(player_a_id)
 	verb_chain_established.emit(chain)
+	_sync_player_overdrive(chain)
 	return chain
 
 
@@ -194,6 +195,9 @@ func _dissolve_chain_for(player_id: int) -> void:
 	_player_to_chain.erase(chain.player_a_id)
 	_player_to_chain.erase(chain.player_b_id)
 	verb_chains.erase(chain_id)
+	_clear_player_overdrive(chain.player_a_id)
+	if not chain.is_self_chain:
+		_clear_player_overdrive(chain.player_b_id)
 
 
 ## Severs EVERY chain at once. Used by SuddenDeathManager ("The Collapse"),
@@ -201,8 +205,29 @@ func _dissolve_chain_for(player_id: int) -> void:
 ## Players stay registered in active_players — only the pairings die.
 ## NETWORK: @rpc replication hook — server-side, broadcast the wipe.
 func dissolve_all_chains() -> void:
+	for player_id: int in _player_to_chain.keys():
+		_clear_player_overdrive(player_id)
 	verb_chains.clear()
 	_player_to_chain.clear()
+
+
+func _sync_player_overdrive(chain: Dictionary) -> void:
+	for body: Node in get_tree().get_nodes_in_group("players"):
+		var player_id: int = body.get_multiplayer_authority()
+		if player_id == chain.player_a_id:
+			if chain.is_self_chain:
+				body.enter_overdrive(player_id)
+			else:
+				body.exit_overdrive(chain.player_b_id)
+		elif player_id == chain.player_b_id:
+			body.exit_overdrive(chain.player_a_id)
+
+
+func _clear_player_overdrive(player_id: int) -> void:
+	for body: Node in get_tree().get_nodes_in_group("players"):
+		if body.get_multiplayer_authority() == player_id:
+			body.exit_overdrive()
+			return
 
 
 ## Canonical dictionary key for an unordered verb pair.

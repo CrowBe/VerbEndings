@@ -21,22 +21,6 @@ signal player_eliminated(player_id: int, survivors_left: int)
 ## NETWORK: @rpc replication hook — broadcast the match result.
 signal ultimate_winner_decided(player_id: int)
 
-## Self-Chain OVERDRIVE profiles: what each verb becomes when its owner is
-## forced Solo during The Collapse. "multiplier" feeds directly into
-## Player.overdrive_multiplier; "effect" is flavor for the HUD/design docs.
-const OVERDRIVE_PROFILES: Dictionary = {
-	Enums.VerbType.NONE: {"multiplier": 1.0, "effect": "no verb, no overdrive"},
-	Enums.VerbType.BURN: {"multiplier": 1.5, "effect": "trailing wildfire wake"},
-	Enums.VerbType.SHIELD: {"multiplier": 1.2, "effect": "unbreakable second skin"},
-	Enums.VerbType.GROW: {"multiplier": 1.4, "effect": "titan mass advantage"},
-	Enums.VerbType.STRETCH: {"multiplier": 1.6, "effect": "slingshot self-launch"},
-	Enums.VerbType.ROLL: {"multiplier": 1.8, "effect": "exponential momentum stacking"},
-	Enums.VerbType.JUMP: {"multiplier": 1.5, "effect": "chained triple-leap"},
-	Enums.VerbType.BOUNCE: {"multiplier": 1.7, "effect": "perfect-restitution ricochet"},
-	Enums.VerbType.FREEZE: {"multiplier": 1.3, "effect": "frictionless ice sprint"},
-	Enums.VerbType.REWIND: {"multiplier": 1.6, "effect": "one free fall undo"},
-}
-
 ## True while The Collapse is running.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var is_active: bool = false
@@ -115,20 +99,9 @@ func trigger_sudden_death(participant_ids: Array[int]) -> void:
 		var peer_id: int = body.get_multiplayer_authority()
 		if peer_id not in surviving_players:
 			continue
-		body.enter_solo_state(get_overdrive_multiplier(body.assigned_verb))
+		body.enter_overdrive()
 
 	sudden_death_triggered.emit(surviving_players.duplicate())
-
-
-## Overdrive multiplier for a verb (e.g. ROLL -> 1.8, its exponential
-## momentum stacking profile).
-func get_overdrive_multiplier(verb: Enums.VerbType) -> float:
-	return OVERDRIVE_PROFILES.get(verb, {"multiplier": 1.0}).multiplier
-
-
-## HUD flavor line for a verb's overdrive.
-func get_overdrive_effect(verb: Enums.VerbType) -> String:
-	return OVERDRIVE_PROFILES.get(verb, {"effect": ""}).effect
 
 
 ## Template hazard callback: connect Survival Race hazard Area3D
@@ -152,3 +125,5 @@ func eliminate_player(player_id: int) -> void:
 	if surviving_players.size() == 1:
 		is_active = false
 		ultimate_winner_decided.emit(surviving_players[0])
+		for body: Node in get_tree().get_nodes_in_group("players"):
+			body.exit_overdrive()

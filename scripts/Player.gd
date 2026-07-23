@@ -52,6 +52,8 @@ const PUZZLE_REACH: float = 4.0
 
 ## Verb activation: deliberately low cooldown so verbs stay the core loop.
 const VERB_COOLDOWN: float = 5.0
+## Overdrive changes exactly one value: Verb Expression cooldown.
+const OVERDRIVE_COOLDOWN_MULTIPLIER: float = 0.5
 ## How long timed verb buffs (SHIELD/GROW/ROLL) last.
 const BUFF_DURATION: float = 3.0
 ## Radius for area verb effects (BURN nova, FREEZE ring).
@@ -82,13 +84,9 @@ var paired_partner_id = -1
 ## NETWORK: @rpc replication hook — server-computed, sync to all peers.
 var chain_sync: float = 1.0
 
-## True once Sudden Death forces this player Solo.
+## True while a Self-Chain or the Collapse grants Overdrive.
 ## NETWORK: @rpc replication hook — server-assigned, sync to all peers.
-var is_solo: bool = false
-
-## Speed multiplier from the Self-Chain overdrive (1.0 outside Sudden Death).
-## NETWORK: @rpc replication hook — server-assigned, sync to all peers.
-var overdrive_multiplier: float = 1.0
+var is_overdrive: bool = false
 
 ## NETWORK: @rpc replication hook — server-authoritative, sync to all peers.
 var health: float = MAX_HEALTH
@@ -171,8 +169,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("verb_activate"):
 		activate_verb()
 
-	var speed: float = WALK_SPEED * overdrive_multiplier * _speed_buff \
-			* _tether_check(delta)
+	var speed: float = WALK_SPEED * _speed_buff * _tether_check(delta)
 
 	# Camera-relative movement: input is rotated by the rig's yaw.
 	var input_dir: Vector2 = Input.get_vector(
@@ -210,13 +207,20 @@ func set_character_identity(verb: Enums.VerbType) -> void:
 	character_name = Enums.verb_name(verb).capitalize()
 
 
-## Forces this player into the Sudden Death Solo state.
-## NETWORK: @rpc replication hook — SuddenDeathManager (server) calls this
-## for every survivor, then broadcasts the new state.
-func enter_solo_state(p_overdrive_multiplier: float) -> void:
-	paired_partner_id = null
-	is_solo = true
-	overdrive_multiplier = p_overdrive_multiplier
+## Enables canonical Overdrive without changing movement, Stability, cost,
+## or Verb Effect strength. Self-Chains pass their own id; the Collapse
+## passes null after dissolving all Pairs.
+func enter_overdrive(partner_id = null) -> void:
+	paired_partner_id = partner_id
+	is_overdrive = true
+	chain_sync = 1.0
+	_partner_body = null
+
+
+## Restores the normal cooldown at Round/Pair lifecycle boundaries.
+func exit_overdrive(partner_id = -1) -> void:
+	paired_partner_id = partner_id
+	is_overdrive = false
 	chain_sync = 1.0
 	_partner_body = null
 
@@ -314,7 +318,7 @@ func activate_verb() -> void:
 		return
 	if assigned_verb == Enums.VerbType.NONE:
 		return
-	_verb_timer = VERB_COOLDOWN
+	_verb_timer = get_verb_cooldown()
 	verb_activated.emit(assigned_verb)
 	_play_verb_animation(assigned_verb)
 
@@ -390,6 +394,11 @@ func _clear_buffs() -> void:
 ## Remaining verb cooldown for the HUD (0 = ready).
 func get_verb_cooldown_remaining() -> float:
 	return _verb_timer
+
+
+func get_verb_cooldown() -> float:
+	return VERB_COOLDOWN * (
+			OVERDRIVE_COOLDOWN_MULTIPLIER if is_overdrive else 1.0)
 
 
 func _record_rewind_breadcrumb() -> void:
@@ -486,9 +495,9 @@ func _play_verb_animation(verb: Enums.VerbType) -> void:
 ## Loose Tether Check: while more than TETHER_RANGE meters from the paired
 ## partner, drain chain_sync and dampen movement speed. Within range,
 ## chain_sync slowly recovers. Returns the speed multiplier for this frame.
-## Solo players (Sudden Death) and Self-Chained players never strain.
+## Collapse participants and Self-Chained players never strain.
 func _tether_check(delta: float) -> float:
-	if is_solo:
+	if paired_partner_id == null:
 		return 1.0
 	var partner: Node3D = _resolve_partner()
 	if partner == null or partner == self:
