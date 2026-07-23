@@ -1,12 +1,12 @@
 extends Node3D
 ## PVE round controller: the swarm.
 ##
-## Monsters spawn on a ring around each living player — never closer than
-## MIN_SPAWN_DISTANCE — and both the spawn rate and per-monster strength
-## grow over the round. After EVOLUTION_TIME, monsters start taking verbs:
-## new spawns roll one immediately, existing monsters evolve randomly on a
-## cadence, and any monster that lands a last hit on a player preemptively
-## inherits the victim's verb instead (see SwarmMonster.assume_verb).
+## Residuals spawn on a ring around each living player — never closer than
+## MIN_SPAWN_DISTANCE — and both the spawn rate and per-residual strength
+## grow over the round. After EVOLUTION_TIME, residuals start taking verbs:
+## new spawns roll one immediately, existing residuals evolve randomly on a
+## cadence, and any residual that lands a last hit on a player preemptively
+## inherits the victim's verb instead (see Residual.assume_verb).
 ##
 ## Scoring combines KILLS and SURVIVAL TIME: swarm_kill bonuses per kill,
 ## survival_tick bonuses on a timer while alive, and end-of-round placements
@@ -17,11 +17,11 @@ extends Node3D
 ## NETWORK: Spawning, AI, evolution, and scoring are all server-side.
 
 ## NETWORK: @rpc replication hook — broadcast for the kill-feed HUD.
-signal monster_killed(player_id: int, new_kill_count: int)
+signal residual_killed(player_id: int, new_kill_count: int)
 ## NETWORK: @rpc replication hook — broadcast the final round placements.
 signal round_finished(ordered_player_ids: Array)
 
-const MONSTER_SCENE: PackedScene = preload("res://scenes/SwarmMonster.tscn")
+const RESIDUAL_SCENE: PackedScene = preload("res://scenes/Residual.tscn")
 
 ## Spawn ring around each player.
 const MIN_SPAWN_DISTANCE: float = 8.0
@@ -30,9 +30,9 @@ const MAX_SPAWN_DISTANCE: float = 14.0
 const BASE_SPAWN_INTERVAL: float = 4.0
 const MIN_SPAWN_INTERVAL: float = 1.2
 const SPAWN_INTERVAL_DECAY: float = 0.02
-## Monster strength growth: +1% per second of round time.
+## Residual strength growth: +1% per second of round time.
 const STRENGTH_GROWTH_PER_SECOND: float = 0.01
-## When the evolution phase begins, and how often existing monsters roll.
+## When the evolution phase begins, and how often existing residuals roll.
 const EVOLUTION_TIME: float = 90.0
 const EVOLUTION_INTERVAL: float = 12.0
 ## Survival scoring cadence.
@@ -43,7 +43,7 @@ const SURVIVAL_WEIGHT: float = 1.0
 
 ## NETWORK: @rpc replication hook — sync elapsed for the round clock HUD.
 var elapsed: float = 0.0
-## player_id -> monsters killed this round.
+## player_id -> residuals killed this round.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var kill_counts: Dictionary = {}
 ## player_id -> survival ticks earned this round.
@@ -78,7 +78,7 @@ func _physics_process(delta: float) -> void:
 		_evolution_timer += delta
 		if _evolution_timer >= EVOLUTION_INTERVAL:
 			_evolution_timer = 0.0
-			_evolve_random_monster()
+			_evolve_random_residual()
 
 
 ## Ends the round: placements by weighted kills + survival, best first.
@@ -95,23 +95,23 @@ func end_round() -> void:
 	round_finished.emit(ordered)
 
 
-## One monster per living player, on that player's spawn ring.
+## One residual per living player, on that player's spawn ring.
 func _spawn_wave() -> void:
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		if not body.is_alive:
 			continue
-		var monster: SwarmMonster = MONSTER_SCENE.instantiate()
-		monster.setup(_current_strength_multiplier())
-		monster.position = _ring_position_around(body)
-		monster.monster_died.connect(_on_monster_died)
-		add_child(monster)
+		var residual: Residual = RESIDUAL_SCENE.instantiate()
+		residual.setup(_current_strength_multiplier())
+		residual.position = _ring_position_around(body)
+		residual.residual_died.connect(_on_residual_died)
+		add_child(residual)
 		# Evolution phase: fresh spawns arrive with a verb already rolled.
 		if elapsed >= EVOLUTION_TIME:
-			monster.evolve_random()
+			residual.evolve_random()
 
 
 ## Random point on the ring: MIN..MAX spawn distance, random bearing.
-## The minimum guarantees no monster ever materializes on top of a player.
+## The minimum guarantees no residual ever materializes on top of a player.
 func _ring_position_around(body: Node3D) -> Vector3:
 	var angle: float = randf() * TAU
 	var distance: float = randf_range(MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE)
@@ -138,23 +138,23 @@ func _award_survival_ticks() -> void:
 		ScoreManager.award_bonus(player_id, "PVE", "survival_tick")
 
 
-func _evolve_random_monster() -> void:
-	var unevolved: Array = get_tree().get_nodes_in_group("monsters").filter(
+func _evolve_random_residual() -> void:
+	var unevolved: Array = get_tree().get_nodes_in_group("residuals").filter(
 			func(m: Node) -> bool: return not m.has_evolved)
 	if not unevolved.is_empty():
 		unevolved.pick_random().evolve_random()
 
 
-func _on_monster_died(_monster: SwarmMonster, killer_player_id: int) -> void:
+func _on_residual_died(_residual: Residual, killer_player_id: int) -> void:
 	kill_counts[killer_player_id] = kill_counts.get(killer_player_id, 0) + 1
 	ScoreManager.award_bonus(killer_player_id, "PVE", "swarm_kill")
-	monster_killed.emit(killer_player_id, kill_counts[killer_player_id])
+	residual_killed.emit(killer_player_id, kill_counts[killer_player_id])
 
 
-## Last-hit verb inheritance: the killing monster preemptively takes the
+## Last-hit verb inheritance: the killing residual preemptively takes the
 ## victim's verb, overriding any pending random evolution.
 func _on_player_died(player: Node, killer: Node) -> void:
-	if killer is SwarmMonster:
+	if killer is Residual:
 		killer.assume_verb(player.assigned_verb)
 
 

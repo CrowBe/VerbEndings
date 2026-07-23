@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvbendmonster1"]
+
+[ext_resource type="Script" path="res://scripts/enemies/Residual.gd" id="1_residual"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_residual"]
+radius = 0.35
+height = 0.9
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_residual"]
+radius = 0.35
+height = 0.9
+
+[node name="Residual" type="CharacterBody3D" groups=["residuals"]]
+script = ExtResource("1_residual")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("CapsuleShape3D_residual")
+
+[node name="ResidualMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("CapsuleMesh_residual")
