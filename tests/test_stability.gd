@@ -36,6 +36,25 @@ func _run() -> void:
 	_expect(not subject.is_destabilised,
 			"Restabilisation makes the Subject eligible to continue")
 
+	subject._set_stability(40.0)
+	subject.stabilisation_rate = 2.5
+	subject._apply_stabilisation(2.0)
+	_expect(is_equal_approx(subject.stability, 45.0),
+			"Stabilisation Rate restores a percentage of baseline per second")
+
+	subject._set_stability(99.0)
+	subject._apply_stabilisation(2.0)
+	_expect(is_equal_approx(subject.stability, subject.BASELINE_STABILITY),
+			"Stabilisation Rate stops exactly at baseline")
+
+	subject._set_stability(1.0)
+	subject.apply_impact(1.0)
+	subject._apply_stabilisation(10.0)
+	_expect(is_equal_approx(subject.stability, 0.0),
+			"Destabilised Subjects do not recover through the rate")
+	_expect(subject.is_destabilised,
+			"Stabilisation Rate does not prevent Impact Destabilisation")
+
 	subject.queue_free()
 	if _failures.is_empty():
 		print("Stability tests passed.")
