@@ -57,4 +57,7 @@ jobs:
       - name: Stability and Verb Expression tests
         run: godot --headless --path . tests/TestStability.tscn
 
+      - name: Trial scoring and resolution tests
+        run: godot --headless --path . tests/TestTrialResolution.tscn
+
       # Add focused gameplay test suites as separate steps below.

@@ -18,7 +18,7 @@ signal self_chain_triggered(player_id: int)
 const BASE_POWER_RATING: float = 10.0
 
 ## Multiplier applied to the Synergy Coefficient when a player self-chains.
-## Self-chains are intentionally weaker than a real partnership.
+## Self-Chains are intentionally weaker than a two-Subject Pair.
 const SELF_CHAIN_SYNERGY_PENALTY: float = 0.5
 
 ## Synergy matrix: how well two verbs amplify each other, as a coefficient.
@@ -200,8 +200,7 @@ func _dissolve_chain_for(player_id: int) -> void:
 		_clear_player_overdrive(chain.player_b_id)
 
 
-## Severs EVERY chain at once. Used by SuddenDeathManager ("The Collapse"),
-## whose critical rule is that no partnership survives into Sudden Death.
+## Severs every Verb Chain. No Pair survives into the Collapse.
 ## Players stay registered in active_players — only the pairings die.
 ## NETWORK: @rpc replication hook — server-side, broadcast the wipe.
 func dissolve_all_chains() -> void:

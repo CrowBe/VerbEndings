@@ -1,11 +1,9 @@
 extends Node
-## SuddenDeathManager (autoload singleton) — "The Collapse"
+## CollapseManager (autoload singleton)
 ##
-## After Round 3, a final Survival Race tiebreaker fires for everyone tied
-## at the top of the ladder — and partners always tie with each other, so
-## even a single winning pair goes to Sudden Death: they duel each other for
-## the crown. Only a Self-Chained solo player can win outright without it.
-## CRITICAL RULE: every previous partnership is broken —
+## After Round Three, the Collapse begins only when multiple Subjects share
+## the highest individual Trial Score.
+## Every previous Pair is dissolved —
 ## all survivors are forced into a Solo state (paired_partner_id = null) and
 ## each one's verb enters Self-Chain OVERDRIVE (a per-verb multiplier far
 ## stronger than the normal self-chain penalty). Last blob standing wins.
@@ -15,7 +13,7 @@ extends Node
 
 ## NETWORK: @rpc replication hook — broadcast so every client swaps to the
 ## Collapse arena and severs its local chain VFX.
-signal sudden_death_triggered(participant_ids: Array)
+signal collapse_triggered(participant_ids: Array)
 ## NETWORK: @rpc replication hook — broadcast each knockout for the feed.
 signal player_eliminated(player_id: int, survivors_left: int)
 ## NETWORK: @rpc replication hook — broadcast the match result.
@@ -29,68 +27,48 @@ var is_active: bool = false
 var surviving_players: Array[int] = []
 
 
-## Builds the final scoreboard from the persistent ladder (a chain's score
-## is its members' combined ScoreManager totals) and runs the tiebreaker.
-## Call this once when Round 3 ends.
+## Resolves First Place from individual Trial Scores after Round Three.
 ## NETWORK: @rpc replication hook — server-side, from the results screen.
-func resolve_match_end() -> bool:
-	var team_scores: Dictionary = {}
-	for chain_id: int in VerbChainManager.verb_chains.keys():
-		var chain: Dictionary = VerbChainManager.verb_chains[chain_id]
-		var score: float = float(ScoreManager.get_total(chain.player_a_id))
-		if not chain.is_self_chain:
-			score += float(ScoreManager.get_total(chain.player_b_id))
-		team_scores[chain_id] = score
-	return check_for_tiebreaker(team_scores)
+func resolve_trial_end() -> bool:
+	if RoundManager.current_round_index < RoundManager.TOTAL_ROUNDS:
+		push_warning("CollapseManager: Trial resolution requires three completed Rounds.")
+		return false
+	return resolve_trial_scores(ScoreManager.player_points)
 
 
-## Checks the final scoreboard for a tie at the top. `team_scores` maps
-## chain_id -> final score. EVERY player inside a top-scoring chain counts
-## as tied — partners share their chain's score, so a lone winning pair
-## still collapses into a one-versus-one Sudden Death. The Collapse fires
-## whenever two or more players are tied at the top; only a top-scoring
-## Self-Chain (one solo player, nobody level with them) wins outright.
-## Only the TOP of the ladder is contested: ties further down (2nd vs 3rd,
-## etc.) stand as-is on the final standings and are never sent to Sudden
-## Death — The Collapse decides the winner, nothing else.
+## The Collapse fires only when two or more Subjects share First Place.
+## Ties below First Place do not affect Trial resolution.
 ## NETWORK: @rpc replication hook — server-side, from the results screen.
-func check_for_tiebreaker(team_scores: Dictionary) -> bool:
-	if team_scores.is_empty():
+func resolve_trial_scores(trial_scores: Dictionary) -> bool:
+	if trial_scores.is_empty():
 		return false
 	var best_score: float = -INF
-	for score: float in team_scores.values():
+	for score: float in trial_scores.values():
 		best_score = maxf(best_score, score)
 	var tied_players: Array[int] = []
-	for chain_id: int in team_scores.keys():
-		if not is_equal_approx(team_scores[chain_id], best_score):
-			continue
-		var chain: Dictionary = VerbChainManager.verb_chains.get(chain_id, {})
-		if chain.is_empty():
-			continue
-		if chain.player_a_id not in tied_players:
-			tied_players.append(chain.player_a_id)
-		if chain.player_b_id not in tied_players:
-			tied_players.append(chain.player_b_id)
+	for player_id: int in trial_scores.keys():
+		if is_equal_approx(trial_scores[player_id], best_score):
+			tied_players.append(player_id)
 	if tied_players.size() < 2:
 		# A Self-Chained solo player alone at the top: the only path to
 		# victory that skips The Collapse.
 		if tied_players.size() == 1:
 			ultimate_winner_decided.emit(tied_players[0])
 		return false
-	trigger_sudden_death(tied_players)
+	trigger_collapse(tied_players)
 	return true
 
 
-## Starts the Survival Race. Breaks ALL partnerships (the critical rule),
+## Starts the Collapse. Dissolves all Pairs,
 ## forces every participant Solo, and arms their Self-Chain overdrive.
 ## NETWORK: @rpc replication hook — server executes, then broadcasts the
 ## solo-state assignments to every peer.
-func trigger_sudden_death(participant_ids: Array[int]) -> void:
+func trigger_collapse(participant_ids: Array[int]) -> void:
 	is_active = true
 	surviving_players = participant_ids.duplicate()
 	surviving_players.sort()
 
-	# CRITICAL RULE: no partnerships survive into The Collapse.
+	# No Pair survives into the Collapse.
 	VerbChainManager.dissolve_all_chains()
 
 	# Force every participant's body into Solo overdrive. Bodies register
@@ -101,7 +79,7 @@ func trigger_sudden_death(participant_ids: Array[int]) -> void:
 			continue
 		body.enter_overdrive()
 
-	sudden_death_triggered.emit(surviving_players.duplicate())
+	collapse_triggered.emit(surviving_players.duplicate())
 
 
 ## Template hazard callback: connect Survival Race hazard Area3D

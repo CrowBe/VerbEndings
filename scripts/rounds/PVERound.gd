@@ -156,7 +156,7 @@ func _on_residual_died(_residual: Residual, killer_player_id: int) -> void:
 func _on_player_destabilised(player: Node, source: Node) -> void:
 	if source is Residual:
 		source.assume_verb(player.assigned_verb)
-	if not SuddenDeathManager.is_active:
+	if not CollapseManager.is_active:
 		player.call_deferred("restabilise")
 
 

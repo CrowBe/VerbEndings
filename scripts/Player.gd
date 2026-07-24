@@ -91,7 +91,7 @@ var character_name: String = ""
 ## Peer id of the chained partner. Deliberately untyped:
 ##   int  = partner's peer id (own id = Self-Chain)
 ##   -1   = not yet paired
-##   null = forced Solo state (Sudden Death severed all partnerships)
+##   null = Solo state (the Collapse dissolved every Pair)
 ## NETWORK: @rpc replication hook — server-assigned, sync to all peers.
 var paired_partner_id = -1
 

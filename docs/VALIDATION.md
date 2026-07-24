@@ -49,6 +49,15 @@ godot4.3 --headless --path . tests/TestStability.tscn
 It verifies configurable Expression cost, the 1-Stability self-spend floor,
 Critical Stability, external-Impact Destabilisation and Restabilisation.
 
+Run the Trial scoring and resolution suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestTrialResolution.tscn
+```
+
+It verifies individual Round and Trial Scores, sole and tied First Place,
+Collapse participation, and odd-roster Self-Chains.
+
 For graphical inspection, run:
 
 ```bash
