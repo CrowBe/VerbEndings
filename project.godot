@@ -22,7 +22,7 @@ VerbChainManager="*res://scripts/autoload/VerbChainManager.gd"
 ScoreManager="*res://scripts/autoload/ScoreManager.gd"
 RoundManager="*res://scripts/autoload/RoundManager.gd"
 LobbyManager="*res://scripts/autoload/LobbyManager.gd"
-SuddenDeathManager="*res://scripts/autoload/SuddenDeathManager.gd"
+CollapseManager="*res://scripts/autoload/CollapseManager.gd"
 
 [input]
 

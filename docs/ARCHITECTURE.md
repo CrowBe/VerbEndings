@@ -17,10 +17,10 @@ On startup, `Game.gd` loads a requested Puzzle or PVE Round and creates one loca
 | Service | Current responsibility |
 | --- | --- |
 | `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, and calculates synergy and versatility values. |
-| `ScoreManager` | Stores per-Player points, awards placement and bonus points, exposes rankings, and provides lowest-score-first draft ordering. |
+| `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes Trial Ranking, and provides lowest-score-first draft ordering. |
 | `RoundManager` | Shuffles PVP, PVE, and Puzzle classifications without replacement, tracks the current Round, and gates Player-versus-Player Impacts. |
 | `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft order, and shared insertion-platform occupancy. |
-| `SuddenDeathManager` | Calculates pair-summed end-state scores, starts its solo elimination state, applies Verb-specific multipliers, and declares the final survivor. |
+| `CollapseManager` | Resolves individual First Place, starts the Collapse for a tie, applies universal Overdrive, and declares the final survivor. |
 
 These are stateful in-process services. Comments identify intended RPC and replication boundaries, but the methods and signals currently execute locally.
 
@@ -63,10 +63,10 @@ Both Round controllers emit an ordered list when asked to end. Neither controls 
 The repository provides a locally runnable gameplay greybox and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
 
 - the Stabilisation Rate and the Material Restabilisation economy are design contracts only;
-- the Pair Draft supports only Round One and Round Two entry points;
+- the Pair Draft has entry points for all three Rounds;
 - the insertion platform is not the canonical Drop sequence;
-- Trial resolution uses pair totals and a non-canonical solo state;
-- Residual and Collapse terminology and behaviour are not implemented;
+- Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
+- the full Compound-wide Collapse environment and Residual pacing are not implemented;
 - PVP has no Experiment scene;
 - the Compound, Assignment Deck, Laboratories, Dispensing Line, Recall, Result Announcement, and Thematic Moments are design contracts only; and
 - multiplayer transport, replication, deterministic scenarios, UI, audio, production art, and automated gameplay tests are absent.
