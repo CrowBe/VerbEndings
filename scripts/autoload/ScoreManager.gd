@@ -1,18 +1,17 @@
 extends Node
 ## ScoreManager (autoload singleton)
 ##
-## Basic points system and ranking ladder. Each round type (PVP / PVE /
-## PUZZLE) has its own placement ladder and bonus-event table, but all
-## points flow into ONE cumulative total per player — the ranking ladder
-## carries across all three rounds and seeds the Round 2 draft order.
+## Subject-owned Round Score and cumulative Trial Score. Each development
+## classification has its own reward tables, but points always belong to one
+## Subject.
 ##
-## NETWORK: The server is the only writer. Clients receive ladder updates
+## NETWORK: The server is the only writer. Clients receive ranking updates
 ## via the RPC hooks on the signals below.
 
 ## NETWORK: @rpc replication hook — broadcast each award for kill-feed UI.
 signal points_awarded(player_id: int, amount: int, round_type: String, reason: String)
-## NETWORK: @rpc replication hook — broadcast the re-sorted ladder.
-signal ladder_updated(ladder: Array)
+## NETWORK: @rpc replication hook — broadcast the re-sorted Trial Ranking.
+signal trial_ranking_updated(trial_ranking: Array)
 
 ## Placement points per round type, index 0 = 1st place. Placements beyond
 ## the table earn the final entry (participation points).
@@ -43,18 +42,20 @@ const BONUS_EVENTS: Dictionary = {
 ## Cumulative totals: player_id -> points. Never reset between rounds.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var player_points: Dictionary = {}
+## Round index -> {player_id -> Round Score}.
+var round_scores: Dictionary = {}
 
 
 ## Awards placement points for a finished round. `ordered_player_ids` is
 ## finish order, winner first.
 ## NETWORK: @rpc replication hook — server-side, at round end.
 func award_placements(round_type: String, ordered_player_ids: Array) -> void:
-	var ladder: Array = PLACEMENT_LADDERS.get(round_type, [])
-	if ladder.is_empty():
+	var reward_table: Array = PLACEMENT_LADDERS.get(round_type, [])
+	if reward_table.is_empty():
 		push_warning("ScoreManager: unknown round type '%s'." % round_type)
 		return
 	for placement: int in ordered_player_ids.size():
-		var amount: int = ladder[mini(placement, ladder.size() - 1)]
+		var amount: int = reward_table[mini(placement, reward_table.size() - 1)]
 		add_points(ordered_player_ids[placement], amount, round_type,
 				"placement_%d" % (placement + 1))
 
@@ -65,8 +66,8 @@ func award_placements(round_type: String, ordered_player_ids: Array) -> void:
 ## player is only paid once.
 ## NETWORK: @rpc replication hook — server-side, at round end.
 func award_chain_placements(round_type: String, ordered_chain_ids: Array) -> void:
-	var ladder: Array = PLACEMENT_LADDERS.get(round_type, [])
-	if ladder.is_empty():
+	var reward_table: Array = PLACEMENT_LADDERS.get(round_type, [])
+	if reward_table.is_empty():
 		push_warning("ScoreManager: unknown round type '%s'." % round_type)
 		return
 	for placement: int in ordered_chain_ids.size():
@@ -74,7 +75,7 @@ func award_chain_placements(round_type: String, ordered_chain_ids: Array) -> voi
 				ordered_chain_ids[placement], {})
 		if chain.is_empty():
 			continue
-		var amount: int = ladder[mini(placement, ladder.size() - 1)]
+		var amount: int = reward_table[mini(placement, reward_table.size() - 1)]
 		var reason: String = "placement_%d" % (placement + 1)
 		add_points(chain.player_a_id, amount, round_type, reason)
 		if not chain.is_self_chain:
@@ -96,36 +97,47 @@ func award_bonus(player_id: int, round_type: String, event: String) -> void:
 ## NETWORK: @rpc replication hook — server-side only.
 func add_points(player_id: int, amount: int, round_type: String, reason: String) -> void:
 	player_points[player_id] = get_total(player_id) + amount
+	var current_round_scores: Dictionary = round_scores.get_or_add(
+			RoundManager.current_round_index, {})
+	current_round_scores[player_id] = current_round_scores.get(player_id, 0) + amount
 	points_awarded.emit(player_id, amount, round_type, reason)
-	ladder_updated.emit(get_ladder())
+	trial_ranking_updated.emit(get_trial_ranking())
 
 
 func get_total(player_id: int) -> int:
 	return player_points.get(player_id, 0)
 
 
-## The ranking ladder: Array of {player_id, points, rank}, best first.
+func get_round_score(round_index: int, player_id: int) -> int:
+	return round_scores.get(round_index, {}).get(player_id, 0)
+
+
+## Trial Ranking: Array of {player_id, trial_score, rank}, best first.
 ## Tied totals share a rank (competition ranking: 1, 2, 2, 4...).
-func get_ladder() -> Array[Dictionary]:
+func get_trial_ranking() -> Array[Dictionary]:
 	var ids: Array = player_points.keys()
 	ids.sort_custom(func(a: int, b: int) -> bool:
 		if player_points[a] != player_points[b]:
 			return player_points[a] > player_points[b]
 		return a < b)
-	var ladder: Array[Dictionary] = []
+	var trial_ranking: Array[Dictionary] = []
 	var rank: int = 0
 	var previous_points: int = -1
 	for i: int in ids.size():
 		if player_points[ids[i]] != previous_points:
 			rank = i + 1
 			previous_points = player_points[ids[i]]
-		ladder.append({"player_id": ids[i], "points": player_points[ids[i]], "rank": rank})
-	return ladder
+		trial_ranking.append({
+			"player_id": ids[i],
+			"trial_score": player_points[ids[i]],
+			"rank": rank,
+		})
+	return trial_ranking
 
 
-## Draft order for Round 2: least points first (ties broken by player id so
-## the order is deterministic on every peer).
-func get_draft_order_by_points(player_ids: Array) -> Array[int]:
+## Later-Round Pair Draft order: least Trial Score first. Ties break by
+## Player id so the order is deterministic on every peer.
+func get_draft_order_by_trial_score(player_ids: Array) -> Array[int]:
 	var order: Array[int] = []
 	for player_id: int in player_ids:
 		order.append(player_id)
@@ -137,7 +149,8 @@ func get_draft_order_by_points(player_ids: Array) -> Array[int]:
 
 
 ## Full wipe, for returning to the main menu — NOT between rounds (the
-## ladder deliberately persists across all three rounds).
+## Trial Score deliberately persists across all three Rounds).
 func reset() -> void:
 	player_points.clear()
-	ladder_updated.emit(get_ladder())
+	round_scores.clear()
+	trial_ranking_updated.emit(get_trial_ranking())

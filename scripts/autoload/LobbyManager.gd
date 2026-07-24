@@ -8,10 +8,10 @@ extends Node
 ##   3. Draft: the SLOWEST verb-pickers choose their pair first. Turns skip
 ##      anyone who has already been drafted by an earlier chooser.
 ##
-## Round 2 lobby flow:
+## Later-Round lobby flow:
 ##   - Verbs/Character Identities carry over unchanged from Round 1.
-##   - All Round 1 pairs dissolve; players draft NEW pairs in order of
-##     LEAST ladder points to most (ScoreManager totals, which persist
+##   - The previous Round's Pairs dissolve; Subjects draft new Pairs in order of
+##     LEAST Trial Score to most (ScoreManager totals, which persist
 ##     across rounds).
 ##
 ## Both lobbies end at the Synced Insertion Vector: a complete partnership
@@ -155,12 +155,16 @@ func begin_round_one_draft() -> void:
 	_start_draft(1, order)
 
 
-## Starts the Round 2 draft: same verbs, fresh pairs. All Round 1 chains
-## dissolve first; draft order is least ladder points to most.
-## NETWORK: @rpc replication hook — server-side, at Round 2 lobby open.
-func begin_round_two_draft() -> void:
+## Starts a Round Two or Three draft with the same Verbs and fresh Pairs.
+## NETWORK: @rpc replication hook — server-side, at the next Pair Draft.
+func begin_subsequent_round_draft(round_index: int) -> void:
+	if round_index < 2 or round_index > RoundManager.TOTAL_ROUNDS:
+		push_warning("LobbyManager: subsequent draft requires Round 2 or 3.")
+		return
 	VerbChainManager.dissolve_all_chains()
-	_start_draft(2, ScoreManager.get_draft_order_by_points(lobby_players))
+	_start_draft(
+			round_index,
+			ScoreManager.get_draft_order_by_trial_score(lobby_players))
 
 
 ## Simulated RPC hook: the current chooser drafts a partner by player id

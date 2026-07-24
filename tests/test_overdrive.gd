@@ -31,13 +31,13 @@ func _run() -> void:
 	_expect(is_equal_approx(first.get_verb_cooldown(), first.VERB_COOLDOWN),
 			"normal Pair restores the baseline cooldown")
 
-	SuddenDeathManager.trigger_sudden_death([11, 12])
+	CollapseManager.trigger_collapse([11, 12])
 	_expect(first.is_overdrive and second.is_overdrive,
 			"Collapse enables Overdrive for every survivor")
 	_expect(first.paired_partner_id == null and second.paired_partner_id == null,
 			"Collapse dissolves Pair membership")
 
-	SuddenDeathManager.eliminate_player(12)
+	CollapseManager.eliminate_player(12)
 	_expect(not first.is_overdrive and not second.is_overdrive,
 			"Collapse resolution clears Overdrive")
 
@@ -45,7 +45,7 @@ func _run() -> void:
 	second.queue_free()
 	VerbChainManager.active_players.clear()
 	VerbChainManager.dissolve_all_chains()
-	SuddenDeathManager.surviving_players.clear()
+	CollapseManager.surviving_players.clear()
 
 	if _failures.is_empty():
 		print("Overdrive tests passed.")
