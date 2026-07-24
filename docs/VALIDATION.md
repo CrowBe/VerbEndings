@@ -55,4 +55,20 @@ For graphical inspection, run:
 godot4.3 --path .
 ```
 
+## Continuous Integration
+
+GitHub Actions runs the static, native import and parse, and timed runtime
+checks on every push and pull request. CI pins Godot 4.3.0 and exposes the
+engine as `godot`, so the equivalent native commands there are:
+
+```bash
+godot --headless --editor --path . --quit
+timeout --signal=INT --kill-after=3s 8s godot --headless --path .
+```
+
+Focused gameplay test suites run as separate steps after the runtime smoke
+check in `.github/workflows/validation.yml`. New suites belong alongside them
+as separate steps, keeping failures isolated while using the same pinned
+engine and imported project.
+
 Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Those claims require focused runtime scenarios and human playtesting.
