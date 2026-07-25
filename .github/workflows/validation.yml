@@ -60,4 +60,7 @@ jobs:
       - name: Trial scoring and resolution tests
         run: godot --headless --path . tests/TestTrialResolution.tscn
 
+      - name: Experiment Protocol tests
+        run: godot --headless --path . tests/TestExperimentProtocols.tscn
+
       # Add focused gameplay test suites as separate steps below.

@@ -48,6 +48,8 @@ var survival_ticks: Dictionary = {}
 ## Stable input for deterministic Residual grammar. Multiplayer hosts provide
 ## the authoritative Trial seed here.
 @export var grammar_seed: int = 0
+@export var protocol: ExperimentProtocol = preload(
+		"res://resources/protocols/adaptive_containment.tres")
 
 var _spawn_timer: float = 0.0
 var _survival_timer: float = 0.0

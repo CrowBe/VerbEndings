@@ -49,6 +49,9 @@ func load_round(round_type: String) -> Node3D:
 	if current_round == null:
 		push_warning("Game: round scene for '%s' must instantiate a Node3D root." % round_type)
 		return null
+	if RoundManager.current_protocol != null \
+			and RoundManager.current_protocol.classification == round_type:
+		current_round.set("protocol", RoundManager.current_protocol)
 	round_root.add_child(current_round)
 	RoundManager.current_round_type = round_type
 	return current_round

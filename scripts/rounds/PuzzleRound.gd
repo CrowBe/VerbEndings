@@ -29,6 +29,8 @@ const UNIT_CLEARANCE: float = 12.0
 
 @export var unit_count: int = 8
 @export var arena_half_extent: float = 45.0
+@export var protocol: ExperimentProtocol = preload(
+		"res://resources/protocols/precision_assembly.tres")
 
 ## player_id -> puzzle units completed (contributed to).
 ## NETWORK: @rpc replication hook — sync to all peers.
