@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ExperimentProtocol" load_steps=2 format=3]
+
+[ext_resource path="res://scripts/resources/ExperimentProtocol.gd" type="Script" id="1"]
+
+[resource]
+script = ExtResource("1")
+protocol_id = &"competitive_stress"
+display_name = "Competitive Stress"
+objective = "Destabilise competing Subjects while preserving your Chain."
+hazards = Array[String](["Subject Impacts", "Critical Stability"])
+scoring_rules = {"placement": "last_stable_subject"}
+completion_condition = "The Experiment timer expires or one eligible Subject remains."
+classification = "PVP"

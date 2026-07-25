@@ -21,7 +21,7 @@ signal round_queue_locked
 signal round_type_eliminated(round_index: int, eliminated_type: String)
 ## Fired when a round actually begins.
 ## NETWORK: @rpc replication hook — server broadcasts to all peers.
-signal round_started(round_index: int, round_type: String)
+signal round_started(round_index: int, protocol: ExperimentProtocol)
 ## Fired after Round 3 completes; carries the played order for the recap.
 signal all_rounds_completed(played_order: Array)
 ## UI layer hook: request a banner (elimination notice / round intro).
@@ -29,7 +29,11 @@ signal all_rounds_completed(played_order: Array)
 signal round_banner_requested(text: String)
 
 ## The pool of round types available at match start.
-const ROUND_TYPES: Array[String] = ["PVP", "PVE", "PUZZLE"]
+const PROTOCOLS: Array[ExperimentProtocol] = [
+	preload("res://resources/protocols/competitive_stress.tres"),
+	preload("res://resources/protocols/adaptive_containment.tres"),
+	preload("res://resources/protocols/precision_assembly.tres"),
+]
 const TOTAL_ROUNDS: int = 3
 
 ## 1-based index of the round in progress (0 = match not started).
@@ -38,24 +42,32 @@ var current_round_index: int = 0
 ## Type of the round in progress ("" between rounds).
 ## NETWORK: @rpc replication hook — sync to all peers.
 var current_round_type: String = ""
+var current_protocol: ExperimentProtocol = null
 ## Types already played, in order.
 ## NETWORK: @rpc replication hook — safe to sync (already revealed).
 var round_history: Array[String] = []
 
 ## The shuffled secret order for all three rounds.
 ## NETWORK: SERVER-ONLY SECRET — never replicate this array to clients.
-var _secret_round_queue: Array[String] = []
+var _secret_protocol_queue: Array[ExperimentProtocol] = []
 
 
 ## Shuffles the round pool into a secret queue. Call once at match start,
 ## on the server only.
 ## NETWORK: @rpc replication hook — server-side; clients only get the
 ## round_queue_locked notification, not the contents.
-func secretly_queue_rounds() -> void:
-	_secret_round_queue = ROUND_TYPES.duplicate()
-	_secret_round_queue.shuffle()
+func secretly_queue_rounds(seed: int = 0) -> void:
+	_secret_protocol_queue = PROTOCOLS.duplicate()
+	var random := RandomNumberGenerator.new()
+	random.seed = seed
+	for i: int in range(_secret_protocol_queue.size() - 1, 0, -1):
+		var swap_index: int = random.randi_range(0, i)
+		var protocol: ExperimentProtocol = _secret_protocol_queue[i]
+		_secret_protocol_queue[i] = _secret_protocol_queue[swap_index]
+		_secret_protocol_queue[swap_index] = protocol
 	current_round_index = 0
 	current_round_type = ""
+	current_protocol = null
 	round_history.clear()
 	round_queue_locked.emit()
 
@@ -65,7 +77,7 @@ func secretly_queue_rounds() -> void:
 ## NETWORK: @rpc replication hook — server drives this; the resulting
 ## round_started / round_type_eliminated signals are what get broadcast.
 func advance_to_next_round() -> String:
-	if _secret_round_queue.is_empty():
+	if _secret_protocol_queue.is_empty():
 		push_warning("RoundManager: call secretly_queue_rounds() before advancing.")
 		return ""
 	if current_round_index >= TOTAL_ROUNDS:
@@ -73,34 +85,38 @@ func advance_to_next_round() -> String:
 		return ""
 
 	current_round_index += 1
-	current_round_type = _secret_round_queue[current_round_index - 1]
+	current_protocol = _secret_protocol_queue[current_round_index - 1]
+	current_round_type = current_protocol.classification
 
 	match current_round_index:
 		1:
 			# Round 1: random selection, nothing revealed yet.
-			_display_banner("ROUND 1 — Type: %s" % current_round_type)
+			_display_banner("ROUND 1\n%s" % current_protocol.experiment_brief())
 		2:
 			# Round 2: reveal that Round 1's type is out of the pool, then
 			# play a (pre-shuffled, therefore random) pick of the last two.
 			var eliminated: String = round_history[0]
 			round_type_eliminated.emit(2, eliminated)
-			_display_banner("'%s' HAS BEEN ELIMINATED FROM THE POOL" % eliminated)
-			_display_banner("ROUND 2 — Type: %s" % current_round_type)
+			_display_banner("PREVIOUS EXPERIMENT PROTOCOL COMPLETE")
+			_display_banner("ROUND 2\n%s" % current_protocol.experiment_brief())
 		3:
 			# Round 3: no choice left — the final remaining type is forced.
 			var eliminated: String = round_history[1]
 			round_type_eliminated.emit(3, eliminated)
-			_display_banner("'%s' HAS BEEN ELIMINATED FROM THE POOL" % eliminated)
-			_display_banner("FINAL ROUND — FORCED Type: %s" % current_round_type)
+			_display_banner("PREVIOUS EXPERIMENT PROTOCOL COMPLETE")
+			_display_banner("FINAL ROUND\n%s" % current_protocol.experiment_brief())
 
 	round_history.append(current_round_type)
-	round_started.emit(current_round_index, current_round_type)
+	round_started.emit(current_round_index, current_protocol)
 	return current_round_type
 
 
 ## Round types still hidden in the queue (server-side helper for tooling).
 func get_remaining_pool() -> Array[String]:
-	return _secret_round_queue.slice(current_round_index)
+	var remaining: Array[String] = []
+	for protocol: ExperimentProtocol in _secret_protocol_queue.slice(current_round_index):
+		remaining.append(protocol.classification)
+	return remaining
 
 
 func is_match_complete() -> bool:
