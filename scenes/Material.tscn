@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/Material.gd" id="1_material"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_material"]
+radius = 0.35
+
+[sub_resource type="SphereMesh" id="SphereMesh_material"]
+radius = 0.35
+height = 0.7
+
+[node name="Material" type="Area3D" groups=["material_resources"]]
+script = ExtResource("1_material")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_material")
+
+[node name="MaterialMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_material")

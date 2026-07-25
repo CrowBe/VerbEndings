@@ -17,11 +17,16 @@ signal residual_died(residual: Residual, killer_player_id: int)
 ## NETWORK: @rpc replication hook — broadcast for evolution VFX/nameplate.
 signal evolved(residual: Residual, verb: Enums.VerbType)
 
+const MATERIAL_SCENE: PackedScene = preload("res://scenes/Material.tscn")
 const BASE_HEALTH: float = 20.0
 const BASE_DAMAGE: float = 6.0
 const BASE_SPEED: float = 3.0
 const ATTACK_RANGE: float = 1.6
 const ATTACK_COOLDOWN: float = 1.2
+
+@export_range(0.0, 100.0, 0.1) var material_shed_amount: float = 10.0
+@export_range(0.0, 1.0, 0.01) var material_shed_probability: float = 0.35
+@export_range(0.0, 1.0, 0.01) var destabilise_shed_probability: float = 1.0
 
 ## Stat mutations applied when a residual takes on a verb.
 const VERB_MUTATIONS: Dictionary = {
@@ -100,7 +105,9 @@ func take_hit(amount: float, attacker_player_id: int) -> void:
 	if health <= 0.0:
 		return
 	health -= amount
+	_shed_material(material_shed_probability)
 	if health <= 0.0:
+		_shed_material(destabilise_shed_probability)
 		residual_died.emit(self, attacker_player_id)
 		queue_free()
 
@@ -163,3 +170,12 @@ func _nearest_living_player() -> Node3D:
 			best_distance = distance
 			best = body
 	return best
+
+
+func _shed_material(probability: float) -> void:
+	if material_shed_amount <= 0.0 or randf() > clampf(probability, 0.0, 1.0):
+		return
+	var material_resource: MaterialResource = MATERIAL_SCENE.instantiate()
+	material_resource.absorb_amount = material_shed_amount
+	get_parent().add_child(material_resource)
+	material_resource.global_position = global_position

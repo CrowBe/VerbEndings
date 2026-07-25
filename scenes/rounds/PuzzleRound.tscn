@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvbendpuzzler1"]
+[gd_scene load_steps=5 format=3 uid="uid://cvbendpuzzler1"]
 
 [ext_resource type="Script" path="res://scripts/rounds/PuzzleRound.gd" id="1_round"]
+[ext_resource type="PackedScene" path="res://scenes/MaterialDispenser.tscn" id="2_dispenser"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(120, 1, 120)
@@ -23,3 +24,6 @@ mesh = SubResource("BoxMesh_floor")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 20, 0)
 shadow_enabled = true
+
+[node name="EngineMaterialDispenser" parent="." instance=ExtResource("2_dispenser")]
+position = Vector3(0, 0, -18)
