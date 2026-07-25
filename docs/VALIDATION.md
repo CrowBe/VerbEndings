@@ -59,6 +59,16 @@ godot4.3 --headless --path . tests/TestTrialResolution.tscn
 It verifies individual Round and Trial Scores, sole and tied First Place,
 Collapse participation, and odd-roster Self-Chains.
 
+Run the Residual grammar suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestResidualGrammar.tscn
+```
+
+It verifies seeded Adverb timing and selection, one-Verb and one-Adverb caps,
+the separation of Assumption from self-development, and independently visible
+behaviour changes on a Verbless Residual.
+
 For graphical inspection, run:
 
 ```bash
