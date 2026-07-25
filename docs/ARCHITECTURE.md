@@ -28,7 +28,7 @@ These are stateful in-process services. Comments identify intended RPC and repli
 
 `Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, timed buffs, and procedural tween animation. Every Subject has baseline Stability, configurable per-Verb Expression Costs, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, and normal-Experiment Restabilisation. Subjects and Residuals shed configurable Material on Impact and Destabilisation. A live Subject below baseline absorbs Material on contact to Restabilise without exceeding baseline. The scene is directly coupled to its primitive visual children and camera rig.
 
-`Residual.gd` is a pursuing `CharacterBody3D`. It finds the nearest stable Subject, attacks in range, scales over time, can evolve, and can assume the Verb of a Destabilised Subject. PVE code addresses these actors through the `residuals` group.
+`Residual.gd` is a pursuing `CharacterBody3D`. It finds the nearest stable Subject, attacks in range, and scales over time. A per-Residual seeded survival threshold develops one Adverb that modifies movement, attacks, and any assumed Verb; Destabilising a Subject is the only path to assuming one Verb. Separate mesh layers present the standard Verb colour treatment and a neutral Adverb overlay. PVE code addresses these actors through the `residuals` group.
 
 The implemented input map is WASD movement, Space jump, left mouse basic hit, right mouse Verb use, and Escape mouse capture.
 
@@ -44,7 +44,7 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 `PuzzleUnit` provides shared contribution tracking, Verb power modifiers, completion signals, and helpers for procedural physics bodies.
 
-`PVERound` spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, evolves hostiles after 90 seconds, and transfers a Destabilised Player's Verb to the responsible hostile.
+`PVERound` spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
 
 Both Round controllers emit an ordered list when asked to end. Neither controls the complete three-Round Trial lifecycle from the main scene.
 

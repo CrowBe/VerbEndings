@@ -3,10 +3,9 @@ extends Node3D
 ##
 ## Residuals spawn on a ring around each living player — never closer than
 ## MIN_SPAWN_DISTANCE — and both the spawn rate and per-residual strength
-## grow over the round. After EVOLUTION_TIME, residuals start taking verbs:
-## new spawns roll one immediately, existing residuals evolve randomly on a
-## cadence, and any residual that lands a last hit on a player preemptively
-## inherits the victim's verb instead (see Residual.assume_verb).
+## grow over the round. Each Residual independently develops one seeded
+## Adverb after surviving its configured threshold. A Residual may separately
+## assume one Verb only by Destabilising its Subject.
 ##
 ## Scoring combines KILLS and SURVIVAL TIME: swarm_kill bonuses per kill,
 ## survival_tick bonuses on a timer while alive, and end-of-round placements
@@ -32,9 +31,6 @@ const MIN_SPAWN_INTERVAL: float = 1.2
 const SPAWN_INTERVAL_DECAY: float = 0.02
 ## Residual strength growth: +1% per second of round time.
 const STRENGTH_GROWTH_PER_SECOND: float = 0.01
-## When the evolution phase begins, and how often existing residuals roll.
-const EVOLUTION_TIME: float = 90.0
-const EVOLUTION_INTERVAL: float = 12.0
 ## Survival scoring cadence.
 const SURVIVAL_TICK_SECONDS: float = 10.0
 ## Placement blend: one kill outweighs one survival tick 3:1.
@@ -49,10 +45,13 @@ var kill_counts: Dictionary = {}
 ## player_id -> survival ticks earned this round.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var survival_ticks: Dictionary = {}
+## Stable input for deterministic Residual grammar. Multiplayer hosts provide
+## the authoritative Trial seed here.
+@export var grammar_seed: int = 0
 
 var _spawn_timer: float = 0.0
 var _survival_timer: float = 0.0
-var _evolution_timer: float = 0.0
+var _residual_sequence: int = 0
 
 
 func _ready() -> void:
@@ -74,13 +73,6 @@ func _physics_process(delta: float) -> void:
 		_survival_timer = 0.0
 		_award_survival_ticks()
 
-	if elapsed >= EVOLUTION_TIME:
-		_evolution_timer += delta
-		if _evolution_timer >= EVOLUTION_INTERVAL:
-			_evolution_timer = 0.0
-			_evolve_random_residual()
-
-
 ## Ends the round: placements by weighted kills + survival, best first.
 ## NETWORK: @rpc replication hook — server-side, on round timer expiry.
 func end_round() -> void:
@@ -101,13 +93,11 @@ func _spawn_wave() -> void:
 		if body.is_destabilised:
 			continue
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
-		residual.setup(_current_strength_multiplier())
+		residual.setup(_current_strength_multiplier(), grammar_seed + _residual_sequence)
+		_residual_sequence += 1
 		residual.position = _ring_position_around(body)
 		residual.residual_died.connect(_on_residual_died)
 		add_child(residual)
-		# Evolution phase: fresh spawns arrive with a verb already rolled.
-		if elapsed >= EVOLUTION_TIME:
-			residual.evolve_random()
 
 
 ## Random point on the ring: MIN..MAX spawn distance, random bearing.
@@ -138,21 +128,13 @@ func _award_survival_ticks() -> void:
 		ScoreManager.award_bonus(player_id, "PVE", "survival_tick")
 
 
-func _evolve_random_residual() -> void:
-	var unevolved: Array = get_tree().get_nodes_in_group("residuals").filter(
-			func(m: Node) -> bool: return not m.has_evolved)
-	if not unevolved.is_empty():
-		unevolved.pick_random().evolve_random()
-
-
 func _on_residual_died(_residual: Residual, killer_player_id: int) -> void:
 	kill_counts[killer_player_id] = kill_counts.get(killer_player_id, 0) + 1
 	ScoreManager.award_bonus(killer_player_id, "PVE", "swarm_kill")
 	residual_killed.emit(killer_player_id, kill_counts[killer_player_id])
 
 
-## Last-hit verb inheritance: the killing residual preemptively takes the
-## victim's verb, overriding any pending random evolution.
+## A last hit is the sole Assumption path.
 func _on_player_destabilised(player: Node, source: Node) -> void:
 	if source is Residual:
 		source.assume_verb(player.assigned_verb)
