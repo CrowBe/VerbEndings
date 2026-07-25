@@ -4,10 +4,9 @@ extends CharacterBody3D
 ## contact. Spawned by PVERound at a ring around each player and scaled by
 ## the round's strength multiplier.
 ##
-## Verbs: residuals start verbless. After the round's evolution timer they
-## may evolve a random verb — but a residual that lands the LAST HIT on a
-## player preemptively takes the victim's verb instead, locking out the
-## random roll. A verb applies the stat mutation from VERB_MUTATIONS.
+## Residuals start without grammar. Survival develops one seeded Adverb,
+## while Destabilising a Subject may grant that Subject's Verb. These are
+## independent, capped states: neither can replace or grant the other.
 ##
 ## NETWORK: Residuals are server-owned. Spawns, evolutions, hits, and deaths
 ## all originate server-side and broadcast via the RPC hooks below.
@@ -15,7 +14,15 @@ extends CharacterBody3D
 ## NETWORK: @rpc replication hook — broadcast; PVERound scores the kill.
 signal residual_died(residual: Residual, killer_player_id: int)
 ## NETWORK: @rpc replication hook — broadcast for evolution VFX/nameplate.
-signal evolved(residual: Residual, verb: Enums.VerbType)
+signal adverb_developed(residual: Residual, adverb: AdverbType)
+signal verb_assumed(residual: Residual, verb: Enums.VerbType)
+
+enum AdverbType {
+	NONE,
+	QUICKLY,
+	VIOLENTLY,
+	RELENTLESSLY,
+}
 
 const MATERIAL_SCENE: PackedScene = preload("res://scenes/Material.tscn")
 const BASE_HEALTH: float = 20.0
@@ -27,6 +34,15 @@ const ATTACK_COOLDOWN: float = 1.2
 @export_range(0.0, 100.0, 0.1) var material_shed_amount: float = 10.0
 @export_range(0.0, 1.0, 0.01) var material_shed_probability: float = 0.35
 @export_range(0.0, 1.0, 0.01) var destabilise_shed_probability: float = 1.0
+## Seeded survival window and Adverb magnitudes are balance data.
+@export_range(0.0, 600.0, 1.0) var adverb_survival_time_min: float = 75.0
+@export_range(0.0, 600.0, 1.0) var adverb_survival_time_max: float = 105.0
+@export_range(0.1, 5.0, 0.05) var quickly_speed_multiplier: float = 1.45
+@export_range(0.1, 5.0, 0.05) var quickly_action_speed_multiplier: float = 1.25
+@export_range(0.1, 5.0, 0.05) var violently_speed_multiplier: float = 1.1
+@export_range(0.1, 5.0, 0.05) var violently_damage_multiplier: float = 1.6
+@export_range(0.1, 5.0, 0.05) var relentlessly_speed_multiplier: float = 1.2
+@export_range(0.1, 5.0, 0.05) var relentlessly_action_speed_multiplier: float = 1.5
 
 ## Stat mutations applied when a residual takes on a verb.
 const VERB_MUTATIONS: Dictionary = {
@@ -49,10 +65,13 @@ var strength_multiplier: float = 1.0
 var health: float = BASE_HEALTH
 ## NETWORK: @rpc replication hook — sync for verb glow/nameplate.
 var verb: Enums.VerbType = Enums.VerbType.NONE
-## True once a verb is locked in (random roll OR last-hit inheritance).
-var has_evolved: bool = false
+## NETWORK: @rpc replication hook — sync for behavioural overlay/nameplate.
+var adverb: AdverbType = AdverbType.NONE
+var adverb_development_time: float = INF
 
 var _attack_timer: float = 0.0
+var _survival_time: float = 0.0
+var _rng := RandomNumberGenerator.new()
 ## Movement slow from a player's FREEZE activation (1.0 = full speed).
 ## NETWORK: @rpc replication hook — sync for a frost-tint shader later.
 var _slow_factor: float = 1.0
@@ -61,13 +80,24 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 ## Configure at spawn, before add_child.
-func setup(p_strength_multiplier: float) -> void:
+@onready var _verb_treatment: MeshInstance3D = $VerbTreatment
+@onready var _adverb_overlay: MeshInstance3D = $AdverbOverlay
+
+
+func setup(p_strength_multiplier: float, grammar_seed: int = 0) -> void:
 	strength_multiplier = p_strength_multiplier
 	health = BASE_HEALTH * strength_multiplier
+	_rng.seed = grammar_seed
+	var lower := minf(adverb_survival_time_min, adverb_survival_time_max)
+	var upper := maxf(adverb_survival_time_min, adverb_survival_time_max)
+	adverb_development_time = _rng.randf_range(lower, upper)
 
 
 func _physics_process(delta: float) -> void:
 	# NETWORK: AI runs on the server only; clients interpolate transforms.
+	_survival_time += delta
+	if adverb == AdverbType.NONE and _survival_time >= adverb_development_time:
+		develop_adverb()
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	_attack_timer = maxf(_attack_timer - delta, 0.0)
@@ -94,7 +124,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		if _attack_timer == 0.0:
-			_attack_timer = ATTACK_COOLDOWN
+			_attack_timer = ATTACK_COOLDOWN / _adverb_action_speed()
 			target.apply_impact(get_damage(), self)
 	move_and_slide()
 
@@ -120,43 +150,111 @@ func apply_slow(factor: float, duration: float) -> void:
 	_slow_timer = maxf(_slow_timer, duration)
 
 
-## Random evolution roll (PVERound calls this after the evolution timer).
-## A residual that already inherited a verb via last hit is locked out.
-func evolve_random() -> void:
-	if has_evolved:
+## Select exactly one Adverb from this Residual's seeded stream.
+func develop_adverb() -> void:
+	if adverb != AdverbType.NONE:
 		return
-	var candidates: Array = Enums.VerbType.values().filter(
-			func(v: Enums.VerbType) -> bool: return v != Enums.VerbType.NONE)
-	_take_on_verb(candidates.pick_random())
+	var candidates: Array[AdverbType] = [
+		AdverbType.QUICKLY,
+		AdverbType.VIOLENTLY,
+		AdverbType.RELENTLESSLY,
+	]
+	adverb = candidates[_rng.randi_range(0, candidates.size() - 1)]
+	_apply_adverb_overlay()
+	adverb_developed.emit(self, adverb)
 
 
-## Last-hit inheritance: this residual killed a player, so it preemptively
-## takes the victim's verb — overriding and locking out the random roll.
+## Assumption only occurs on a Subject's Destabilisation and never replaces
+## an already assumed Verb.
 ## NETWORK: @rpc replication hook — server-side, from PVERound's death hook.
 func assume_verb(victim_verb: Enums.VerbType) -> void:
-	if victim_verb == Enums.VerbType.NONE:
+	if victim_verb == Enums.VerbType.NONE or verb != Enums.VerbType.NONE:
 		return
 	_take_on_verb(victim_verb)
 
 
 func get_damage() -> float:
-	return BASE_DAMAGE * strength_multiplier * _mutation().damage
+	return BASE_DAMAGE * strength_multiplier * _mutation().damage \
+			* _adverb_damage()
 
 
 func get_speed() -> float:
-	return BASE_SPEED * strength_multiplier * _mutation().speed * _slow_factor
+	return BASE_SPEED * strength_multiplier * _mutation().speed \
+			* _adverb_speed() * _slow_factor
 
 
 func _take_on_verb(new_verb: Enums.VerbType) -> void:
 	verb = new_verb
-	has_evolved = true
 	# Health mutation applies to the remaining pool, not a full heal.
 	health *= _mutation().health
-	evolved.emit(self, verb)
+	_apply_verb_treatment()
+	verb_assumed.emit(self, verb)
 
 
 func _mutation() -> Dictionary:
 	return VERB_MUTATIONS.get(verb, VERB_MUTATIONS[Enums.VerbType.NONE])
+
+
+func _adverb_speed() -> float:
+	match adverb:
+		AdverbType.QUICKLY:
+			return quickly_speed_multiplier
+		AdverbType.VIOLENTLY:
+			return violently_speed_multiplier
+		AdverbType.RELENTLESSLY:
+			return relentlessly_speed_multiplier
+	return 1.0
+
+
+func _adverb_damage() -> float:
+	return violently_damage_multiplier if adverb == AdverbType.VIOLENTLY else 1.0
+
+
+func _adverb_action_speed() -> float:
+	match adverb:
+		AdverbType.QUICKLY:
+			return quickly_action_speed_multiplier
+		AdverbType.RELENTLESSLY:
+			return relentlessly_action_speed_multiplier
+	return 1.0
+
+
+func _apply_verb_treatment() -> void:
+	if not is_node_ready():
+		return
+	var colours: Dictionary = {
+		Enums.VerbType.BURN: Color("#ff6a3d"),
+		Enums.VerbType.SHIELD: Color("#35bceb"),
+		Enums.VerbType.GROW: Color("#66c95a"),
+		Enums.VerbType.STRETCH: Color("#d45ac7"),
+		Enums.VerbType.ROLL: Color("#4169d8"),
+		Enums.VerbType.JUMP: Color("#f2c94c"),
+		Enums.VerbType.BOUNCE: Color("#ff7db5"),
+		Enums.VerbType.FREEZE: Color("#a8e8e8"),
+		Enums.VerbType.REWIND: Color("#8067d8"),
+	}
+	var treatment := StandardMaterial3D.new()
+	treatment.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	treatment.albedo_color = colours.get(verb, Color.WHITE) * Color(1, 1, 1, 0.38)
+	treatment.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_verb_treatment.material_override = treatment
+	_verb_treatment.visible = true
+
+
+func _apply_adverb_overlay() -> void:
+	if not is_node_ready():
+		return
+	var overlay := StandardMaterial3D.new()
+	overlay.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	overlay.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	# Neutral monochrome bands remain distinct from every saturated Verb cue.
+	overlay.albedo_color = {
+		AdverbType.QUICKLY: Color(0.95, 0.95, 0.95, 0.7),
+		AdverbType.VIOLENTLY: Color(0.15, 0.15, 0.15, 0.8),
+		AdverbType.RELENTLESSLY: Color(0.55, 0.55, 0.55, 0.75),
+	}.get(adverb, Color.TRANSPARENT)
+	_adverb_overlay.material_override = overlay
+	_adverb_overlay.visible = true
 
 
 func _nearest_living_player() -> Node3D:

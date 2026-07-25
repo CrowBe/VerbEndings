@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvbendmonster1"]
+[gd_scene load_steps=6 format=3 uid="uid://cvbendmonster1"]
 
 [ext_resource type="Script" path="res://scripts/enemies/Residual.gd" id="1_residual"]
 
@@ -10,6 +10,14 @@ height = 0.9
 radius = 0.35
 height = 0.9
 
+[sub_resource type="SphereMesh" id="SphereMesh_verb"]
+radius = 0.42
+height = 0.84
+
+[sub_resource type="TorusMesh" id="TorusMesh_adverb"]
+inner_radius = 0.43
+outer_radius = 0.49
+
 [node name="Residual" type="CharacterBody3D" groups=["residuals"]]
 script = ExtResource("1_residual")
 
@@ -20,3 +28,13 @@ shape = SubResource("CapsuleShape3D_residual")
 [node name="ResidualMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 mesh = SubResource("CapsuleMesh_residual")
+
+[node name="VerbTreatment" type="MeshInstance3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("SphereMesh_verb")
+
+[node name="AdverbOverlay" type="MeshInstance3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0.45, 0)
+mesh = SubResource("TorusMesh_adverb")

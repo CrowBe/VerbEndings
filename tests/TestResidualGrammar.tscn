@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/test_residual_grammar.gd" id="1_test"]
+
+[node name="TestResidualGrammar" type="Node"]
+script = ExtResource("1_test")
