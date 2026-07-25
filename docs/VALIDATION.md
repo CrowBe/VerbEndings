@@ -69,6 +69,15 @@ It verifies seeded Adverb timing and selection, one-Verb and one-Adverb caps,
 the separation of Assumption from self-development, and independently visible
 behaviour changes on a Verbless Residual.
 
+Run the Experiment Protocol suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
+```
+
+It verifies deterministic seeded Protocol sequences, required authored fields,
+and Experiment Brief terminology that does not expose internal classifications.
+
 For graphical inspection, run:
 
 ```bash

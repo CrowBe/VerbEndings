@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ExperimentProtocol" load_steps=2 format=3]
+
+[ext_resource path="res://scripts/resources/ExperimentProtocol.gd" type="Script" id="1"]
+
+[resource]
+script = ExtResource("1")
+protocol_id = &"adaptive_containment"
+display_name = "Adaptive Containment"
+objective = "Contain the Residual swarm while maintaining Stability."
+hazards = Array[String](["Residual swarm", "Escalating pressure"])
+scoring_rules = {"survival_tick": 3, "swarm_kill": 8, "placement": "weighted_survival"}
+completion_condition = "The Experiment timer expires."
+classification = "PVE"

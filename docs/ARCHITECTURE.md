@@ -18,7 +18,7 @@ On startup, `Game.gd` loads a requested Puzzle or PVE Round and creates one loca
 | --- | --- |
 | `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, and calculates synergy and versatility values. |
 | `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes Trial Ranking, and provides lowest-score-first draft ordering. |
-| `RoundManager` | Shuffles PVP, PVE, and Puzzle classifications without replacement, tracks the current Round, and gates Player-versus-Player Impacts. |
+| `RoundManager` | Uses a Trial seed to select authored Experiment Protocols without replacement, tracks the current Round, and gates Player-versus-Player Impacts using each Protocol's internal classification. |
 | `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft order, and shared insertion-platform occupancy. |
 | `CollapseManager` | Resolves individual First Place, starts the Collapse for a tie, applies universal Overdrive, and declares the final survivor. |
 
@@ -34,7 +34,9 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 ## Experiments
 
-`PuzzleRound` scatters five physics puzzle units, dispenses Material through a visible Semantic Engine apparatus, and ranks Players by completed-unit contributions. Dispensing stops while the Semantic Engine is offline during the Collapse. The available units are:
+Experiment Protocols are authored resources containing an Objective, hazards, scoring rules, completion condition, and an internal development classification. The Semantic Engine authority in `RoundManager` selects a deterministic three-Protocol sequence from a Trial seed and derives each Experiment Brief from the selected resource.
+
+`PuzzleRound` executes the Precision Assembly Protocol. It scatters five physics puzzle units, dispenses Material through a visible Semantic Engine apparatus, and ranks Players by completed-unit contributions. Dispensing stops while the Semantic Engine is offline during the Collapse. The available units are:
 
 - Momentum Turbine;
 - Counterweight Plate;
@@ -44,7 +46,7 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 `PuzzleUnit` provides shared contribution tracking, Verb power modifiers, completion signals, and helpers for procedural physics bodies.
 
-`PVERound` spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
+`PVERound` executes the Adaptive Containment Protocol. It spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
 
 Both Round controllers emit an ordered list when asked to end. Neither controls the complete three-Round Trial lifecycle from the main scene.
 
