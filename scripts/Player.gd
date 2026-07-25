@@ -25,6 +25,7 @@ signal critical_stability_changed(is_critical: bool)
 signal hit_performed
 signal verb_expressed(verb: Enums.VerbType)
 
+const MATERIAL_SCENE: PackedScene = preload("res://scenes/Material.tscn")
 const MOUSE_SENSITIVITY: float = 0.003
 const CAMERA_PITCH_MIN: float = deg_to_rad(-75.0)
 const CAMERA_PITCH_MAX: float = deg_to_rad(25.0)
@@ -46,6 +47,11 @@ const CRITICAL_STABILITY_MAX: float = 9.0
 ## Percentage of baseline Stability restored each second. This is balance
 ## data and may be overridden per Subject.
 @export_range(0.0, 100.0, 0.1) var stabilisation_rate: float = 1.0
+## Material shed by a Subject Impact is balance data. Destabilisation makes
+## one additional shed roll because it is the strongest possible Impact.
+@export_range(0.0, 100.0, 0.1) var material_shed_amount: float = 10.0
+@export_range(0.0, 1.0, 0.01) var material_shed_probability: float = 0.35
+@export_range(0.0, 1.0, 0.01) var destabilise_shed_probability: float = 1.0
 
 ## Basic hit: the big fist.
 const HIT_COOLDOWN: float = 0.6
@@ -252,8 +258,10 @@ func apply_impact(amount: float, source: Node = null) -> void:
 			and not RoundManager.is_pvp_enabled():
 		return
 	_set_stability(maxf(stability - amount, 0.0))
+	_shed_material(material_shed_probability)
 	if stability == 0.0:
 		is_destabilised = true
+		_shed_material(destabilise_shed_probability)
 		destabilised.emit(self, source)
 
 
@@ -263,6 +271,15 @@ func restabilise() -> void:
 	is_destabilised = false
 	_set_stability(BASELINE_STABILITY)
 	_clear_buffs()
+
+
+## Absorbs Material while this Subject is active and below baseline.
+## Returns whether any Material was consumed.
+func absorb_material(amount: float) -> bool:
+	if is_destabilised or stability >= BASELINE_STABILITY or amount <= 0.0:
+		return false
+	_set_stability(stability + amount)
+	return true
 
 
 ## Applies the universal, always-on Restabilisation as a percentage of
@@ -408,6 +425,15 @@ func _set_stability(value: float) -> void:
 	is_critical_stability = stability >= 1.0 and stability <= CRITICAL_STABILITY_MAX
 	if is_critical_stability != was_critical:
 		critical_stability_changed.emit(is_critical_stability)
+
+
+func _shed_material(probability: float) -> void:
+	if material_shed_amount <= 0.0 or randf() > clampf(probability, 0.0, 1.0):
+		return
+	var material_resource: MaterialResource = MATERIAL_SCENE.instantiate()
+	material_resource.absorb_amount = material_shed_amount
+	get_parent().add_child(material_resource)
+	material_resource.global_position = global_position
 
 
 func _in_verb_radius(body: Node3D) -> bool:

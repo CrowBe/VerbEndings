@@ -47,8 +47,16 @@ func _run() -> void:
 	_expect(is_equal_approx(subject.stability, subject.BASELINE_STABILITY),
 			"Stabilisation Rate stops exactly at baseline")
 
+	subject._set_stability(92.0)
+	_expect(subject.absorb_material(20.0),
+			"a live Subject below baseline absorbs Material")
+	_expect(is_equal_approx(subject.stability, subject.BASELINE_STABILITY),
+			"Material absorption is capped at baseline Stability")
+
 	subject._set_stability(1.0)
 	subject.apply_impact(1.0)
+	_expect(not subject.absorb_material(20.0),
+			"a Destabilised Subject cannot absorb Material")
 	subject._apply_stabilisation(10.0)
 	_expect(is_equal_approx(subject.stability, 0.0),
 			"Destabilised Subjects do not recover through the rate")

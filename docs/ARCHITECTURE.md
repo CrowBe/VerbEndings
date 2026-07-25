@@ -26,7 +26,7 @@ These are stateful in-process services. Comments identify intended RPC and repli
 
 ## Actors And Interaction
 
-`Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, timed buffs, and procedural tween animation. Every Subject has baseline Stability, configurable per-Verb Expression Costs, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, and normal-Experiment Restabilisation. The scene is directly coupled to its primitive visual children and camera rig.
+`Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, timed buffs, and procedural tween animation. Every Subject has baseline Stability, configurable per-Verb Expression Costs, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, and normal-Experiment Restabilisation. Subjects and Residuals shed configurable Material on Impact and Destabilisation. A live Subject below baseline absorbs Material on contact to Restabilise without exceeding baseline. The scene is directly coupled to its primitive visual children and camera rig.
 
 `Residual.gd` is a pursuing `CharacterBody3D`. It finds the nearest stable Subject, attacks in range, scales over time, can evolve, and can assume the Verb of a Destabilised Subject. PVE code addresses these actors through the `residuals` group.
 
@@ -34,7 +34,7 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 ## Experiments
 
-`PuzzleRound` scatters five physics puzzle units and ranks Players by completed-unit contributions. The available units are:
+`PuzzleRound` scatters five physics puzzle units, dispenses Material through a visible Semantic Engine apparatus, and ranks Players by completed-unit contributions. Dispensing stops while the Semantic Engine is offline during the Collapse. The available units are:
 
 - Momentum Turbine;
 - Counterweight Plate;
@@ -62,7 +62,7 @@ Both Round controllers emit an ordered list when asked to end. Neither controls 
 
 The repository provides a locally runnable gameplay greybox and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
 
-- the Stabilisation Rate and the Material Restabilisation economy are design contracts only;
+- Material dispensing is currently wired only into the Puzzle Experiment;
 - the Pair Draft has entry points for all three Rounds;
 - the insertion platform is not the canonical Drop sequence;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
