@@ -32,6 +32,12 @@ func face_direction(direction: Vector3, turn_amount: float) -> void:
 			visual_root.rotation.y, atan2(direction.x, direction.z), turn_amount)
 
 
+func get_facing_direction() -> Vector3:
+	if visual_root == null:
+		return Vector3.BACK
+	return visual_root.global_transform.basis * Vector3.BACK
+
+
 func update_locomotion(horizontal_speed: float, is_grounded: bool) -> void:
 	if not is_grounded:
 		return

@@ -32,6 +32,9 @@ func _run() -> void:
 	subject.animation_adapter.play_destabilise()
 	_expect(subject.animation_adapter.last_semantic_clip == &"destabilise",
 			"Destabilisation maps to destabilise")
+	subject.animation_adapter.face_direction(Vector3.RIGHT, 1.0)
+	_expect(subject.animation_adapter.get_facing_direction().is_equal_approx(Vector3.RIGHT),
+			"gameplay facing follows the presentation heading")
 
 	for verb: Enums.VerbType in [
 		Enums.VerbType.BURN,

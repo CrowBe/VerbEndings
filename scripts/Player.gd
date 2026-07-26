@@ -311,7 +311,7 @@ func basic_hit() -> void:
 func _resolve_hit() -> void:
 	if is_destabilised:
 		return
-	var facing: Vector3 = global_transform.basis * Vector3(0, 0, 1)
+	var facing: Vector3 = animation_adapter.get_facing_direction()
 	for body: Node3D in hit_box.get_overlapping_bodies():
 		if body == self:
 			continue
@@ -356,7 +356,7 @@ func express_verb() -> void:
 			_buff_time_left = BUFF_DURATION
 		Enums.VerbType.STRETCH:
 			# Not damaging: elastic lunge along facing.
-			var facing: Vector3 = global_transform.basis * Vector3(0, 0, 1)
+			var facing: Vector3 = animation_adapter.get_facing_direction()
 			velocity += facing * STRETCH_LUNGE_SPEED
 		Enums.VerbType.ROLL:
 			# Not damaging: momentum burst — sustained speed buff.
