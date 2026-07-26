@@ -9,6 +9,7 @@ extends Node
 
 const DEFAULT_PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
 const ROUND_SCENES: Dictionary = {
+	"PVP": preload("res://scenes/rounds/PVPRound.tscn"),
 	"PVE": preload("res://scenes/rounds/PVERound.tscn"),
 	"PUZZLE": preload("res://scenes/rounds/PuzzleRound.tscn"),
 }
