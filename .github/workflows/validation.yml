@@ -63,4 +63,7 @@ jobs:
       - name: Experiment Protocol tests
         run: godot --headless --path . tests/TestExperimentProtocols.tscn
 
+      - name: Animation adapter tests
+        run: godot --headless --path . tests/TestAnimationAdapter.tscn
+
       # Add focused gameplay test suites as separate steps below.

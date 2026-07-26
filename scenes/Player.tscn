@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvbendplayer01"]
+[gd_scene load_steps=7 format=3 uid="uid://cvbendplayer01"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/presentation/AnimationAdapter.gd" id="2_adapter"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.45
@@ -24,22 +25,28 @@ script = ExtResource("1_player")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("CapsuleShape3D_body")
 
-[node name="BlobMesh" type="MeshInstance3D" parent="."]
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="BlobMesh" type="MeshInstance3D" parent="Visual"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 mesh = SubResource("CapsuleMesh_blob")
 
-[node name="FistPivot" type="Node3D" parent="BlobMesh"]
+[node name="FistPivot" type="Node3D" parent="Visual"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.3)
 
-[node name="FistMesh" type="MeshInstance3D" parent="BlobMesh/FistPivot"]
+[node name="FistMesh" type="MeshInstance3D" parent="Visual/FistPivot"]
 visible = false
 mesh = SubResource("SphereMesh_fist")
 
-[node name="HitBox" type="Area3D" parent="BlobMesh"]
+[node name="HitBox" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BlobMesh/HitBox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitBox"]
 shape = SubResource("BoxShape3D_hitbox")
+
+[node name="AnimationAdapter" type="Node" parent="."]
+script = ExtResource("2_adapter")
+visual_root_path = NodePath("../Visual")
 
 [node name="CameraRig" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)

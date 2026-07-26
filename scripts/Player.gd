@@ -2,15 +2,12 @@ extends CharacterBody3D
 ## Third-person player controller for Verb Endings (Fall Guys-style blob).
 ##
 ## Movement: camera orbits via a yaw pivot (CameraRig) + pitched SpringArm3D;
-## WASD is camera-relative and the blob mesh turns to face travel.
+## WASD is camera-relative and the presentation turns to face travel.
 ## Combat: a comical BIG FIST punch (left mouse) is the universal Impact —
 ## it destabilises residuals, affects Subjects in PVP rounds, and drives
 ## puzzle units. Verb Expression (right mouse, 5s cooldown) fires the Verb's
 ## unique move and spends Stability.
 ## A loose "Tether Check" penalizes drifting too far from the chain partner.
-##
-## All "animations" here are procedural Tween gags on the graybox meshes —
-## replace with an AnimationPlayer once real character art exists.
 ##
 ## NETWORK: This scene will be spawned once per peer via MultiplayerSpawner.
 ## Variables marked with "@rpc replication hook" are the ones that need
@@ -140,10 +137,8 @@ var _position_history: Array[Dictionary] = []
 @onready var camera_rig: Node3D = $CameraRig
 @onready var spring_arm: SpringArm3D = $CameraRig/SpringArm3D
 @onready var camera: Camera3D = $CameraRig/SpringArm3D/Camera3D
-@onready var blob_mesh: MeshInstance3D = $BlobMesh
-@onready var fist_pivot: Node3D = $BlobMesh/FistPivot
-@onready var fist_mesh: MeshInstance3D = $BlobMesh/FistPivot/FistMesh
-@onready var hit_box: Area3D = $BlobMesh/HitBox
+@onready var animation_adapter: AnimationAdapter = $AnimationAdapter
+@onready var hit_box: Area3D = $HitBox
 
 
 func _ready() -> void:
@@ -152,6 +147,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	# The rig is top-level so orbiting the camera never twists the body.
 	camera_rig.top_level = true
+	animation_adapter.basic_hit_impact.connect(_resolve_hit)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -187,6 +183,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		animation_adapter.play_jump_start()
 	if Input.is_action_just_pressed("basic_hit"):
 		basic_hit()
 	if Input.is_action_just_pressed("verb_expression"):
@@ -205,20 +202,21 @@ func _physics_process(delta: float) -> void:
 	if direction:
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
-		# Turn the blob to face where it's headed (Fall Guys waddle).
-		blob_mesh.rotation.y = lerp_angle(
-				blob_mesh.rotation.y, atan2(direction.x, direction.z),
-				BLOB_TURN_SPEED * delta)
+		animation_adapter.face_direction(direction, BLOB_TURN_SPEED * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, speed)
 		velocity.z = move_toward(velocity.z, 0.0, speed)
 
 	move_and_slide()
+	animation_adapter.update_locomotion(
+			Vector2(velocity.x, velocity.z).length(), is_on_floor())
 
 	# BOUNCE: while charges remain, every landing re-launches the blob.
 	if _bounce_charges > 0 and is_on_floor() and not _was_on_floor:
 		velocity.y = JUMP_VELOCITY * 1.1
 		_bounce_charges -= 1
+	elif is_on_floor() and not _was_on_floor:
+		animation_adapter.play_land()
 	_was_on_floor = is_on_floor()
 
 
@@ -261,6 +259,7 @@ func apply_impact(amount: float, source: Node = null) -> void:
 	_shed_material(material_shed_probability)
 	if stability == 0.0:
 		is_destabilised = true
+		animation_adapter.play_destabilise()
 		_shed_material(destabilise_shed_probability)
 		destabilised.emit(self, source)
 
@@ -305,14 +304,14 @@ func basic_hit() -> void:
 		return
 	_hit_timer = HIT_COOLDOWN
 	hit_performed.emit()
-	_play_fist_animation()
+	animation_adapter.play_basic_hit()
 
 
 ## Damage/interaction resolution, fired by the animation at full extension.
 func _resolve_hit() -> void:
 	if is_destabilised:
 		return
-	var facing: Vector3 = blob_mesh.global_transform.basis * Vector3(0, 0, 1)
+	var facing: Vector3 = global_transform.basis * Vector3(0, 0, 1)
 	for body: Node3D in hit_box.get_overlapping_bodies():
 		if body == self:
 			continue
@@ -323,28 +322,6 @@ func _resolve_hit() -> void:
 	var unit: PuzzleUnit = _nearest_puzzle_unit()
 	if unit != null:
 		unit.interact(get_multiplayer_authority(), assigned_verb, facing)
-
-
-## Placeholder comic punch animation: fist inflates with overshoot, shoots
-## forward, resolves the hit, then deflates back into the blob.
-func _play_fist_animation() -> void:
-	fist_mesh.visible = true
-	fist_mesh.scale = Vector3.ONE * 0.2
-	fist_pivot.position.z = 0.3
-	var tween: Tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(fist_mesh, "scale", Vector3.ONE * 1.6, 0.12) \
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(fist_pivot, "position:z", 1.2, 0.12) \
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.set_parallel(false)
-	tween.tween_callback(_resolve_hit)
-	tween.tween_interval(0.08)
-	tween.set_parallel(true)
-	tween.tween_property(fist_mesh, "scale", Vector3.ONE * 0.2, 0.15)
-	tween.tween_property(fist_pivot, "position:z", 0.3, 0.15)
-	tween.set_parallel(false)
-	tween.tween_callback(func() -> void: fist_mesh.visible = false)
 
 
 ## --- Verb Expression ---------------------------------------------------
@@ -362,7 +339,7 @@ func express_verb() -> void:
 	_spend_expression_cost()
 	_verb_timer = get_verb_cooldown()
 	verb_expressed.emit(assigned_verb)
-	_play_verb_animation(assigned_verb)
+	animation_adapter.play_verb_expression(Enums.verb_name(assigned_verb))
 
 	match assigned_verb:
 		Enums.VerbType.BURN:
@@ -379,7 +356,7 @@ func express_verb() -> void:
 			_buff_time_left = BUFF_DURATION
 		Enums.VerbType.STRETCH:
 			# Not damaging: elastic lunge along facing.
-			var facing: Vector3 = blob_mesh.global_transform.basis * Vector3(0, 0, 1)
+			var facing: Vector3 = global_transform.basis * Vector3(0, 0, 1)
 			velocity += facing * STRETCH_LUNGE_SPEED
 		Enums.VerbType.ROLL:
 			# Not damaging: momentum burst — sustained speed buff.
@@ -420,7 +397,10 @@ func _spend_expression_cost() -> void:
 
 
 func _set_stability(value: float) -> void:
+	var previous_stability: float = stability
 	stability = clampf(value, 0.0, BASELINE_STABILITY)
+	if stability < previous_stability:
+		animation_adapter.play_stability_loss()
 	var was_critical := is_critical_stability
 	is_critical_stability = stability >= 1.0 and stability <= CRITICAL_STABILITY_MAX
 	if is_critical_stability != was_critical:
@@ -455,7 +435,6 @@ func _clear_buffs() -> void:
 	_speed_buff = 1.0
 	_power_buff = 1.0
 	_bounce_charges = 0
-	blob_mesh.scale = Vector3.ONE
 
 
 ## Remaining verb cooldown for the HUD (0 = ready).
@@ -492,69 +471,6 @@ func _nearest_puzzle_unit() -> PuzzleUnit:
 			best_distance = distance
 			best = unit
 	return best
-
-
-## --- Verb animations (procedural placeholders) -------------------------
-
-## One unique transform gag per verb. All of these are stand-ins for real
-## AnimationPlayer clips; they only touch blob_mesh scale/rotation so they
-## can never fight the movement code.
-func _play_verb_animation(verb: Enums.VerbType) -> void:
-	var tween: Tween = create_tween()
-	match verb:
-		Enums.VerbType.BURN:
-			# Double flare pulse.
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE * 1.35, 0.08)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE * 1.05, 0.08)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE * 1.45, 0.10)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.15)
-		Enums.VerbType.SHIELD:
-			# Squash into a dome and hold for the buff.
-			tween.tween_property(blob_mesh, "scale", Vector3(1.4, 0.55, 1.4), 0.12) \
-					.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-			tween.tween_interval(BUFF_DURATION - 0.3)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.18)
-		Enums.VerbType.GROW:
-			# Bulk up and stay big while the buff lasts.
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE * 1.6, 0.25) \
-					.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-			tween.tween_interval(BUFF_DURATION - 0.5)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.25)
-		Enums.VerbType.STRETCH:
-			# Taffy snap along the lunge.
-			tween.tween_property(blob_mesh, "scale", Vector3(0.6, 0.7, 2.4), 0.10)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.30) \
-					.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
-		Enums.VerbType.ROLL:
-			# Full forward somersault.
-			tween.tween_property(blob_mesh, "rotation:x", TAU, 0.5) \
-					.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-			tween.tween_callback(func() -> void: blob_mesh.rotation.x = 0.0)
-		Enums.VerbType.JUMP:
-			# Anticipation squash, then a launch stretch.
-			tween.tween_property(blob_mesh, "scale", Vector3(1.3, 0.6, 1.3), 0.08)
-			tween.tween_property(blob_mesh, "scale", Vector3(0.8, 1.5, 0.8), 0.15)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.25)
-		Enums.VerbType.BOUNCE:
-			# Three diminishing rubber squashes.
-			tween.tween_property(blob_mesh, "scale", Vector3(1.3, 0.7, 1.3), 0.10)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.10)
-			tween.tween_property(blob_mesh, "scale", Vector3(1.2, 0.8, 1.2), 0.08)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.08)
-			tween.tween_property(blob_mesh, "scale", Vector3(1.1, 0.9, 1.1), 0.06)
-			tween.tween_property(blob_mesh, "scale", Vector3.ONE, 0.06)
-		Enums.VerbType.FREEZE:
-			# Brittle shiver.
-			tween.tween_property(blob_mesh, "rotation:z", 0.12, 0.05)
-			tween.tween_property(blob_mesh, "rotation:z", -0.12, 0.05)
-			tween.tween_property(blob_mesh, "rotation:z", 0.08, 0.04)
-			tween.tween_property(blob_mesh, "rotation:z", -0.08, 0.04)
-			tween.tween_property(blob_mesh, "rotation:z", 0.0, 0.04)
-		Enums.VerbType.REWIND:
-			# Frantic reverse spin.
-			tween.tween_property(blob_mesh, "rotation:y", -TAU * 2.0, 0.4) \
-					.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-			tween.tween_callback(func() -> void: blob_mesh.rotation.y = 0.0)
 
 
 ## --- Tether ------------------------------------------------------------

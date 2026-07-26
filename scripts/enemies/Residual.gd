@@ -80,8 +80,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 ## Configure at spawn, before add_child.
-@onready var _verb_treatment: MeshInstance3D = $VerbTreatment
-@onready var _adverb_overlay: MeshInstance3D = $AdverbOverlay
+@onready var animation_adapter: AnimationAdapter = $AnimationAdapter
 
 
 func setup(p_strength_multiplier: float, grammar_seed: int = 0) -> void:
@@ -125,8 +124,11 @@ func _physics_process(delta: float) -> void:
 		velocity.z = 0.0
 		if _attack_timer == 0.0:
 			_attack_timer = ATTACK_COOLDOWN / _adverb_action_speed()
+			animation_adapter.play_basic_hit()
 			target.apply_impact(get_damage(), self)
 	move_and_slide()
+	animation_adapter.update_locomotion(
+			Vector2(velocity.x, velocity.z).length(), is_on_floor())
 
 
 ## Damage from a player's verb attack.
@@ -137,6 +139,7 @@ func take_hit(amount: float, attacker_player_id: int) -> void:
 	health -= amount
 	_shed_material(material_shed_probability)
 	if health <= 0.0:
+		animation_adapter.play_destabilise()
 		_shed_material(destabilise_shed_probability)
 		residual_died.emit(self, attacker_player_id)
 		queue_free()
@@ -160,7 +163,7 @@ func develop_adverb() -> void:
 		AdverbType.RELENTLESSLY,
 	]
 	adverb = candidates[_rng.randi_range(0, candidates.size() - 1)]
-	_apply_adverb_overlay()
+	animation_adapter.apply_adverb_treatment(adverb)
 	adverb_developed.emit(self, adverb)
 
 
@@ -187,7 +190,8 @@ func _take_on_verb(new_verb: Enums.VerbType) -> void:
 	verb = new_verb
 	# Health mutation applies to the remaining pool, not a full heal.
 	health *= _mutation().health
-	_apply_verb_treatment()
+	animation_adapter.apply_verb_treatment(verb)
+	animation_adapter.play_verb_expression(Enums.verb_name(verb))
 	verb_assumed.emit(self, verb)
 
 
@@ -217,44 +221,6 @@ func _adverb_action_speed() -> float:
 		AdverbType.RELENTLESSLY:
 			return relentlessly_action_speed_multiplier
 	return 1.0
-
-
-func _apply_verb_treatment() -> void:
-	if not is_node_ready():
-		return
-	var colours: Dictionary = {
-		Enums.VerbType.BURN: Color("#ff6a3d"),
-		Enums.VerbType.SHIELD: Color("#35bceb"),
-		Enums.VerbType.GROW: Color("#66c95a"),
-		Enums.VerbType.STRETCH: Color("#d45ac7"),
-		Enums.VerbType.ROLL: Color("#4169d8"),
-		Enums.VerbType.JUMP: Color("#f2c94c"),
-		Enums.VerbType.BOUNCE: Color("#ff7db5"),
-		Enums.VerbType.FREEZE: Color("#a8e8e8"),
-		Enums.VerbType.REWIND: Color("#8067d8"),
-	}
-	var treatment := StandardMaterial3D.new()
-	treatment.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	treatment.albedo_color = colours.get(verb, Color.WHITE) * Color(1, 1, 1, 0.38)
-	treatment.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_verb_treatment.material_override = treatment
-	_verb_treatment.visible = true
-
-
-func _apply_adverb_overlay() -> void:
-	if not is_node_ready():
-		return
-	var overlay := StandardMaterial3D.new()
-	overlay.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	overlay.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	# Neutral monochrome bands remain distinct from every saturated Verb cue.
-	overlay.albedo_color = {
-		AdverbType.QUICKLY: Color(0.95, 0.95, 0.95, 0.7),
-		AdverbType.VIOLENTLY: Color(0.15, 0.15, 0.15, 0.8),
-		AdverbType.RELENTLESSLY: Color(0.55, 0.55, 0.55, 0.75),
-	}.get(adverb, Color.TRANSPARENT)
-	_adverb_overlay.material_override = overlay
-	_adverb_overlay.visible = true
 
 
 func _nearest_living_player() -> Node3D:
