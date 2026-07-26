@@ -10,7 +10,7 @@ VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Ga
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` loads a requested Puzzle or PVE Round and creates one local `Player`. PVP is recognised by the Round manager but has no scene in `Game.ROUND_SCENES`. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round and creates one local `Player`. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
 
 ## Autoload Services
 
@@ -48,7 +48,9 @@ Experiment Protocols are authored resources containing an Objective, hazards, sc
 
 `PVERound` executes the Adaptive Containment Protocol. It spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
 
-Both Round controllers emit an ordered list when asked to end. Neither controls the complete three-Round Trial lifecycle from the main scene.
+`PVPRound` executes the Competitive Stress Protocol in an open impact crucible with measurement pylons, force plates, launch markings, shelters, and barricades. It samples Subject-owned dominance, displacement, and resilience metrics, awards knockout bonuses, and Recalls Destabilised Subjects.
+
+All three Round controllers emit an ordered list when asked to end. None controls the complete three-Round Trial lifecycle from the main scene.
 
 ## Scene And State Boundaries
 
@@ -69,7 +71,6 @@ The repository provides a locally runnable gameplay greybox and domain service p
 - the insertion platform is not the canonical Drop sequence;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
-- PVP has no Experiment scene;
 - the Compound, Assignment Deck, Laboratories, Dispensing Line, Recall, Result Announcement, and Thematic Moments are design contracts only; and
 - multiplayer transport, replication, deterministic scenarios, UI, audio, production art, and automated gameplay tests are absent.
 

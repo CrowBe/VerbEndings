@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/rounds/PVPRound.gd" id="1_round"]
+
+[sub_resource type="BoxShape3D" id="floor_shape"]
+size = Vector3(112, 1, 112)
+
+[sub_resource type="BoxMesh" id="floor_mesh"]
+size = Vector3(112, 1, 112)
+
+[sub_resource type="CylinderMesh" id="pylon_mesh"]
+top_radius = 0.6
+bottom_radius = 0.9
+height = 5.0
+
+[sub_resource type="BoxMesh" id="plate_mesh"]
+size = Vector3(5, 0.15, 5)
+
+[sub_resource type="BoxMesh" id="shelter_mesh"]
+size = Vector3(10, 3, 2)
+
+[sub_resource type="BoxShape3D" id="shelter_shape"]
+size = Vector3(10, 3, 2)
+
+[sub_resource type="TorusMesh" id="crucible_mesh"]
+inner_radius = 11.5
+outer_radius = 12.0
+
+[node name="PVPRound" type="Node3D"]
+script = ExtResource("1_round")
+
+[node name="TestFloor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestFloor"]
+shape = SubResource("floor_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="TestFloor"]
+mesh = SubResource("floor_mesh")
+
+[node name="ImpactCrucible" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.08, 0)
+mesh = SubResource("crucible_mesh")
+
+[node name="MeasurementPylons" type="Node3D" parent="."]
+
+[node name="North" type="MeshInstance3D" parent="MeasurementPylons"]
+position = Vector3(0, 2.5, -18)
+mesh = SubResource("pylon_mesh")
+
+[node name="East" type="MeshInstance3D" parent="MeasurementPylons"]
+position = Vector3(18, 2.5, 0)
+mesh = SubResource("pylon_mesh")
+
+[node name="South" type="MeshInstance3D" parent="MeasurementPylons"]
+position = Vector3(0, 2.5, 18)
+mesh = SubResource("pylon_mesh")
+
+[node name="West" type="MeshInstance3D" parent="MeasurementPylons"]
+position = Vector3(-18, 2.5, 0)
+mesh = SubResource("pylon_mesh")
+
+[node name="ForcePlates" type="Node3D" parent="."]
+
+[node name="NorthWest" type="MeshInstance3D" parent="ForcePlates"]
+position = Vector3(-15, 0.1, -15)
+mesh = SubResource("plate_mesh")
+
+[node name="SouthEast" type="MeshInstance3D" parent="ForcePlates"]
+position = Vector3(15, 0.1, 15)
+mesh = SubResource("plate_mesh")
+
+[node name="LaunchMeasurement" type="Node3D" parent="."]
+
+[node name="AxisX" type="MeshInstance3D" parent="LaunchMeasurement"]
+position = Vector3(0, 0.1, 0)
+scale = Vector3(6, 1, 0.05)
+mesh = SubResource("plate_mesh")
+
+[node name="AxisZ" type="MeshInstance3D" parent="LaunchMeasurement"]
+position = Vector3(0, 0.1, 0)
+scale = Vector3(0.05, 1, 6)
+mesh = SubResource("plate_mesh")
+
+[node name="SheltersAndBarricades" type="Node3D" parent="."]
+
+[node name="WestShelter" type="StaticBody3D" parent="SheltersAndBarricades"]
+position = Vector3(-28, 1.5, -18)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SheltersAndBarricades/WestShelter"]
+shape = SubResource("shelter_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="SheltersAndBarricades/WestShelter"]
+mesh = SubResource("shelter_mesh")
+
+[node name="EastShelter" type="StaticBody3D" parent="SheltersAndBarricades"]
+position = Vector3(28, 1.5, 18)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SheltersAndBarricades/EastShelter"]
+shape = SubResource("shelter_shape")
+
+[node name="Mesh" type="MeshInstance3D" parent="SheltersAndBarricades/EastShelter"]
+mesh = SubResource("shelter_mesh")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+shadow_enabled = true
