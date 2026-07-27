@@ -9,12 +9,15 @@ extends Node
 signal basic_hit_impact
 
 const MOVEMENT_DEAD_ZONE: float = 0.1
+const BASIC_HIT_CLIP: StringName = &"basic_hit"
 
 @export var visual_root_path: NodePath = ^"Visual"
 @export var animation_player_path: NodePath
 
 var last_semantic_clip: StringName = &""
 var _current_locomotion: StringName = &""
+var _basic_hit_attempt: int = 0
+var _pending_basic_hit_attempts: Dictionary = {}
 
 @onready var visual_root: Node3D = get_node_or_null(visual_root_path)
 @onready var animation_player: AnimationPlayer = get_node_or_null(animation_player_path)
@@ -57,12 +60,17 @@ func play_land() -> void:
 
 
 func play_basic_hit() -> void:
-	if play_semantic(&"basic_hit"):
-		# Production clips resolve their gameplay Impact immediately until
-		# authored call-method tracks provide a later marker.
-		basic_hit_impact.emit()
+	var attempt: int = _begin_basic_hit_attempt()
+	if play_semantic(BASIC_HIT_CLIP):
+		_schedule_production_basic_hit_fallback(attempt)
 		return
-	_play_proxy_basic_hit()
+	_play_proxy_basic_hit(attempt)
+
+
+## Contact callback for a production basic_hit clip's call-method track.
+## The track targets this adapter, never an imported visual descendant.
+func basic_hit_contact() -> void:
+	_resolve_basic_hit_impact(_basic_hit_attempt)
 
 
 func play_verb_expression(verb_name: String) -> void:
@@ -132,14 +140,34 @@ func _play_animation_player_clip(clip: StringName) -> bool:
 	return true
 
 
-func _play_proxy_basic_hit() -> void:
+func _begin_basic_hit_attempt() -> int:
+	_basic_hit_attempt += 1
+	_pending_basic_hit_attempts[_basic_hit_attempt] = true
+	return _basic_hit_attempt
+
+
+func _resolve_basic_hit_impact(attempt: int) -> void:
+	if not _pending_basic_hit_attempts.has(attempt):
+		return
+	_pending_basic_hit_attempts.erase(attempt)
+	basic_hit_impact.emit()
+
+
+func _schedule_production_basic_hit_fallback(attempt: int) -> void:
+	var animation: Animation = animation_player.get_animation(BASIC_HIT_CLIP)
+	var tween: Tween = create_tween()
+	tween.tween_interval(animation.length)
+	tween.tween_callback(func() -> void: _resolve_basic_hit_impact(attempt))
+
+
+func _play_proxy_basic_hit(attempt: int) -> void:
 	if visual_root == null:
-		basic_hit_impact.emit()
+		_resolve_basic_hit_impact(attempt)
 		return
 	var fist_pivot: Node3D = visual_root.get_node_or_null("FistPivot")
 	var fist_mesh: MeshInstance3D = visual_root.get_node_or_null("FistPivot/FistMesh")
 	if fist_pivot == null or fist_mesh == null:
-		basic_hit_impact.emit()
+		_resolve_basic_hit_impact(attempt)
 		return
 	fist_mesh.visible = true
 	fist_mesh.scale = Vector3.ONE * 0.2
@@ -151,7 +179,7 @@ func _play_proxy_basic_hit() -> void:
 	tween.tween_property(fist_pivot, "position:z", 1.2, 0.12) \
 			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.set_parallel(false)
-	tween.tween_callback(basic_hit_impact.emit)
+	tween.tween_callback(func() -> void: _resolve_basic_hit_impact(attempt))
 	tween.tween_interval(0.08)
 	tween.set_parallel(true)
 	tween.tween_property(fist_mesh, "scale", Vector3.ONE * 0.2, 0.15)

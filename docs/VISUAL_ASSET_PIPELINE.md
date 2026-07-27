@@ -40,12 +40,14 @@ Subject and Residual scenes expose semantic animation names through an `Animatio
 | Move | `move` | Movement above the dead zone |
 | Jump | `jump_start` | Accepted jump input |
 | Land | `land` | Floor contact after airtime |
-| Basic Impact | `basic_hit` | Basic-Impact signal |
+| Basic Impact | `basic_hit` | Accepted basic-hit presentation request |
 | Verb Expression | `verb_expression_<verb_name>` | Verb-Expression signal |
 | Stability Loss | `stability_loss` | Stability decreases |
 | Destabilisation | `destabilise` | Stability reaches zero from an Impact |
 
 The adapter translates literal gameplay-code signals into this semantic contract. Gameplay code does not address skeleton bones or imported mesh descendants directly.
+
+The production `basic_hit` clip may contain one call-method track key at its authored contact frame. The track targets the actor's `AnimationAdapter` relative to the `AnimationPlayer` root and calls `basic_hit_contact()` with no arguments. The adapter emits the gameplay `basic_hit_impact` signal at most once for that accepted presentation attempt. If the clip has no marker, the adapter emits the signal at the end of the clip duration. The proxy fallback emits at the fist's full extension after anticipation. Imported visual or animation descendants never call gameplay code or emit gameplay signals.
 
 ## Import Contract
 
