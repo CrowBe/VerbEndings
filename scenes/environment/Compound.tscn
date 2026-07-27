@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/environment/Compound.gd" id="1_compound"]
+
+[node name="Compound" type="Node3D"]
+script = ExtResource("1_compound")
+
+[node name="CentralCore" type="Node3D" parent="."]
+
+[node name="AssignmentDeck" type="Node3D" parent="."]
+
+[node name="ResearcherBoothReserved" type="Marker3D" parent="AssignmentDeck"]
+position = Vector3(0, 6, -17)
+
+[node name="SeparatorSpines" type="Node3D" parent="."]
+
+[node name="PerimeterMaintenanceRoute" type="Node3D" parent="."]
+
+[node name="DomeShell" type="Node3D" parent="."]
+
+[node name="Laboratories" type="Node3D" parent="."]
+
+[node name="AppliedCausalityLaboratory" type="Node3D" parent="Laboratories"]
+position = Vector3(0, 0, -44)
+
+[node name="RoundContent" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+
+[node name="Connections" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+
+[node name="LandingAreas" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+
+[node name="DominantApparatus" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+
+[node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+
+[node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/AppliedCausalityLaboratory"]
+position = Vector3(0, 4, 26)
+
+[node name="CompetitiveStressLaboratory" type="Node3D" parent="Laboratories"]
+position = Vector3(38.105, 0, 22)
+rotation_y = 2.094395
+
+[node name="RoundContent" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
+[node name="Connections" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
+[node name="LandingAreas" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
+[node name="DominantApparatus" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
+[node name="CriticalCueHooks" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
+[node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/CompetitiveStressLaboratory"]
+position = Vector3(0, 4, 26)
+
+[node name="AdaptiveContainmentLaboratory" type="Node3D" parent="Laboratories"]
+position = Vector3(-38.105, 0, 22)
+rotation_y = 4.18879
+
+[node name="RoundContent" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="Connections" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="LandingAreas" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="DominantApparatus" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+position = Vector3(0, 4, 26)

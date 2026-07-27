@@ -66,4 +66,5 @@ jobs:
       - name: Animation adapter tests
         run: godot --headless --path . tests/TestAnimationAdapter.tscn
 
-      # Add focused gameplay test suites as separate steps below.
+      - name: Compound topology and spatial-contract tests
+        run: godot --headless --path . tests/TestCompound.tscn
