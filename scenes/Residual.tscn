@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvbendmonster1"]
+[gd_scene load_steps=7 format=3 uid="uid://cvbendmonster1"]
 
 [ext_resource type="Script" path="res://scripts/enemies/Residual.gd" id="1_residual"]
+[ext_resource type="Script" path="res://scripts/presentation/AnimationAdapter.gd" id="2_adapter"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_residual"]
 radius = 0.35
@@ -25,16 +26,22 @@ script = ExtResource("1_residual")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("CapsuleShape3D_residual")
 
-[node name="ResidualMesh" type="MeshInstance3D" parent="."]
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ResidualMesh" type="MeshInstance3D" parent="Visual"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 mesh = SubResource("CapsuleMesh_residual")
 
-[node name="VerbTreatment" type="MeshInstance3D" parent="."]
+[node name="VerbTreatment" type="MeshInstance3D" parent="Visual"]
 visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 mesh = SubResource("SphereMesh_verb")
 
-[node name="AdverbOverlay" type="MeshInstance3D" parent="."]
+[node name="AdverbOverlay" type="MeshInstance3D" parent="Visual"]
 visible = false
 transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707107, 0, 0.707107, 0.707107, 0, 0.45, 0)
 mesh = SubResource("TorusMesh_adverb")
+
+[node name="AnimationAdapter" type="Node" parent="."]
+script = ExtResource("2_adapter")
+visual_root_path = NodePath("../Visual")
