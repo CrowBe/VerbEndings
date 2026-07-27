@@ -78,6 +78,19 @@ godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
 It verifies deterministic seeded Protocol sequences, required authored fields,
 and Experiment Brief terminology that does not expose internal classifications.
 
+Run the Compound topology and spatial-contract suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestCompound.tscn
+```
+
+It verifies the Central Core, Assignment Deck, three 52 m Test Floors,
+separator shutters, closed perimeter route, 30-degree dome modules, three
+distinct and recoverable Landing strategies per Laboratory, route redundancy,
+24-Subject floor-area allowance, non-colour cue hooks, cross-layer visibility
+hooks, normal-Round confinement, retained Laboratory node identity, environment
+kit naming and origins, metric contracts, and Godot-owned collision.
+
 For graphical inspection, run:
 
 ```bash
@@ -100,4 +113,4 @@ check in `.github/workflows/validation.yml`. New suites belong alongside them
 as separate steps, keeping failures isolated while using the same pinned
 engine and imported project.
 
-Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Those claims require focused runtime scenarios and human playtesting.
+Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Compound silhouette readability during a Drop, comfortable 8–12 Subject use, practical 24-Subject circulation, route legibility, and cross-layer sightline quality require graphical inspection and human playtesting.

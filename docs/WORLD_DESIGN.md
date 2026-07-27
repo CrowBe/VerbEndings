@@ -118,6 +118,14 @@ All pieces use metre scale, applied transforms, stable names, predictable origin
 
 The camera remains third-person. Main paths are 4–6 m wide, secondary paths 2.5–3 m wide, doors at least 4 m wide and 4.5 m high, and barriers roughly 1.1–1.3 m high. Apparatus uses large relationships—momentum, mass, timing, trajectory, pressure, balance, and cooperation—rather than tiny switches or precision placement.
 
+### Runtime Greybox
+
+The runnable Compound uses twelve 30-degree shell and perimeter modules, a 2 m planning grid with 1 m detail increments, 6 m main paths, 3 m secondary paths, 4 m by 4.5 m clear door contracts, and 1.2 m barriers. The Assignment Deck is a twelve-segment annulus at 6 m elevation with inner and outer rails and a reserved booth marker. Three 52 m Test Floors sit around the Core and retain their scene nodes while normal-Round confinement selects one active `RoundContent` boundary.
+
+Applied Causality uses a raised receiver, plinth, and transfer truss. Competitive Stress uses a reinforced crucible and four measurement pylons. Adaptive Containment uses a tall specimen-delivery column and four physical vent hooks. Each Laboratory provides apparatus-approach, perimeter-shelter, and service-access Landing strategies; two shuttered route connections; geometry, icon, and motion cue hooks; and a sightline marker towards the Assignment Deck.
+
+Headless validation establishes dimensions, node topology, route count, Landing recoverability, broad-path contracts, 24-Subject floor-area allowance, non-colour hooks, retained node identity, kit naming, and Godot collision ownership. Independent graphical acceptance still establishes Drop-time silhouette readability, comfortable 8–12 Subject spacing, practical 24-Subject circulation under live movement, sightline quality, and whether every strategy remains legible from the playable camera.
+
 ## Scope Boundaries
 
 The Compound does not use arbitrary structural destruction, runtime fracture simulation, unrestricted between-Round exploration, unique art for every state combination, generic random events that invalidate objectives, first-person interaction design, gore, or overt body horror. Support above 24 concurrent Players is outside the product boundary.

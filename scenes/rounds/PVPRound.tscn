@@ -1,12 +1,6 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/rounds/PVPRound.gd" id="1_round"]
-
-[sub_resource type="BoxShape3D" id="floor_shape"]
-size = Vector3(112, 1, 112)
-
-[sub_resource type="BoxMesh" id="floor_mesh"]
-size = Vector3(112, 1, 112)
 
 [sub_resource type="CylinderMesh" id="pylon_mesh"]
 top_radius = 0.6
@@ -28,15 +22,6 @@ outer_radius = 12.0
 
 [node name="PVPRound" type="Node3D"]
 script = ExtResource("1_round")
-
-[node name="TestFloor" type="StaticBody3D" parent="."]
-position = Vector3(0, -0.5, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TestFloor"]
-shape = SubResource("floor_shape")
-
-[node name="Mesh" type="MeshInstance3D" parent="TestFloor"]
-mesh = SubResource("floor_mesh")
 
 [node name="ImpactCrucible" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.08, 0)
