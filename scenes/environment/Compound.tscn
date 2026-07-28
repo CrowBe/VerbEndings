@@ -38,7 +38,7 @@ position = Vector3(0, 4, 26)
 
 [node name="CompetitiveStressLaboratory" type="Node3D" parent="Laboratories"]
 position = Vector3(38.105, 0, 22)
-rotation_y = 2.094395
+rotation = Vector3(0, 4.18879, 0)
 
 [node name="RoundContent" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
 
@@ -55,7 +55,7 @@ position = Vector3(0, 4, 26)
 
 [node name="AdaptiveContainmentLaboratory" type="Node3D" parent="Laboratories"]
 position = Vector3(-38.105, 0, 22)
-rotation_y = 4.18879
+rotation = Vector3(0, 2.094395, 0)
 
 [node name="RoundContent" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 

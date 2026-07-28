@@ -30,6 +30,7 @@ const DOOR_CLEAR_WIDTH_M: float = 4.0
 const DOOR_CLEAR_HEIGHT_M: float = 4.5
 const BARRIER_HEIGHT_M: float = 1.2
 const SUBJECT_CAPACITY: int = 24
+const CRITICAL_CUE_ROTATION_SPEED: float = 2.4
 
 const COLOUR_FLOOR := Color("c8ced1")
 const COLOUR_STRUCTURE := Color("66727a")
@@ -49,6 +50,23 @@ func _ready() -> void:
 	_build_perimeter_route()
 	_build_dome_shell()
 	select_active_laboratory(&"AppliedCausality")
+	set_process(false)
+
+
+func _process(delta: float) -> void:
+	var has_active_cue: bool = false
+	for laboratory_id: StringName in LABORATORY_IDS:
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		if not laboratory.get_meta("critical_state_active", false):
+			continue
+		has_active_cue = true
+		var motion_hook: Node3D = laboratory.get_node(
+				"CriticalCueHooks/MotionStateHook")
+		motion_hook.rotation.y = wrapf(
+				motion_hook.rotation.y + CRITICAL_CUE_ROTATION_SPEED * delta,
+				0.0, TAU)
+	if not has_active_cue:
+		set_process(false)
 
 
 func select_active_laboratory(laboratory_id: StringName) -> bool:
@@ -88,6 +106,24 @@ func get_round_content(laboratory_id: StringName) -> Node3D:
 	if laboratory == null:
 		return null
 	return laboratory.get_node("RoundContent") as Node3D
+
+
+func set_laboratory_critical_state(
+	laboratory_id: StringName,
+	active: bool,
+) -> bool:
+	var laboratory: Node3D = get_laboratory(laboratory_id)
+	if laboratory == null:
+		push_warning("Compound: unknown Laboratory '%s'." % laboratory_id)
+		return false
+	laboratory.set_meta("critical_state_active", active)
+	var cues: Node3D = laboratory.get_node("CriticalCueHooks")
+	cues.visible = active
+	var geometry_hook: Node3D = cues.get_node("GeometryStateHook")
+	geometry_hook.scale = Vector3(1.0, 1.35, 1.0) if active else Vector3.ONE
+	if active:
+		set_process(true)
+	return true
 
 
 func get_environment_kit_contract() -> Dictionary:
@@ -283,12 +319,39 @@ func _build_lab_apparatus(
 
 func _build_lab_cue_hooks(laboratory: Node3D) -> void:
 	var cues: Node3D = laboratory.get_node("CriticalCueHooks")
-	for cue_name: StringName in [
-		&"GeometryStateHook", &"IconStateHook", &"MotionStateHook",
-	]:
-		var marker := Marker3D.new()
-		marker.name = cue_name
-		cues.add_child(marker)
+	cues.position = Vector3(0.0, 0.0, -18.0)
+	var geometry_hook := Node3D.new()
+	geometry_hook.name = "GeometryStateHook"
+	geometry_hook.set_meta("cue_channel", &"geometry")
+	cues.add_child(geometry_hook)
+	_add_piece(geometry_hook, &"RaisedWarningFin",
+			EnvironmentKitPiece.Kind.PANEL, Vector3(1.0, 6.0, 3.0),
+			Vector3(-3.0, 0.0, 0.0), 0.0, COLOUR_CUE, false)
+	_add_piece(geometry_hook, &"RaisedWarningFin",
+			EnvironmentKitPiece.Kind.PANEL, Vector3(1.0, 6.0, 3.0),
+			Vector3(3.0, 0.0, 0.0), 0.0, COLOUR_CUE, false)
+
+	var icon_hook := Node3D.new()
+	icon_hook.name = "IconStateHook"
+	icon_hook.set_meta("cue_channel", &"icon")
+	cues.add_child(icon_hook)
+	_add_piece(icon_hook, &"AlertStem", EnvironmentKitPiece.Kind.PANEL,
+			Vector3(1.5, 4.0, 0.6), Vector3(0.0, 3.0, 0.0), 0.0,
+			COLOUR_PANEL, false)
+	_add_piece(icon_hook, &"AlertPoint", EnvironmentKitPiece.Kind.PANEL,
+			Vector3(1.5, 1.5, 0.6), Vector3(0.0, 0.5, 0.0), 0.0,
+			COLOUR_PANEL, false)
+
+	var motion_hook := Node3D.new()
+	motion_hook.name = "MotionStateHook"
+	motion_hook.set_meta("cue_channel", &"motion")
+	motion_hook.set_meta("motion", &"continuous_rotation")
+	cues.add_child(motion_hook)
+	_add_piece(motion_hook, &"WarningSweep", EnvironmentKitPiece.Kind.TRUSS,
+			Vector3(12.0, 0.5, 0.5), Vector3(0.0, 7.0, 0.0), 0.0,
+			COLOUR_STRUCTURE, false)
+	laboratory.set_meta("critical_state_active", false)
+	cues.visible = false
 
 
 func _build_separator_spines() -> void:

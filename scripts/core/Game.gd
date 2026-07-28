@@ -50,6 +50,9 @@ func load_round(round_type: String) -> Node3D:
 		push_warning("Game: no Laboratory registered for round type '%s'." % round_type)
 		return null
 	if current_round != null:
+		# Detach before moving the shared Round root so the outgoing Round cannot
+		# render for one frame at the next Laboratory while queue_free resolves.
+		round_root.remove_child(current_round)
 		current_round.queue_free()
 		current_round = null
 	var round_scene: PackedScene = ROUND_SCENES.get(round_type)

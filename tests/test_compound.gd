@@ -117,12 +117,27 @@ func _test_laboratory_contracts(
 		&"CompetitiveStress": &"ReinforcedImpactCrucible",
 		&"AdaptiveContainment": &"SpecimenDeliveryColumn",
 	}
+	var laboratory_positions: Array[Vector3] = []
 	for laboratory_id: StringName in Compound.LABORATORY_IDS:
 		var laboratory: Node3D = compound.get_laboratory(laboratory_id)
 		_expect(laboratory != null,
 				"%s Laboratory must exist" % laboratory_id, failures)
 		if laboratory == null:
 			continue
+		laboratory_positions.append(laboratory.global_position)
+		var inward_direction: Vector3 = Vector3(
+				-laboratory.global_position.x, 0.0,
+				-laboratory.global_position.z).normalized()
+		var local_inward: Vector3 = laboratory.global_basis.z.normalized()
+		_expect(local_inward.dot(inward_direction) >= 0.999,
+				"%s local +Z must face the Central Core" % laboratory_id,
+				failures)
+		var sightline: Marker3D = laboratory.get_node(
+				"SightlineToAssignmentDeck")
+		_expect(sightline.global_position.length()
+				< laboratory.global_position.length(),
+				"%s sightline marker must project towards the Assignment Deck"
+				% laboratory_id, failures)
 		_expect(laboratory.get_meta("test_floor_span_m") >= 48.0
 				and laboratory.get_meta("test_floor_span_m") <= 56.0,
 				"%s Test Floor must span 48-56 m" % laboratory_id, failures)
@@ -170,12 +185,49 @@ func _test_laboratory_contracts(
 			_expect(cue_hooks.has_node(hook_name),
 					"%s must provide the non-colour %s" % [laboratory_id, hook_name],
 					failures)
+			_expect(cue_hooks.get_node(hook_name).get_child_count() > 0,
+					"%s %s must contain a visible cue, not an empty marker"
+					% [laboratory_id, hook_name], failures)
 		var floor_area_per_subject: float = pow(
 				laboratory.get_meta("test_floor_span_m"), 2.0) \
 				/ laboratory.get_meta("subject_capacity")
 		_expect(floor_area_per_subject >= 100.0,
 				"%s must provide broad 24-Subject-capable floor area"
 				% laboratory_id, failures)
+	_expect(laboratory_positions.size() == 3,
+			"Compound must expose all three Laboratory centres", failures)
+	for index: int in laboratory_positions.size():
+		var position: Vector3 = laboratory_positions[index]
+		_expect(is_equal_approx(position.length(), 44.0),
+				"Laboratory centres must sit on the 44 m radial module",
+				failures)
+		var next_position: Vector3 = laboratory_positions[
+				(index + 1) % laboratory_positions.size()]
+		_expect(position.normalized().dot(next_position.normalized()) < -0.49
+				and position.normalized().dot(next_position.normalized()) > -0.51,
+				"Laboratory centres must maintain 120-degree radial separation",
+				failures)
+
+	var cue_laboratory: Node3D = compound.get_laboratory(&"AppliedCausality")
+	_expect(compound.set_laboratory_critical_state(&"AppliedCausality", true),
+			"critical-state cue activation must accept a valid Laboratory",
+			failures)
+	var active_cues: Node3D = cue_laboratory.get_node("CriticalCueHooks")
+	_expect(active_cues.visible,
+			"critical-state cues must become visible when active", failures)
+	var motion_before: float = active_cues.get_node("MotionStateHook").rotation.y
+	compound.call("_process", 0.5)
+	_expect(not is_equal_approx(
+			active_cues.get_node("MotionStateHook").rotation.y, motion_before),
+			"critical-state motion cue must visibly move", failures)
+	compound.set_laboratory_critical_state(&"AppliedCausality", false)
+	_expect(not active_cues.visible,
+			"critical-state cues must hide when inactive", failures)
+	for repeat: int in 5:
+		compound.set_laboratory_critical_state(&"AppliedCausality", true)
+		compound.set_laboratory_critical_state(&"AppliedCausality", false)
+	_expect(not active_cues.visible,
+			"repeated critical-state changes must settle inactive", failures)
 
 
 func _test_confinement_and_retained_state(
@@ -223,9 +275,22 @@ func _test_game_composition(failures: Array[String]) -> void:
 			game_compound.get_laboratory_anchor_transform(&"CompetitiveStress")),
 			"Game must place Round-local content at the active Laboratory anchor",
 			failures)
+	var outgoing_round: Node3D = game.current_round
 	_expect(game.load_round("PVE") != null,
 			"Game must load the Adaptive Containment Round", failures)
+	_expect(outgoing_round.get_parent() == null,
+			"outgoing Round must detach before the shared root moves", failures)
+	_expect(game.get_node("World/Round").get_child_count() == 1,
+			"Round switch must never render outgoing and incoming Rounds together",
+			failures)
 	await get_tree().process_frame
+	for round_type: String in ["PUZZLE", "PVP", "PVE", "PUZZLE", "PVP"]:
+		_expect(game.load_round(round_type) != null,
+				"repeated Round switching must load %s" % round_type, failures)
+		_expect(game.get_node("World/Round").get_child_count() == 1,
+				"repeated Round switching must keep one rendered Round",
+				failures)
+		await get_tree().process_frame
 	_expect(game_compound.get_laboratory(&"AppliedCausality").get_instance_id()
 			== retained_id,
 			"Game Round changes must retain inactive Laboratory instances",
