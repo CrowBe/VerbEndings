@@ -92,6 +92,7 @@ func set_collision_active(active: bool) -> void:
 func _rebuild() -> void:
 	_detach_visual_meshes()
 	for child: Node in get_children():
+		remove_child(child)
 		child.queue_free()
 	set_meta("kit_kind", KIND_NAMES[kind])
 	set_meta("dimensions_m", dimensions)
