@@ -26,6 +26,8 @@ const RADIAL_MODULE_DEGREES: float = 30.0
 const TEST_FLOOR_SPAN_M: float = 52.0
 const MAIN_PATH_WIDTH_M: float = 6.0
 const SECONDARY_PATH_WIDTH_M: float = 3.0
+const ASSIGNMENT_DECK_RADIUS_M: float = 17.0
+const PERIMETER_ROUTE_RADIUS_M: float = 73.0
 const DOOR_CLEAR_WIDTH_M: float = 4.0
 const DOOR_CLEAR_HEIGHT_M: float = 4.5
 const BARRIER_HEIGHT_M: float = 1.2
@@ -158,17 +160,24 @@ func _build_assignment_deck() -> void:
 	var deck: Node3D = $AssignmentDeck
 	for index: int in 12:
 		var angle: float = deg_to_rad(index * RADIAL_MODULE_DEGREES)
-		var tangent_rotation: float = angle
+		var tangent_rotation: float = -angle
 		_add_piece(deck, &"AnnularFloorSegment",
 				EnvironmentKitPiece.Kind.ANNULAR_FLOOR_SEGMENT,
-				Vector3(9.0, 0.5, 6.0),
-				Vector3(sin(angle) * 17.0, 5.5, -cos(angle) * 17.0),
-				tangent_rotation, COLOUR_FLOOR)
+				Vector3(
+						_annular_tangent_span(
+								ASSIGNMENT_DECK_RADIUS_M, MAIN_PATH_WIDTH_M),
+						0.5,
+						MAIN_PATH_WIDTH_M),
+				_radial_module_centre(ASSIGNMENT_DECK_RADIUS_M, 5.5, angle),
+				tangent_rotation, COLOUR_FLOOR, true, ASSIGNMENT_DECK_RADIUS_M)
 		for radius: float in [13.5, 20.5]:
 			_add_piece(deck, &"DeckRail", EnvironmentKitPiece.Kind.DECK_RAIL,
-					Vector3(9.0, BARRIER_HEIGHT_M, 0.25),
-					Vector3(sin(angle) * radius, 6.0, -cos(angle) * radius),
-					tangent_rotation, COLOUR_STRUCTURE)
+					Vector3(
+							_annular_tangent_span(radius, 0.25),
+							BARRIER_HEIGHT_M,
+							0.25),
+					_radial_module_centre(radius, 6.0, angle),
+					tangent_rotation, COLOUR_STRUCTURE, true, radius)
 	for access_index: int in 3:
 		var access_angle: float = deg_to_rad(access_index * 120.0)
 		_add_piece(deck, &"RadialAccessSegment",
@@ -376,9 +385,26 @@ func _build_perimeter_route() -> void:
 		var angle: float = deg_to_rad(index * RADIAL_MODULE_DEGREES)
 		_add_piece(route, &"PerimeterAnnularSegment",
 				EnvironmentKitPiece.Kind.ANNULAR_FLOOR_SEGMENT,
-				Vector3(38.0, 0.5, MAIN_PATH_WIDTH_M),
-				Vector3(sin(angle) * 74.0, -0.5, -cos(angle) * 74.0),
-				angle, COLOUR_STRUCTURE)
+				Vector3(
+						_annular_tangent_span(
+								PERIMETER_ROUTE_RADIUS_M, MAIN_PATH_WIDTH_M),
+						0.5,
+						MAIN_PATH_WIDTH_M),
+				_radial_module_centre(PERIMETER_ROUTE_RADIUS_M, -0.5, angle),
+				-angle, COLOUR_STRUCTURE, true, PERIMETER_ROUTE_RADIUS_M)
+
+
+func _radial_module_centre(
+	radius: float,
+	height: float,
+	angle: float,
+) -> Vector3:
+	return Vector3(sin(angle) * radius, height, -cos(angle) * radius)
+
+
+func _annular_tangent_span(radius: float, radial_width: float) -> float:
+	var half_module_angle: float = deg_to_rad(RADIAL_MODULE_DEGREES * 0.5)
+	return 2.0 * (radius + radial_width * 0.5) * sin(half_module_angle)
 
 
 func _build_dome_shell() -> void:
@@ -407,9 +433,12 @@ func _add_piece(
 	rotation_y: float,
 	colour: Color,
 	with_collision: bool = true,
+	annular_radius_m: float = 0.0,
 ) -> EnvironmentKitPiece:
 	var piece := KIT_PIECE_SCENE.instantiate() as EnvironmentKitPiece
 	piece.configure(kind, dimensions, colour, with_collision)
+	if annular_radius_m > 0.0:
+		piece.configure_annular(annular_radius_m, RADIAL_MODULE_DEGREES)
 	piece.name = "%s_%03d" % [base_name, _piece_sequence]
 	_piece_sequence += 1
 	piece.position = position
