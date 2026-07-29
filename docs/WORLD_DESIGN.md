@@ -12,13 +12,15 @@ The Semantic Engine communicates through plans, panels, lights, printers, and ma
 
 ## Compound Topology
 
-The Compound is a faceted hemisphere around a vertical Central Core. Three wedge-shaped Laboratories occupy the main floor. Thick radial separator spines contain observation rooms, utilities, shutters, and concealed connections. A perimeter maintenance route provides a longer connection between Laboratories.
+The Compound is a faceted hemisphere with a hexagonal plan around a vertical Central Core. Its main floor is organised as three repeating nominal 120-degree territories. Each territory contains one wedge-shaped Laboratory and shares the separator structures on its two radial boundaries; the Laboratories never meet along a zero-width line.
+
+Thick, non-zero-width radial separator spines sit between neighbouring Laboratories. They belong to the Compound rather than either Test Floor and contain service corridors, observation rooms, utilities, shutters, concealed connections, and other facility machinery. A repeating planning cell therefore reads as half a separator spine, one Laboratory, and half a separator spine. A perimeter maintenance route provides a longer connection between Laboratories.
 
 An elevated annular Assignment Deck surrounds the Core. It hosts Verb Selection, Pair Drafts, Experiment Briefs, Result Announcements, and the Researcher's booth. The Dispensing Line runs from this deck along ceiling rails to each Laboratory.
 
-Normal Rounds confine Subjects to the active Laboratory. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.
+Normal Rounds confine Subjects to the active Laboratory and keep separator service routes sealed from the Test Floor. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.
 
-The macro layout uses repeatable 15- or 30-degree radial modules. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
+The primary partition is three repeating 120-degree planning cells aligned to the hexagonal plan. Smaller 15- or 30-degree radial modules may structure specialised details inside that envelope, but they do not define Laboratory boundaries. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m, measured independently of separator-spine and service-route width, and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
 
 ## Laboratories
 
@@ -112,7 +114,7 @@ Player and Verb cues remain protected from aggressive grading. SDFGI, SSR, motio
 
 ## Environment Kit Contract
 
-The reusable environment kit contains orthogonal floor and wall bays, radial and annular floor segments, dome-shell bays, separator-spine junctions, 4 m doors and shutters, Assignment Deck rails, support columns, trusses, vents, panels, and material variants for clean, stressed, and breached states.
+The reusable environment kit contains orthogonal floor and wall bays, radial and annular floor segments, dome-shell bays, separator corridor bays, utility-wall modules, separator-spine junctions at the Core and perimeter, 4 m doors and shutters, Assignment Deck rails, support columns, trusses, vents, panels, and material variants for clean, stressed, and breached states.
 
 All pieces use metre scale, applied transforms, stable names, predictable origins, and snap without mesh editing. Gameplay collision remains in Godot. Radial pieces are a small specialised subset; most assets remain orthogonal and reusable across Laboratories.
 
