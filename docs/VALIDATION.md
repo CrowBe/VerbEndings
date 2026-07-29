@@ -117,8 +117,10 @@ materially checks for a live non-empty visual mesh and the expected live
 gameplay collision state. Each attempt has a positive configurable wall-clock
 limit (30 seconds by default). On timeout the wrapper terminates and reaps the
 Godot process group, reports captured output, and fails the attempt even if its
-success marker was already printed. The wrapper also rejects Godot errors and
-warnings even when the engine exits with status zero.
+success marker was already printed. On Linux, the wrapper temporarily acts as
+a child subreaper so orphaned descendants in the process group are also reaped
+before the attempt finishes. The wrapper also rejects Godot errors and warnings
+even when the engine exits with status zero.
 
 For graphical inspection, run:
 

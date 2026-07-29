@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import io
-import os
 import signal
 import sys
 import time
@@ -18,8 +17,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_environment_kit_piece_rebuild_test as runner
 
 
+def _process_state(process_id: int) -> str | None:
+    try:
+        stat = Path(f"/proc/{process_id}/stat").read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return None
+    return stat[stat.rfind(")") + 2 :].split(maxsplit=1)[0]
+
+
 class EnvironmentKitPieceRebuildRunnerTests(unittest.TestCase):
     def test_timeout_reaps_child_and_rejects_early_success_marker(self) -> None:
+        previous_subreaper_state = runner._get_child_subreaper()
         grandchild_code = "\n".join(
             (
                 "import signal",
@@ -53,8 +61,14 @@ class EnvironmentKitPieceRebuildRunnerTests(unittest.TestCase):
         )
 
         self.assertTrue(result.timed_out)
+        self.assertIsNone(result.cleanup_error)
         self.assertIn(runner.SUCCESS_MARKER, result.output)
         self.assertFalse(runner.classify_attempt(result).passed)
+        self.assertEqual(
+            runner._get_child_subreaper(),
+            previous_subreaper_state,
+        )
+        process_ids = {}
         for prefix in ("child_pid=", "grandchild_pid="):
             process_id = int(
                 next(
@@ -63,15 +77,23 @@ class EnvironmentKitPieceRebuildRunnerTests(unittest.TestCase):
                     if line.startswith(prefix)
                 )
             )
+            process_ids[prefix.removesuffix("=")] = process_id
             deadline = time.monotonic() + 2.0
             while time.monotonic() < deadline:
-                try:
-                    os.kill(process_id, 0)
-                except ProcessLookupError:
+                state = _process_state(process_id)
+                if state is None:
                     break
                 time.sleep(0.01)
             else:
-                self.fail(f"timed-out process remained alive: {process_id}")
+                classification = "zombie" if state == "Z" else "live"
+                self.fail(
+                    "timed-out process remained "
+                    f"{classification}: pid={process_id}, state={state}"
+                )
+        self.assertFalse(
+            runner._process_group_exists(process_ids["child_pid"]),
+            "timed-out process group still exists after cleanup",
+        )
 
     def test_classification_rejects_exit_marker_and_diagnostic_failures(
         self,
@@ -103,8 +125,14 @@ class EnvironmentKitPieceRebuildRunnerTests(unittest.TestCase):
     def test_invalid_limits_are_rejected_before_spawning(self) -> None:
         for option, value in (
             ("--attempts", "0"),
+            ("--attempts", "-1"),
+            ("--attempts", "1.5"),
             ("--timeout-seconds", "0"),
+            ("--timeout-seconds", "-1"),
             ("--timeout-seconds", "nan"),
+            ("--timeout-seconds", "inf"),
+            ("--timeout-seconds", "-inf"),
+            ("--timeout-seconds", "not-a-number"),
         ):
             with self.subTest(option=option, value=value):
                 with mock.patch.object(runner, "run_attempt") as run_attempt:

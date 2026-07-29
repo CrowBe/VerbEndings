@@ -4,14 +4,18 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
 import math
 import os
 import signal
 import subprocess
 import sys
 from collections.abc import Sequence
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
+from time import monotonic, sleep
+from typing import Iterator
 
 
 SUCCESS_MARKER = "Environment kit piece rebuild tests passed."
@@ -23,15 +27,19 @@ FORBIDDEN_OUTPUT = (
 )
 DEFAULT_TIMEOUT_SECONDS = 30.0
 TERMINATION_GRACE_SECONDS = 3.0
+PROCESS_REAP_POLL_SECONDS = 0.01
+PR_SET_CHILD_SUBREAPER = 36
+PR_GET_CHILD_SUBREAPER = 37
 
 
 @dataclass(frozen=True)
 class AttemptResult:
-    returncode: int
+    returncode: int | None
     stdout: str
     stderr: str
     timed_out: bool
     termination_signal: int | None = None
+    cleanup_error: str | None = None
 
     @property
     def output(self) -> str:
@@ -74,44 +82,131 @@ def _process_group_exists(process_group_id: int) -> bool:
     return True
 
 
+def _prctl(option: int, argument: object) -> None:
+    if not sys.platform.startswith("linux"):
+        raise RuntimeError(
+            "full process-tree reaping requires Linux child-subreaper support"
+        )
+    libc = ctypes.CDLL(None, use_errno=True)
+    try:
+        prctl = libc.prctl
+    except AttributeError as error:
+        raise RuntimeError(
+            "full process-tree reaping requires Linux prctl support"
+        ) from error
+    ctypes.set_errno(0)
+    if prctl(option, argument, 0, 0, 0) != 0:
+        error_number = ctypes.get_errno()
+        raise OSError(error_number, os.strerror(error_number))
+
+
+def _get_child_subreaper() -> int:
+    state = ctypes.c_int()
+    _prctl(PR_GET_CHILD_SUBREAPER, ctypes.byref(state))
+    return state.value
+
+
+@contextmanager
+def _child_subreaper() -> Iterator[None]:
+    previous_state = _get_child_subreaper()
+    _prctl(PR_SET_CHILD_SUBREAPER, 1)
+    try:
+        yield
+    finally:
+        _prctl(PR_SET_CHILD_SUBREAPER, previous_state)
+
+
+def _reap_process_group(
+    process_group_id: int,
+    timeout_seconds: float,
+) -> bool:
+    deadline = monotonic() + timeout_seconds
+    while True:
+        while True:
+            try:
+                child_pid, _status = os.waitpid(
+                    -process_group_id,
+                    os.WNOHANG,
+                )
+            except ChildProcessError:
+                break
+            if child_pid == 0:
+                break
+        if not _process_group_exists(process_group_id):
+            return True
+        if monotonic() >= deadline:
+            return False
+        sleep(PROCESS_REAP_POLL_SECONDS)
+
+
+def _timeout_output(output: str | bytes | None) -> str:
+    if output is None:
+        return ""
+    if isinstance(output, bytes):
+        return output.decode(errors="replace")
+    return output
+
+
 def run_attempt(
     command: Sequence[str],
     cwd: Path,
     timeout_seconds: float,
 ) -> AttemptResult:
-    process = subprocess.Popen(
-        command,
-        cwd=cwd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        start_new_session=True,
-    )
-    try:
-        stdout, stderr = process.communicate(timeout=timeout_seconds)
-    except subprocess.TimeoutExpired:
-        termination_signal = signal.SIGTERM
-        _signal_process_group(process.pid, termination_signal)
+    with _child_subreaper():
+        process = subprocess.Popen(
+            command,
+            cwd=cwd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        )
         try:
-            stdout, stderr = process.communicate(
-                timeout=TERMINATION_GRACE_SECONDS
-            )
+            stdout, stderr = process.communicate(timeout=timeout_seconds)
         except subprocess.TimeoutExpired:
-            termination_signal = signal.SIGKILL
+            termination_signal = signal.SIGTERM
             _signal_process_group(process.pid, termination_signal)
-            stdout, stderr = process.communicate()
-        else:
-            if _process_group_exists(process.pid):
+            try:
+                stdout, stderr = process.communicate(
+                    timeout=TERMINATION_GRACE_SECONDS
+                )
+            except subprocess.TimeoutExpired:
                 termination_signal = signal.SIGKILL
                 _signal_process_group(process.pid, termination_signal)
-        return AttemptResult(
-            process.returncode,
-            stdout,
-            stderr,
-            True,
-            termination_signal,
-        )
-    return AttemptResult(process.returncode, stdout, stderr, False)
+                try:
+                    stdout, stderr = process.communicate(
+                        timeout=TERMINATION_GRACE_SECONDS
+                    )
+                    cleanup_error = None
+                except subprocess.TimeoutExpired as error:
+                    stdout = _timeout_output(error.stdout)
+                    stderr = _timeout_output(error.stderr)
+                    cleanup_error = (
+                        "process group did not close captured output after "
+                        "SIGKILL"
+                    )
+            else:
+                cleanup_error = None
+                if _process_group_exists(process.pid):
+                    termination_signal = signal.SIGKILL
+                    _signal_process_group(process.pid, termination_signal)
+            if not _reap_process_group(
+                process.pid,
+                TERMINATION_GRACE_SECONDS,
+            ):
+                cleanup_error = (
+                    "process group still existed after bounded SIGKILL "
+                    "reaping"
+                )
+            return AttemptResult(
+                process.returncode,
+                stdout,
+                stderr,
+                True,
+                termination_signal,
+                cleanup_error,
+            )
+        return AttemptResult(process.returncode, stdout, stderr, False)
 
 
 def classify_attempt(result: AttemptResult) -> AttemptClassification:
@@ -169,8 +264,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 f"Attempt {attempt} timed out after "
                 f"{arguments.timeout_seconds:g} seconds; "
                 f"terminated process group with {signal_name} and reaped "
-                "the Godot child.\n"
+                "its child process tree.\n"
             )
+            if result.cleanup_error is not None:
+                sys.stderr.write(
+                    f"Attempt {attempt} cleanup failed: "
+                    f"{result.cleanup_error}.\n"
+                )
         if not classification.passed:
             failed = True
             sys.stderr.write(
