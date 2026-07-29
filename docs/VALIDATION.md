@@ -91,6 +91,17 @@ distinct and recoverable Landing strategies per Laboratory, route redundancy,
 hooks, normal-Round confinement, retained Laboratory node identity, environment
 kit naming and origins, metric contracts, and Godot-owned collision.
 
+Run the Compound lifetime and teardown regression twice with:
+
+```bash
+python3 tests/run_compound_lifetime_test.py --godot godot4.3 --attempts 2
+```
+
+It verifies direct Compound teardown and twelve repeated Puzzle, PVP, and PVE
+Round transitions while retaining Laboratory identity, authored state, one
+active Round, and correct Player placement. The subprocess wrapper rejects
+Godot errors and warnings even when the engine exits with status zero.
+
 For graphical inspection, run:
 
 ```bash
