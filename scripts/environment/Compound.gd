@@ -42,6 +42,7 @@ const COLOUR_CUE := Color("f4c95d")
 
 var active_laboratory_id: StringName = &""
 var _piece_sequence: int = 0
+var _sightline_targets: Dictionary = {}
 
 
 func _ready() -> void:
@@ -193,6 +194,26 @@ func _build_assignment_deck() -> void:
 	_add_piece(booth, &"BoothBack", EnvironmentKitPiece.Kind.WALL_BAY,
 			Vector3(6.0, 3.0, 0.5), Vector3(0.0, 0.0, -2.0), 0.0,
 			COLOUR_PANEL)
+	var sightline_targets: Node3D = deck.get_node("SightlineTargets")
+	for laboratory_index: int in LABORATORY_IDS.size():
+		var laboratory_id: StringName = LABORATORY_IDS[laboratory_index]
+		var angle: float = deg_to_rad(laboratory_index * 120.0)
+		var fascia: EnvironmentKitPiece = _add_piece(
+				sightline_targets,
+				StringName("%sSightlineFascia" % laboratory_id),
+				EnvironmentKitPiece.Kind.PANEL,
+				Vector3(4.0, 2.0, 0.25),
+				_radial_module_centre(
+						ASSIGNMENT_DECK_RADIUS_M, 3.5, angle),
+				-angle,
+				COLOUR_CUE,
+				false)
+		fascia.set_meta("laboratory_id", laboratory_id)
+		var target := Marker3D.new()
+		target.name = "VisibilityTarget"
+		target.position = Vector3(0.0, 1.0, -0.4)
+		fascia.add_child(target)
+		_sightline_targets[laboratory_id] = target
 
 
 func _build_laboratories() -> void:
@@ -209,6 +230,11 @@ func _build_laboratories() -> void:
 		laboratory.set_meta("other_layer_visibility", &"AssignmentDeck")
 		laboratory.set_meta("critical_cue_channels",
 				PackedStringArray(["geometry", "icon", "motion"]))
+		var sightline := laboratory.get_node(
+				"SightlineToAssignmentDeck") as Marker3D
+		var sightline_target := _sightline_targets[laboratory_id] as Marker3D
+		sightline.set_meta(
+				"target_node_path", sightline.get_path_to(sightline_target))
 		_add_piece(laboratory, &"TestFloor", EnvironmentKitPiece.Kind.FLOOR_BAY,
 				Vector3(TEST_FLOOR_SPAN_M, 0.5, TEST_FLOOR_SPAN_M),
 				Vector3(0.0, -0.5, 0.0), 0.0, COLOUR_FLOOR)
@@ -230,8 +256,17 @@ func _build_lab_edges(laboratory: Node3D) -> void:
 				"position": Vector3(18.0, 0.0, -26.0), "rotation": 0.0},
 		{"name": &"InnerWallWest", "size": Vector3(16.0, 8.0, 1.0),
 				"position": Vector3(-18.0, 0.0, 26.0), "rotation": 0.0},
-		{"name": &"InnerWallEast", "size": Vector3(32.0, 8.0, 1.0),
-				"position": Vector3(10.0, 0.0, 26.0), "rotation": 0.0},
+		{"name": &"InnerWallSightlineWest",
+				"size": Vector3(4.0, 8.0, 1.0),
+				"position": Vector3(-4.0, 0.0, 26.0), "rotation": 0.0},
+		{"name": &"InnerWallSightlineSill",
+				"size": Vector3(4.0, 2.5, 1.0),
+				"position": Vector3(0.0, 0.0, 26.0), "rotation": 0.0},
+		{"name": &"InnerWallSightlineHeader",
+				"size": Vector3(4.0, 1.5, 1.0),
+				"position": Vector3(0.0, 6.5, 26.0), "rotation": 0.0},
+		{"name": &"InnerWallEast", "size": Vector3(24.0, 8.0, 1.0),
+				"position": Vector3(14.0, 0.0, 26.0), "rotation": 0.0},
 	]:
 		_add_piece(laboratory, edge_data.name, EnvironmentKitPiece.Kind.WALL_BAY,
 				edge_data.size, edge_data.position, edge_data.rotation,
