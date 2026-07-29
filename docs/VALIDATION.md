@@ -105,13 +105,20 @@ Godot errors and warnings even when the engine exits with status zero.
 Run the environment-kit live-rebuild regression twice with:
 
 ```bash
-python3 tests/run_environment_kit_piece_rebuild_test.py --godot godot4.3 --attempts 2
+python3 -m unittest tests/test_environment_kit_piece_rebuild_runner.py
+python3 tests/run_environment_kit_piece_rebuild_test.py \
+  --godot godot4.3 --attempts 2 --timeout-seconds 30
 ```
 
-It rebuilds collidable and collision-disabled kit pieces, waits beyond
-deferred node deletion, and materially checks for a live non-empty visual mesh
-and the expected live gameplay collision state. The subprocess wrapper rejects
-Godot errors and warnings even when the engine exits with status zero.
+The focused Python suite verifies runner validation, timeout classification,
+and process-group cleanup. The Godot regression rebuilds collidable and
+collision-disabled kit pieces, waits beyond deferred node deletion, and
+materially checks for a live non-empty visual mesh and the expected live
+gameplay collision state. Each attempt has a positive configurable wall-clock
+limit (30 seconds by default). On timeout the wrapper terminates and reaps the
+Godot process group, reports captured output, and fails the attempt even if its
+success marker was already printed. The wrapper also rejects Godot errors and
+warnings even when the engine exits with status zero.
 
 For graphical inspection, run:
 

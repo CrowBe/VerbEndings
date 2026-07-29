@@ -41,7 +41,7 @@ func _test_collidable_rebuild(failures: Array[String]) -> void:
 	_expect_live_visual_and_collision(
 			piece, true, "rebuilt collidable piece", failures)
 	piece.queue_free()
-	await get_tree().process_frame
+	await _flush_queued_piece_teardown()
 
 
 func _test_collision_disabled_rebuild(failures: Array[String]) -> void:
@@ -60,7 +60,14 @@ func _test_collision_disabled_rebuild(failures: Array[String]) -> void:
 	_expect_live_visual_and_collision(
 			piece, false, "rebuilt collision-disabled piece", failures)
 	piece.queue_free()
+	await _flush_queued_piece_teardown()
+
+
+func _flush_queued_piece_teardown() -> void:
+	# Let queued renderer and physics cleanup complete before the scene exits.
 	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().physics_frame
 
 
 func _expect_live_visual_and_collision(
