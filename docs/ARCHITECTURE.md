@@ -20,6 +20,8 @@ On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round, maps it to th
 
 Normal-Round confinement is a selection operation on the persistent Compound. `Compound.select_active_laboratory()` enables only the selected Laboratory's `RoundContent` processing and keeps both of its route shutters closed. It does not hide, free, duplicate, or reset any Laboratory, so authored scene state remains attached to the original nodes.
 
+`EnvironmentKitPiece` and `PuzzleUnit` detach their runtime-created `Mesh` resources from `MeshInstance3D` children during tree exit. Procedural render owners preserve this teardown boundary so Godot 4.3 unregisters each render instance before its final mesh resource reference is released.
+
 ## Autoload Services
 
 | Service | Current responsibility |

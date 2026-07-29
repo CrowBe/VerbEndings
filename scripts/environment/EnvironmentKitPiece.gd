@@ -49,6 +49,10 @@ func _ready() -> void:
 	_rebuild()
 
 
+func _exit_tree() -> void:
+	_detach_visual_meshes()
+
+
 func configure(
 		new_kind: Kind,
 		new_dimensions: Vector3,
@@ -86,6 +90,7 @@ func set_collision_active(active: bool) -> void:
 
 
 func _rebuild() -> void:
+	_detach_visual_meshes()
 	for child: Node in get_children():
 		child.queue_free()
 	set_meta("kit_kind", KIND_NAMES[kind])
@@ -100,6 +105,15 @@ func _rebuild() -> void:
 		_build_column()
 	else:
 		_build_box(&"Visual", dimensions, Vector3(0.0, dimensions.y * 0.5, 0.0))
+
+
+func _detach_visual_meshes() -> void:
+	# Procedural Mesh resources are otherwise released while their
+	# MeshInstance3D children are being destroyed. Godot 4.3's headless
+	# renderer can then inspect an already-freed mesh RID during teardown.
+	for child: Node in get_children():
+		if child is MeshInstance3D:
+			child.mesh = null
 
 
 func _build_annular_prism() -> void:

@@ -68,3 +68,6 @@ jobs:
 
       - name: Compound topology and spatial-contract tests
         run: godot --headless --path . tests/TestCompound.tscn
+
+      - name: Compound lifetime and teardown tests
+        run: python3 tests/run_compound_lifetime_test.py --godot godot --attempts 2
