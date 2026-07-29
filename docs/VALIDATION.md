@@ -102,6 +102,17 @@ Round transitions while retaining Laboratory identity, authored state, one
 active Round, and correct Player placement. The subprocess wrapper rejects
 Godot errors and warnings even when the engine exits with status zero.
 
+Run the environment-kit live-rebuild regression twice with:
+
+```bash
+python3 tests/run_environment_kit_piece_rebuild_test.py --godot godot4.3 --attempts 2
+```
+
+It rebuilds collidable and collision-disabled kit pieces, waits beyond
+deferred node deletion, and materially checks for a live non-empty visual mesh
+and the expected live gameplay collision state. The subprocess wrapper rejects
+Godot errors and warnings even when the engine exits with status zero.
+
 For graphical inspection, run:
 
 ```bash
