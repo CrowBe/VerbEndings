@@ -9,6 +9,8 @@ script = ExtResource("1_compound")
 
 [node name="AssignmentDeck" type="Node3D" parent="."]
 
+[node name="SightlineTargets" type="Node3D" parent="AssignmentDeck"]
+
 [node name="ResearcherBoothReserved" type="Marker3D" parent="AssignmentDeck"]
 position = Vector3(0, 6, -17)
 
@@ -34,7 +36,7 @@ position = Vector3(0, 0, -44)
 [node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
 
 [node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/AppliedCausalityLaboratory"]
-position = Vector3(0, 4, 26)
+position = Vector3(0, 4, 24)
 
 [node name="CompetitiveStressLaboratory" type="Node3D" parent="Laboratories"]
 position = Vector3(38.105, 0, 22)
@@ -51,7 +53,7 @@ rotation = Vector3(0, 4.18879, 0)
 [node name="CriticalCueHooks" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
 
 [node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/CompetitiveStressLaboratory"]
-position = Vector3(0, 4, 26)
+position = Vector3(0, 4, 24)
 
 [node name="AdaptiveContainmentLaboratory" type="Node3D" parent="Laboratories"]
 position = Vector3(-38.105, 0, 22)
@@ -68,4 +70,4 @@ rotation = Vector3(0, 2.094395, 0)
 [node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 
 [node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
-position = Vector3(0, 4, 26)
+position = Vector3(0, 4, 24)

@@ -7,6 +7,7 @@ const PLAYER_CAPSULE_RADIUS_M: float = 0.5
 const PLAYER_CAPSULE_HEIGHT_M: float = 1.8
 const ANNULAR_SAMPLE_STEP_DEGREES: float = 2.0
 const MAXIMUM_SEAM_GAP_M: float = 0.01
+const SIGHTLINE_PROBE_RADIUS_M: float = 0.25
 
 
 func _ready() -> void:
@@ -17,6 +18,7 @@ func _ready() -> void:
 	await _test_annular_traversal(compound, failures)
 	_test_environment_kit(compound, failures)
 	_test_laboratory_contracts(compound, failures)
+	_test_cross_layer_sightlines(compound, failures)
 	_test_confinement_and_retained_state(compound, failures)
 	await _test_game_composition(failures)
 	compound.queue_free()
@@ -469,6 +471,109 @@ func _test_laboratory_contracts(
 		compound.set_laboratory_critical_state(&"AppliedCausality", false)
 	_expect(not active_cues.visible,
 			"repeated critical-state changes must settle inactive", failures)
+
+
+func _test_cross_layer_sightlines(
+	compound: Compound,
+	failures: Array[String],
+) -> void:
+	var deck: Node3D = compound.get_node("AssignmentDeck")
+	var space_state: PhysicsDirectSpaceState3D = compound.get_world_3d() \
+			.direct_space_state
+	for laboratory_id: StringName in Compound.LABORATORY_IDS:
+		var laboratory: Node3D = compound.get_laboratory(laboratory_id)
+		var sightline := laboratory.get_node(
+				"SightlineToAssignmentDeck") as Marker3D
+
+		var probe := SphereShape3D.new()
+		probe.radius = SIGHTLINE_PROBE_RADIUS_M
+		var overlap_query := PhysicsShapeQueryParameters3D.new()
+		overlap_query.shape = probe
+		overlap_query.transform = Transform3D(
+				Basis.IDENTITY, sightline.global_position)
+		overlap_query.collision_mask = 1
+		overlap_query.collide_with_areas = false
+		overlap_query.collide_with_bodies = true
+		var marker_overlaps: Array[Dictionary] = space_state.intersect_shape(
+				overlap_query, 8)
+		_expect(marker_overlaps.is_empty(),
+				"%s sightline marker must be outside gameplay collision"
+				% laboratory_id, failures)
+
+		var target: Marker3D = null
+		if sightline.has_meta("target_node_path"):
+			var target_path: NodePath = sightline.get_meta("target_node_path")
+			target = sightline.get_node_or_null(target_path) as Marker3D
+		_expect(
+				target != null and deck.is_ancestor_of(target),
+				"%s sightline must name a target on the Assignment Deck"
+				% laboratory_id, failures)
+		if target == null:
+			continue
+		var target_piece := target.get_parent() as EnvironmentKitPiece
+		var target_visual := target_piece.get_node_or_null(
+				"Visual") as MeshInstance3D
+		_expect(
+				target_piece.kind == EnvironmentKitPiece.Kind.PANEL
+						and not target_piece.collision_enabled
+						and target_visual != null
+						and target_visual.mesh != null,
+				"%s sightline target must be visible Assignment Deck fascia geometry"
+				% laboratory_id, failures)
+		var target_global: Vector3 = target.global_position
+
+		var visibility_query := PhysicsShapeQueryParameters3D.new()
+		visibility_query.shape = probe
+		visibility_query.transform = Transform3D(
+				Basis.IDENTITY, sightline.global_position)
+		visibility_query.motion = target_global - sightline.global_position
+		visibility_query.collision_mask = 1
+		visibility_query.collide_with_areas = false
+		visibility_query.collide_with_bodies = true
+		var visibility_motion: PackedFloat32Array = space_state.cast_motion(
+				visibility_query)
+		_expect(
+				visibility_motion.size() == 2
+						and is_equal_approx(visibility_motion[0], 1.0),
+				"%s must have a collision-free swept sightline to the Assignment Deck"
+				% laboratory_id, failures)
+
+		var player_capsule := CapsuleShape3D.new()
+		player_capsule.radius = PLAYER_CAPSULE_RADIUS_M
+		player_capsule.height = PLAYER_CAPSULE_HEIGHT_M
+		var confinement_query := PhysicsShapeQueryParameters3D.new()
+		confinement_query.shape = player_capsule
+		confinement_query.transform = Transform3D(
+				Basis.IDENTITY,
+				laboratory.to_global(Vector3(0.0, 1.0, 24.0)))
+		confinement_query.motion = (
+				laboratory.to_global(Vector3(0.0, 1.0, 28.0))
+				- confinement_query.transform.origin)
+		confinement_query.collision_mask = 1
+		var confinement_motion: PackedFloat32Array = space_state.cast_motion(
+				confinement_query)
+		_expect(
+				confinement_motion.size() == 2
+						and confinement_motion[0] < 1.0,
+				"%s observation window must remain closed to Player traversal"
+				% laboratory_id, failures)
+
+		var shutter_count: int = 0
+		for connection: Node in laboratory.get_node("Connections").get_children():
+			if connection is EnvironmentKitPiece \
+					and connection.kind == EnvironmentKitPiece.Kind.SHUTTER_4M:
+				shutter_count += 1
+				var collision_body := connection.get_node_or_null(
+						"GameplayCollision") as StaticBody3D
+				_expect(
+						connection.collision_enabled
+								and collision_body != null
+								and collision_body.collision_layer == 1,
+						"%s normal-Round route shutters must remain closed and collidable"
+						% laboratory_id, failures)
+		_expect(shutter_count == 2,
+				"%s must retain both authored route shutters"
+				% laboratory_id, failures)
 
 
 func _test_confinement_and_retained_state(
