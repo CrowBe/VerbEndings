@@ -3,6 +3,10 @@ extends Node
 const COMPOUND_SCENE: PackedScene = preload(
 		"res://scenes/environment/Compound.tscn")
 const GAME_SCENE: PackedScene = preload("res://scenes/core/Game.tscn")
+const PLAYER_CAPSULE_RADIUS_M: float = 0.5
+const PLAYER_CAPSULE_HEIGHT_M: float = 1.8
+const ANNULAR_SAMPLE_STEP_DEGREES: float = 2.0
+const MAXIMUM_SEAM_GAP_M: float = 0.01
 
 
 func _ready() -> void:
@@ -10,6 +14,7 @@ func _ready() -> void:
 	var compound := COMPOUND_SCENE.instantiate() as Compound
 	add_child(compound)
 	_test_macro_topology(compound, failures)
+	await _test_annular_traversal(compound, failures)
 	_test_environment_kit(compound, failures)
 	_test_laboratory_contracts(compound, failures)
 	_test_confinement_and_retained_state(compound, failures)
@@ -48,6 +53,242 @@ func _test_macro_topology(compound: Compound, failures: Array[String]) -> void:
 			"perimeter route must connect all three Laboratories", failures)
 	_expect(route.get_child_count() == 12,
 			"perimeter route must close through twelve annular modules", failures)
+
+
+func _test_annular_traversal(
+	compound: Compound,
+	failures: Array[String],
+) -> void:
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var route: Node3D = compound.get_node("PerimeterMaintenanceRoute")
+	var route_segments: Array[EnvironmentKitPiece] = []
+	for child: Node in route.get_children():
+		if child is EnvironmentKitPiece:
+			route_segments.append(child)
+	_test_annular_segment_transforms(
+			route_segments, "perimeter maintenance route", failures)
+	_test_perimeter_laboratory_connections(
+			compound, route_segments, failures)
+	_test_player_sized_support(
+			compound, route_segments, 0.0, "perimeter maintenance route", failures)
+
+	var deck: Node3D = compound.get_node("AssignmentDeck")
+	var deck_segments: Array[EnvironmentKitPiece] = []
+	for child: Node in deck.get_children():
+		if child is EnvironmentKitPiece \
+				and child.kind == EnvironmentKitPiece.Kind.ANNULAR_FLOOR_SEGMENT:
+			deck_segments.append(child)
+	_test_annular_segment_transforms(
+			deck_segments, "Assignment Deck annulus", failures)
+	_test_player_sized_support(
+			compound, deck_segments, 6.0, "Assignment Deck annulus", failures)
+
+
+func _test_annular_segment_transforms(
+	segments: Array[EnvironmentKitPiece],
+	route_name: String,
+	failures: Array[String],
+) -> void:
+	_expect(segments.size() == 12,
+			"%s must contain twelve floor segments" % route_name, failures)
+	if segments.size() != 12:
+		return
+	for segment: EnvironmentKitPiece in segments:
+		var radial: Vector3 = Vector3(
+				segment.global_position.x, 0.0, segment.global_position.z).normalized()
+		var expected_tangent := Vector3(-radial.z, 0.0, radial.x)
+		var actual_tangent: Vector3 = segment.global_basis.x.normalized()
+		_expect(actual_tangent.dot(expected_tangent) >= 0.999,
+				"%s segment %s must be tangent to its radial centre"
+				% [route_name, segment.name], failures)
+		var visual := segment.get_node_or_null("Visual") as MeshInstance3D
+		var collision: CollisionShape3D = null
+		var collision_body := segment.get_node_or_null(
+				"GameplayCollision") as StaticBody3D
+		if collision_body != null:
+			for child: Node in collision_body.get_children():
+				if child is CollisionShape3D:
+					collision = child
+					break
+		_expect(visual != null and visual.mesh != null,
+				"%s segment %s must expose rendered floor geometry"
+				% [route_name, segment.name], failures)
+		_expect(collision != null and collision.shape != null,
+				"%s segment %s must expose supporting gameplay collision"
+				% [route_name, segment.name], failures)
+	for index: int in segments.size():
+		var segment: EnvironmentKitPiece = segments[index]
+		var next_segment: EnvironmentKitPiece = segments[
+				(index + 1) % segments.size()]
+		var rendered_shared_vertices: int = _count_shared_vertices(
+				_top_rendered_vertices(segment),
+				_top_rendered_vertices(next_segment))
+		var collision_shared_vertices: int = _count_shared_vertices(
+				_top_collision_vertices(segment),
+				_top_collision_vertices(next_segment))
+		_expect(rendered_shared_vertices >= 2,
+				"%s rendered floor edges must meet at join %d"
+				% [route_name, index], failures)
+		_expect(collision_shared_vertices >= 2,
+				"%s gameplay collision edges must meet at join %d"
+				% [route_name, index], failures)
+
+
+func _top_rendered_vertices(piece: EnvironmentKitPiece) -> Array[Vector3]:
+	var output: Array[Vector3] = []
+	var visual := piece.get_node("Visual") as MeshInstance3D
+	for vertex: Vector3 in visual.mesh.get_faces():
+		var piece_local_vertex: Vector3 = visual.transform * vertex
+		if is_equal_approx(piece_local_vertex.y, piece.dimensions.y):
+			_append_unique_vertex(output, piece.to_global(piece_local_vertex))
+	return output
+
+
+func _top_collision_vertices(piece: EnvironmentKitPiece) -> Array[Vector3]:
+	var output: Array[Vector3] = []
+	var collision_body := piece.get_node("GameplayCollision") as StaticBody3D
+	var collision := collision_body.get_child(0) as CollisionShape3D
+	var local_vertices := PackedVector3Array()
+	if collision.shape is ConcavePolygonShape3D:
+		local_vertices = collision.shape.get_faces()
+	elif collision.shape is BoxShape3D:
+		var half_size: Vector3 = collision.shape.size * 0.5
+		for x_sign: float in [-1.0, 1.0]:
+			for z_sign: float in [-1.0, 1.0]:
+				local_vertices.append(Vector3(
+						x_sign * half_size.x,
+						half_size.y,
+						z_sign * half_size.z))
+	for vertex: Vector3 in local_vertices:
+		var piece_local_vertex: Vector3 = collision.transform * vertex
+		if is_equal_approx(piece_local_vertex.y, piece.dimensions.y):
+			_append_unique_vertex(output, piece.to_global(piece_local_vertex))
+	return output
+
+
+func _append_unique_vertex(vertices: Array[Vector3], candidate: Vector3) -> void:
+	for existing: Vector3 in vertices:
+		if existing.distance_to(candidate) <= MAXIMUM_SEAM_GAP_M:
+			return
+	vertices.append(candidate)
+
+
+func _count_shared_vertices(
+	first: Array[Vector3],
+	second: Array[Vector3],
+) -> int:
+	var shared_count: int = 0
+	for first_vertex: Vector3 in first:
+		for second_vertex: Vector3 in second:
+			if first_vertex.distance_to(second_vertex) <= MAXIMUM_SEAM_GAP_M:
+				shared_count += 1
+				break
+	return shared_count
+
+
+func _test_perimeter_laboratory_connections(
+	compound: Compound,
+	segments: Array[EnvironmentKitPiece],
+	failures: Array[String],
+) -> void:
+	if segments.is_empty():
+		return
+	var route_radius: float = Vector2(
+			segments[0].global_position.x,
+			segments[0].global_position.z).length()
+	var route_inner_radius: float = route_radius - segments[0].dimensions.z * 0.5
+	for laboratory_id: StringName in Compound.LABORATORY_IDS:
+		var laboratory: Node3D = compound.get_laboratory(laboratory_id)
+		var floor: EnvironmentKitPiece = null
+		for child: Node in laboratory.get_children():
+			if child is EnvironmentKitPiece \
+					and child.kind == EnvironmentKitPiece.Kind.FLOOR_BAY:
+				floor = child
+				break
+		if floor == null:
+			continue
+		var laboratory_outer_radius: float = Vector2(
+				laboratory.global_position.x,
+				laboratory.global_position.z).length() + floor.dimensions.z * 0.5
+		_expect(is_equal_approx(route_inner_radius, laboratory_outer_radius),
+				"perimeter route must meet %s Test Floor collision at its radial edge"
+				% laboratory_id, failures)
+
+
+func _test_player_sized_support(
+	compound: Compound,
+	segments: Array[EnvironmentKitPiece],
+	surface_y: float,
+	route_name: String,
+	failures: Array[String],
+) -> void:
+	if segments.is_empty():
+		return
+	var radius: float = Vector2(
+			segments[0].global_position.x,
+			segments[0].global_position.z).length()
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = PLAYER_CAPSULE_RADIUS_M
+	capsule.height = PLAYER_CAPSULE_HEIGHT_M
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = capsule
+	query.collision_mask = 1
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	var unsupported_samples: int = 0
+	var first_unsupported_angle: float = -1.0
+	var sample_count: int = int(360.0 / ANNULAR_SAMPLE_STEP_DEGREES)
+	var safe_radial_offset: float = (
+			segments[0].dimensions.z * 0.5 - PLAYER_CAPSULE_RADIUS_M)
+	for radial_offset: float in [
+		-safe_radial_offset, 0.0, safe_radial_offset,
+	]:
+		for sample_index: int in sample_count:
+			var angle: float = deg_to_rad(
+					sample_index * ANNULAR_SAMPLE_STEP_DEGREES)
+			var sample_radius: float = radius + radial_offset
+			query.transform = Transform3D(
+					Basis.IDENTITY,
+					Vector3(
+							sin(angle) * sample_radius,
+							surface_y + PLAYER_CAPSULE_HEIGHT_M * 0.5 - 0.05,
+							-cos(angle) * sample_radius))
+			var hits: Array[Dictionary] = compound.get_world_3d() \
+					.direct_space_state.intersect_shape(query, 8)
+			var has_route_support: bool = false
+			for hit: Dictionary in hits:
+				var collider := hit.get("collider") as Node
+				if collider != null and _is_descendant_of_any(collider, segments):
+					has_route_support = true
+					break
+			if not has_route_support:
+				unsupported_samples += 1
+				if first_unsupported_angle < 0.0:
+					first_unsupported_angle = rad_to_deg(angle)
+	_expect(
+			unsupported_samples == 0,
+			("%s must support a Player-sized capsule across its complete safe "
+			+ "width; %d/%d samples unsupported (first at %.1f degrees)") % [
+				route_name,
+				unsupported_samples,
+				sample_count * 3,
+				first_unsupported_angle,
+			],
+			failures)
+
+
+func _is_descendant_of_any(
+	node: Node,
+	ancestors: Array[EnvironmentKitPiece],
+) -> bool:
+	var candidate: Node = node
+	while candidate != null:
+		for ancestor: EnvironmentKitPiece in ancestors:
+			if candidate == ancestor:
+				return true
+		candidate = candidate.get_parent()
+	return false
 
 
 func _test_environment_kit(compound: Compound, failures: Array[String]) -> void:

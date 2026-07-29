@@ -41,6 +41,8 @@ const KIND_NAMES: Array[StringName] = [
 @export var dimensions: Vector3 = Vector3(2.0, 0.5, 2.0)
 @export var collision_enabled: bool = true
 @export var greybox_colour: Color = Color("c8ced1")
+@export var annular_radius_m: float = 0.0
+@export var annular_module_degrees: float = 0.0
 
 
 func _ready() -> void:
@@ -64,6 +66,17 @@ func configure(
 	return self
 
 
+func configure_annular(
+	radius_m: float,
+	module_degrees: float,
+) -> EnvironmentKitPiece:
+	annular_radius_m = radius_m
+	annular_module_degrees = module_degrees
+	set_meta("annular_radius_m", annular_radius_m)
+	set_meta("radial_module_degrees", annular_module_degrees)
+	return self
+
+
 func set_collision_active(active: bool) -> void:
 	collision_enabled = active
 	var body: StaticBody3D = get_node_or_null("GameplayCollision")
@@ -79,12 +92,108 @@ func _rebuild() -> void:
 	set_meta("dimensions_m", dimensions)
 	set_meta("origin_contract", &"floor_centred")
 	set_meta("grid_increment_m", 1.0)
-	if kind == Kind.DOOR_FRAME_4M:
+	if annular_radius_m > 0.0 and annular_module_degrees > 0.0:
+		_build_annular_prism()
+	elif kind == Kind.DOOR_FRAME_4M:
 		_build_door_frame()
 	elif kind == Kind.COLUMN:
 		_build_column()
 	else:
 		_build_box(&"Visual", dimensions, Vector3(0.0, dimensions.y * 0.5, 0.0))
+
+
+func _build_annular_prism() -> void:
+	var faces := PackedVector3Array()
+	var subdivision_count: int = maxi(1, ceili(annular_module_degrees / 5.0))
+	var half_angle: float = deg_to_rad(annular_module_degrees * 0.5)
+	var step_angle: float = deg_to_rad(
+			annular_module_degrees / subdivision_count)
+	var inner_radius: float = annular_radius_m - dimensions.z * 0.5
+	var outer_radius: float = annular_radius_m + dimensions.z * 0.5
+	for index: int in subdivision_count:
+		var start_angle: float = -half_angle + index * step_angle
+		var end_angle: float = start_angle + step_angle
+		var inner_start := _annular_point(inner_radius, start_angle)
+		var outer_start := _annular_point(outer_radius, start_angle)
+		var inner_end := _annular_point(inner_radius, end_angle)
+		var outer_end := _annular_point(outer_radius, end_angle)
+		var inner_start_top := inner_start + Vector3.UP * dimensions.y
+		var outer_start_top := outer_start + Vector3.UP * dimensions.y
+		var inner_end_top := inner_end + Vector3.UP * dimensions.y
+		var outer_end_top := outer_end + Vector3.UP * dimensions.y
+		_append_triangle(
+				faces, inner_start_top, outer_end_top, outer_start_top)
+		_append_triangle(
+				faces, inner_start_top, inner_end_top, outer_end_top)
+		_append_triangle(faces, inner_start, outer_start, outer_end)
+		_append_triangle(faces, inner_start, outer_end, inner_end)
+		_append_quad(
+				faces, outer_start, outer_start_top, outer_end_top, outer_end)
+		_append_quad(
+				faces, inner_start, inner_end, inner_end_top, inner_start_top)
+		if index == 0:
+			_append_quad(
+					faces,
+					inner_start,
+					inner_start_top,
+					outer_start_top,
+					outer_start)
+		if index == subdivision_count - 1:
+			_append_quad(
+					faces, inner_end, outer_end, outer_end_top, inner_end_top)
+
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for vertex: Vector3 in faces:
+		surface.add_vertex(vertex)
+	surface.generate_normals()
+	var mesh := surface.commit()
+	mesh.surface_set_material(0, _material())
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.name = "Visual"
+	mesh_instance.mesh = mesh
+	add_child(mesh_instance)
+	if not collision_enabled:
+		return
+	var body := StaticBody3D.new()
+	body.name = "GameplayCollision"
+	var collision := CollisionShape3D.new()
+	collision.name = "CollisionShape3D"
+	var shape := ConcavePolygonShape3D.new()
+	shape.set_faces(faces)
+	shape.backface_collision = true
+	collision.shape = shape
+	body.add_child(collision)
+	add_child(body)
+
+
+func _annular_point(radius: float, angle: float) -> Vector3:
+	return Vector3(
+			sin(angle) * radius,
+			0.0,
+			annular_radius_m - cos(angle) * radius)
+
+
+func _append_quad(
+	faces: PackedVector3Array,
+	first: Vector3,
+	second: Vector3,
+	third: Vector3,
+	fourth: Vector3,
+) -> void:
+	_append_triangle(faces, first, second, third)
+	_append_triangle(faces, first, third, fourth)
+
+
+func _append_triangle(
+	faces: PackedVector3Array,
+	first: Vector3,
+	second: Vector3,
+	third: Vector3,
+) -> void:
+	faces.append(first)
+	faces.append(second)
+	faces.append(third)
 
 
 func _build_door_frame() -> void:
