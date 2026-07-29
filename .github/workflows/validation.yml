@@ -72,5 +72,10 @@ jobs:
       - name: Compound lifetime and teardown tests
         run: python3 tests/run_compound_lifetime_test.py --godot godot --attempts 2
 
+      - name: Environment kit piece rebuild runner tests
+        run: python3 -m unittest tests/test_environment_kit_piece_rebuild_runner.py
+
       - name: Environment kit piece rebuild tests
-        run: python3 tests/run_environment_kit_piece_rebuild_test.py --godot godot --attempts 2
+        run: >-
+          python3 tests/run_environment_kit_piece_rebuild_test.py
+          --godot godot --attempts 2 --timeout-seconds 30
