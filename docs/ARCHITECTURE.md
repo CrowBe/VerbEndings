@@ -4,29 +4,28 @@
 
 ## Runtime
 
-VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Game.tscn` is the configured main scene. Its `Game` script owns three child roots:
+VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Game.tscn` is the configured main scene. Its `Game` script owns a single `World` root containing two nested containers:
 
-- `World`, the runtime world container;
-- `Players`, the actor container; and
-- `Round`, the active Experiment scene container.
+- `World/Players`, the actor container; and
+- `World/Round`, the active Experiment scene container.
 
-On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round and creates one local `Player`. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round and creates one local `Player`. It adopts `RoundManager`'s selected Protocol only when that Protocol's classification matches the requested Round. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
 
 ## Autoload Services
 
 | Service | Current responsibility |
 | --- | --- |
-| `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, and calculates synergy and versatility values. |
-| `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes Trial Ranking, and provides lowest-score-first draft ordering. |
-| `RoundManager` | Uses a Trial seed to select authored Experiment Protocols without replacement, tracks the current Round, and gates Player-versus-Player Impacts using each Protocol's internal classification. |
-| `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft order, and shared insertion-platform occupancy. |
-| `CollapseManager` | Resolves individual First Place, starts the Collapse for a tie, applies universal Overdrive, and declares the final survivor. |
+| `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, calculates synergy and versatility values, and pushes Overdrive state onto Self-Chained actors. |
+| `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes competition-ranked Trial Ranking, awards placements individually or to a whole Verb Chain, and provides lowest-Trial-Score-first draft ordering. Its placement and bonus tables are keyed by development classification. |
+| `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
+| `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and shared insertion-platform occupancy. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
+| `CollapseManager` | Resolves individual First Place, starts the Collapse for the Subjects tied at First Place, applies Overdrive to those participants, and declares the final survivor. |
 
 These are stateful in-process services. Comments identify intended RPC and replication boundaries, but the methods and signals currently execute locally.
 
 ## Actors And Interaction
 
-`Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, and timed buffs. Every Subject has baseline Stability, configurable per-Verb Expression Costs, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, and normal-Experiment Restabilisation. Subjects and Residuals shed configurable Material on Impact and Destabilisation. A live Subject below baseline absorbs Material on contact to Restabilise without exceeding baseline.
+`Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, and timed buffs. Every Subject has baseline Stability, configurable per-Verb Expression Costs, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, a configurable always-on Stabilisation Rate expressed as a percentage of baseline per second, and full Restabilisation at Recall. Subjects and Residuals shed configurable Material on Impact and Destabilisation. A live Subject below baseline absorbs Material on contact to Restabilise without exceeding baseline.
 
 `Residual.gd` is a pursuing `CharacterBody3D`. It finds the nearest stable Subject, attacks in range, and scales over time. A per-Residual seeded survival threshold develops one Adverb that modifies movement, attacks, and any assumed Verb; Destabilising a Subject is the only path to assuming one Verb. Separate mesh layers present the standard Verb colour treatment and a neutral Adverb overlay. PVE code addresses these actors through the `residuals` group.
 
@@ -38,7 +37,7 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 Experiment Protocols are authored resources containing an Objective, hazards, scoring rules, completion condition, and an internal development classification. The Semantic Engine authority in `RoundManager` selects a deterministic three-Protocol sequence from a Trial seed and derives each Experiment Brief from the selected resource.
 
-`PuzzleRound` executes the Precision Assembly Protocol. It scatters five physics puzzle units, dispenses Material through a visible Semantic Engine apparatus, and ranks Players by completed-unit contributions. Dispensing stops while the Semantic Engine is offline during the Collapse. The available units are:
+`PuzzleRound` executes the Precision Assembly Protocol. It scatters a configurable number of physics puzzle units — at least five, eight by default — cycling through five unit types, dispenses Material through a visible Semantic Engine apparatus, and ranks Players by completed-unit contributions. Dispensing stops while the Semantic Engine is offline during the Collapse. The unit types are:
 
 - Momentum Turbine;
 - Counterweight Plate;
@@ -70,13 +69,29 @@ The repository provides a locally runnable gameplay greybox and domain service p
 
 - Material dispensing is currently wired only into the Puzzle Experiment;
 - the Pair Draft has entry points for all three Rounds;
-- the insertion platform is not the canonical Drop sequence;
+- the insertion platform is not the canonical Drop sequence, and no Round scene instances it;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
+- development classifications still key the scoring tables and travel in `RoundManager`'s transition signal, so any consumer of that signal must keep them out of player-facing text;
+- Material shedding and puzzle-unit scatter positions use the global random stream rather than the Trial seed;
 - the Compound, Assignment Deck, Laboratories, Dispensing Line, Recall, Result Announcement, and Thematic Moments are design contracts only; and
-- multiplayer transport, replication, deterministic scenarios, UI, audio, production art, and automated gameplay tests are absent.
+- multiplayer transport, replication, and deterministic multi-peer scenarios are absent, as are UI, audio, and production art.
+
+Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, Residual grammar, Experiment Protocols, and the animation adapter; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
+
+## Non-Canonical Identifiers
+
+Several code identifiers and internal comments do not match `CONTEXT.md`. They are load-bearing today, so the mismatch is recorded here rather than hidden:
+
+- `Player`, `player_id`, `players` group, and `active_players` stand for Subject and Subject identity;
+- `match` appears in `RoundManager.is_match_complete()` and `Game.start_graybox_match()` where the domain term is Trial;
+- `PLACEMENT_LADDERS` in `ScoreManager` holds placement point tables;
+- `health`, `damage`, `died`, and `kill` appear in `Residual`, `PVERound`, and `Player` Impact resolution;
+- `InsertionVector`, `insertion_vector_launched`, and vector occupancy in `LobbyManager` stand in for the Dispensing Line and the Drop;
+- `arena` in `PuzzleRound` and `PuzzleUnit`, including `arena_half_extent`, describes the scatter area rather than a Laboratory Test Floor; and
+- `graybox` appears in `Game`'s exported start flag and in puzzle comments where prose uses `greybox`.
 
 ## Dependencies And Extension Rules
 

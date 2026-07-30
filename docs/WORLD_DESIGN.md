@@ -12,13 +12,13 @@ The Semantic Engine communicates through plans, panels, lights, printers, and ma
 
 ## Compound Topology
 
-The Compound is a faceted hemisphere around a vertical Central Core. Three wedge-shaped Laboratories occupy the main floor. Thick radial separator spines contain observation rooms, utilities, shutters, and concealed connections. A perimeter maintenance route provides a longer connection between Laboratories.
+The Compound is a faceted hemisphere on a hexagonal plan around a vertical Central Core. Three nominal 120-degree planning cells organise the main floor; each cell reads as half a separator spine, one wedge-shaped Laboratory, and half a separator spine. Thick radial separator spines contain service corridors, observation rooms, utilities, shutters, and concealed connections. A separator spine belongs to the Compound rather than to either neighbouring Test Floor, so it always has a physical width and neighbouring Laboratory floors never join along a zero-width radial line. A perimeter maintenance route provides a longer connection between Laboratories.
 
 An elevated annular Assignment Deck surrounds the Core. It hosts Verb Selection, Pair Drafts, Experiment Briefs, Result Announcements, and the Researcher's booth. The Dispensing Line runs from this deck along ceiling rails to each Laboratory.
 
 Normal Rounds confine Subjects to the active Laboratory. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.
 
-The macro layout uses repeatable 15- or 30-degree radial modules. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
+Repeatable 15- or 30-degree radial modules remain subordinate to specialised structural detail; they never define a Laboratory boundary. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m, measured across the Test Floor independently of separator and service-route width, and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
 
 ## Laboratories
 
