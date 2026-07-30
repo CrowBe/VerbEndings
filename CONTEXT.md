@@ -43,8 +43,11 @@ The next Round creates new Pairs. A Subject retains its Verb but not its Partner
 - A **Synergy Coefficient** expresses compatibility between those Verbs and may modify shared effects and scoring.
 - A **Self-Chain** is the single-Subject Verb Chain used when an odd roster leaves one Subject without a Partner.
 - **Overdrive** is the solo operating state available to a Self-Chain and to every surviving Subject during the Collapse.
+- **Chain Severance** is a Verb Chain ending early because a Partner is Eliminated during an Experiment.
 
-A Pair and its Verb Chain end after the Experiment. Points belong to Subjects, never to a Pair. `Team`, `partnership` and `Pair Score` are not canonical domain nouns.
+A Subject draws part of its own cohesion from its Partner's Verb, so Chain Severance costs the surviving Subject Stability. A Self-Chain has no Partner to lose and can never be Severed.
+
+Scheduled dissolution is not Severance: a Pair and its Verb Chain end after every Experiment at no cost, and the Collapse dissolving all Pairs at once is a lifecycle transition rather than a loss. Points belong to Subjects, never to a Pair. `Team`, `partnership` and `Pair Score` are not canonical domain nouns.
 
 ## Verb Expression And Stability
 
@@ -62,6 +65,7 @@ A Pair and its Verb Chain end after the Experiment. Points belong to Subjects, n
 
 - **Stability** is a Subject's current capacity to maintain its form and is the visible gameplay resource.
 - **Stability Loss** is a reduction caused by an Impact, hazard or Protocol-specific effect.
+- **Severance Loss** is the Stability Loss a Subject suffers when Chain Severance takes its Partner's Verb away from it.
 - **Restabilisation** restores Stability where an effect permits it.
 - **Stabilisation Rate** is the small, always-on Restabilisation every Subject receives, expressed as a percentage of baseline Stability. It cannot raise Stability above baseline.
 - **Critical Stability** is single-digit Stability. It receives strong visual and audio deformation cues, but no additional movement or power penalty by default.
@@ -70,6 +74,8 @@ A Pair and its Verb Chain end after the Experiment. Points belong to Subjects, n
 - **Elimination** is removal from the active Experiment or Collapse.
 
 Every Subject uses the same baseline Stability. A Verb uses the same Base Expression Cost whether the Subject is Paired or Self-Chained. Paying an Expression Cost cannot reduce Stability below `1`; only an Impact can Destabilise a Subject.
+
+Severance Loss follows the same floor. It is a configurable balance value, it applies once per Severance, and it cannot reduce Stability below `1`, so losing a Partner never Destabilises the Subject that survives.
 
 During a normal Experiment, a Destabilised Subject is Eliminated from that Experiment and automatically Recalled. It returns in the next Round. During the Collapse, Recall is unavailable and Elimination is permanent for the remainder of the Trial.
 
@@ -114,7 +120,7 @@ If exactly one Subject holds First Place after Round Three, that Subject wins. I
 - An **Experiment Protocol** is the authored ruleset defining objectives, hazards, scoring and completion conditions for an Experiment.
 - An **Experiment Brief** is the player-facing explanation of the selected Protocol before Laboratory Entry.
 - An **Objective** is a concrete task established by the Protocol.
-- Puzzle, PVP and PVE are development and marketing classifications, not in-world names.
+- Environment, PVP and PVE are development and marketing classifications, not in-world names.
 
 ### Facility Language
 
@@ -128,7 +134,7 @@ If exactly one Subject holds First Place after Round Three, that Subject wins. I
 
 The three Laboratories are:
 
-- **Applied Causality Laboratory** — tests whether Verbs can make physical systems work.
+- **Applied Attrition Laboratory** — tests how long a Subject holds its form in an unstable environment.
 - **Competitive Stress Laboratory** — measures dominance, displacement and resilience.
 - **Adaptive Containment Laboratory** — tests survival against contained creatures and failed predecessors.
 
@@ -183,7 +189,7 @@ The Residual reveal occurs through the environment first, then is accidentally c
 
 > During Pair Draft, each Subject selects a Partner and forms a Verb Chain for the Round.
 
-> The Semantic Engine presents the Experiment Brief before the Dispensing Line carries each Pair into the Applied Causality Laboratory.
+> The Semantic Engine presents the Experiment Brief before the Dispensing Line carries each Pair into the Applied Attrition Laboratory.
 
 > An Expression can leave a Subject at Critical Stability, but only an Impact can Destabilise it.
 
