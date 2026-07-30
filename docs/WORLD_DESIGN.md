@@ -24,9 +24,13 @@ The primary partition is three repeating 120-degree planning cells aligned to th
 
 ## Laboratories
 
-### Applied Causality Laboratory
+### Applied Attrition Laboratory
 
-This Laboratory tests whether Verbs can make physical systems produce useful results. A raised result receiver is its dominant silhouette. Apparatus covers momentum transfer, counterweights, trajectory, gravity, and linked machine chains. Cause, transfer, and outcome read through geometry and motion rather than small labels.
+This Laboratory tests how long a Subject holds its form in an unstable environment. An elevated dispensing armature is its dominant silhouette: the Semantic Engine's Material supply, deliberately placed out of easy reach. The atmosphere itself causes continuous Stability Loss, so the Experiment is a race between attrition and access rather than a contest against any occupant. No Residuals are contained here.
+
+Apparatus covers momentum transfer, counterweights, trajectory, gravity, and linked machine chains, serving as the obstacle and traversal field rather than as Objectives. A swinging mass knocks a Subject off a route, a gravity funnel drags it away from a dispenser, and a turbine or counterweight platform launches or lifts it toward one. Cause, transfer, and outcome still read through geometry and motion rather than small labels, so a Subject can predict what a machine will do to it before committing.
+
+Selected hero props hold Material behind breakable housings, giving damage-focused Verbs a route to the supply. The Laboratory nonetheless favours mobility Verbs, and that bias is intentional; a Verb's usefulness is meant to vary across the three Laboratories rather than be flat in all of them.
 
 ### Competitive Stress Laboratory
 
