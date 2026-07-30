@@ -79,7 +79,8 @@ All three Round controllers emit an ordered list when asked to end. None control
 
 The repository provides a locally runnable gameplay greybox and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
 
-- Material dispensing is currently wired only into the Puzzle Experiment;
+- the implemented Puzzle Experiment predates the Applied Attrition Laboratory charter in `CONTEXT.md`, so `PuzzleRound`, the `precision_assembly` Protocol resource, and the `PUZZLE` classification still score unit completion rather than survival;
+- Material dispensing is currently wired only into that Experiment;
 - the Pair Draft has entry points for all three Rounds;
 - the insertion platform is not the canonical Drop sequence;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
