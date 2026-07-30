@@ -87,7 +87,7 @@ const REWIND_SECONDS: float = 4.0
 var assigned_verb: Enums.VerbType = Enums.VerbType.NONE
 
 ## Character Identity: display name derived from the verb (e.g. "Burn").
-## Uniqueness is enforced by LobbyManager.claim_character_identity().
+## Uniqueness is enforced by LobbyManager.select_verb().
 ## NETWORK: @rpc replication hook — sync to all peers for nameplates.
 var character_name: String = ""
 
@@ -221,7 +221,7 @@ func _physics_process(delta: float) -> void:
 
 
 ## Assigns this player's verb and the matching Character Identity name.
-## Call through LobbyManager.claim_character_identity() so uniqueness holds.
+## Call through LobbyManager.select_verb() so uniqueness holds.
 ## NETWORK: @rpc replication hook — server assigns, then broadcasts.
 func set_character_identity(verb: Enums.VerbType) -> void:
 	assigned_verb = verb

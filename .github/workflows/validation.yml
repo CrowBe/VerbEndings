@@ -60,6 +60,9 @@ jobs:
       - name: Trial scoring and resolution tests
         run: godot --headless --path . tests/TestTrialResolution.tscn
 
+      - name: Residual grammar tests
+        run: godot --headless --path . tests/TestResidualGrammar.tscn
+
       - name: Experiment Protocol tests
         run: godot --headless --path . tests/TestExperimentProtocols.tscn
 
