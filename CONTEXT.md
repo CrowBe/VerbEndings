@@ -47,6 +47,8 @@ The next Round creates new Pairs. A Subject retains its Verb but not its Partner
 
 A Subject draws part of its own cohesion from its Partner's Verb, so Chain Severance costs the surviving Subject Stability. A Self-Chain has no Partner to lose and can never be Severed.
 
+Chain Severance never grants Overdrive. Overdrive comes only from entering a Round Self-Chained or from the Collapse, so a Subject orphaned mid-Experiment finishes that Experiment alone and unaided. A Partner's mistakes and a Partner's successes both reach the Subject beside them, and that exposure is the point of Pairing rather than a rough edge to file off.
+
 Scheduled dissolution is not Severance: a Pair and its Verb Chain end after every Experiment at no cost, and the Collapse dissolving all Pairs at once is a lifecycle transition rather than a loss. Points belong to Subjects, never to a Pair. `Team`, `partnership` and `Pair Score` are not canonical domain nouns.
 
 ## Verb Expression And Stability
@@ -98,6 +100,7 @@ Overdrive changes one relationship only: Verb Expression cooldown is halved.
 - Base Expression Cost is unchanged.
 - Verb Effect strength is unchanged.
 - The same rule applies to a Self-Chain during a normal Round and universally during the Collapse.
+- Chain Severance grants nothing: an orphaned Subject keeps its normal cooldown.
 
 Any further multiplier requires playtest evidence rather than being part of the domain rule.
 
