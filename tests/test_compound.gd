@@ -356,7 +356,7 @@ func _test_laboratory_contracts(
 	failures: Array[String],
 ) -> void:
 	var expected_apparatus: Dictionary = {
-		&"AppliedCausality": &"RaisedResultReceiver",
+		&"AppliedCausality": &"ElevatedDispensingArmature",
 		&"CompetitiveStress": &"ReinforcedImpactCrucible",
 		&"AdaptiveContainment": &"SpecimenDeliveryColumn",
 	}

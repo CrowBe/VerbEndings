@@ -16,7 +16,7 @@ const LABORATORY_NODE_NAMES: Dictionary = {
 	&"AdaptiveContainment": &"AdaptiveContainmentLaboratory",
 }
 const LABORATORY_APPARATUS: Dictionary = {
-	&"AppliedCausality": &"RaisedResultReceiver",
+	&"AppliedCausality": &"ElevatedDispensingArmature",
 	&"CompetitiveStress": &"ReinforcedImpactCrucible",
 	&"AdaptiveContainment": &"SpecimenDeliveryColumn",
 }
@@ -320,13 +320,15 @@ func _build_lab_apparatus(
 	var apparatus: Node3D = laboratory.get_node("DominantApparatus")
 	apparatus.name = LABORATORY_APPARATUS[laboratory_id]
 	if laboratory_id == &"AppliedCausality":
-		_add_piece(apparatus, &"ReceiverPlinth", EnvironmentKitPiece.Kind.COLUMN,
-				Vector3(10.0, 3.0, 10.0), Vector3.ZERO, 0.0, COLOUR_HEAVY)
-		_add_piece(apparatus, &"ResultReceiver",
-				EnvironmentKitPiece.Kind.PANEL, Vector3(14.0, 2.0, 8.0),
-				Vector3(0.0, 6.0, 0.0), 0.0, COLOUR_CUE)
-		_add_piece(apparatus, &"TransferTruss", EnvironmentKitPiece.Kind.TRUSS,
-				Vector3(4.0, 1.0, 22.0), Vector3(0.0, 9.0, -5.0),
+		_add_piece(apparatus, &"ArmatureSupport",
+				EnvironmentKitPiece.Kind.COLUMN, Vector3(5.0, 12.0, 5.0),
+				Vector3(0.0, 5.5, 0.0), 0.0, COLOUR_HEAVY)
+		_add_piece(apparatus, &"MaterialDispenser",
+				EnvironmentKitPiece.Kind.PANEL, Vector3(12.0, 2.0, 6.0),
+				Vector3(0.0, 11.0, 0.0), 0.0, COLOUR_CUE)
+		_add_piece(apparatus, &"DispensingTruss",
+				EnvironmentKitPiece.Kind.TRUSS, Vector3(4.0, 1.0, 22.0),
+				Vector3(0.0, 14.0, -5.0),
 				0.0, COLOUR_STRUCTURE)
 	elif laboratory_id == &"CompetitiveStress":
 		for segment: Dictionary in [
