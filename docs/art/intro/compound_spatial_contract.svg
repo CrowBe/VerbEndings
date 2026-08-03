@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#49d9ef"/></marker>
+    <marker id="dim" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M10 0L0 5L10 10Z" fill="#f2b84b"/></marker>
+    <style>
+      .title{font:700 30px sans-serif;fill:#f4f0e8}.sub{font:600 20px sans-serif;fill:#d6dde2}.label{font:600 17px sans-serif;fill:#f4f0e8}.small{font:500 14px sans-serif;fill:#b9c4ca}.tiny{font:500 12px sans-serif;fill:#a9b6bd}.cyan{stroke:#49d9ef;fill:none}.amber{stroke:#f2b84b;fill:none}.line{stroke:#71808a;fill:none}.structure{stroke:#9aa7ae;fill:#293239}.floor{fill:#303a40;stroke:#798890}.deck{fill:#d8d2c6;stroke:#f4f0e8}.beat{fill:#49d9ef;stroke:#112029;stroke-width:3}.beatText{font:700 13px sans-serif;fill:#112029;text-anchor:middle;dominant-baseline:central}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#11171b"/>
+  <text x="50" y="52" class="title">VerbEndings Compound — Spatial Contract</text>
+  <text x="50" y="82" class="small">One continuous Test Floor at 0 m · one Assignment Deck at +6 m · no occupied intermediate tiers</text>
+
+  <rect x="35" y="105" width="900" height="750" rx="18" fill="#182126" stroke="#43515a" stroke-width="2"/>
+  <text x="65" y="142" class="sub">PLAN — three exact 120° Laboratories</text>
+
+  <!-- three wedge laboratories -->
+  <path d="M470 470 L470 140 A330 330 0 0 1 756 635 Z" fill="#29383b" stroke="#77878e" stroke-width="3"/>
+  <path d="M470 470 L756 635 A330 330 0 0 1 184 635 Z" fill="#35343b" stroke="#77878e" stroke-width="3"/>
+  <path d="M470 470 L184 635 A330 330 0 0 1 470 140 Z" fill="#3a3530" stroke="#77878e" stroke-width="3"/>
+  <circle cx="470" cy="470" r="330" fill="none" stroke="#d8d2c6" stroke-width="11"/>
+  <circle cx="470" cy="470" r="307" fill="none" stroke="#71808a" stroke-width="13" opacity=".7"/>
+  <circle cx="470" cy="470" r="284" fill="none" stroke="#49d9ef" stroke-width="3" stroke-dasharray="10 10" opacity=".8"/>
+
+  <!-- separator spines -->
+  <line x1="470" y1="470" x2="470" y2="140" stroke="#b9c4ca" stroke-width="25"/>
+  <line x1="470" y1="470" x2="756" y2="635" stroke="#b9c4ca" stroke-width="25"/>
+  <line x1="470" y1="470" x2="184" y2="635" stroke="#b9c4ca" stroke-width="25"/>
+  <line x1="470" y1="470" x2="470" y2="140" stroke="#4b5961" stroke-width="17"/>
+  <line x1="470" y1="470" x2="756" y2="635" stroke="#4b5961" stroke-width="17"/>
+  <line x1="470" y1="470" x2="184" y2="635" stroke="#4b5961" stroke-width="17"/>
+
+  <!-- aligned outer service apertures -->
+  <rect x="158" y="613" width="54" height="44" rx="8" fill="#11171b" stroke="#f2b84b" stroke-width="4" transform="rotate(-30 185 635)"/>
+  <rect x="729" y="613" width="54" height="44" rx="8" fill="#11171b" stroke="#f2b84b" stroke-width="4" transform="rotate(30 756 635)"/>
+
+  <!-- core and deck -->
+  <circle cx="470" cy="470" r="125" fill="#20292f" stroke="#7d8b92" stroke-width="4"/>
+  <circle cx="470" cy="470" r="105" class="deck" stroke-width="4"/>
+  <circle cx="470" cy="470" r="62" fill="#59666c" stroke="#49d9ef" stroke-width="5"/>
+  <circle cx="470" cy="470" r="43" fill="#263037" stroke="#aeb9be" stroke-width="4"/>
+  <rect x="558" y="493" width="90" height="58" rx="10" fill="#d8d2c6" stroke="#49d9ef" stroke-width="4" transform="rotate(30 603 522)"/>
+
+  <!-- labels -->
+  <text x="285" y="360" class="label" text-anchor="middle">APPLIED CAUSALITY</text>
+  <text x="470" y="720" class="label" text-anchor="middle">COMPETITIVE STRESS</text>
+  <text x="655" y="360" class="label" text-anchor="middle">ADAPTIVE CONTAINMENT</text>
+  <text x="470" y="465" class="tiny" text-anchor="middle">CORE</text>
+  <text x="470" y="575" class="tiny" text-anchor="middle">ASSIGNMENT DECK +6 m</text>
+  <text x="611" y="558" class="tiny" text-anchor="middle">FORMING BANK</text>
+  <text x="470" y="798" class="small" text-anchor="middle">Ground perimeter route at 0 m</text>
+  <text x="470" y="825" class="tiny" text-anchor="middle">Dashed cyan ring: single gondola rail at +6 m, not a balcony</text>
+
+  <!-- camera path plan -->
+  <path d="M245 620 Q465 785 700 620 Q758 570 720 508 Q655 485 625 500" stroke="#49d9ef" stroke-width="7" fill="none" stroke-dasharray="14 10" marker-end="url(#arrow)"/>
+  <g><circle cx="245" cy="620" r="15" class="beat"/><text x="245" y="620" class="beatText">1</text></g>
+  <g><circle cx="360" cy="704" r="15" class="beat"/><text x="360" y="704" class="beatText">2</text></g>
+  <g><circle cx="545" cy="704" r="15" class="beat"/><text x="545" y="704" class="beatText">3</text></g>
+  <g><circle cx="700" cy="620" r="15" class="beat"/><text x="700" y="620" class="beatText">4</text></g>
+  <g><circle cx="720" cy="535" r="15" class="beat"/><text x="720" y="535" class="beatText">5</text></g>
+  <g><circle cx="625" cy="500" r="15" class="beat"/><text x="625" y="500" class="beatText">6</text></g>
+
+  <!-- plan legend -->
+  <rect x="670" y="165" width="225" height="170" rx="12" fill="#11171b" stroke="#43515a"/>
+  <text x="690" y="195" class="label">Physical transitions</text>
+  <line x1="692" y1="223" x2="740" y2="223" stroke="#f2b84b" stroke-width="5"/><text x="752" y="228" class="small">spine aperture</text>
+  <line x1="692" y1="253" x2="740" y2="253" stroke="#49d9ef" stroke-width="5" stroke-dasharray="8 6"/><text x="752" y="258" class="small">camera route</text>
+  <line x1="692" y1="283" x2="740" y2="283" stroke="#49d9ef" stroke-width="3" stroke-dasharray="8 6"/><text x="752" y="288" class="small">gondola rail</text>
+  <text x="690" y="317" class="tiny">Core remains visible from all wedges.</text>
+
+  <!-- section panel -->
+  <rect x="960" y="105" width="605" height="750" rx="18" fill="#182126" stroke="#43515a" stroke-width="2"/>
+  <text x="990" y="142" class="sub">SECTION — only one vertical rise</text>
+  <path d="M1010 700 Q1035 240 1260 180 Q1485 240 1510 700" fill="#222c31" stroke="#d8d2c6" stroke-width="8"/>
+  <line x1="1010" y1="700" x2="1510" y2="700" stroke="#c7d0d4" stroke-width="12"/>
+  <rect x="1220" y="225" width="80" height="475" rx="18" fill="#59666c" stroke="#49d9ef" stroke-width="5"/>
+  <rect x="1150" y="465" width="220" height="38" rx="12" class="deck" stroke-width="4"/>
+  <rect x="1100" y="455" width="90" height="54" rx="10" fill="#313c42" stroke="#49d9ef" stroke-width="4"/>
+  <path d="M1030 480 Q1080 450 1135 475" stroke="#71808a" stroke-width="12" fill="none"/>
+  <rect x="1030" y="455" width="78" height="48" rx="8" fill="#d8d2c6" stroke="#49d9ef" stroke-width="4"/>
+  <line x1="1040" y1="305" x2="1480" y2="305" stroke="#71808a" stroke-width="8" stroke-dasharray="16 10"/>
+  <text x="1260" y="210" class="tiny" text-anchor="middle">CENTRAL CORE</text>
+  <text x="1378" y="487" class="small">Assignment Deck +6 m</text>
+  <text x="1028" y="535" class="small">gondola +6 m</text>
+  <text x="1085" y="686" class="small">single Test Floor 0 m</text>
+  <text x="1320" y="292" class="tiny">suspended Dispensing Line — no walkway</text>
+
+  <!-- section camera route -->
+  <path d="M1050 645 Q1085 620 1080 525 Q1105 475 1165 482" stroke="#49d9ef" stroke-width="7" fill="none" stroke-dasharray="14 10" marker-end="url(#arrow)"/>
+  <g><circle cx="1050" cy="645" r="15" class="beat"/><text x="1050" y="645" class="beatText">A</text></g>
+  <g><circle cx="1080" cy="525" r="15" class="beat"/><text x="1080" y="525" class="beatText">B</text></g>
+  <g><circle cx="1165" cy="482" r="15" class="beat"/><text x="1165" y="482" class="beatText">C</text></g>
+
+  <!-- dimensions -->
+  <line x1="1470" y1="700" x2="1470" y2="485" stroke="#f2b84b" stroke-width="2" marker-start="url(#dim)" marker-end="url(#dim)"/>
+  <text x="1482" y="598" class="small" fill="#f2b84b">6 m</text>
+
+  <!-- no tiers callout -->
+  <rect x="1010" y="740" width="520" height="80" rx="12" fill="#11171b" stroke="#f2b84b" stroke-width="2"/>
+  <text x="1030" y="770" class="label">Forbidden generation:</text>
+  <text x="1030" y="798" class="small">stacked galleries · wall balconies · intermediate floors · separate Core chamber</text>
+</svg>

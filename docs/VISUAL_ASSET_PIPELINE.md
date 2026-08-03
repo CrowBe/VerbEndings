@@ -21,6 +21,8 @@ docs/art/               # Art bible, briefs, contact sheets, naming references
 
 Use lowercase snake_case filenames and matching concept names between source and export files. Runtime scenes reference exported files, never source files.
 
+[`docs/art/README.md`](art/README.md) indexes the approved identity, spatial, and intro-staging references. These images constrain shape, proportion, material, palette, and composition; they are not runtime assets and do not imply that production art is implemented.
+
 ## Asset Readiness
 
 An asset has one of four readiness levels:
@@ -56,10 +58,21 @@ The production `basic_hit` clip may contain one call-method track key at its aut
 - Use one predictably named root per exported asset.
 - Keep collision in `.tscn` scenes except for intentionally authored static prop collision.
 - Use shared materials for facility surfaces and consistent per-Verb readability.
+- Keep the shared Subject mesh independent of its claimed Verb. Apply the per-Verb substrate tone and the smaller Verb line beneath the `SAD` badge through runtime material or decal variants.
 - Track large editable source files with Git LFS when ordinary Git becomes impractical.
 
 ## Acceptance Checks
 
+### Generative reference safety
+
+- Describe the project's rendering language through visual properties such as rounded forms, tactile materials, controlled industrial lighting, and stylised proportions. Do not use third-party studio, franchise, artist, or brand names as style shorthand.
+- Identify supplied inputs as original project-owned fictional designs when submitting them to external generation services.
+- Use clean single-frame compositions for video keyframes. Multi-panel turnarounds and design sheets remain identity references, not literal video frames.
+- Describe contained Residuals as inactive jelly predecessors and state their bloodless, non-aggressive presentation explicitly. Do not rely on ambiguous experimentation, injury, or horror terminology in generation prompts.
+- Exclude third-party characters, logos, brands, graphic violence, gore, weapons, and unrequested on-screen text explicitly.
+- Prompt simplification must not alter canonical product terminology in repository documentation or runtime presentation.
+
+An asset is acceptable only when:
 - Hiding the imported visual leaves gameplay collision and logic functional.
 - Origin, scale, facing direction, and collision envelope match the approved greybox.
 - Required animation names exist and trigger through the adapter.

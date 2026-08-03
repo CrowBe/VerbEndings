@@ -10,15 +10,29 @@ The visual style is stylised PBR: rounded, simplified forms with believable mate
 
 The Semantic Engine communicates through plans, panels, lights, printers, and machinery. It has no avatar or conversational persona. The Researcher is the sole regular speaking character: sincere, subordinate to the Engine, physically clumsy, and careless enough to reveal what the institution conceals.
 
+The Researcher is an active woman in her late fifties with a compact, sturdy build, a warm rounded face, a silver-streaked dark curly bob, and rectangular glasses. Her practical warm off-white laboratory coat, cool-grey shirt, charcoal trousers, worn work shoes, and cyan-accented facility ID share the Compound's tactile stylised-PBR material language. Her friendly, animated presentation supports physical comedy without making her look frail or authoritative.
+
 ## Compound Topology
 
-The Compound is a faceted hemisphere around a vertical Central Core. Three wedge-shaped Laboratories occupy the main floor. Thick radial separator spines contain observation rooms, utilities, shutters, and concealed connections. A perimeter maintenance route provides a longer connection between Laboratories.
+The Compound is a faceted hemisphere around a vertical Central Core. Three 120-degree wedge-shaped Laboratories occupy one continuous main-floor datum. Thick radial separator spines run from the Core plinth to the perimeter wall and contain utilities, shutters, and concealed connections. Their outer ends include aligned service apertures that can open as a continuous clockwise perimeter route between Laboratories. The route remains on the main-floor datum and does not form a stacked gallery.
 
-An elevated annular Assignment Deck surrounds the Core. It hosts Verb Selection, Pair Drafts, Experiment Briefs, Result Announcements, and the Researcher's booth. The Dispensing Line runs from this deck along ceiling rails to each Laboratory.
+The Test Floor datum is `0 m`. An elevated annular Assignment Deck surrounds the Core at `+6 m`; it is the Compound's only occupiable upper-level ring. It hosts Verb Selection, Pair Drafts, Experiment Briefs, Result Announcements, and the Researcher's booth. The Dispensing Line runs from this deck along suspended ceiling rails to each Laboratory. These rails and other overhead conduits are machinery, not walkways or additional floors.
+
+One observation-gondola rail follows the inner perimeter wall at the Assignment Deck datum. Its mobile cantilevered platform can rotate to face a Laboratory and dock to the Deck, but the rail does not create a second perimeter balcony. Apart from local apparatus platforms and stairs serving the Assignment Deck, each Laboratory is one full-height volume beneath the dome with no mezzanine, occupied wall tier, or stacked arena.
+
+The Subject staging manifold supports the complete set of up to 24 Verb substrates without presenting simultaneous outlets. A physical indexed selector or cartridge carousel routes each selected substrate in sequence to one shared, downward-facing forming nozzle above one landing pad. Small cyan, green, and pink indicators may preview the queued substrates, but each SAD visibly stretches from the same open nozzle, detaches under gravity, and lands before the next forms. A newly formed Subject moves away from the pad to clear it for the next SAD.
 
 Normal Rounds confine Subjects to the active Laboratory. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.
 
 The macro layout uses repeatable 15- or 30-degree radial modules. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
+
+### Intro camera route
+
+The introductory camera begins near the inner dome wall at approximately the `+6 m` gondola datum, looking down into one Laboratory. It travels clockwise through one level 360-degree orbit at a fixed distance from the wall and returns to its starting view. The camera maintains the same Laboratory, Test Floor, and Central Core throughout rather than touring separate chambers.
+
+As the orbit completes, the observation gondola emerges from a flush wall aperture onto its single rail. The Researcher balances against the gondola's motion, operates its controls, waves, and turns towards the Core. The camera then turns inward, approaches the Core along the Assignment Deck, passes its integrated physical diagnostic screens, and turns right to the one-nozzle Subject staging manifold rooted visibly in the Core.
+
+The shared nozzle forms the queued SADs one at a time. Each SAD stretches and detaches like a cohesive liquid drop, lands on the single pad, settles into a Subject, and moves aside before the next SAD emerges. The formed Subjects remain buoyant, curious, and cheerful through expressive eyes, tilts, hops, arm gestures, and responsive jelly motion without acquiring mouths. The route does not pass through an invented intermediate floor, wall gallery, separate forming room, or disconnected Core chamber.
 
 ## Laboratories
 
@@ -86,7 +100,7 @@ The facility stays neutral enough for Subjects, Verbs, hazards, and active appar
 
 ### Verb Readability
 
-Subject identity and Verb state remain separate. Identity uses a stable suit treatment and number; Verb Effects use temporary material, silhouette, icon, and motion changes.
+Subject classification and Verb state remain legible at rest. Every Subject uses the same stable laboratory-coat treatment with an `SAD` classification badge; the claimed Verb appears beneath `SAD` in smaller type. The Subject's substrate uses that Verb's colour tone. Active Verb Effects add temporary material, silhouette, icon, and motion changes without replacing the at-rest classification cues.
 
 | Verb | Colour | Primary treatment |
 | --- | --- | --- |
@@ -101,6 +115,8 @@ Subject identity and Verb state remain separate. Identity uses a stable suit tre
 | REWIND | `#8067D8` | Positional echoes, reverse ribbons, clock icon |
 
 Each Verb reads from silhouette or motion within roughly 150 ms, keeps effects close to the Subject, and explains the physical interaction without obscuring it.
+
+Subject geometry is shared across Verbs. Body tone and badge text are runtime material or decal variants rather than separately generated meshes.
 
 An assumed Verb on a Residual uses the same per-Verb treatment so learned readability transfers. A Residual's Adverb reads as a separate behavioural and material overlay that modifies motion without imitating any Verb treatment, so unsanctioned grammar is never mistaken for a tenth Verb.
 
