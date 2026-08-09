@@ -3,26 +3,26 @@ extends Node
 ##
 ## After Round Three, the Collapse begins only when multiple Subjects share
 ## the highest individual Trial Score.
-## Every previous Pair is dissolved —
-## all survivors are forced into a Solo state (paired_partner_id = null) and
-## each one's verb enters Self-Chain OVERDRIVE (a per-verb multiplier far
-## stronger than the normal self-chain penalty). Last blob standing wins.
+## Every previous Pair is dissolved — participants are forced into a Solo
+## state (paired_partner_id = null) and enter Overdrive, which halves Verb
+## Expression cooldown and changes nothing else. Elimination is permanent for
+## the remainder of the Trial and the last Subject standing is Trial Winner.
 ##
 ## NETWORK: Everything here is server-authoritative. Eliminations and the
 ## final winner are broadcast via the RPC hooks noted on the signals.
 
 ## NETWORK: @rpc replication hook — broadcast so every client swaps to the
-## Collapse arena and severs its local chain VFX.
+## Collapse presentation and severs its local chain VFX.
 signal collapse_triggered(participant_ids: Array)
-## NETWORK: @rpc replication hook — broadcast each knockout for the feed.
+## NETWORK: @rpc replication hook — broadcast each Elimination for the feed.
 signal player_eliminated(player_id: int, survivors_left: int)
-## NETWORK: @rpc replication hook — broadcast the match result.
+## NETWORK: @rpc replication hook — broadcast the Trial result.
 signal ultimate_winner_decided(player_id: int)
 
 ## True while The Collapse is running.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var is_active: bool = false
-## Players still alive in the Survival Race.
+## Subjects not yet Eliminated from the Collapse.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var surviving_players: Array[int] = []
 
@@ -50,8 +50,8 @@ func resolve_trial_scores(trial_scores: Dictionary) -> bool:
 		if is_equal_approx(trial_scores[player_id], best_score):
 			tied_players.append(player_id)
 	if tied_players.size() < 2:
-		# A Self-Chained solo player alone at the top: the only path to
-		# victory that skips The Collapse.
+		# One Subject alone at the top: the only path to victory that
+		# skips The Collapse.
 		if tied_players.size() == 1:
 			ultimate_winner_decided.emit(tied_players[0])
 		return false
@@ -59,8 +59,8 @@ func resolve_trial_scores(trial_scores: Dictionary) -> bool:
 	return true
 
 
-## Starts the Collapse. Dissolves all Pairs,
-## forces every participant Solo, and arms their Self-Chain overdrive.
+## Starts the Collapse. Dissolves all Pairs, forces every participant Solo,
+## and puts each of them into Overdrive.
 ## NETWORK: @rpc replication hook — server executes, then broadcasts the
 ## solo-state assignments to every peer.
 func trigger_collapse(participant_ids: Array[int]) -> void:
@@ -71,7 +71,7 @@ func trigger_collapse(participant_ids: Array[int]) -> void:
 	# No Pair survives into the Collapse.
 	VerbChainManager.dissolve_all_chains()
 
-	# Force every participant's body into Solo overdrive. Bodies register
+	# Force every participant's body into Solo Overdrive. Bodies register
 	# in the "players" group (see Player.tscn).
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		var peer_id: int = body.get_multiplayer_authority()
@@ -82,9 +82,9 @@ func trigger_collapse(participant_ids: Array[int]) -> void:
 	collapse_triggered.emit(surviving_players.duplicate())
 
 
-## Template hazard callback: connect Survival Race hazard Area3D
-## body_entered signals here (kill floors, crushers, the collapsing edge).
-## Eliminates the fallen player; the last blob standing wins outright.
+## Template hazard callback: connect Collapse hazard Area3D body_entered
+## signals here (hazard floors, crushers, failing routes).
+## Eliminates the fallen Subject; the last Subject standing wins outright.
 ## NETWORK: @rpc replication hook — hazards overlap on the server only;
 ## the resulting elimination is broadcast.
 func _on_player_fall_into_hazard(body: Node3D) -> void:
@@ -93,7 +93,7 @@ func _on_player_fall_into_hazard(body: Node3D) -> void:
 	eliminate_player(body.get_multiplayer_authority())
 
 
-## Removes a player from the race and crowns the winner when one remains.
+## Removes a Subject from the Collapse and crowns the winner when one remains.
 func eliminate_player(player_id: int) -> void:
 	if not is_active or player_id not in surviving_players:
 		return

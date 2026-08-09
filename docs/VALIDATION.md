@@ -47,8 +47,9 @@ godot4.3 --headless --path . tests/TestStability.tscn
 ```
 
 It verifies configurable Expression cost, the 1-Stability self-spend floor,
-Critical Stability, external-Impact Destabilisation, Restabilisation, and
-Material absorption rules.
+Critical Stability, external-Impact Destabilisation, Recall Restabilisation,
+the always-on Stabilisation Rate and its baseline cap, and Material
+absorption rules.
 
 Run the Trial scoring and resolution suite with:
 
@@ -77,6 +78,17 @@ godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
 
 It verifies deterministic seeded Protocol sequences, required authored fields,
 and Experiment Brief terminology that does not expose internal classifications.
+
+Run the animation adapter suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestAnimationAdapter.tscn
+```
+
+It verifies the semantic clip names reachable through the adapter, gameplay
+functioning with the visual subtree hidden, and single-Impact basic-hit
+resolution for the proxy fallback, a production clip without a contact
+marker, and a production clip with one.
 
 Run the Compound topology and spatial-contract suite with:
 

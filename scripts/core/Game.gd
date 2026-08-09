@@ -1,11 +1,11 @@
 extends Node
 ## Root scene coordinator for the playable greybox.
 ##
-## The initial commit launched directly into Player.tscn, which made the
-## project boot as an isolated character controller and forced global systems
-## to know too much about scene setup. Game owns match bootstrap, round scene
-## loading, and temporary local-player spawning until multiplayer spawning is
-## implemented.
+## Game is the composition root: it owns bootstrap, Round scene loading, and
+## temporary local-player spawning until multiplayer spawning is implemented.
+## It does not drive the three-Round Trial lifecycle; RoundManager owns
+## Protocol selection and Game adopts the selected Protocol only when its
+## classification matches the requested Round.
 
 const DEFAULT_PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
 const ROUND_SCENES: Dictionary = {
