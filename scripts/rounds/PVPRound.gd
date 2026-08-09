@@ -73,7 +73,8 @@ func _sample_subject(body: Node3D, sample_delta: float) -> void:
 	_previous_positions[body] = body.global_position
 
 	if not body.get("is_destabilised"):
-		var floor_position := Vector2(body.global_position.x, body.global_position.z)
+		var local_position: Vector3 = to_local(body.global_position)
+		var floor_position := Vector2(local_position.x, local_position.z)
 		if floor_position.length() <= DOMINANCE_RADIUS:
 			dominance_seconds[player_id] = dominance_seconds.get(player_id, 0.0) \
 					+ sample_delta
