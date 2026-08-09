@@ -121,7 +121,7 @@ func establish_verb_chain(player_a_id: int, player_b_id: int) -> Dictionary:
 
 ## Pairs the whole roster. With an odd player count, the leftover player is
 ## chained with themselves (Self-Chain).
-## NETWORK: @rpc replication hook — server runs this at match start.
+## NETWORK: @rpc replication hook — server runs this at Trial start.
 func auto_pair_all_players() -> void:
 	var ids: Array = active_players.keys()
 	ids.sort()
@@ -146,7 +146,7 @@ func get_partner_id(player_id: int) -> int:
 	return chain.player_b_id if chain.player_a_id == player_id else chain.player_a_id
 
 
-## Synergy Coefficient for a verb pair, from the matchmaking matrix.
+## Synergy Coefficient for a verb pair, from the compatibility matrix.
 func get_synergy_coefficient(verb_a: Enums.VerbType, verb_b: Enums.VerbType) -> float:
 	return SYNERGY_MATRIX.get(_synergy_key(verb_a, verb_b), DEFAULT_SYNERGY)
 

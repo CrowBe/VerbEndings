@@ -608,7 +608,7 @@ func _test_confinement_and_retained_state(
 
 func _test_game_composition(failures: Array[String]) -> void:
 	var game: Node = GAME_SCENE.instantiate()
-	game.auto_start_graybox = false
+	game.auto_start_greybox = false
 	add_child(game)
 	var game_compound: Compound = game.get_node("World/Compound")
 	var retained_lab: Node3D = game_compound.get_laboratory(&"AppliedCausality")

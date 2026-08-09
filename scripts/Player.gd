@@ -52,7 +52,7 @@ const CRITICAL_STABILITY_MAX: float = 9.0
 
 ## Basic hit: the big fist.
 const HIT_COOLDOWN: float = 0.6
-const HIT_DAMAGE: float = 10.0
+const HIT_IMPACT_STRENGTH: float = 10.0
 ## Reach for driving puzzle units with a punch.
 const PUZZLE_REACH: float = 4.0
 
@@ -76,7 +76,7 @@ const OVERDRIVE_COOLDOWN_MULTIPLIER: float = 0.5
 const BUFF_DURATION: float = 3.0
 ## Radius for area verb effects (BURN nova, FREEZE ring).
 const VERB_AREA_RADIUS: float = 4.0
-const BURN_NOVA_DAMAGE: float = 14.0
+const BURN_NOVA_IMPACT_STRENGTH: float = 14.0
 const FREEZE_SLOW_FACTOR: float = 0.45
 const STRETCH_LUNGE_SPEED: float = 12.0
 const REWIND_SECONDS: float = 4.0
@@ -307,7 +307,7 @@ func basic_hit() -> void:
 	animation_adapter.play_basic_hit()
 
 
-## Damage/interaction resolution, fired by the animation at full extension.
+## Impact/interaction resolution, fired by the animation at full extension.
 func _resolve_hit() -> void:
 	if is_destabilised:
 		return
@@ -316,9 +316,9 @@ func _resolve_hit() -> void:
 		if body == self:
 			continue
 		if body.is_in_group("residuals"):
-			body.take_hit(HIT_DAMAGE * _power_buff, get_multiplayer_authority())
+			body.take_hit(HIT_IMPACT_STRENGTH * _power_buff, get_multiplayer_authority())
 		elif body.is_in_group("players"):
-			body.apply_impact(HIT_DAMAGE * _power_buff, self)
+			body.apply_impact(HIT_IMPACT_STRENGTH * _power_buff, self)
 	var unit: PuzzleUnit = _nearest_puzzle_unit()
 	if unit != null:
 		unit.interact(get_multiplayer_authority(), assigned_verb, facing)
@@ -344,7 +344,7 @@ func express_verb() -> void:
 	match assigned_verb:
 		Enums.VerbType.BURN:
 			# Damaging: flame nova around the blob.
-			_area_hit(BURN_NOVA_DAMAGE)
+			_area_hit(BURN_NOVA_IMPACT_STRENGTH)
 		Enums.VerbType.SHIELD:
 			# Brief immunity to external Stability loss.
 			shield_active = true
@@ -378,14 +378,14 @@ func express_verb() -> void:
 			_teleport_to_breadcrumb()
 
 
-## Damage every residual (and player, PVP-gated) inside the verb radius.
-func _area_hit(damage: float) -> void:
+## Impact every residual (and player, PVP-gated) inside the verb radius.
+func _area_hit(impact_strength: float) -> void:
 	for residual: Node in get_tree().get_nodes_in_group("residuals"):
 		if _in_verb_radius(residual):
-			residual.take_hit(damage, get_multiplayer_authority())
+			residual.take_hit(impact_strength, get_multiplayer_authority())
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		if body != self and _in_verb_radius(body):
-			body.apply_impact(damage, self)
+			body.apply_impact(impact_strength, self)
 
 
 func get_expression_cost() -> float:

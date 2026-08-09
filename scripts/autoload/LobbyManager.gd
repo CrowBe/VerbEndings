@@ -50,7 +50,7 @@ var draft_queue: Array[int] = []
 var current_chooser_id: int = -1
 
 ## Character Identity registry: VerbType -> claiming player_id. Enforces
-## that each verb-named character exists at most once per match.
+## that each verb-named character exists at most once per Trial.
 ## NETWORK: server-authoritative; replicate on change.
 var _claimed_identities: Dictionary = {}
 ## Ticks (msec) when selection opened; -1 = selection closed.
