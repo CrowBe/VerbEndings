@@ -1,22 +1,23 @@
 extends Node3D
 ## PVE round controller: the swarm.
 ##
-## Residuals spawn on a ring around each living player — never closer than
+## Residuals spawn on a ring around each stable player — never closer than
 ## MIN_SPAWN_DISTANCE — and both the spawn rate and per-residual strength
 ## grow over the round. Each Residual independently develops one seeded
 ## Adverb after surviving its configured threshold. A Residual may separately
 ## assume one Verb only by Destabilising its Subject.
 ##
-## Scoring combines KILLS and SURVIVAL TIME: swarm_kill bonuses per kill,
-## survival_tick bonuses on a timer while alive, and end-of-round placements
+## Scoring combines DESTABILISATIONS and SURVIVAL TIME: swarm_kill bonuses
+## per Residual Destabilised (the bonus key is serialised Protocol data),
+## survival_tick bonuses on a timer while stable, and end-of-round placements
 ## ranked by a weighted blend of both.
 ##
 ## PVP is disabled for this round (RoundManager.is_pvp_enabled()).
 ##
 ## NETWORK: Spawning, AI, evolution, and scoring are all server-side.
 
-## NETWORK: @rpc replication hook — broadcast for the kill-feed HUD.
-signal residual_killed(player_id: int, new_kill_count: int)
+## NETWORK: @rpc replication hook — broadcast for the Elimination-feed HUD.
+signal residual_destabilised(player_id: int, new_destabilisation_count: int)
 ## NETWORK: @rpc replication hook — broadcast the final round placements.
 signal round_finished(ordered_player_ids: Array)
 
@@ -33,15 +34,15 @@ const SPAWN_INTERVAL_DECAY: float = 0.02
 const STRENGTH_GROWTH_PER_SECOND: float = 0.01
 ## Survival scoring cadence.
 const SURVIVAL_TICK_SECONDS: float = 10.0
-## Placement blend: one kill outweighs one survival tick 3:1.
-const KILL_WEIGHT: float = 3.0
+## Placement blend: one Destabilisation outweighs one survival tick 3:1.
+const DESTABILISATION_WEIGHT: float = 3.0
 const SURVIVAL_WEIGHT: float = 1.0
 
 ## NETWORK: @rpc replication hook — sync elapsed for the round clock HUD.
 var elapsed: float = 0.0
-## player_id -> residuals killed this round.
+## player_id -> Residuals Destabilised this round.
 ## NETWORK: @rpc replication hook — sync to all peers.
-var kill_counts: Dictionary = {}
+var destabilisation_counts: Dictionary = {}
 ## player_id -> survival ticks earned this round.
 ## NETWORK: @rpc replication hook — sync to all peers.
 var survival_ticks: Dictionary = {}
@@ -75,7 +76,8 @@ func _physics_process(delta: float) -> void:
 		_survival_timer = 0.0
 		_award_survival_ticks()
 
-## Ends the round: placements by weighted kills + survival, best first.
+## Ends the round: placements by weighted Destabilisations + survival,
+## best first.
 ## NETWORK: @rpc replication hook — server-side, on round timer expiry.
 func end_round() -> void:
 	var ordered: Array = VerbChainManager.active_players.keys()
@@ -89,7 +91,7 @@ func end_round() -> void:
 	round_finished.emit(ordered)
 
 
-## One residual per living player, on that player's spawn ring.
+## One residual per stable player, on that player's spawn ring.
 func _spawn_wave() -> void:
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		if body.is_destabilised:
@@ -98,7 +100,7 @@ func _spawn_wave() -> void:
 		residual.setup(_current_strength_multiplier(), grammar_seed + _residual_sequence)
 		_residual_sequence += 1
 		residual.position = to_local(_ring_position_around(body))
-		residual.residual_died.connect(_on_residual_died)
+		residual.residual_destabilised.connect(_on_residual_destabilised)
 		add_child(residual)
 
 
@@ -130,10 +132,12 @@ func _award_survival_ticks() -> void:
 		ScoreManager.award_bonus(player_id, "PVE", "survival_tick")
 
 
-func _on_residual_died(_residual: Residual, killer_player_id: int) -> void:
-	kill_counts[killer_player_id] = kill_counts.get(killer_player_id, 0) + 1
-	ScoreManager.award_bonus(killer_player_id, "PVE", "swarm_kill")
-	residual_killed.emit(killer_player_id, kill_counts[killer_player_id])
+func _on_residual_destabilised(_residual: Residual, attacker_player_id: int) -> void:
+	destabilisation_counts[attacker_player_id] = \
+			destabilisation_counts.get(attacker_player_id, 0) + 1
+	ScoreManager.award_bonus(attacker_player_id, "PVE", "swarm_kill")
+	residual_destabilised.emit(
+			attacker_player_id, destabilisation_counts[attacker_player_id])
 
 
 ## A last hit is the sole Assumption path.
@@ -145,5 +149,5 @@ func _on_player_destabilised(player: Node, source: Node) -> void:
 
 
 func _round_score(player_id: int) -> float:
-	return kill_counts.get(player_id, 0) * KILL_WEIGHT \
+	return destabilisation_counts.get(player_id, 0) * DESTABILISATION_WEIGHT \
 			+ survival_ticks.get(player_id, 0) * SURVIVAL_WEIGHT

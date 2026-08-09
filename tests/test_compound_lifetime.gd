@@ -36,7 +36,7 @@ func _test_direct_compound_teardown() -> void:
 
 func _test_repeated_round_switching(failures: Array[String]) -> void:
 	var game: Node = GAME_SCENE.instantiate()
-	game.auto_start_graybox = false
+	game.auto_start_greybox = false
 	add_child(game)
 	await get_tree().process_frame
 	var compound: Compound = game.get_node("World/Compound")

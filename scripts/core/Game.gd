@@ -19,7 +19,7 @@ const ROUND_LABORATORIES: Dictionary = {
 	"PUZZLE": &"AppliedCausality",
 }
 
-@export var auto_start_graybox: bool = true
+@export var auto_start_greybox: bool = true
 @export var debug_round_type: String = "PUZZLE"
 @export var player_scene: PackedScene = DEFAULT_PLAYER_SCENE
 
@@ -33,13 +33,13 @@ var local_player: Node3D = null
 
 
 func _ready() -> void:
-	if auto_start_graybox:
-		start_graybox_match(debug_round_type)
+	if auto_start_greybox:
+		start_greybox_trial(debug_round_type)
 
 
 ## Starts a local single-player smoke test. The networked version should keep
 ## this public API but swap spawn_local_player() for MultiplayerSpawner output.
-func start_graybox_match(round_type: String) -> void:
+func start_greybox_trial(round_type: String) -> void:
 	_spawn_local_player()
 	load_round(round_type)
 
