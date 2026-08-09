@@ -99,7 +99,7 @@ func _spawn_wave() -> void:
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
 		residual.setup(_current_strength_multiplier(), grammar_seed + _residual_sequence)
 		_residual_sequence += 1
-		residual.position = _ring_position_around(body)
+		residual.position = to_local(_ring_position_around(body))
 		residual.residual_destabilised.connect(_on_residual_destabilised)
 		add_child(residual)
 
