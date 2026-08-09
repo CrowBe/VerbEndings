@@ -1,25 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvbendpuzzler1"]
+[gd_scene load_steps=3 format=3 uid="uid://cvbendpuzzler1"]
 
 [ext_resource type="Script" path="res://scripts/rounds/PuzzleRound.gd" id="1_round"]
 [ext_resource type="PackedScene" path="res://scenes/MaterialDispenser.tscn" id="2_dispenser"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
-size = Vector3(120, 1, 120)
-
-[sub_resource type="BoxMesh" id="BoxMesh_floor"]
-size = Vector3(120, 1, 120)
-
 [node name="PuzzleRound" type="Node3D"]
 script = ExtResource("1_round")
-
-[node name="Floor" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
-shape = SubResource("BoxShape3D_floor")
-
-[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
-mesh = SubResource("BoxMesh_floor")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 20, 0)

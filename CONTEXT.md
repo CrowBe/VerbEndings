@@ -132,6 +132,8 @@ If exactly one Subject holds First Place after Round Three, that Subject wins. I
 - The **Central Core** contains the Semantic Engine's physical infrastructure and primary machinery.
 - A **Laboratory** is one of the three named experimental environments.
 - The **Test Floor** is the continuous playable area within a Laboratory.
+- A **Separator Spine** is a non-zero-width radial structure between neighbouring Laboratories. It belongs to the Compound rather than either Test Floor and contains observation, utility, shutter, and connective infrastructure.
+- A **Service Route** is a normally sealed corridor through a Separator Spine or around the Compound perimeter. Service Routes become playable only during an authored transition such as the Collapse.
 - **Sector** is limited to literal radial geometry or streaming boundaries.
 - **Zone** is limited to generic spatial triggers in technical discussion.
 
