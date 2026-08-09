@@ -8,14 +8,14 @@ extends Node
 ## NETWORK: The server is the only writer. Clients receive ranking updates
 ## via the RPC hooks on the signals below.
 
-## NETWORK: @rpc replication hook — broadcast each award for kill-feed UI.
+## NETWORK: @rpc replication hook — broadcast each award for score-feed UI.
 signal points_awarded(player_id: int, amount: int, round_type: String, reason: String)
 ## NETWORK: @rpc replication hook — broadcast the re-sorted Trial Ranking.
 signal trial_ranking_updated(trial_ranking: Array)
 
 ## Placement points per round type, index 0 = 1st place. Placements beyond
 ## the table earn the final entry (participation points).
-const PLACEMENT_LADDERS: Dictionary = {
+const PLACEMENT_TABLES: Dictionary = {
 	"PVP": [100, 80, 60, 45, 30, 15],
 	"PVE": [90, 75, 60, 45, 30, 15],
 	"PUZZLE": [110, 85, 60, 40, 25, 10],
@@ -50,7 +50,7 @@ var round_scores: Dictionary = {}
 ## finish order, winner first.
 ## NETWORK: @rpc replication hook — server-side, at round end.
 func award_placements(round_type: String, ordered_player_ids: Array) -> void:
-	var reward_table: Array = PLACEMENT_LADDERS.get(round_type, [])
+	var reward_table: Array = PLACEMENT_TABLES.get(round_type, [])
 	if reward_table.is_empty():
 		push_warning("ScoreManager: unknown round type '%s'." % round_type)
 		return
@@ -66,7 +66,7 @@ func award_placements(round_type: String, ordered_player_ids: Array) -> void:
 ## player is only paid once.
 ## NETWORK: @rpc replication hook — server-side, at round end.
 func award_chain_placements(round_type: String, ordered_chain_ids: Array) -> void:
-	var reward_table: Array = PLACEMENT_LADDERS.get(round_type, [])
+	var reward_table: Array = PLACEMENT_TABLES.get(round_type, [])
 	if reward_table.is_empty():
 		push_warning("ScoreManager: unknown round type '%s'." % round_type)
 		return
