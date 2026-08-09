@@ -54,6 +54,10 @@ func _enter_tree() -> void:
 	add_to_group("puzzle_units")
 
 
+func _exit_tree() -> void:
+	_detach_procedural_meshes(self)
+
+
 ## Simulated RPC hook: a player interacts with the unit (shove, stomp,
 ## spin — the subclass decides). `direction` is the player's aim; ZERO lets
 ## the subclass pick a sensible default (usually "toward the goal").
@@ -154,3 +158,10 @@ func _make_area_box(size: Vector3, local_pos: Vector3) -> Area3D:
 	area.position = local_pos
 	add_child(area)
 	return area
+
+
+func _detach_procedural_meshes(node: Node) -> void:
+	for child: Node in node.get_children():
+		if child is MeshInstance3D:
+			child.mesh = null
+		_detach_procedural_meshes(child)

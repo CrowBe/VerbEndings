@@ -28,7 +28,7 @@ const MIN_UNIT_COUNT: int = 5
 const UNIT_CLEARANCE: float = 12.0
 
 @export var unit_count: int = 8
-@export var scatter_half_extent: float = 45.0
+@export var scatter_half_extent: float = 20.0
 @export var protocol: ExperimentProtocol = preload(
 		"res://resources/protocols/precision_assembly.tres")
 
