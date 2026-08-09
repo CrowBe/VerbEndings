@@ -2,7 +2,7 @@ class_name GravityFunnel
 extends PuzzleUnit
 ## Gravity Funnel — loose balls are scattered around a sunken catch basin;
 ## herd enough of them in to complete the unit. Verb flavor: ROLL steers
-## balls mid-travel, FREEZE kills overshoot friction, BOUNCE banks shots in
+## balls mid-travel, FREEZE removes overshoot friction, BOUNCE banks shots in
 ## off the rim.
 
 const BALL_COUNT: int = 6

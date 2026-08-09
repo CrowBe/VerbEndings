@@ -87,12 +87,8 @@ GitHub issues own implementation work. This document records capability boundari
 Several code identifiers and internal comments do not match `CONTEXT.md`. They are load-bearing today, so the mismatch is recorded here rather than hidden:
 
 - `Player`, `player_id`, `players` group, and `active_players` stand for Subject and Subject identity;
-- `match` appears in `RoundManager.is_match_complete()` and `Game.start_graybox_match()` where the domain term is Trial;
-- `PLACEMENT_LADDERS` in `ScoreManager` holds placement point tables;
-- `health`, `damage`, `died`, and `kill` appear in `Residual`, `PVERound`, and `Player` Impact resolution;
-- `InsertionVector`, `insertion_vector_launched`, and vector occupancy in `LobbyManager` stand in for the Dispensing Line and the Drop;
-- `arena` in `PuzzleRound` and `PuzzleUnit`, including `arena_half_extent`, describes the scatter area rather than a Laboratory Test Floor; and
-- `graybox` appears in `Game`'s exported start flag and in puzzle comments where prose uses `greybox`.
+- `InsertionVector`, `insertion_vector_launched`, and vector occupancy in `LobbyManager` stand in for the Dispensing Line and the Drop; and
+- `swarm_kill` is a serialised bonus key in the `adaptive_containment` Protocol resource and `ScoreManager.BONUS_EVENTS`, so the string stays until a data migration renames it.
 
 ## Dependencies And Extension Rules
 

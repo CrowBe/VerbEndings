@@ -2,7 +2,7 @@ extends Node
 ## RoundManager (autoload singleton)
 ##
 ## Drives the three-round "Blind Round" structure. The full round order is
-## secretly shuffled at match start; players only learn what was eliminated
+## secretly shuffled at Trial start; players only learn what was eliminated
 ## as rounds transition:
 ##   Round 1 — selected randomly (queue slot 0), no reveal.
 ##   Round 2 — UI announces which type was just eliminated (Round 1's type),
@@ -28,7 +28,7 @@ signal all_rounds_completed(played_order: Array)
 ## NETWORK: local-only — each peer renders banners from replicated signals.
 signal round_banner_requested(text: String)
 
-## The pool of round types available at match start.
+## The pool of round types available at Trial start.
 const PROTOCOLS: Array[ExperimentProtocol] = [
 	preload("res://resources/protocols/competitive_stress.tres"),
 	preload("res://resources/protocols/adaptive_containment.tres"),
@@ -36,7 +36,7 @@ const PROTOCOLS: Array[ExperimentProtocol] = [
 ]
 const TOTAL_ROUNDS: int = 3
 
-## 1-based index of the round in progress (0 = match not started).
+## 1-based index of the round in progress (0 = Trial not started).
 ## NETWORK: @rpc replication hook — sync to all peers.
 var current_round_index: int = 0
 ## Type of the round in progress ("" between rounds).
@@ -52,7 +52,7 @@ var round_history: Array[String] = []
 var _secret_protocol_queue: Array[ExperimentProtocol] = []
 
 
-## Shuffles the round pool into a secret queue. Call once at match start,
+## Shuffles the round pool into a secret queue. Call once at Trial start,
 ## on the server only.
 ## NETWORK: @rpc replication hook — server-side; clients only get the
 ## round_queue_locked notification, not the contents.
@@ -72,8 +72,8 @@ func secretly_queue_rounds(seed: int = 0) -> void:
 	round_queue_locked.emit()
 
 
-## Advances the match to the next round, handling the reveal rules for each
-## transition. Returns the new round type, or "" when the match is over.
+## Advances the Trial to the next round, handling the reveal rules for each
+## transition. Returns the new round type, or "" when the Trial is over.
 ## NETWORK: @rpc replication hook — server drives this; the resulting
 ## round_started / round_type_eliminated signals are what get broadcast.
 func advance_to_next_round() -> String:
@@ -119,7 +119,7 @@ func get_remaining_pool() -> Array[String]:
 	return remaining
 
 
-func is_match_complete() -> bool:
+func is_trial_complete() -> bool:
 	return current_round_index >= TOTAL_ROUNDS
 
 

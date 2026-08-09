@@ -1,18 +1,19 @@
 class_name Residual
 extends CharacterBody3D
-## Basic PVE swarm enemy. Chases the nearest living player and bites on
-## contact. Spawned by PVERound at a ring around each player and scaled by
-## the round's strength multiplier.
+## Basic PVE hostile that attacks in swarms. Chases the nearest stable
+## player and bites on contact. Spawned by PVERound at a ring around each
+## player and scaled by the round's strength multiplier.
 ##
 ## Residuals start without grammar. Survival develops one seeded Adverb,
 ## while Destabilising a Subject may grant that Subject's Verb. These are
 ## independent, capped states: neither can replace or grant the other.
 ##
-## NETWORK: Residuals are server-owned. Spawns, evolutions, hits, and deaths
-## all originate server-side and broadcast via the RPC hooks below.
+## NETWORK: Residuals are server-owned. Spawns, evolutions, hits, and
+## Destabilisations all originate server-side and broadcast via the RPC hooks
+## below.
 
-## NETWORK: @rpc replication hook — broadcast; PVERound scores the kill.
-signal residual_died(residual: Residual, killer_player_id: int)
+## NETWORK: @rpc replication hook — broadcast; PVERound scores it.
+signal residual_destabilised(residual: Residual, attacker_player_id: int)
 ## NETWORK: @rpc replication hook — broadcast for evolution VFX/nameplate.
 signal adverb_developed(residual: Residual, adverb: AdverbType)
 signal verb_assumed(residual: Residual, verb: Enums.VerbType)
@@ -25,8 +26,8 @@ enum AdverbType {
 }
 
 const MATERIAL_SCENE: PackedScene = preload("res://scenes/Material.tscn")
-const BASE_HEALTH: float = 20.0
-const BASE_DAMAGE: float = 6.0
+const BASE_STABILITY: float = 20.0
+const BASE_IMPACT_STRENGTH: float = 6.0
 const BASE_SPEED: float = 3.0
 const ATTACK_RANGE: float = 1.6
 const ATTACK_COOLDOWN: float = 1.2
@@ -40,29 +41,29 @@ const ATTACK_COOLDOWN: float = 1.2
 @export_range(0.1, 5.0, 0.05) var quickly_speed_multiplier: float = 1.45
 @export_range(0.1, 5.0, 0.05) var quickly_action_speed_multiplier: float = 1.25
 @export_range(0.1, 5.0, 0.05) var violently_speed_multiplier: float = 1.1
-@export_range(0.1, 5.0, 0.05) var violently_damage_multiplier: float = 1.6
+@export_range(0.1, 5.0, 0.05) var violently_impact_multiplier: float = 1.6
 @export_range(0.1, 5.0, 0.05) var relentlessly_speed_multiplier: float = 1.2
 @export_range(0.1, 5.0, 0.05) var relentlessly_action_speed_multiplier: float = 1.5
 
 ## Stat mutations applied when a residual takes on a verb.
 const VERB_MUTATIONS: Dictionary = {
-	Enums.VerbType.NONE: {"health": 1.0, "damage": 1.0, "speed": 1.0},
-	Enums.VerbType.BURN: {"health": 1.0, "damage": 1.5, "speed": 1.1},
-	Enums.VerbType.SHIELD: {"health": 1.8, "damage": 0.9, "speed": 0.9},
-	Enums.VerbType.GROW: {"health": 1.6, "damage": 1.3, "speed": 0.8},
-	Enums.VerbType.STRETCH: {"health": 1.0, "damage": 1.2, "speed": 1.2},
-	Enums.VerbType.ROLL: {"health": 1.1, "damage": 1.1, "speed": 1.5},
-	Enums.VerbType.JUMP: {"health": 1.0, "damage": 1.1, "speed": 1.3},
-	Enums.VerbType.BOUNCE: {"health": 1.2, "damage": 1.0, "speed": 1.4},
-	Enums.VerbType.FREEZE: {"health": 1.3, "damage": 1.2, "speed": 1.0},
-	Enums.VerbType.REWIND: {"health": 1.4, "damage": 1.2, "speed": 1.1},
+	Enums.VerbType.NONE: {"stability": 1.0, "impact": 1.0, "speed": 1.0},
+	Enums.VerbType.BURN: {"stability": 1.0, "impact": 1.5, "speed": 1.1},
+	Enums.VerbType.SHIELD: {"stability": 1.8, "impact": 0.9, "speed": 0.9},
+	Enums.VerbType.GROW: {"stability": 1.6, "impact": 1.3, "speed": 0.8},
+	Enums.VerbType.STRETCH: {"stability": 1.0, "impact": 1.2, "speed": 1.2},
+	Enums.VerbType.ROLL: {"stability": 1.1, "impact": 1.1, "speed": 1.5},
+	Enums.VerbType.JUMP: {"stability": 1.0, "impact": 1.1, "speed": 1.3},
+	Enums.VerbType.BOUNCE: {"stability": 1.2, "impact": 1.0, "speed": 1.4},
+	Enums.VerbType.FREEZE: {"stability": 1.3, "impact": 1.2, "speed": 1.0},
+	Enums.VerbType.REWIND: {"stability": 1.4, "impact": 1.2, "speed": 1.1},
 }
 
 ## Difficulty scale at spawn time (grows over the round).
 ## NETWORK: @rpc replication hook — set at spawn, sync once.
 var strength_multiplier: float = 1.0
-## NETWORK: @rpc replication hook — sync for health bars.
-var health: float = BASE_HEALTH
+## NETWORK: @rpc replication hook — sync for Stability readouts.
+var stability: float = BASE_STABILITY
 ## NETWORK: @rpc replication hook — sync for verb glow/nameplate.
 var verb: Enums.VerbType = Enums.VerbType.NONE
 ## NETWORK: @rpc replication hook — sync for behavioural overlay/nameplate.
@@ -85,7 +86,7 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func setup(p_strength_multiplier: float, grammar_seed: int = 0) -> void:
 	strength_multiplier = p_strength_multiplier
-	health = BASE_HEALTH * strength_multiplier
+	stability = BASE_STABILITY * strength_multiplier
 	_rng.seed = grammar_seed
 	var lower := minf(adverb_survival_time_min, adverb_survival_time_max)
 	var upper := maxf(adverb_survival_time_min, adverb_survival_time_max)
@@ -105,7 +106,7 @@ func _physics_process(delta: float) -> void:
 		if _slow_timer <= 0.0:
 			_slow_factor = 1.0
 
-	var target: Node3D = _nearest_living_player()
+	var target: Node3D = _nearest_stable_player()
 	if target == null:
 		velocity.x = 0.0
 		velocity.z = 0.0
@@ -125,23 +126,23 @@ func _physics_process(delta: float) -> void:
 		if _attack_timer == 0.0:
 			_attack_timer = ATTACK_COOLDOWN / _adverb_action_speed()
 			animation_adapter.play_basic_hit()
-			target.apply_impact(get_damage(), self)
+			target.apply_impact(get_impact_strength(), self)
 	move_and_slide()
 	animation_adapter.update_locomotion(
 			Vector2(velocity.x, velocity.z).length(), is_on_floor())
 
 
-## Damage from a player's verb attack.
+## Stability Loss from a player's verb attack.
 ## NETWORK: @rpc replication hook — server applies, then broadcasts.
 func take_hit(amount: float, attacker_player_id: int) -> void:
-	if health <= 0.0:
+	if stability <= 0.0:
 		return
-	health -= amount
+	stability -= amount
 	_shed_material(material_shed_probability)
-	if health <= 0.0:
+	if stability <= 0.0:
 		animation_adapter.play_destabilise()
 		_shed_material(destabilise_shed_probability)
-		residual_died.emit(self, attacker_player_id)
+		residual_destabilised.emit(self, attacker_player_id)
 		queue_free()
 
 
@@ -169,16 +170,17 @@ func develop_adverb() -> void:
 
 ## Assumption only occurs on a Subject's Destabilisation and never replaces
 ## an already assumed Verb.
-## NETWORK: @rpc replication hook — server-side, from PVERound's death hook.
+## NETWORK: @rpc replication hook — server-side, from PVERound's
+## Destabilisation hook.
 func assume_verb(victim_verb: Enums.VerbType) -> void:
 	if victim_verb == Enums.VerbType.NONE or verb != Enums.VerbType.NONE:
 		return
 	_take_on_verb(victim_verb)
 
 
-func get_damage() -> float:
-	return BASE_DAMAGE * strength_multiplier * _mutation().damage \
-			* _adverb_damage()
+func get_impact_strength() -> float:
+	return BASE_IMPACT_STRENGTH * strength_multiplier * _mutation().impact \
+			* _adverb_impact()
 
 
 func get_speed() -> float:
@@ -188,8 +190,9 @@ func get_speed() -> float:
 
 func _take_on_verb(new_verb: Enums.VerbType) -> void:
 	verb = new_verb
-	# Health mutation applies to the remaining pool, not a full heal.
-	health *= _mutation().health
+	# The stability mutation applies to the remaining pool; it is not a
+	# full Restabilisation.
+	stability *= _mutation().stability
 	animation_adapter.apply_verb_treatment(verb)
 	animation_adapter.play_verb_expression(Enums.verb_name(verb))
 	verb_assumed.emit(self, verb)
@@ -210,8 +213,8 @@ func _adverb_speed() -> float:
 	return 1.0
 
 
-func _adverb_damage() -> float:
-	return violently_damage_multiplier if adverb == AdverbType.VIOLENTLY else 1.0
+func _adverb_impact() -> float:
+	return violently_impact_multiplier if adverb == AdverbType.VIOLENTLY else 1.0
 
 
 func _adverb_action_speed() -> float:
@@ -223,7 +226,7 @@ func _adverb_action_speed() -> float:
 	return 1.0
 
 
-func _nearest_living_player() -> Node3D:
+func _nearest_stable_player() -> Node3D:
 	var best: Node3D = null
 	var best_distance: float = INF
 	for body: Node in get_tree().get_nodes_in_group("players"):

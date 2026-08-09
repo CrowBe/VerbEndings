@@ -49,13 +49,13 @@ func _test_grammar_caps_and_independence() -> void:
 func _test_verbless_adverb_behaviour() -> void:
 	var residual := await _spawn_residual(73)
 	var base_speed := residual.get_speed()
-	var base_damage := residual.get_damage()
+	var base_impact := residual.get_impact_strength()
 	residual.adverb = Residual.AdverbType.VIOLENTLY
 	_expect(residual.verb == Enums.VerbType.NONE,
 			"Adverb development does not self-develop a Verb")
 	_expect(residual.get_speed() > base_speed,
 			"an Adverb changes a Verbless Residual's movement")
-	_expect(residual.get_damage() > base_damage,
+	_expect(residual.get_impact_strength() > base_impact,
 			"an Adverb changes a Verbless Residual's attack")
 	residual.queue_free()
 

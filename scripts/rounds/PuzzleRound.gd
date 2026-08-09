@@ -1,6 +1,6 @@
 extends Node3D
 ## PUZZLE round controller. Scatters at least MIN_UNIT_COUNT small physics
-## puzzle units through the arena; players (still tethered to their pair)
+## puzzle units across the scatter area; players (still tethered to their pair)
 ## race to rack up the highest COMPLETION COUNT before the timer ends.
 ##
 ## PVP is disabled for this round — RoundManager.is_pvp_enabled() returns
@@ -24,11 +24,11 @@ const PUZZLE_TYPES: Array[Script] = [
 	preload("res://scripts/puzzles/MomentumTurbine.gd"),
 ]
 const MIN_UNIT_COUNT: int = 5
-## Keeps scattered units from overlapping each other's graybox footprints.
+## Keeps scattered units from overlapping each other's greybox footprints.
 const UNIT_CLEARANCE: float = 12.0
 
 @export var unit_count: int = 8
-@export var arena_half_extent: float = 45.0
+@export var scatter_half_extent: float = 45.0
 @export var protocol: ExperimentProtocol = preload(
 		"res://resources/protocols/precision_assembly.tres")
 
@@ -90,11 +90,11 @@ func _on_unit_completed(_unit: PuzzleUnit, contributor_ids: Array) -> void:
 
 func _pick_clear_position(placed: Array[Vector3]) -> Vector3:
 	# Rejection-sample a spot with clearance; give up gracefully after a
-	# few tries so a crowded arena still fills.
+	# few tries so a crowded scatter area still fills.
 	for _attempt: int in 20:
 		var candidate := Vector3(
-				randf_range(-arena_half_extent, arena_half_extent), 0.0,
-				randf_range(-arena_half_extent, arena_half_extent))
+				randf_range(-scatter_half_extent, scatter_half_extent), 0.0,
+				randf_range(-scatter_half_extent, scatter_half_extent))
 		var clear: bool = true
 		for existing: Vector3 in placed:
 			if candidate.distance_to(existing) < UNIT_CLEARANCE:
@@ -103,5 +103,5 @@ func _pick_clear_position(placed: Array[Vector3]) -> Vector3:
 		if clear:
 			return candidate
 	return Vector3(
-			randf_range(-arena_half_extent, arena_half_extent), 0.0,
-			randf_range(-arena_half_extent, arena_half_extent))
+			randf_range(-scatter_half_extent, scatter_half_extent), 0.0,
+			randf_range(-scatter_half_extent, scatter_half_extent))

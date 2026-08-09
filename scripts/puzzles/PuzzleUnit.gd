@@ -2,14 +2,15 @@ class_name PuzzleUnit
 extends Node3D
 ## Base class for the PUZZLE round's small scorable units.
 ##
-## Each unit is a self-contained physics toy scattered through the arena.
+## Each unit is a self-contained physics toy scattered across the Round's
+## scatter area.
 ## Progress runs 0..1; on completion, every player who contributed gains a
 ## completion (PuzzleRound handles scoring — players chase a high completion
 ## COUNT, not a single big finish).
 ##
 ## ANY verb adds value: every VerbType has an assist profile that scales the
 ## force of that player's interactions, so no verb is dead weight at any
-## unit. Subclasses build their own graybox physics bodies in _ready() via
+## unit. Subclasses build their own greybox physics bodies in _ready() via
 ## the helpers below and override _apply_interaction().
 ##
 ## NETWORK: Physics simulation is server-authoritative; progress and
@@ -86,7 +87,7 @@ func _set_progress(value: float) -> void:
 		puzzle_completed.emit(self, _contributor_ids.duplicate())
 
 
-## --- Graybox body builders ---------------------------------------------
+## --- Greybox body builders ---------------------------------------------
 ## Shared placeholder construction so every unit is playable with zero art.
 
 func _make_box_rigid(size: Vector3, mass: float, local_pos: Vector3) -> RigidBody3D:
