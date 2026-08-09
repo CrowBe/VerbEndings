@@ -4,13 +4,23 @@
 
 ## Runtime
 
-VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Game.tscn` is the configured main scene. Its `Game` script owns three child roots:
+VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Game.tscn` is the configured main scene. Its `Game` script owns the `World` runtime root with three children:
 
-- `World`, the runtime world container;
+- `Compound`, the persistent facility scene;
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round and creates one local `Player`. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round, maps it to the corresponding Laboratory, moves the `Round` root to that Laboratory's anchor, and creates one local `Player`. The Compound remains instantiated when the active Round changes. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+
+## Compound And Environment Kit
+
+`scenes/environment/Compound.tscn` is the persistent faceted-hemisphere greybox. It contains the Central Core, elevated annular Assignment Deck, reserved Researcher booth position, three inward-facing 52 m Test Floors, separator spines, normal-Round shutters, and the twelve-module perimeter maintenance route. Each Laboratory owns three Landing-strategy markers, a dominant apparatus silhouette, geometry/icon/motion critical-state cues, a sightline hook into the Assignment Deck, and a stable `RoundContent` boundary. `Compound.set_laboratory_critical_state()` drives all three non-colour cue channels together.
+
+`scenes/environment/EnvironmentKitPiece.tscn` is the reusable environment-kit primitive. `EnvironmentKitPiece.gd` builds its replaceable `Visual` and Godot-owned `GameplayCollision` children from metre-scale dimensions using a floor-centred origin. The kit catalogues orthogonal floor and wall bays, radial and annular segments, dome-shell bays, spine junctions, 4 m door frames and shutters, deck rails, columns, trusses, vents, and panels. Compound instances use stable sequence names and store their kind, dimensions, grid increment, and origin contract as metadata for validation and future tooling.
+
+Normal-Round confinement is a selection operation on the persistent Compound. `Compound.select_active_laboratory()` enables only the selected Laboratory's `RoundContent` processing and keeps both of its route shutters closed. It does not hide, free, duplicate, or reset any Laboratory, so authored scene state remains attached to the original nodes.
+
+`EnvironmentKitPiece` detaches old children before building their replacements so a live rebuild cannot attach new gameplay collision beneath a node queued for deletion. `EnvironmentKitPiece` and `PuzzleUnit` also detach their runtime-created `Mesh` resources from `MeshInstance3D` children during tree exit. Procedural render owners preserve this teardown boundary so Godot 4.3 unregisters each render instance before its final mesh resource reference is released.
 
 ## Autoload Services
 
@@ -58,7 +68,8 @@ All three Round controllers emit an ordered list when asked to end. None control
 
 | Layer | Owns | Does not own |
 | --- | --- | --- |
-| `Game` | Scene composition, active Round instance, local Player instance | Scoring formulas, Pair rules, actor behaviour |
+| `Game` | Scene composition, persistent Compound instance, active Round placement, local Player instance | Laboratory geometry internals, scoring formulas, Pair rules, actor behaviour |
+| `Compound` | Facility topology, environment-kit instances, Laboratory anchors, normal-Round spatial confinement | Experiment objectives, spawning, scoring, Trial lifecycle |
 | Autoload services | Cross-scene roster, chain, score, Round, and final-resolution state | Render geometry and per-frame actor simulation |
 | Round controllers | Experiment-local spawning, scoring inputs, ordering, cleanup | Verb Selection and persistent Trial presentation |
 | Actors | Input, movement, Impacts, Verb effects, actor-local state | Trial ranking and Round selection |
@@ -68,13 +79,15 @@ All three Round controllers emit an ordered list when asked to end. None control
 
 The repository provides a locally runnable gameplay greybox and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
 
-- Material dispensing is currently wired only into the Puzzle Experiment;
+- the implemented Puzzle Experiment predates the Applied Attrition Laboratory charter in `CONTEXT.md`, so `PuzzleRound`, the `precision_assembly` Protocol resource, and the `PUZZLE` classification still score unit completion rather than survival;
+- Material dispensing is currently wired only into that Experiment;
 - the Pair Draft has entry points for all three Rounds;
 - the insertion platform is not the canonical Drop sequence;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
-- the Compound, Assignment Deck, Laboratories, Dispensing Line, Recall, Result Announcement, and Thematic Moments are design contracts only; and
-- multiplayer transport, replication, deterministic scenarios, UI, audio, production art, and automated gameplay tests are absent.
+- the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
+- the Dispensing Line, Drop, Recall, Result Announcement, and Thematic Moments remain design contracts only; and
+- multiplayer transport, replication, deterministic scenarios, UI, audio, production art, and comprehensive automated gameplay coverage are absent.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 

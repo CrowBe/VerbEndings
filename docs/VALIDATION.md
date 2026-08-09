@@ -78,6 +78,50 @@ godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
 It verifies deterministic seeded Protocol sequences, required authored fields,
 and Experiment Brief terminology that does not expose internal classifications.
 
+Run the Compound topology and spatial-contract suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestCompound.tscn
+```
+
+It verifies the Central Core, Assignment Deck, three 52 m Test Floors,
+separator shutters, closed perimeter route, 30-degree dome modules, three
+distinct and recoverable Landing strategies per Laboratory, route redundancy,
+24-Subject floor-area allowance, non-colour cue hooks, cross-layer visibility
+hooks, normal-Round confinement, retained Laboratory node identity, environment
+kit naming and origins, metric contracts, and Godot-owned collision.
+
+Run the Compound lifetime and teardown regression twice with:
+
+```bash
+python3 tests/run_compound_lifetime_test.py --godot godot4.3 --attempts 2
+```
+
+It verifies direct Compound teardown and twelve repeated Puzzle, PVP, and PVE
+Round transitions while retaining Laboratory identity, authored state, one
+active Round, and correct Player placement. The subprocess wrapper rejects
+Godot errors and warnings even when the engine exits with status zero.
+
+Run the environment-kit live-rebuild regression twice with:
+
+```bash
+python3 -m unittest tests/test_environment_kit_piece_rebuild_runner.py
+python3 tests/run_environment_kit_piece_rebuild_test.py \
+  --godot godot4.3 --attempts 2 --timeout-seconds 30
+```
+
+The focused Python suite verifies runner validation, timeout classification,
+and process-group cleanup. The Godot regression rebuilds collidable and
+collision-disabled kit pieces, waits beyond deferred node deletion, and
+materially checks for a live non-empty visual mesh and the expected live
+gameplay collision state. Each attempt has a positive configurable wall-clock
+limit (30 seconds by default). On timeout the wrapper terminates and reaps the
+Godot process group, reports captured output, and fails the attempt even if its
+success marker was already printed. On Linux, the wrapper temporarily acts as
+a child subreaper so orphaned descendants in the process group are also reaped
+before the attempt finishes. The wrapper also rejects Godot errors and warnings
+even when the engine exits with status zero.
+
 For graphical inspection, run:
 
 ```bash
@@ -100,4 +144,4 @@ check in `.github/workflows/validation.yml`. New suites belong alongside them
 as separate steps, keeping failures isolated while using the same pinned
 engine and imported project.
 
-Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Those claims require focused runtime scenarios and human playtesting.
+Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Compound silhouette readability during a Drop, comfortable 8–12 Subject use, practical 24-Subject circulation, route legibility, and cross-layer sightline quality require graphical inspection and human playtesting.

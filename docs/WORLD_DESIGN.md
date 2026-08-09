@@ -12,19 +12,25 @@ The Semantic Engine communicates through plans, panels, lights, printers, and ma
 
 ## Compound Topology
 
-The Compound is a faceted hemisphere around a vertical Central Core. Three wedge-shaped Laboratories occupy the main floor. Thick radial separator spines contain observation rooms, utilities, shutters, and concealed connections. A perimeter maintenance route provides a longer connection between Laboratories.
+The Compound is a faceted hemisphere with a hexagonal plan around a vertical Central Core. Its main floor is organised as three repeating nominal 120-degree territories. Each territory contains one wedge-shaped Laboratory and shares the separator structures on its two radial boundaries; the Laboratories never meet along a zero-width line.
+
+Thick, non-zero-width radial separator spines sit between neighbouring Laboratories. They belong to the Compound rather than either Test Floor and contain service corridors, observation rooms, utilities, shutters, concealed connections, and other facility machinery. A repeating planning cell therefore reads as half a separator spine, one Laboratory, and half a separator spine. A perimeter maintenance route provides a longer connection between Laboratories.
 
 An elevated annular Assignment Deck surrounds the Core. It hosts Verb Selection, Pair Drafts, Experiment Briefs, Result Announcements, and the Researcher's booth. The Dispensing Line runs from this deck along ceiling rails to each Laboratory.
 
-Normal Rounds confine Subjects to the active Laboratory. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.
+Normal Rounds confine Subjects to the active Laboratory and keep separator service routes sealed from the Test Floor. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.
 
-The macro layout uses repeatable 15- or 30-degree radial modules. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
+The primary partition is three repeating 120-degree planning cells aligned to the hexagonal plan. Smaller 15- or 30-degree radial modules may structure specialised details inside that envelope, but they do not define Laboratory boundaries. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m, measured independently of separator-spine and service-route width, and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.
 
 ## Laboratories
 
-### Applied Causality Laboratory
+### Applied Attrition Laboratory
 
-This Laboratory tests whether Verbs can make physical systems produce useful results. A raised result receiver is its dominant silhouette. Apparatus covers momentum transfer, counterweights, trajectory, gravity, and linked machine chains. Cause, transfer, and outcome read through geometry and motion rather than small labels.
+This Laboratory tests how long a Subject holds its form in an unstable environment. An elevated dispensing armature is its dominant silhouette: the Semantic Engine's Material supply, deliberately placed out of easy reach. The atmosphere itself causes continuous Stability Loss, so the Experiment is a race between attrition and access rather than a contest against any occupant. No Residuals are contained here.
+
+Apparatus covers momentum transfer, counterweights, trajectory, gravity, and linked machine chains, serving as the obstacle and traversal field rather than as Objectives. A swinging mass knocks a Subject off a route, a gravity funnel drags it away from a dispenser, and a turbine or counterweight platform launches or lifts it toward one. Cause, transfer, and outcome still read through geometry and motion rather than small labels, so a Subject can predict what a machine will do to it before committing.
+
+Selected hero props hold Material behind breakable housings, giving damage-focused Verbs a route to the supply. The Laboratory nonetheless favours mobility Verbs, and that bias is intentional; a Verb's usefulness is meant to vary across the three Laboratories rather than be flat in all of them.
 
 ### Competitive Stress Laboratory
 
@@ -112,11 +118,19 @@ Player and Verb cues remain protected from aggressive grading. SDFGI, SSR, motio
 
 ## Environment Kit Contract
 
-The reusable environment kit contains orthogonal floor and wall bays, radial and annular floor segments, dome-shell bays, separator-spine junctions, 4 m doors and shutters, Assignment Deck rails, support columns, trusses, vents, panels, and material variants for clean, stressed, and breached states.
+The reusable environment kit contains orthogonal floor and wall bays, radial and annular floor segments, dome-shell bays, separator corridor bays, utility-wall modules, separator-spine junctions at the Core and perimeter, 4 m doors and shutters, Assignment Deck rails, support columns, trusses, vents, panels, and material variants for clean, stressed, and breached states.
 
 All pieces use metre scale, applied transforms, stable names, predictable origins, and snap without mesh editing. Gameplay collision remains in Godot. Radial pieces are a small specialised subset; most assets remain orthogonal and reusable across Laboratories.
 
 The camera remains third-person. Main paths are 4–6 m wide, secondary paths 2.5–3 m wide, doors at least 4 m wide and 4.5 m high, and barriers roughly 1.1–1.3 m high. Apparatus uses large relationships—momentum, mass, timing, trajectory, pressure, balance, and cooperation—rather than tiny switches or precision placement.
+
+### Runtime Greybox
+
+The runnable Compound uses twelve 30-degree shell and perimeter modules, a 2 m planning grid with 1 m detail increments, 6 m main paths, 3 m secondary paths, 4 m by 4.5 m clear door contracts, and 1.2 m barriers. The Assignment Deck is a twelve-segment annulus at 6 m elevation with inner and outer rails and a reserved booth marker. Three 52 m Test Floors sit around the Core and retain their scene nodes while normal-Round confinement selects one active `RoundContent` boundary.
+
+Applied Attrition uses an elevated Material-dispensing armature, support column, and dispensing truss. Competitive Stress uses a reinforced crucible and four measurement pylons. Adaptive Containment uses a tall specimen-delivery column and four physical vent hooks. Each Laboratory faces inward towards the Central Core and provides apparatus-approach, perimeter-shelter, and service-access Landing strategies; two shuttered route connections; visible geometry, icon, and rotating motion cues for critical state; and a Player-blocking observation window with a sightline to visible Assignment Deck fascia.
+
+Headless validation establishes dimensions, node topology, route count, Landing recoverability, broad-path contracts, 24-Subject floor-area allowance, non-colour hooks, retained node identity, kit naming, and Godot collision ownership. Independent graphical acceptance still establishes Drop-time silhouette readability, comfortable 8–12 Subject spacing, practical 24-Subject circulation under live movement, sightline quality, and whether every strategy remains legible from the playable camera.
 
 ## Scope Boundaries
 
