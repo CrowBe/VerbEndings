@@ -1,15 +1,11 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/MaterialDispenser.gd" id="1_dispenser"]
+[ext_resource type="PackedScene" path="res://assets/exports/props/material_dispenser.glb" id="2_dispenser_glb"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dispenser"]
 height = 2.0
 radius = 0.8
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_dispenser"]
-height = 2.0
-top_radius = 0.8
-bottom_radius = 0.8
 
 [node name="EngineMaterialDispenser" type="Node3D"]
 script = ExtResource("1_dispenser")
@@ -20,9 +16,7 @@ script = ExtResource("1_dispenser")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CylinderShape3D_dispenser")
 
-[node name="ApparatusMesh" type="MeshInstance3D" parent="Apparatus"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CylinderMesh_dispenser")
+[node name="Visual" parent="Apparatus" instance=ExtResource("2_dispenser_glb")]
 
 [node name="DispenseSocket" type="Marker3D" parent="."]
 position = Vector3(0, 0.4, 1.1)
