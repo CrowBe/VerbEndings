@@ -1,0 +1,41 @@
+{
+  "input_path": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_raw.glb",
+  "output_glb": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_clay.glb",
+  "input_dimensions": [
+    1.6,
+    1.897672,
+    2.0
+  ],
+  "scale_factor": 1.0,
+  "floor_translation_after_scale": -0.0,
+  "output_bounds_min": [
+    -0.8,
+    -1.1,
+    0.0
+  ],
+  "output_bounds_max": [
+    0.8,
+    0.797672,
+    2.0
+  ],
+  "output_dimensions": [
+    1.6,
+    1.897672,
+    2.0
+  ],
+  "output_size_bytes": 330488,
+  "output_sha256": "e20ad956d8de02f347cfd45794de90c5d1027d4daad8445689c24a19645aec03",
+  "cleanup_operations": [
+    "uniform scale to 2.0 m height",
+    "align minimum Z to floor",
+    "apply transforms",
+    "rename single mesh",
+    "assign shared evaluation clay material"
+  ],
+  "renders": {
+    "front": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/clay_renders/front.png",
+    "left_side": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/clay_renders/left_side.png",
+    "back": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/clay_renders/back.png",
+    "front_three_quarter": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/clay_renders/front_three_quarter.png"
+  }
+}

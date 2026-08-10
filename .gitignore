@@ -3,3 +3,7 @@
 *.translation
 export.cfg
 export_credentials.cfg
+
+# Python tooling caches
+__pycache__/
+*.py[cod]

@@ -1,0 +1,41 @@
+{
+  "input_path": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/material_dispenser_meshy6_pre_remeshed.glb",
+  "output_glb": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/material_dispenser_meshy6_pre_remeshed_normalized.glb",
+  "input_dimensions": [
+    1.867645,
+    1.899293,
+    1.89663
+  ],
+  "scale_factor": 1.05450217,
+  "floor_translation_after_scale": 1.000895858,
+  "output_bounds_min": [
+    -0.985686,
+    -1.000484,
+    0.0
+  ],
+  "output_bounds_max": [
+    0.983749,
+    1.002325,
+    2.0
+  ],
+  "output_dimensions": [
+    1.969435,
+    2.002809,
+    2.0
+  ],
+  "output_size_bytes": 104998228,
+  "output_sha256": "637ae1f1fcd9390f8aef17bec887f621b0d755410a0ee95343f4de0b8adc0efe",
+  "cleanup_operations": [
+    "uniform scale to 2.0 m height",
+    "align minimum Z to floor",
+    "apply transforms",
+    "rename single mesh",
+    "assign shared evaluation clay material"
+  ],
+  "renders": {
+    "front": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/pre_remeshed_renders/front.png",
+    "left_side": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/pre_remeshed_renders/left_side.png",
+    "back": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/pre_remeshed_renders/back.png",
+    "front_three_quarter": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/pre_remeshed_renders/front_three_quarter.png"
+  }
+}

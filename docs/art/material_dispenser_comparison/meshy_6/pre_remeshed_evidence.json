@@ -1,0 +1,91 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "input_path": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/meshy_6/material_dispenser_meshy6_pre_remeshed.glb",
+  "file_size_bytes": 22516688,
+  "sha256": "dc8a00d8b6b66baabd61dc55835e08c79accd3a710260e4d848636d54ee7da1a",
+  "object_count": 1,
+  "mesh_count": 1,
+  "objects": [
+    {
+      "name": "mesh_node",
+      "vertices": 625363,
+      "edges": 1876443,
+      "polygons": 1250962,
+      "triangles": 1250962,
+      "connected_components": 1,
+      "welded_connected_components": 1,
+      "welded_vertices": 625363,
+      "raw_non_manifold_edges": 0,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.867645,
+        1.899293,
+        1.89663
+      ],
+      "materials": []
+    }
+  ],
+  "total_vertices": 625363,
+  "total_edges": 1876443,
+  "total_polygons": 1250962,
+  "total_triangles": 1250962,
+  "total_connected_components": 1,
+  "total_welded_connected_components": 1,
+  "total_raw_non_manifold_edges": 0,
+  "total_non_manifold_edges": 0,
+  "total_degenerate_polygons": 0,
+  "material_names": [],
+  "bounds_min": [
+    -0.934741,
+    -0.948773,
+    -0.949164
+  ],
+  "bounds_max": [
+    0.932904,
+    0.95052,
+    0.947465
+  ],
+  "dimensions": [
+    1.867645,
+    1.899293,
+    1.89663
+  ],
+  "floor_offset": -0.949164,
+  "root_objects": [
+    {
+      "name": "mesh_node",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}

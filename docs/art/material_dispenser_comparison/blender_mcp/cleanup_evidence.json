@@ -1,0 +1,258 @@
+{
+  "input_path": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_raw.glb",
+  "output_path": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_clean.glb",
+  "operation": "collapse the shortest edge of faces below 1e-6 square metres, dissolve edges shorter than 1e-7 m, recalculate face normals, validate mesh data, export with applied transforms",
+  "mesh_count": 49,
+  "triangles_before": 5724,
+  "triangles_after": 5364,
+  "triangles_removed": 360,
+  "output_size_bytes": 315016,
+  "output_sha256": "510a828b0c7fbfae94202432518c1cc498ea06c91a08a34d3b21119855cb8c8b",
+  "objects": [
+    {
+      "name": "Back_Vent_Slat_01",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Back_Vent_Slat_02",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Back_Vent_Slat_03",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Back_Vent_Slat_04",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Back_Vent_Slat_05",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Base_Bumper_Back",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Base_Bumper_Front",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Base_Bumper_Left",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Base_Bumper_Right",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Base_Charcoal_Gasket",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Charcoal_Aperture",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Charcoal_Recess_Back",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Charcoal_Recess_Front",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Cyan_Status_Bar",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Cyan_Status_Ring",
+      "triangles_before": 384,
+      "triangles_after": 384
+    },
+    {
+      "name": "Front_Vent_Slat_01",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Front_Vent_Slat_02",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Front_Vent_Slat_03",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Front_Vent_Slat_04",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Front_Vent_Slat_05",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Maintenance_Lamp_Left",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Maintenance_Lamp_Right",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Iris_Blade_01",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Iris_Blade_02",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Iris_Blade_03",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Iris_Blade_04",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Iris_Blade_05",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Iris_Blade_06",
+      "triangles_before": 54,
+      "triangles_after": 54
+    },
+    {
+      "name": "Mechanical_Shutter_Plate",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Mechanical_Shutter_Rim",
+      "triangles_before": 384,
+      "triangles_after": 384
+    },
+    {
+      "name": "Nozzle_Collar_Backplate",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Nozzle_Collar_Outer",
+      "triangles_before": 384,
+      "triangles_after": 384
+    },
+    {
+      "name": "Nozzle_Housing",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Protective_Panel_Frame_Front_Left",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Frame_Front_Right",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Frame_Left_Side",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Frame_Rear_Left",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Frame_Rear_Right",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Frame_Right_Side",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Front_Left",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Front_Right",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Left_Side",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Rear_Left",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Rear_Right",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Protective_Panel_Right_Side",
+      "triangles_before": 54,
+      "triangles_after": 30
+    },
+    {
+      "name": "Shell_Body",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Shell_Top_Cap",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Upper_Charcoal_Band",
+      "triangles_before": 286,
+      "triangles_after": 286
+    },
+    {
+      "name": "Weighted_Base",
+      "triangles_before": 286,
+      "triangles_after": 286
+    }
+  ]
+}
