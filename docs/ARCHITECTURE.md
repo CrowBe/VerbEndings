@@ -42,6 +42,8 @@ These are stateful in-process services. Comments identify intended RPC and repli
 
 Subject and Residual scenes own gameplay collision separately from a replaceable `Visual` subtree. `AnimationAdapter` translates movement, jump, landing, Impact, Verb Expression, Stability-loss, and Destabilisation events into the semantic animation names documented by the visual asset pipeline. The adapter is the sole presentation-side owner of basic-hit contact: the proxy fallback resolves at full extension, a production `basic_hit` clip may mark its authored contact frame through the adapter, and an unmarked production clip falls back at the end of its duration. Each accepted presentation attempt can emit at most one gameplay Impact. Production scenes may replace the visual subtree and `AnimationPlayer` without changing gameplay scripts.
 
+`scenes/MaterialDispenser.tscn` follows the same boundary: the scene owns gameplay, the Godot cylinder collision, and the `DispenseSocket`, while an imported GLB child named `Visual` owns presentation. Broader production art remains incomplete.
+
 The implemented input map is WASD movement, Space jump, left mouse basic hit, right mouse Verb use, and Escape mouse capture.
 
 ## Experiments
@@ -89,9 +91,9 @@ The repository provides a locally runnable gameplay greybox and domain service p
 - Material shedding and puzzle-unit scatter positions use the global random stream rather than the Trial seed;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
 - the Dispensing Line, Drop, Recall, Result Announcement, and Thematic Moments remain design contracts only; and
-- multiplayer transport, replication, deterministic scenarios, UI, audio, production art, and comprehensive automated gameplay coverage are absent.
+- multiplayer transport, replication, deterministic scenarios, UI, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
-Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, Residual grammar, Experiment Protocols, the animation adapter, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
+Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 

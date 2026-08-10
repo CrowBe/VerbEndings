@@ -1,0 +1,2536 @@
+{
+  "asset": "Material Dispenser (Semantic Engine dispensing machinery)",
+  "issue": "CrowBe/VerbEndings#46 (production-preparation asset slice)",
+  "revision": "2 - planner art-review corrections (panel exposure + iris legibility)",
+  "blender_version": "5.2.0 LTS",
+  "mcp_server": "blender-mcp==1.6.4",
+  "mcp_python_sdk_constraint": "mcp[cli]<2",
+  "blender_addon_source_commit": "2f973e9517c000527f7e570389fcf44285cc656f",
+  "execution_approach": "Procedural bpy reconstruction via the Nous-approved Blender MCP in a live Blender 5.2.0 LTS session. Revision 2 corrected two blocking visual defects found in planner art review: (1) the six Protective_Panel_* meshes were rebuilt as closed solids with their outer face moved outward to radius 0.730 m (frame strips/rails at 0.738 m) so the warm off-white panel faces are visibly exposed around the cylinder while remaining nested just inside the equipment-grey frames; (2) the aperture depth stack was reordered so the front collar is an annulus (open centre) at r 0.330-0.385 with front face at Y=-1.110, a segmented Systems_Cyan ring sits at r 0.290-0.330 just inside it, the Charcoal shutter rim at r 0.260-0.290, six Equipment_Grey iris blades at r 0.133-0.263 in front of a small Charcoal backing disc (r 0.16, Y=-1.075) and the deep Charcoal backplate (r 0.34, Y=-1.060); the former solid Mechanical_Shutter_Rim cylinder that occluded the whole aperture was replaced by a thin annulus. Recess plates were darkened to Charcoal and vent slats lightened to Equipment_Grey so the upper chassis reads as a dark recess, not a glowing screen; only the small status bar, cap lamps and maintenance lamps use emissive materials. All meshes were positionally welded, normals recalculated, transforms applied, and the asset-only hierarchy exported to GLB with export_yup=True so the repo pipeline restores Z-up.",
+  "reference_paths": [
+    "docs/art/material_dispenser_comparison/references/turnaround_approved.png",
+    "docs/art/material_dispenser_comparison/references/front.png",
+    "docs/art/material_dispenser_comparison/references/left_side.png",
+    "docs/art/material_dispenser_comparison/references/back.png",
+    "docs/art/material_dispenser_comparison/references/front_three_quarter.png",
+    "docs/art/material_dispenser_comparison/evaluation/fidelity_runtime_contact_sheet.png",
+    "assets/source/props/material_dispenser/material_dispenser_meshy6_concept.glb (shape reference only; removed before save/export)"
+  ],
+  "objects": [
+    {
+      "name": "Back_Vent_Slat_01",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.025,
+        0.02,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Back_Vent_Slat_02",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.025,
+        0.02,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Back_Vent_Slat_03",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.025,
+        0.02,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Back_Vent_Slat_04",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.025,
+        0.02,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Back_Vent_Slat_05",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.025,
+        0.02,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Base_Bumper_Back",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.11,
+        0.08,
+        0.055
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Base_Bumper_Front",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.11,
+        0.08,
+        0.055
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Base_Bumper_Left",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.08,
+        0.11,
+        0.055
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Base_Bumper_Right",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.08,
+        0.11,
+        0.055
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Base_Charcoal_Gasket",
+      "vertices": 576,
+      "edges": 864,
+      "polygons": 384,
+      "triangles": 384,
+      "connected_components": 98,
+      "welded_connected_components": 1,
+      "welded_vertices": 192,
+      "raw_non_manifold_edges": 576,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.6,
+        1.6,
+        0.04
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Base_Step_Charcoal",
+      "vertices": 352,
+      "edges": 458,
+      "polygons": 188,
+      "triangles": 188,
+      "connected_components": 82,
+      "welded_connected_components": 1,
+      "welded_vertices": 96,
+      "raw_non_manifold_edges": 352,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.48,
+        1.48,
+        0.12
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Cap_Status_Lamp_Left",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.03,
+        0.024,
+        0.024
+      ],
+      "materials": [
+        "Soft_White_Emission"
+      ]
+    },
+    {
+      "name": "Cap_Status_Lamp_Right",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.03,
+        0.024,
+        0.024
+      ],
+      "materials": [
+        "Soft_White_Emission"
+      ]
+    },
+    {
+      "name": "Charcoal_Aperture",
+      "vertices": 192,
+      "edges": 282,
+      "polygons": 124,
+      "triangles": 124,
+      "connected_components": 34,
+      "welded_connected_components": 1,
+      "welded_vertices": 64,
+      "raw_non_manifold_edges": 192,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.32,
+        0.008,
+        0.32
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Charcoal_Recess_Back",
+      "vertices": 132,
+      "edges": 192,
+      "polygons": 84,
+      "triangles": 84,
+      "connected_components": 24,
+      "welded_connected_components": 1,
+      "welded_vertices": 44,
+      "raw_non_manifold_edges": 132,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.341926,
+        0.038966,
+        0.5
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Charcoal_Recess_Front",
+      "vertices": 156,
+      "edges": 228,
+      "polygons": 100,
+      "triangles": 100,
+      "connected_components": 28,
+      "welded_connected_components": 1,
+      "welded_vertices": 52,
+      "raw_non_manifold_edges": 156,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.393405,
+        0.045215,
+        0.38
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Bar",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.08,
+        0.02,
+        0.035
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_01",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.039508,
+        0.014,
+        0.103247
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_02",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.082709,
+        0.014,
+        0.103749
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_03",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.103749,
+        0.014,
+        0.082709
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_04",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.103247,
+        0.014,
+        0.039508
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_05",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.103749,
+        0.014,
+        0.082709
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_06",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.082709,
+        0.014,
+        0.103749
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_07",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.039508,
+        0.014,
+        0.103247
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_08",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.082709,
+        0.014,
+        0.103749
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_09",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.103749,
+        0.014,
+        0.082709
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_10",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.103247,
+        0.014,
+        0.039508
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_11",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.103749,
+        0.014,
+        0.082709
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Cyan_Status_Ring_Segment_12",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.082709,
+        0.014,
+        0.103749
+      ],
+      "materials": [
+        "Systems_Cyan"
+      ]
+    },
+    {
+      "name": "Frame_Strip_Front_Right",
+      "vertices": 60,
+      "edges": 84,
+      "polygons": 36,
+      "triangles": 36,
+      "connected_components": 12,
+      "welded_connected_components": 1,
+      "welded_vertices": 20,
+      "raw_non_manifold_edges": 60,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.068061,
+        0.097934,
+        1.24
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Frame_Strip_Left_Back",
+      "vertices": 60,
+      "edges": 84,
+      "polygons": 36,
+      "triangles": 36,
+      "connected_components": 12,
+      "welded_connected_components": 1,
+      "welded_vertices": 20,
+      "raw_non_manifold_edges": 60,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.068061,
+        0.097934,
+        1.24
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Frame_Strip_Rear_Left",
+      "vertices": 60,
+      "edges": 84,
+      "polygons": 36,
+      "triangles": 36,
+      "connected_components": 12,
+      "welded_connected_components": 1,
+      "welded_vertices": 20,
+      "raw_non_manifold_edges": 60,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.068061,
+        0.097934,
+        1.24
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Frame_Strip_Rear_Right",
+      "vertices": 60,
+      "edges": 84,
+      "polygons": 36,
+      "triangles": 36,
+      "connected_components": 12,
+      "welded_connected_components": 1,
+      "welded_vertices": 20,
+      "raw_non_manifold_edges": 60,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.102961,
+        0.021749,
+        1.24
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Frame_Strip_Right_Forward",
+      "vertices": 60,
+      "edges": 84,
+      "polygons": 36,
+      "triangles": 36,
+      "connected_components": 12,
+      "welded_connected_components": 1,
+      "welded_vertices": 20,
+      "raw_non_manifold_edges": 60,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.068061,
+        0.097934,
+        1.24
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Front_Chassis",
+      "vertices": 252,
+      "edges": 372,
+      "polygons": 164,
+      "triangles": 164,
+      "connected_components": 44,
+      "welded_connected_components": 1,
+      "welded_vertices": 84,
+      "raw_non_manifold_edges": 252,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.490957,
+        0.063771,
+        1.36
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Front_Vent_Slat_01",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.026,
+        0.001,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Front_Vent_Slat_02",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.026,
+        0.001,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Front_Vent_Slat_03",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.026,
+        0.001,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Front_Vent_Slat_04",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.026,
+        0.001,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Front_Vent_Slat_05",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.026,
+        0.001,
+        0.05
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Maintenance_Lamp_Left",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.05,
+        0.025,
+        0.11
+      ],
+      "materials": [
+        "Soft_White_Emission"
+      ]
+    },
+    {
+      "name": "Maintenance_Lamp_Right",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.05,
+        0.025,
+        0.11
+      ],
+      "materials": [
+        "Soft_White_Emission"
+      ]
+    },
+    {
+      "name": "Mechanical_Iris_Blade_01",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.154503,
+        0.014,
+        0.142607
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Mechanical_Iris_Blade_02",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.13,
+        0.014,
+        0.125
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Mechanical_Iris_Blade_03",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.154503,
+        0.014,
+        0.142607
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Mechanical_Iris_Blade_04",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.154503,
+        0.014,
+        0.142607
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Mechanical_Iris_Blade_05",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.13,
+        0.014,
+        0.125
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Mechanical_Iris_Blade_06",
+      "vertices": 24,
+      "edges": 30,
+      "polygons": 12,
+      "triangles": 12,
+      "connected_components": 6,
+      "welded_connected_components": 1,
+      "welded_vertices": 8,
+      "raw_non_manifold_edges": 24,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.154503,
+        0.014,
+        0.142607
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Mechanical_Shutter_Rim",
+      "vertices": 576,
+      "edges": 864,
+      "polygons": 384,
+      "triangles": 384,
+      "connected_components": 98,
+      "welded_connected_components": 1,
+      "welded_vertices": 192,
+      "raw_non_manifold_edges": 576,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.58,
+        0.012,
+        0.58
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Mid_Equipment_Belt",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.476,
+        1.476,
+        0.08
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Nozzle_Collar_Backplate",
+      "vertices": 240,
+      "edges": 354,
+      "polygons": 156,
+      "triangles": 156,
+      "connected_components": 42,
+      "welded_connected_components": 1,
+      "welded_vertices": 80,
+      "raw_non_manifold_edges": 240,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.68,
+        0.008,
+        0.68
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Nozzle_Collar_Outer",
+      "vertices": 576,
+      "edges": 864,
+      "polygons": 384,
+      "triangles": 384,
+      "connected_components": 98,
+      "welded_connected_components": 1,
+      "welded_vertices": 192,
+      "raw_non_manifold_edges": 576,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.77,
+        0.17,
+        0.77
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Nozzle_Housing",
+      "vertices": 880,
+      "edges": 1154,
+      "polygons": 476,
+      "triangles": 476,
+      "connected_components": 202,
+      "welded_connected_components": 1,
+      "welded_vertices": 240,
+      "raw_non_manifold_edges": 880,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.6,
+        0.34,
+        0.6
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Panel_Rail_Bottom",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.476,
+        1.476,
+        0.04
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Panel_Rail_Top",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.476,
+        1.476,
+        0.04
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Protective_Panel_Front_Left",
+      "vertices": 204,
+      "edges": 300,
+      "polygons": 132,
+      "triangles": 132,
+      "connected_components": 36,
+      "welded_connected_components": 1,
+      "welded_vertices": 68,
+      "raw_non_manifold_edges": 204,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.58488,
+        0.349972,
+        1.2
+      ],
+      "materials": [
+        "Warm_Off_White"
+      ]
+    },
+    {
+      "name": "Protective_Panel_Front_Right",
+      "vertices": 204,
+      "edges": 300,
+      "polygons": 132,
+      "triangles": 132,
+      "connected_components": 36,
+      "welded_connected_components": 1,
+      "welded_vertices": 68,
+      "raw_non_manifold_edges": 204,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.58488,
+        0.349972,
+        1.2
+      ],
+      "materials": [
+        "Warm_Off_White"
+      ]
+    },
+    {
+      "name": "Protective_Panel_Left_Side",
+      "vertices": 204,
+      "edges": 300,
+      "polygons": 132,
+      "triangles": 132,
+      "connected_components": 36,
+      "welded_connected_components": 1,
+      "welded_vertices": 68,
+      "raw_non_manifold_edges": 204,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.10377,
+        0.674153,
+        1.2
+      ],
+      "materials": [
+        "Warm_Off_White"
+      ]
+    },
+    {
+      "name": "Protective_Panel_Rear_Left",
+      "vertices": 204,
+      "edges": 300,
+      "polygons": 132,
+      "triangles": 132,
+      "connected_components": 36,
+      "welded_connected_components": 1,
+      "welded_vertices": 68,
+      "raw_non_manifold_edges": 204,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.58488,
+        0.349972,
+        1.2
+      ],
+      "materials": [
+        "Warm_Off_White"
+      ]
+    },
+    {
+      "name": "Protective_Panel_Rear_Right",
+      "vertices": 204,
+      "edges": 300,
+      "polygons": 132,
+      "triangles": 132,
+      "connected_components": 36,
+      "welded_connected_components": 1,
+      "welded_vertices": 68,
+      "raw_non_manifold_edges": 204,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.58488,
+        0.349972,
+        1.2
+      ],
+      "materials": [
+        "Warm_Off_White"
+      ]
+    },
+    {
+      "name": "Protective_Panel_Right_Side",
+      "vertices": 204,
+      "edges": 300,
+      "polygons": 132,
+      "triangles": 132,
+      "connected_components": 36,
+      "welded_connected_components": 1,
+      "welded_vertices": 68,
+      "raw_non_manifold_edges": 204,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.10377,
+        0.674153,
+        1.2
+      ],
+      "materials": [
+        "Warm_Off_White"
+      ]
+    },
+    {
+      "name": "Shell_Body",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.44,
+        1.44,
+        1.4
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Shell_Top_Cap",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.52,
+        1.52,
+        0.08
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Top_Cap_Centre",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.04,
+        1.04,
+        0.1
+      ],
+      "materials": [
+        "Charcoal"
+      ]
+    },
+    {
+      "name": "Top_Cap_Mid_Tier",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.36,
+        1.36,
+        0.12
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Upper_Charcoal_Band",
+      "vertices": 1056,
+      "edges": 1386,
+      "polygons": 572,
+      "triangles": 572,
+      "connected_components": 242,
+      "welded_connected_components": 1,
+      "welded_vertices": 288,
+      "raw_non_manifold_edges": 1056,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.47,
+        1.47,
+        0.12
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    },
+    {
+      "name": "Weighted_Base",
+      "vertices": 512,
+      "edges": 682,
+      "polygons": 284,
+      "triangles": 284,
+      "connected_components": 114,
+      "welded_connected_components": 1,
+      "welded_vertices": 144,
+      "raw_non_manifold_edges": 512,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.6,
+        1.6,
+        0.16
+      ],
+      "materials": [
+        "Equipment_Grey"
+      ]
+    }
+  ],
+  "mesh_count": 67,
+  "object_count": 68,
+  "totals": {
+    "vertices": 15304,
+    "edges": 20732,
+    "polygons": 8720,
+    "triangles": 8720,
+    "raw_connected_components": 3298,
+    "welded_connected_components": 67,
+    "raw_non_manifold_edges": 15304,
+    "non_manifold_edges_after_positional_welding": 0,
+    "degenerate_polygons": 0
+  },
+  "world_space_bounds": {
+    "min": [
+      -0.8,
+      -1.11,
+      0.0
+    ],
+    "max": [
+      0.8,
+      0.8,
+      2.0
+    ],
+    "dimensions_xyz_m": [
+      1.6,
+      1.91,
+      2.0
+    ],
+    "floor_offset_z": 0.0
+  },
+  "root_transform": [
+    {
+      "name": "material_dispenser",
+      "type": "EMPTY",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "material_names": [
+    "Charcoal",
+    "Equipment_Grey",
+    "Soft_White_Emission",
+    "Systems_Cyan",
+    "Warm_Off_White"
+  ],
+  "aperture_contract": {
+    "aperture_centre_z_m": 0.4,
+    "front_extent_y_m": -1.11,
+    "depth_m": 1.91,
+    "stack_from_front": [
+      "Nozzle_Collar_Outer annulus r 0.330-0.385, front face Y=-1.110 (Equipment_Grey)",
+      "Cyan_Status_Ring segments r 0.290-0.330, Y=-1.102..-1.088 (Systems_Cyan)",
+      "Mechanical_Shutter_Rim annulus r 0.260-0.290, Y=-1.100..-1.088 (Charcoal)",
+      "Mechanical_Iris_Blade x6 r 0.133-0.263, Y=-1.102..-1.088 (Equipment_Grey)",
+      "Charcoal_Aperture backing disc r 0.16, Y=-1.075 (Charcoal)",
+      "Nozzle_Collar_Backplate r 0.34, Y=-1.060 (Charcoal)"
+    ]
+  },
+  "panel_contract": {
+    "protective_panel_outer_face_radius_m": 0.73,
+    "frame_face_radius_m": 0.738,
+    "shell_radius_m": 0.72
+  },
+  "files": {
+    "source_blend": {
+      "path": "assets/source/props/material_dispenser/material_dispenser.blend",
+      "size_bytes": 203783,
+      "sha256": "815acec79fe8668ac6532ecd400466fa442ec55830ea57a42c9b522ab26eb8a7"
+    },
+    "runtime_glb": {
+      "path": "assets/exports/props/material_dispenser.glb",
+      "size_bytes": 436040,
+      "sha256": "0767670404bdc70075d514af578d75ab6ffe0dfb53ea1c0a803cbff3778c67df"
+    }
+  },
+  "renders": {
+    "front": "docs/art/material_dispenser/renders/front.png",
+    "left_side": "docs/art/material_dispenser/renders/left_side.png",
+    "back": "docs/art/material_dispenser/renders/back.png",
+    "front_three_quarter": "docs/art/material_dispenser/renders/front_three_quarter.png",
+    "resolution": "768x768"
+  },
+  "temporary_meshy_reference_removed_before_save_and_export": true,
+  "validation": {
+    "repo_inspect_glb": "tools/asset_pipeline/inspect_glb.py on the exported GLB: 8,720 triangles, 0 non-manifold edges after positional welding, 0 degenerate polygons, dimensions [1.6, 1.91, 2.0] m, floor offset 0.0, identity material_dispenser root.",
+    "clean_glb_idempotency": "tools/asset_pipeline/clean_glb.py: 8,720 -> 8,720 triangles, 0 removed.",
+    "independent_glb_reimport": "GLB re-imported into a clean temporary Blender collection: 67 mesh objects, 6 Equipment_Grey iris blades, 12 Systems_Cyan ring segments, dimensions [1.6, 1.91, 2.0], 0 non-manifold, 0 degenerates.",
+    "visual_acceptance": "Front render: warm off-white panels visible left/right of front face inside equipment-grey frames; lower aperture shows six distinct iris blades around a dark centre with a segmented cyan ring; upper chassis reads dark/recessed and non-emissive; aperture reads as machinery, not a face."
+  }
+}
