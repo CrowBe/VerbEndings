@@ -30,6 +30,38 @@ An asset has one of four readiness levels:
 3. **Production** — final geometry, materials, skeleton, and required animation clips use stable interfaces.
 4. **Polish** — VFX, impact frames, camera response, audio markers, and accessibility checks are integrated.
 
+## Hybrid Concept-To-Production Route
+
+For visually specific 3D props, high-detail generation and runtime modelling are separate asset stages:
+
+1. Write the asset brief first. Fix canon, dimensions, facing, contact origin, polygon budget, material boundaries, collision ownership, and target export before spending generation credits.
+2. Approve a consistent turnaround or multi-view reference. Inputs show one object without labels, loose presentation effects, or geometry that should not become part of the asset.
+3. Generate a high-detail concept mesh from the approved views and preserve the pre-remesh output under `assets/source/`. It is a shape reference, not a runtime asset.
+4. Inspect the concept structurally and visually before any reduction. Record dimensions, origin, triangles, connected components, non-manifold edges, materials, task identifier, model, credits, and exact inputs.
+5. For hard-surface props, reconstruct or deliberately retopologise the approved silhouette in Blender rather than trusting an automatic low-poly remesh to preserve panel seams, apertures, and authored state boundaries. Use Meshy geometry directly only when it survives the same structural checks.
+6. In Blender, establish the final metre scale and floor-contact origin, separate semantic components and material slots, apply transforms, recalculate normals, remove degenerate geometry, and save the editable `.blend` source.
+7. Export only the asset hierarchy to GLB. Cameras, lights, reference planes, and evaluation floors remain outside the export root.
+8. Import and instantiate the GLB with Godot 4.3. Gameplay collision, sockets, signals, and scripts remain in `.tscn` scenes. Import settings such as generated LODs are deliberate per asset; warnings are fixed or explicitly avoided only when the asset budget makes that feature unnecessary.
+
+Source-only generator and Blender directories may contain a `.gdignore` so Godot does not import large concept meshes or editable DCC files. Runtime scenes continue to reference only `assets/exports/`.
+
+The repository includes metre-scale Blender helpers for this route:
+
+```bash
+blender --background --python tools/asset_pipeline/inspect_glb.py -- \
+  input.glb evidence.json
+
+blender --background --python tools/asset_pipeline/normalise_and_render_glb.py -- \
+  input.glb evaluation.glb evaluation_renders/
+
+blender --background --python tools/asset_pipeline/clean_glb.py -- \
+  input.glb cleaned.glb cleanup_evidence.json
+```
+
+`normalise_and_render_glb.py` assigns a shared clay material and is for controlled evaluation, not final material export. At metre scale, `clean_glb.py` collapses faces below 1 mm² and dissolves edges below 0.1 µm; it must run on a retained copy followed by visual, structural, and Godot checks.
+
+The Material Dispenser evidence set in [`docs/art/material_dispenser_comparison/`](art/material_dispenser_comparison/) demonstrates this boundary: the Meshy concept retains visual richness, while the Blender export provides the editable proxy and runtime contract.
+
 ## Animation Contract
 
 Subject and Residual scenes expose semantic animation names through an `AnimationPlayer` or `AnimationTree` adapter:

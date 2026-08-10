@@ -1,0 +1,706 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "elapsed_build_wall_clock_seconds": 414.81103769299807,
+  "elapsed_build_measurement_scope": "Wall-clock from first destructive build call through final evidence capture; includes MCP round-trips, measurement, correction, export and rendering.",
+  "final_render_seconds": 6.244555266981479,
+  "coordinate_contract": {
+    "up_axis": "Z",
+    "front_axis": "-Y",
+    "floor_contact_z_metres": 0.0,
+    "aperture_centre_z_metres": 0.4,
+    "nozzle_front_y_metres_approx": -1.1,
+    "unit_scale_metres": 1.0
+  },
+  "root": {
+    "name": "material_dispenser",
+    "type": "EMPTY",
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler_radians": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "matrix_world": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "asset_objects": [
+    {
+      "name": "material_dispenser",
+      "type": "EMPTY",
+      "parent": null
+    },
+    {
+      "name": "Back_Vent_Slat_01",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Back_Vent_Slat_02",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Back_Vent_Slat_03",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Back_Vent_Slat_04",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Back_Vent_Slat_05",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Base_Bumper_Back",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Base_Bumper_Front",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Base_Bumper_Left",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Base_Bumper_Right",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Base_Charcoal_Gasket",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Charcoal_Aperture",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Charcoal_Recess_Back",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Charcoal_Recess_Front",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Cyan_Status_Bar",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Cyan_Status_Ring",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Front_Vent_Slat_01",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Front_Vent_Slat_02",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Front_Vent_Slat_03",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Front_Vent_Slat_04",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Front_Vent_Slat_05",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Maintenance_Lamp_Left",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Maintenance_Lamp_Right",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Iris_Blade_01",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Iris_Blade_02",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Iris_Blade_03",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Iris_Blade_04",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Iris_Blade_05",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Iris_Blade_06",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Shutter_Plate",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Mechanical_Shutter_Rim",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Nozzle_Collar_Backplate",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Nozzle_Collar_Outer",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Nozzle_Housing",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Frame_Front_Left",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Frame_Front_Right",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Frame_Left_Side",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Frame_Rear_Left",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Frame_Rear_Right",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Frame_Right_Side",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Front_Left",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Front_Right",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Left_Side",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Rear_Left",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Rear_Right",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Protective_Panel_Right_Side",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Shell_Body",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Shell_Top_Cap",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Upper_Charcoal_Band",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    },
+    {
+      "name": "Weighted_Base",
+      "type": "MESH",
+      "parent": "material_dispenser"
+    }
+  ],
+  "scene_objects": [
+    {
+      "name": "Back_Vent_Slat_01",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Back_Vent_Slat_02",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Back_Vent_Slat_03",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Back_Vent_Slat_04",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Back_Vent_Slat_05",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Base_Bumper_Back",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Base_Bumper_Front",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Base_Bumper_Left",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Base_Bumper_Right",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Base_Charcoal_Gasket",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Charcoal_Aperture",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Charcoal_Recess_Back",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Charcoal_Recess_Front",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Cyan_Status_Bar",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Cyan_Status_Ring",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Evidence_Camera",
+      "type": "CAMERA",
+      "parent": null,
+      "inside_asset_root": false
+    },
+    {
+      "name": "Front_Vent_Slat_01",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Front_Vent_Slat_02",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Front_Vent_Slat_03",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Front_Vent_Slat_04",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Front_Vent_Slat_05",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Maintenance_Lamp_Left",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Maintenance_Lamp_Right",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Iris_Blade_01",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Iris_Blade_02",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Iris_Blade_03",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Iris_Blade_04",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Iris_Blade_05",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Iris_Blade_06",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Shutter_Plate",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Mechanical_Shutter_Rim",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Nozzle_Collar_Backplate",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Nozzle_Collar_Outer",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Nozzle_Housing",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Frame_Front_Left",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Frame_Front_Right",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Frame_Left_Side",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Frame_Rear_Left",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Frame_Rear_Right",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Frame_Right_Side",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Front_Left",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Front_Right",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Left_Side",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Rear_Left",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Rear_Right",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Protective_Panel_Right_Side",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Shell_Body",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Shell_Top_Cap",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Studio_Fill",
+      "type": "LIGHT",
+      "parent": null,
+      "inside_asset_root": false
+    },
+    {
+      "name": "Studio_Floor",
+      "type": "MESH",
+      "parent": null,
+      "inside_asset_root": false
+    },
+    {
+      "name": "Studio_Front_Softbox",
+      "type": "LIGHT",
+      "parent": null,
+      "inside_asset_root": false
+    },
+    {
+      "name": "Studio_Key",
+      "type": "LIGHT",
+      "parent": null,
+      "inside_asset_root": false
+    },
+    {
+      "name": "Studio_Rim",
+      "type": "LIGHT",
+      "parent": null,
+      "inside_asset_root": false
+    },
+    {
+      "name": "Upper_Charcoal_Band",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "Weighted_Base",
+      "type": "MESH",
+      "parent": "material_dispenser",
+      "inside_asset_root": true
+    },
+    {
+      "name": "material_dispenser",
+      "type": "EMPTY",
+      "parent": null,
+      "inside_asset_root": true
+    }
+  ],
+  "mesh_count": 49,
+  "geometry": {
+    "vertices": 2954,
+    "edges": 8586,
+    "polygons": 5724,
+    "triangles": 5724,
+    "non_manifold_edges": 0
+  },
+  "asset_world_space_bounding_box_metres": {
+    "min": [
+      -0.800000011920929,
+      -1.100000023841858,
+      0.0
+    ],
+    "max": [
+      0.800000011920929,
+      0.7976723313331604,
+      2.0
+    ],
+    "dimensions": [
+      1.600000023841858,
+      1.8976723551750183,
+      2.0
+    ]
+  },
+  "unapplied_asset_mesh_transforms": [],
+  "material_names": [
+    "Charcoal",
+    "Equipment_Grey",
+    "Soft_White_Emission",
+    "Systems_Cyan",
+    "Warm_Off_White"
+  ],
+  "saved_file_paths": {
+    "blend": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_raw.blend",
+    "glb": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_raw.glb",
+    "render_png": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/material_dispenser_blender_mcp_raw.png",
+    "evidence_json": "/home/crowclaws/worktrees/VerbEndings-material-dispenser-comparison/docs/art/material_dispenser_comparison/blender_mcp/build_evidence.json"
+  },
+  "saved_file_sizes_bytes": {
+    "blend": 260690,
+    "glb": 331712,
+    "render_png": 524022
+  },
+  "execution_approach": {
+    "interface": "Configured Blender MCP server blender-mcp==1.6.4 executing bpy code in the currently running Blender 5.2.0 LTS instance.",
+    "modelling": "Cleared the default scene; created an identity Empty root; built separate named components from 48-sided cylinders, bevelled cubes and low-resolution tori; applied all bevel modifiers and transforms; added a six-bar physical shutter cue; applied per-object Collapse Decimate at ratio 0.50 to normalise topology near the 5,000-triangle target; directly normalised mesh coordinates to the dimensional contract.",
+    "materials": "Created Principled BSDF materials from the brief palette (#66727A, #273238, #F1EEE6, #56D6D2) plus restrained soft-white emission.",
+    "studio": "Created neutral floor, camera and four area lights in a separate Evidence_Studio collection with no parent under material_dispenser; rendered in BLENDER_EEVEE at 768x768.",
+    "export": "Selected material_dispenser and recursive descendants only, then used bpy.ops.export_scene.gltf with export_format=GLB, use_selection=True, export_apply=False and export_yup=True. Studio floor, camera and lights were not selected.",
+    "external_generation": "None. No Meshy or other generative 3D service was used.",
+    "verification": "Called Blender MCP get_scene_info before modification and after the build, captured a viewport screenshot, measured topology and bounds with bpy/bmesh, rendered and visually reviewed the PNG, and retained zero non-manifold edges."
+  },
+  "notes": [
+    "No rigging or animation data was created.",
+    "Draco and MeshOptimizer shared libraries were unavailable; the GLB exported successfully without those optional compression paths."
+  ]
+}
