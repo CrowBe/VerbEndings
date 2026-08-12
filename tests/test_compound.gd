@@ -644,12 +644,16 @@ func _test_game_composition(failures: Array[String]) -> void:
 	_expect(game.current_round.get_parent() == game.get_node("World/Round"),
 			"Round-local responsibilities must remain under the Game Round root",
 			failures)
-	var player: Node3D = game.call("_spawn_local_player")
-	game.call("_place_local_player_for_round", "PVE")
-	_expect(player.global_position.is_equal_approx(
+	var config := LocalPlaytestConfig.new()
+	config.protocol_classification = "PVE"
+	config.subject_count = 1
+	config.initial_verbs = [Enums.VerbType.BURN]
+	game.local_playtest_config = config
+	game.start_local_playtest()
+	_expect(game.local_player.global_position.is_equal_approx(
 			game_compound.get_laboratory(&"AdaptiveContainment").to_global(
 					Vector3(0.0, 1.0, 16.0))),
-			"Game must place the local Subject in the rotated active Laboratory",
+			"local bootstrap must place the controlled Subject in the active Laboratory",
 			failures)
 	game.queue_free()
 

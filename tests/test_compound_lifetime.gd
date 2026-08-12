@@ -60,12 +60,16 @@ func _test_repeated_round_switching(failures: Array[String]) -> void:
 		_expect(laboratory.get_meta("lifetime_test_state") == laboratory_id,
 				"Round switching must retain %s Laboratory state"
 				% laboratory_id, failures)
-	var player: Node3D = game.call("_spawn_local_player")
-	game.call("_place_local_player_for_round", "PVE")
+	var config := LocalPlaytestConfig.new()
+	config.protocol_classification = "PVE"
+	config.subject_count = 1
+	config.initial_verbs = [Enums.VerbType.BURN]
+	game.local_playtest_config = config
+	game.start_local_playtest()
 	var expected_position: Vector3 = compound.get_laboratory(
 			&"AdaptiveContainment").to_global(Vector3(0.0, 1.0, 16.0))
-	_expect(player.global_position.is_equal_approx(expected_position),
-			"Round switching must preserve correct Player placement", failures)
+	_expect(game.local_player.global_position.is_equal_approx(expected_position),
+			"Round switching must preserve correct Subject placement", failures)
 	game.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame

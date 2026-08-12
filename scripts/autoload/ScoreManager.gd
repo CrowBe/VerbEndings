@@ -46,6 +46,15 @@ var player_points: Dictionary = {}
 var round_scores: Dictionary = {}
 
 
+## Enrols a Subject at zero so the scoring and ranking service recognises the
+## complete roster before the first award.
+func register_player(player_id: int) -> void:
+	if player_points.has(player_id):
+		return
+	player_points[player_id] = 0
+	trial_ranking_updated.emit(get_trial_ranking())
+
+
 ## Awards placement points for a finished round. `ordered_player_ids` is
 ## finish order, winner first.
 ## NETWORK: @rpc replication hook — server-side, at round end.

@@ -91,6 +91,10 @@ var assigned_verb: Enums.VerbType = Enums.VerbType.NONE
 ## NETWORK: @rpc replication hook — sync to all peers for nameplates.
 var character_name: String = ""
 
+## Only one Subject consumes keyboard and mouse input in local quick start.
+## Network authority replaces this flag when multiplayer transport lands.
+var accepts_local_input: bool = true
+
 ## Peer id of the chained partner. Deliberately untyped:
 ##   int  = partner's peer id (own id = Self-Chain)
 ##   -1   = not yet paired
@@ -144,13 +148,17 @@ var _position_history: Array[Dictionary] = []
 func _ready() -> void:
 	# NETWORK: gate this on is_multiplayer_authority() once peers exist —
 	# only the local player captures the mouse and keeps an active camera.
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if accepts_local_input:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	camera.current = accepts_local_input
 	# The rig is top-level so orbiting the camera never twists the body.
 	camera_rig.top_level = true
 	animation_adapter.basic_hit_impact.connect(_resolve_hit)
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not accepts_local_input:
+		return
 	# NETWORK: input handling must run only on the authority peer.
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		camera_rig.rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
@@ -181,19 +189,20 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if accepts_local_input and Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 		animation_adapter.play_jump_start()
-	if Input.is_action_just_pressed("basic_hit"):
+	if accepts_local_input and Input.is_action_just_pressed("basic_hit"):
 		basic_hit()
-	if Input.is_action_just_pressed("verb_expression"):
+	if accepts_local_input and Input.is_action_just_pressed("verb_expression"):
 		express_verb()
 
 	var speed: float = WALK_SPEED * _speed_buff * _tether_check(delta)
 
 	# Camera-relative movement: input is rotated by the rig's yaw.
 	var input_dir: Vector2 = Input.get_vector(
-			"move_left", "move_right", "move_forward", "move_back")
+			"move_left", "move_right", "move_forward", "move_back") \
+			if accepts_local_input else Vector2.ZERO
 	var direction: Vector3 = camera_rig.global_transform.basis * Vector3(
 			input_dir.x, 0.0, input_dir.y)
 	direction.y = 0.0
