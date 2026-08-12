@@ -23,6 +23,7 @@ ScoreManager="*res://scripts/autoload/ScoreManager.gd"
 RoundManager="*res://scripts/autoload/RoundManager.gd"
 LobbyManager="*res://scripts/autoload/LobbyManager.gd"
 CollapseManager="*res://scripts/autoload/CollapseManager.gd"
+TrialCoordinator="*res://scripts/autoload/TrialCoordinator.gd"
 
 [input]
 

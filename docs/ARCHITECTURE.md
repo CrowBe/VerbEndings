@@ -10,7 +10,7 @@ VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Ga
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, assigns deterministic unique Verbs, forms Pairs or a Self-Chain, and loads the configured seeded Protocol in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants for Pair-state inspection. Same-seed and next-seed restart actions rebuild the roster, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
 
 ## Compound And Environment Kit
 
@@ -31,6 +31,7 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 | `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
 | `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and shared insertion-platform occupancy. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
 | `CollapseManager` | Resolves individual First Place, starts the Collapse for the Subjects tied at First Place, applies Overdrive to those participants, and declares the final survivor. |
+| `TrialCoordinator` | Owns the host-authoritative Trial state machine: Verb Selection once; Pair Draft, Experiment Brief, Laboratory Entry, timed or condition-completed Experiment, Recall, Result Announcement, and optional Thematic Moment for each of exactly three Rounds; then sole-winner or Collapse resolution. It emits presentation-independent state and composition signals. |
 
 These are stateful in-process services. Comments identify intended RPC and replication boundaries, but the methods and signals currently execute locally.
 
@@ -86,12 +87,12 @@ The repository provides a deterministic local gameplay quick start and domain se
 - the Pair Draft has entry points for all three Rounds;
 - the local quick start configures one Protocol and a roster of one locally controlled Subject plus optional stationary participants; it is isolated from the unimplemented production host/join path;
 - the insertion platform is not the canonical Drop sequence, and no Round scene instances it;
-- Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
+- Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place; the local runtime automatically advances the complete three-Round lifecycle, while physical Drop, Recall, announcement, and Thematic Moment presentation remain unimplemented;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
 - development classifications still key the scoring tables and travel in `RoundManager`'s transition signal, so any consumer of that signal must keep them out of player-facing text;
 - Material shedding and puzzle-unit scatter positions use the global random stream rather than the Trial seed;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
-- the Dispensing Line, Drop, Recall, Result Announcement, and Thematic Moments remain design contracts only; and
+- the Dispensing Line, Drop, Recall and Result Announcement presentation, and Thematic Moments remain design contracts only; and
 - multiplayer transport, replication, deterministic scenarios, UI, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
 Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.

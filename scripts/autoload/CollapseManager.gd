@@ -27,6 +27,12 @@ var is_active: bool = false
 var surviving_players: Array[int] = []
 
 
+## Clears Collapse state when a Trial is replayed in the same process.
+func reset() -> void:
+	is_active = false
+	surviving_players.clear()
+
+
 ## Resolves First Place from individual Trial Scores after Round Three.
 ## NETWORK: @rpc replication hook — server-side, from the results screen.
 func resolve_trial_end() -> bool:
