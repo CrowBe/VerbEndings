@@ -12,6 +12,12 @@ This document records the current visual-reference coverage for the complete Ver
 
 These evidence classes are separate from the Greybox, Proxy, Production, and Polish runtime-readiness levels defined by the visual asset pipeline.
 
+## Generated Sheet Coverage
+
+[`reference_sheets/`](reference_sheets/) contains 47 generated focused sheets. Together with the existing shared Subject turnaround, the package provides visual-development coverage for all 48 asset-family rows below. The generated sheets are candidate modelling and review inputs: they do not change an evidence class until a focused asset review accepts the relevant geometry, scale, origin, material boundaries, collision ownership, and runtime target. The evidence classifications and remaining canonical requirements below therefore continue to describe the approved project state.
+
+The suite index, use boundary, prompt set, and generation record are retained in [`reference_sheets/README.md`](reference_sheets/README.md), [`reference_sheets/PROMPTS.md`](reference_sheets/PROMPTS.md), and [`reference_sheets/PROVENANCE.md`](reference_sheets/PROVENANCE.md).
+
 ## Canonical Reference Package
 
 Every focused static-prop package contains:
