@@ -5,7 +5,7 @@ extends CharacterBody3D
 ## WASD is camera-relative and the presentation turns to face travel.
 ## Combat: a comical BIG FIST punch (left mouse) is the universal Impact —
 ## it destabilises residuals, affects Subjects in PVP rounds, and drives
-## puzzle units. Verb Expression (right mouse, 5s cooldown) fires the Verb's
+## environment apparatus. Verb Expression (right mouse, 5s cooldown) fires the Verb's
 ## unique move and spends Stability.
 ## A loose "Tether Check" penalizes drifting too far from the chain partner.
 ##
@@ -17,6 +17,7 @@ extends CharacterBody3D
 ## NETWORK: @rpc replication hook — server decides, then broadcasts.
 signal destabilised(player: Node, source: Node)
 signal critical_stability_changed(is_critical: bool)
+signal material_absorbed(amount: float)
 ## NETWORK: @rpc replication hook — broadcast so remote peers play the
 ## punch/Expression animation on their copy of this body.
 signal hit_performed
@@ -53,8 +54,8 @@ const CRITICAL_STABILITY_MAX: float = 9.0
 ## Basic hit: the big fist.
 const HIT_COOLDOWN: float = 0.6
 const HIT_IMPACT_STRENGTH: float = 10.0
-## Reach for driving puzzle units with a punch.
-const PUZZLE_REACH: float = 4.0
+## Reach for driving environment apparatus with a punch.
+const APPARATUS_REACH: float = 4.0
 
 ## Verb Expression: deliberately low cooldown so Verbs stay the core loop.
 const VERB_COOLDOWN: float = 5.0
@@ -258,19 +259,31 @@ func exit_overdrive(partner_id = -1) -> void:
 ## Applies external Stability loss. Subject-on-Subject Impacts are ignored
 ## outside Competitive Stress Experiments. Expression spend uses a separate
 ## path and can never Destabilise a Subject.
-func apply_impact(amount: float, source: Node = null) -> void:
+func apply_impact(
+	amount: float,
+	source: Node = null,
+	allow_material_shed: bool = true,
+) -> void:
 	if is_destabilised or shield_active:
 		return
 	if source != null and source.is_in_group("players") \
 			and not RoundManager.is_pvp_enabled():
 		return
 	_set_stability(maxf(stability - amount, 0.0))
-	_shed_material(material_shed_probability)
+	if allow_material_shed:
+		_shed_material(material_shed_probability)
 	if stability == 0.0:
 		is_destabilised = true
 		animation_adapter.play_destabilise()
-		_shed_material(destabilise_shed_probability)
+		if allow_material_shed:
+			_shed_material(destabilise_shed_probability)
 		destabilised.emit(self, source)
+
+
+## Protocol hazards use the external Stability Loss path without creating
+## Impact-shed Material.
+func apply_hazard_stability_loss(amount: float, source: Node = null) -> void:
+	apply_impact(amount, source, false)
 
 
 ## Restabilises a Subject during normal Experiment Recall.
@@ -286,7 +299,9 @@ func restabilise() -> void:
 func absorb_material(amount: float) -> bool:
 	if is_destabilised or stability >= BASELINE_STABILITY or amount <= 0.0:
 		return false
-	_set_stability(stability + amount)
+	var restored_amount: float = minf(amount, BASELINE_STABILITY - stability)
+	_set_stability(stability + restored_amount)
+	material_absorbed.emit(restored_amount)
 	return true
 
 
@@ -305,7 +320,7 @@ func _apply_stabilisation(delta: float) -> void:
 ## Comical punch: an oversized fist pops out of the blob, the Impact lands
 ## at full extension, then it snaps back in. One move drives everything —
 ## residuals take hits, Subjects take PVP-gated Stability loss, and the nearest
-## puzzle unit within reach gets a verb-scaled interaction.
+## environment apparatus within reach gets a Verb-scaled interaction.
 ## NETWORK: @rpc replication hook — authority requests, server resolves
 ## the hit, hit_performed replicates the animation to remote peers.
 func basic_hit() -> void:
@@ -328,9 +343,11 @@ func _resolve_hit() -> void:
 			body.take_hit(HIT_IMPACT_STRENGTH * _power_buff, get_multiplayer_authority())
 		elif body.is_in_group("players"):
 			body.apply_impact(HIT_IMPACT_STRENGTH * _power_buff, self)
-	var unit: PuzzleUnit = _nearest_puzzle_unit()
+		elif body.has_method("take_hit"):
+			body.take_hit(HIT_IMPACT_STRENGTH * _power_buff, self)
+	var unit: PuzzleUnit = _nearest_apparatus()
 	if unit != null:
-		unit.interact(get_multiplayer_authority(), assigned_verb, facing)
+		unit.interact(assigned_verb, facing)
 
 
 ## --- Verb Expression ---------------------------------------------------
@@ -359,7 +376,7 @@ func express_verb() -> void:
 			shield_active = true
 			_buff_time_left = BUFF_DURATION
 		Enums.VerbType.GROW:
-			# Not damaging: bulk up — punches hit twice as hard (puzzle
+			# Not damaging: bulk up — punches hit twice as hard (apparatus
 			# shoves already get GROW's top-tier static assist).
 			_power_buff = 2.0
 			_buff_time_left = BUFF_DURATION
@@ -395,6 +412,10 @@ func _area_hit(impact_strength: float) -> void:
 	for body: Node in get_tree().get_nodes_in_group("players"):
 		if body != self and _in_verb_radius(body):
 			body.apply_impact(impact_strength, self)
+	for receiver: Node in get_tree().get_nodes_in_group("impact_receivers"):
+		if receiver is Node3D and _in_verb_radius(receiver) \
+				and receiver.has_method("take_hit"):
+			receiver.take_hit(impact_strength, self)
 
 
 func get_expression_cost() -> float:
@@ -471,12 +492,12 @@ func _teleport_to_breadcrumb() -> void:
 	velocity = Vector3.ZERO
 
 
-func _nearest_puzzle_unit() -> PuzzleUnit:
+func _nearest_apparatus() -> PuzzleUnit:
 	var best: PuzzleUnit = null
 	var best_distance: float = INF
-	for unit: Node in get_tree().get_nodes_in_group("puzzle_units"):
+	for unit: Node in get_tree().get_nodes_in_group("environment_apparatus"):
 		var distance: float = global_position.distance_to(unit.global_position)
-		if distance <= PUZZLE_REACH and distance < best_distance:
+		if distance <= APPARATUS_REACH and distance < best_distance:
 			best_distance = distance
 			best = unit
 	return best

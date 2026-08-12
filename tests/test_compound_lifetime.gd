@@ -4,10 +4,10 @@ const COMPOUND_SCENE: PackedScene = preload(
 		"res://scenes/environment/Compound.tscn")
 const GAME_SCENE: PackedScene = preload("res://scenes/core/Game.tscn")
 const ROUND_TYPES: Array[String] = [
-	"PUZZLE", "PVP", "PVE",
-	"PUZZLE", "PVP", "PVE",
-	"PUZZLE", "PVP", "PVE",
-	"PUZZLE", "PVP", "PVE",
+	"ENVIRONMENT", "PVP", "PVE",
+	"ENVIRONMENT", "PVP", "PVE",
+	"ENVIRONMENT", "PVP", "PVE",
+	"ENVIRONMENT", "PVP", "PVE",
 ]
 
 

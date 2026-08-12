@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/environment/BreakableMaterialHousing.gd" id="1_housing"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_housing"]
+size = Vector3(2.4, 2.0, 2.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_housing"]
+size = Vector3(2.4, 2.0, 2.4)
+
+[node name="BreakableMaterialHousing" type="StaticBody3D" groups=["impact_receivers"]]
+script = ExtResource("1_housing")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1, 0)
+shape = SubResource("BoxShape3D_housing")
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1, 0)
+mesh = SubResource("BoxMesh_housing")
+
+[node name="ReleaseSocket" type="Marker3D" parent="."]
+position = Vector3(0, 0.6, 1.5)
