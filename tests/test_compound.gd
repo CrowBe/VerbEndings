@@ -37,6 +37,17 @@ func _test_macro_topology(compound: Compound, failures: Array[String]) -> void:
 			"Compound must contain the Central Core", failures)
 	_expect(compound.has_node("AssignmentDeck/ResearcherBoothReserved"),
 			"Assignment Deck must reserve the Researcher booth", failures)
+	var dispensing_line: Node3D = compound.get_node("AssignmentDeck/DispensingLine")
+	_expect(dispensing_line.get_meta("subject_capacity") == 24,
+			"Dispensing Line must support the 24-Subject ceiling", failures)
+	for tube_index: int in Compound.SUBJECT_CAPACITY - 1:
+		_expect(dispensing_line.get_node(
+				"Tube%02d" % tube_index).global_position.distance_to(
+				dispensing_line.get_node(
+						"Tube%02d" % (tube_index + 1)).global_position) \
+				<= Compound.DISPENSING_TUBE_SPACING_M + 0.2,
+				"sequential Dispensing Line tubes must be physically adjacent",
+				failures)
 	_expect(compound.get_node("AssignmentDeck").get_child_count() >= 25,
 			"Assignment Deck must be an elevated annulus with safe rails", failures)
 	_expect(compound.has_node("DomeShell"),
@@ -415,6 +426,12 @@ func _test_laboratory_contracts(
 		_expect(trade_offs.size() == 3,
 				"%s Landing strategies must have meaningful trade-offs"
 				% laboratory_id, failures)
+		_expect(laboratory.get_node("DropSockets").get_child_count() == 24,
+				"%s must expose one independent Drop socket per Subject"
+				% laboratory_id, failures)
+		_expect(laboratory.get_node("RecallApertures").get_child_count() == 24,
+				"%s must expose one Recall aperture per Subject"
+				% laboratory_id, failures)
 		_expect(laboratory.get_meta("mandatory_choke_count") == 0,
 				"%s must not contain a mandatory choke" % laboratory_id, failures)
 		_expect(laboratory.get_meta("valid_exit_count") >= 2,
@@ -650,10 +667,11 @@ func _test_game_composition(failures: Array[String]) -> void:
 	config.initial_verbs = [Enums.VerbType.BURN]
 	game.local_playtest_config = config
 	game.start_local_playtest()
-	_expect(game.local_player.global_position.is_equal_approx(
-			game_compound.get_laboratory(&"AdaptiveContainment").to_global(
-					Vector3(0.0, 1.0, 16.0))),
-			"local bootstrap must place the controlled Subject in the active Laboratory",
+	var tube_index: int = LobbyManager.get_dispensing_line_tube(1)
+	_expect(game.local_player.global_transform.is_equal_approx(
+			game_compound.get_drop_socket_transform(
+					&"AdaptiveContainment", tube_index)),
+			"local bootstrap must begin at its assigned Laboratory Drop socket",
 			failures)
 	game.queue_free()
 

@@ -4,19 +4,20 @@
 
 ## Runtime
 
-VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Game.tscn` is the configured main scene. Its `Game` script owns the `World` runtime root with three children:
+VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Game.tscn` is the configured main scene. Its `Game` script owns the `World` runtime root with four children:
 
 - `Compound`, the persistent facility scene;
 - `Players`, the actor container; and
-- `Round`, the active Experiment scene container.
+- `Round`, the active Experiment scene container; and
+- `LaboratoryTransit`, the presentation controller container for Drop and Recall.
 
-On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. Local automatic selections share a zero-duration pick time, so Round One uses the stable Subject-id tie-break instead of machine scheduling time. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound.
+On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. Local automatic selections share a zero-duration pick time, so Round One uses the stable Subject-id tie-break instead of machine scheduling time. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. `LaboratoryTransit` presents the internal Dispensing Line journey as a cut, holds each Subject at its overhead Drop socket until independent Release, returns normal movement for steerable descent, waits for every Landing, and lifts Subjects through floor apertures during Recall. One Subject accepts local input; optional additional Subjects Release automatically and remain stationary after Landing. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, transit, scores, and seeded global random stream without replacing the persistent Compound.
 
 `Game.host_session()` and `Game.join_session()` provide the programmatic ENet host/join path used before player-facing session UI exists. `NetworkSession` enrols peers into the same domain services, accepts movement and action intent from owning clients, simulates gameplay on the host, and sends explicit snapshots for roster, revealed lifecycle state, Pair state, scores, Collapse state, Subjects, and Residuals. The host's secret Protocol queue is never included. Clients compose the revealed Round and render replicated actors without advancing Round simulation. There is no menu, lobby scene, player-facing UI, `MultiplayerSpawner`, or `MultiplayerSynchronizer`; explicit replication is the implemented equivalent transport boundary.
 
 ## Compound And Environment Kit
 
-`scenes/environment/Compound.tscn` is the persistent faceted-hemisphere greybox. It contains the Central Core, elevated annular Assignment Deck, reserved Researcher booth position, three inward-facing 52 m Test Floors, separator spines, normal-Round shutters, and the twelve-module perimeter maintenance route. Each Laboratory owns three Landing-strategy markers, a dominant apparatus silhouette, geometry/icon/motion critical-state cues, a sightline hook into the Assignment Deck, and a stable `RoundContent` boundary. `Compound.set_laboratory_critical_state()` drives all three non-colour cue channels together.
+`scenes/environment/Compound.tscn` is the persistent faceted-hemisphere greybox. It contains the Central Core, elevated annular Assignment Deck, a 24-tube overhead Dispensing Line, reserved Researcher booth position, three inward-facing 52 m Test Floors, separator spines, normal-Round shutters, and the twelve-module perimeter maintenance route. Each Laboratory owns 24 overhead Drop sockets, 24 floor Recall apertures, three Landing-strategy markers, a dominant apparatus silhouette, geometry/icon/motion critical-state cues, a sightline hook into the Assignment Deck, and a stable `RoundContent` boundary. Sequential tube indices are physically adjacent, and the matching index identifies one Subject's Drop and Recall path. `Compound.set_laboratory_critical_state()` drives all three non-colour cue channels together.
 
 `scenes/environment/EnvironmentKitPiece.tscn` is the reusable environment-kit primitive. `EnvironmentKitPiece.gd` builds its replaceable `Visual` and Godot-owned `GameplayCollision` children from metre-scale dimensions using a floor-centred origin. The kit catalogues orthogonal floor and wall bays, radial and annular segments, dome-shell bays, spine junctions, 4 m door frames and shutters, deck rails, columns, trusses, vents, and panels. Compound instances use stable sequence names and store their kind, dimensions, grid increment, and origin contract as metadata for validation and future tooling.
 
@@ -32,7 +33,7 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 | `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, calculates synergy and versatility values, pushes Overdrive state onto Self-Chained actors, and Severs a live Pair when one Partner is Eliminated. A Severed bond is removed immediately while its Round-scoped Chain record remains available for symmetric scoring until scheduled dissolution. |
 | `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes competition-ranked Trial Ranking, applies each Protocol's authored individual or Verb-Chain reward policy, and provides lowest-Trial-Score-first draft ordering. Shared rewards credit each Partner separately, optionally use the Synergy Coefficient, and pay a Self-Chain once without Synergy scaling. Its placement and bonus tables are keyed by development classification. |
 | `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
-| `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and shared insertion-platform occupancy. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
+| `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and deterministic Dispensing Line tube assignments. A Pair receives adjacent tubes and a Self-Chain receives one tube. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
 | `CollapseManager` | Resolves individual First Place, starts the Collapse for the Subjects tied at First Place, applies Overdrive to those participants, and declares the final survivor. |
 | `TrialCoordinator` | Owns the host-authoritative Trial state machine: Verb Selection once; Pair Draft, Experiment Brief, Laboratory Entry, timed or condition-completed Experiment, Recall, Result Announcement, and optional Thematic Moment for each of exactly three Rounds; then sole-winner or Collapse resolution. It emits presentation-independent state and composition signals. |
 
@@ -90,16 +91,15 @@ The repository provides a deterministic local gameplay quick start and a present
 - Material dispensing and breakable Material housings are wired into Sustained Exposure; other Experiments rely on Impact shedding;
 - the Pair Draft has entry points for all three Rounds;
 - the local quick start configures one Protocol and a roster of one locally controlled Subject plus optional stationary participants; the programmatic ENet host/join path has no player-facing session UI;
-- the insertion platform is not the canonical Drop sequence, and no Round scene instances it;
-- Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place; the local runtime automatically advances the complete three-Round lifecycle, while physical Drop, Recall, announcement, and Thematic Moment presentation remain unimplemented;
+- Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place; the local runtime automatically advances the complete three-Round lifecycle, while Result Announcement and Thematic Moment presentation remain unimplemented;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
 - development classifications still key the scoring tables and travel in `RoundManager`'s transition signal, so any consumer of that signal must keep them out of player-facing text;
 - Material shedding and Environment apparatus scatter positions use the host's seeded global random stream; clients consume replicated gameplay outcomes rather than reproducing those draws;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
-- the Dispensing Line, Drop, Recall and Result Announcement presentation, and Thematic Moments remain design contracts only; and
+- the Dispensing Line, Drop, and Recall have structural greybox presentation; tube interiors use a presentation cut, and Result Announcement presentation and Thematic Moments remain design contracts only; and
 - large-roster multiplayer scenarios, reconnect support, latency compensation, UI, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
-Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
+Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, Laboratory Entry/Drop/Recall, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 
@@ -108,7 +108,6 @@ GitHub issues own implementation work. This document records capability boundari
 Several code identifiers and internal comments do not match `CONTEXT.md`. They are load-bearing today, so the mismatch is recorded here rather than hidden:
 
 - `Player`, `player_id`, `players` group, and `active_players` stand for Subject and Subject identity;
-- `InsertionVector`, `insertion_vector_launched`, and vector occupancy in `LobbyManager` stand in for the Dispensing Line and the Drop; and
 - `swarm_kill` is a serialised bonus key in the `adaptive_containment` Protocol resource and `ScoreManager.BONUS_EVENTS`, so the string stays until a data migration renames it.
 
 ## Dependencies And Extension Rules
