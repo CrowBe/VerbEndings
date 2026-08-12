@@ -79,13 +79,13 @@ func award_protocol_placements(protocol: ExperimentProtocol,
 			protocol.scoring_rules.get("shared_reward_synergy", false))
 
 
-## Collapses a Subject performance order to unique active Verb Chains. The
-## first member encountered determines the Chain's placement, so an Eliminated
-## Partner may be absent without losing the shared result.
+## Collapses a Subject performance order to unique Round-authored Verb Chains.
+## The first member encountered determines the Chain's placement, so an
+## Eliminated Partner may be absent without losing the shared result.
 func get_ordered_chain_ids(ordered_player_ids: Array) -> Array[int]:
 	var ordered_chain_ids: Array[int] = []
 	for player_id: int in ordered_player_ids:
-		var chain: Dictionary = VerbChainManager.get_chain_for_player(player_id)
+		var chain: Dictionary = VerbChainManager.get_round_chain_for_player(player_id)
 		if chain.is_empty() or ordered_chain_ids.has(chain.chain_id):
 			continue
 		ordered_chain_ids.append(chain.chain_id)
@@ -104,8 +104,8 @@ func award_chain_placements(round_type: String, ordered_chain_ids: Array,
 		push_warning("ScoreManager: unknown round type '%s'." % round_type)
 		return
 	for placement: int in ordered_chain_ids.size():
-		var chain: Dictionary = VerbChainManager.verb_chains.get(
-				ordered_chain_ids[placement], {})
+		var chain: Dictionary = VerbChainManager.get_round_chain(
+				ordered_chain_ids[placement])
 		if chain.is_empty():
 			continue
 		var base_amount: int = reward_table[mini(placement, reward_table.size() - 1)]
@@ -134,7 +134,7 @@ func award_protocol_bonus(player_id: int, protocol: ExperimentProtocol,
 	if not shared_events.has(event):
 		award_bonus(player_id, protocol.classification, event)
 		return
-	var chain: Dictionary = VerbChainManager.get_chain_for_player(player_id)
+	var chain: Dictionary = VerbChainManager.get_round_chain_for_player(player_id)
 	if chain.is_empty():
 		award_bonus(player_id, protocol.classification, event)
 		return

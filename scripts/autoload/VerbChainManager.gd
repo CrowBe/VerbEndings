@@ -71,6 +71,12 @@ var verb_chains: Dictionary = {}
 ## NETWORK: derived state — rebuild locally from verb_chains, do not replicate.
 var _player_to_chain: Dictionary = {}
 
+## The authored Verb Chain for each Subject in the current Round. A Severed
+## Chain remains here until scheduled dissolution so shared rewards still
+## reach both Partners after one has been Eliminated.
+var _round_chains: Dictionary = {}
+var _player_to_round_chain: Dictionary = {}
+
 var _next_chain_id: int = 1
 
 
@@ -90,13 +96,9 @@ func register_player(player_id: int, verb: Enums.VerbType) -> void:
 ## Removes a player and dissolves any chain they were part of.
 ## NETWORK: @rpc replication hook — call on peer disconnect (server-side).
 func unregister_player(player_id: int) -> void:
+	_dissolve_chain_for(player_id)
+	_dissolve_round_chain_for(player_id)
 	active_players.erase(player_id)
-	var chain_id: int = _player_to_chain.get(player_id, -1)
-	if chain_id != -1:
-		var chain: Dictionary = verb_chains[chain_id]
-		_player_to_chain.erase(chain.player_a_id)
-		_player_to_chain.erase(chain.player_b_id)
-		verb_chains.erase(chain_id)
 
 
 ## Pairs two players into a verb chain and computes its power rating.
@@ -113,11 +115,16 @@ func establish_verb_chain(player_a_id: int, player_b_id: int) -> Dictionary:
 	# Re-pairing dissolves any existing chains first.
 	_dissolve_chain_for(player_a_id)
 	_dissolve_chain_for(player_b_id)
+	_dissolve_round_chain_for(player_a_id)
+	_dissolve_round_chain_for(player_b_id)
 
 	var chain: Dictionary = _build_chain(player_a_id, player_b_id)
 	verb_chains[chain.chain_id] = chain
 	_player_to_chain[player_a_id] = chain.chain_id
 	_player_to_chain[player_b_id] = chain.chain_id
+	_round_chains[chain.chain_id] = chain
+	_player_to_round_chain[player_a_id] = chain.chain_id
+	_player_to_round_chain[player_b_id] = chain.chain_id
 
 	if chain.is_self_chain:
 		self_chain_triggered.emit(player_a_id)
@@ -151,6 +158,40 @@ func get_partner_id(player_id: int) -> int:
 	if chain.is_empty():
 		return -1
 	return chain.player_b_id if chain.player_a_id == player_id else chain.player_a_id
+
+
+## Returns the Verb Chain authored for this Subject's current Round. Unlike
+## get_chain_for_player(), this still returns a Chain after Severance so Round
+## scoring retains its symmetric reward policy.
+func get_round_chain_for_player(player_id: int) -> Dictionary:
+	var chain_id: int = _player_to_round_chain.get(player_id, -1)
+	return _round_chains.get(chain_id, {})
+
+
+func get_round_chain(chain_id: int) -> Dictionary:
+	return _round_chains.get(chain_id, {})
+
+
+## Ends a two-Subject Chain early because one Partner was Eliminated. The
+## surviving Subject pays its configured Severance Loss once and receives no
+## Overdrive. Returns whether a live Chain was Severed.
+## NETWORK: @rpc replication hook — server-side, broadcast the Severance and
+## resulting Stability update.
+func sever_chain_for(eliminated_player_id: int) -> bool:
+	var chain_id: int = _player_to_chain.get(eliminated_player_id, -1)
+	if chain_id == -1:
+		return false
+	var chain: Dictionary = verb_chains[chain_id]
+	if chain.is_self_chain:
+		return false
+	var surviving_player_id: int = chain.player_b_id \
+			if chain.player_a_id == eliminated_player_id else chain.player_a_id
+	_remove_active_chain(chain)
+	for body: Node in get_tree().get_nodes_in_group("players"):
+		if body.get_multiplayer_authority() == surviving_player_id:
+			body.apply_severance_loss()
+			break
+	return true
 
 
 ## Synergy Coefficient for a verb pair, from the compatibility matrix.
@@ -199,12 +240,30 @@ func _dissolve_chain_for(player_id: int) -> void:
 	if chain_id == -1:
 		return
 	var chain: Dictionary = verb_chains[chain_id]
+	_remove_active_chain(chain)
+	_remove_round_chain(chain)
+
+
+func _remove_active_chain(chain: Dictionary) -> void:
 	_player_to_chain.erase(chain.player_a_id)
 	_player_to_chain.erase(chain.player_b_id)
-	verb_chains.erase(chain_id)
+	verb_chains.erase(chain.chain_id)
 	_clear_player_overdrive(chain.player_a_id)
 	if not chain.is_self_chain:
 		_clear_player_overdrive(chain.player_b_id)
+
+
+func _remove_round_chain(chain: Dictionary) -> void:
+	_player_to_round_chain.erase(chain.player_a_id)
+	_player_to_round_chain.erase(chain.player_b_id)
+	_round_chains.erase(chain.chain_id)
+
+
+func _dissolve_round_chain_for(player_id: int) -> void:
+	var chain_id: int = _player_to_round_chain.get(player_id, -1)
+	if chain_id == -1:
+		return
+	_remove_round_chain(_round_chains[chain_id])
 
 
 ## Severs every Verb Chain. No Pair survives into the Collapse.
@@ -215,6 +274,8 @@ func dissolve_all_chains() -> void:
 		_clear_player_overdrive(player_id)
 	verb_chains.clear()
 	_player_to_chain.clear()
+	_round_chains.clear()
+	_player_to_round_chain.clear()
 
 
 func _sync_player_overdrive(chain: Dictionary) -> void:
