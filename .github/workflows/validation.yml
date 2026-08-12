@@ -66,6 +66,9 @@ jobs:
       - name: Experiment Protocol tests
         run: godot --headless --path . tests/TestExperimentProtocols.tscn
 
+      - name: Local playtest bootstrap tests
+        run: godot --headless --path . tests/TestLocalPlaytestBootstrap.tscn
+
       - name: Animation adapter tests
         run: godot --headless --path . tests/TestAnimationAdapter.tscn
 

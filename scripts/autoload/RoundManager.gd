@@ -72,6 +72,25 @@ func secretly_queue_rounds(seed: int = 0) -> void:
 	round_queue_locked.emit()
 
 
+## Builds the same seeded queue while placing a configured Protocol first.
+## This is the local quick-start seam; the canonical Trial still uses the
+## blind queue above.
+func queue_local_protocol(protocol_classification: String, seed: int) -> bool:
+	secretly_queue_rounds(seed)
+	var selected_index: int = -1
+	for index: int in _secret_protocol_queue.size():
+		if _secret_protocol_queue[index].classification == protocol_classification:
+			selected_index = index
+			break
+	if selected_index == -1:
+		push_warning("RoundManager: unknown local Protocol '%s'." % protocol_classification)
+		return false
+	var selected: ExperimentProtocol = _secret_protocol_queue[selected_index]
+	_secret_protocol_queue.remove_at(selected_index)
+	_secret_protocol_queue.push_front(selected)
+	return true
+
+
 ## Advances the Trial to the next round, handling the reveal rules for each
 ## transition. Returns the new round type, or "" when the Trial is over.
 ## NETWORK: @rpc replication hook — server drives this; the resulting

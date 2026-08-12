@@ -74,6 +74,13 @@ var _player_to_chain: Dictionary = {}
 var _next_chain_id: int = 1
 
 
+## Clears local Trial state before a quick-start replay or return to menu.
+func reset() -> void:
+	dissolve_all_chains()
+	active_players.clear()
+	_next_chain_id = 1
+
+
 ## Adds a player to the roster with their assigned verb.
 ## NETWORK: @rpc replication hook — server calls this, then broadcasts.
 func register_player(player_id: int, verb: Enums.VerbType) -> void:

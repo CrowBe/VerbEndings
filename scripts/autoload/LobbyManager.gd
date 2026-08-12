@@ -62,6 +62,17 @@ var _verb_pick_seconds: Dictionary = {}
 var _vector_occupants: Dictionary = {}
 
 
+## Clears local Trial state before rebuilding a roster.
+func reset() -> void:
+	lobby_players.clear()
+	draft_queue.clear()
+	current_chooser_id = -1
+	_claimed_identities.clear()
+	_selection_open_msec = -1
+	_verb_pick_seconds.clear()
+	_vector_occupants.clear()
+
+
 ## A player enters the lobby with no verb selected yet.
 ## NETWORK: @rpc replication hook — server-side, on peer connect.
 func join_lobby(player_id: int) -> void:
