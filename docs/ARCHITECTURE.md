@@ -10,7 +10,7 @@ VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Ga
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` loads a requested Puzzle, PVE, or PVP Round, maps it to the corresponding Laboratory, moves the `Round` root to that Laboratory's anchor, and creates one local `Player`. It adopts `RoundManager`'s selected Protocol only when that Protocol's classification matches the requested Round. The Compound remains instantiated when the active Round changes. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, assigns deterministic unique Verbs, forms Pairs or a Self-Chain, and loads the configured seeded Protocol in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants for Pair-state inspection. Same-seed and next-seed restart actions rebuild the roster, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
 
 ## Compound And Environment Kit
 
@@ -70,7 +70,7 @@ All three Round controllers emit an ordered list when asked to end. None control
 
 | Layer | Owns | Does not own |
 | --- | --- | --- |
-| `Game` | Scene composition, persistent Compound instance, active Round placement, local Player instance | Laboratory geometry internals, scoring formulas, Pair rules, actor behaviour |
+| `Game` | Scene composition, persistent Compound instance, deterministic local bootstrap, local Subject instances, and active Round placement | Laboratory geometry internals, scoring formulas, Pair rules, actor behaviour |
 | `Compound` | Facility topology, environment-kit instances, Laboratory anchors, normal-Round spatial confinement | Experiment objectives, spawning, scoring, Trial lifecycle |
 | Autoload services | Cross-scene roster, chain, score, Round, and final-resolution state | Render geometry and per-frame actor simulation |
 | Round controllers | Experiment-local spawning, scoring inputs, ordering, cleanup | Verb Selection and persistent Trial presentation |
@@ -79,11 +79,12 @@ All three Round controllers emit an ordered list when asked to end. None control
 
 ## Current Capability Boundary
 
-The repository provides a locally runnable gameplay greybox and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
+The repository provides a deterministic local gameplay quick start and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
 
 - the implemented Puzzle Experiment predates the Applied Attrition Laboratory charter in `CONTEXT.md`, so `PuzzleRound`, the `precision_assembly` Protocol resource, and the `PUZZLE` classification still score unit completion rather than survival;
 - Material dispensing is currently wired only into that Experiment;
 - the Pair Draft has entry points for all three Rounds;
+- the local quick start configures one Protocol and a roster of one locally controlled Subject plus optional stationary participants; it is isolated from the unimplemented production host/join path;
 - the insertion platform is not the canonical Drop sequence, and no Round scene instances it;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
