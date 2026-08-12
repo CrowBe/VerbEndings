@@ -160,8 +160,15 @@ func _on_draft_completed() -> void:
 	_set_phase(Phase.EXPERIMENT_BRIEF)
 	if automatic_drafts:
 		_begin_laboratory_entry()
-	else:
-		call_deferred("_begin_laboratory_entry")
+
+
+## Player-facing presentation completion seam. Interactive Trials remain on
+## the Experiment Brief until the local presentation explicitly continues.
+func complete_experiment_brief() -> bool:
+	if not _is_host() or current_phase != Phase.EXPERIMENT_BRIEF:
+		return false
+	_begin_laboratory_entry()
+	return true
 
 
 func _begin_laboratory_entry() -> void:
@@ -226,6 +233,21 @@ func _announce_result() -> void:
 	_set_phase(Phase.RESULT_ANNOUNCEMENT)
 	round_result_announced.emit(RoundManager.current_round_index,
 			_pending_order.duplicate(), ScoreManager.get_trial_ranking())
+	if not automatic_drafts:
+		return
+	_complete_result_presentation()
+
+
+## Player-facing presentation completion seam. Interactive Trials keep the
+## Result Announcement visible until the local presentation acknowledges it.
+func complete_result_announcement() -> bool:
+	if not _is_host() or current_phase != Phase.RESULT_ANNOUNCEMENT:
+		return false
+	_complete_result_presentation()
+	return true
+
+
+func _complete_result_presentation() -> void:
 	if RoundManager.current_protocol.includes_thematic_moment:
 		_set_phase(Phase.THEMATIC_MOMENT)
 		call_deferred("_finish_round_lifecycle")

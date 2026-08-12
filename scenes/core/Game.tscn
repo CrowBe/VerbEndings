@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvbendgame001"]
+[gd_scene load_steps=4 format=3 uid="uid://cvbendgame001"]
 
 [ext_resource type="Script" path="res://scripts/core/Game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/environment/Compound.tscn" id="2_compound"]
+[ext_resource type="PackedScene" path="res://scenes/presentation/TrialPresentation.tscn" id="3_ui"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_game")
@@ -15,3 +16,5 @@ script = ExtResource("1_game")
 [node name="Round" type="Node3D" parent="World"]
 
 [node name="LaboratoryTransit" type="Node" parent="World"]
+
+[node name="TrialPresentation" parent="." instance=ExtResource("3_ui")]

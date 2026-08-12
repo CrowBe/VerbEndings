@@ -21,7 +21,7 @@ const ROUND_LABORATORIES: Dictionary = {
 	"ENVIRONMENT": &"AppliedAttrition",
 }
 
-@export var auto_start_greybox: bool = true
+@export var auto_start_greybox: bool = false
 @export var local_playtest_config: LocalPlaytestConfig = DEFAULT_LOCAL_CONFIG
 @export var player_scene: PackedScene = DEFAULT_PLAYER_SCENE
 
@@ -74,6 +74,50 @@ func start_local_playtest() -> void:
 	_build_local_playtest(active_seed)
 
 
+## Opens the player-facing local lobby without pre-claiming Verbs. The
+## presentation collects every local Subject's unique claim before starting
+## the interactive Trial lifecycle.
+func open_local_lobby() -> void:
+	NetworkSession.shutdown()
+	_prepare_session_state()
+	active_seed = local_playtest_config.trial_seed
+	seed(active_seed)
+	_spawn_local_subjects(false)
+
+
+func select_local_lobby_verb(player_id: int, verb: Enums.VerbType) -> bool:
+	if NetworkSession.mode != NetworkSession.Mode.LOCAL:
+		return false
+	return LobbyManager.select_verb(player_id, verb)
+
+
+func start_interactive_local_trial() -> bool:
+	if NetworkSession.mode != NetworkSession.Mode.LOCAL:
+		return false
+	for player_id: int in LobbyManager.lobby_players:
+		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
+				== Enums.VerbType.NONE:
+			return false
+	for subject: Node3D in local_subjects:
+		subject.call("set_character_identity", VerbChainManager.active_players.get(
+				subject.get_multiplayer_authority(), Enums.VerbType.NONE))
+	return TrialCoordinator.start_trial(active_seed, false)
+
+
+func complete_timed_verb_selection() -> bool:
+	if NetworkSession.mode == NetworkSession.Mode.CLIENT:
+		return false
+	LobbyManager.complete_verb_selection_automatically()
+	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+		return start_interactive_local_trial()
+	return start_hosted_trial()
+
+
+func return_to_main_menu() -> void:
+	NetworkSession.shutdown()
+	_prepare_session_state()
+
+
 func restart_local_playtest(use_new_seed: bool) -> void:
 	if use_new_seed:
 		active_seed += 1
@@ -88,6 +132,7 @@ func host_session(port: int = NetworkSession.DEFAULT_PORT,
 		trial_seed: int = local_playtest_config.trial_seed) -> Error:
 	_prepare_session_state()
 	active_seed = trial_seed
+	seed(active_seed)
 	var error: Error = NetworkSession.host_session(port, max_clients, trial_seed)
 	if error == OK:
 		LobbyManager.open_verb_selection()
@@ -120,7 +165,7 @@ func _build_local_playtest(trial_seed: int) -> void:
 	_prepare_session_state()
 	active_seed = trial_seed
 	seed(trial_seed)
-	_spawn_local_subjects()
+	_spawn_local_subjects(true)
 	TrialCoordinator.start_trial(trial_seed, true, -1.0,
 			local_playtest_config.protocol_classification)
 
@@ -170,7 +215,7 @@ func load_round(round_type: String) -> Node3D:
 	return current_round
 
 
-func _spawn_local_subjects() -> void:
+func _spawn_local_subjects(assign_configured_verbs: bool = true) -> void:
 	for subject_index: int in local_playtest_config.subject_count:
 		var player_id: int = subject_index + 1
 		LobbyManager.join_lobby(player_id)
@@ -178,10 +223,12 @@ func _spawn_local_subjects() -> void:
 	LobbyManager.open_verb_selection()
 	for subject_index: int in local_playtest_config.subject_count:
 		var player_id: int = subject_index + 1
-		var verb: Enums.VerbType = _select_local_verb(player_id, subject_index)
-		if verb == Enums.VerbType.NONE:
-			push_warning("Game: no unique Verb remains for local Subject %d." % player_id)
-			continue
+		var verb: Enums.VerbType = Enums.VerbType.NONE
+		if assign_configured_verbs:
+			verb = _select_local_verb(player_id, subject_index)
+			if verb == Enums.VerbType.NONE:
+				push_warning("Game: no unique Verb remains for local Subject %d." % player_id)
+				continue
 		var subject: Node3D = player_scene.instantiate() as Node3D
 		if subject == null:
 			continue
