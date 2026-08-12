@@ -1,8 +1,8 @@
 extends Node
 ## Root scene coordinator for the playable greybox.
 ##
-## Game is the composition root: it owns bootstrap, Round scene loading, and
-## temporary local-player spawning until multiplayer spawning is implemented.
+## Game is the composition root: it owns local bootstrap, network Subject
+## composition, and Round scene loading.
 ## TrialCoordinator drives lifecycle state; Game responds by composing the
 ## requested Round scene and keeping presentation nodes out of domain logic.
 
@@ -37,6 +37,8 @@ var active_seed: int = 0
 func _ready() -> void:
 	TrialCoordinator.experiment_requested.connect(_on_experiment_requested)
 	TrialCoordinator.phase_changed.connect(_on_trial_phase_changed)
+	NetworkSession.roster_changed.connect(_on_network_roster_changed)
+	LobbyManager.verb_selected.connect(_on_network_verb_selected)
 	if auto_start_greybox:
 		start_local_playtest()
 
@@ -64,16 +66,56 @@ func restart_local_playtest(use_new_seed: bool) -> void:
 	_build_local_playtest(active_seed)
 
 
+## Hosts an ENet session and enrols this process as Subject 1.
+func host_session(port: int = NetworkSession.DEFAULT_PORT,
+		max_clients: int = NetworkSession.DEFAULT_MAX_CLIENTS,
+		trial_seed: int = local_playtest_config.trial_seed) -> Error:
+	_prepare_session_state()
+	active_seed = trial_seed
+	var error: Error = NetworkSession.host_session(port, max_clients, trial_seed)
+	if error == OK:
+		LobbyManager.open_verb_selection()
+	return error
+
+
+## Joins an ENet host. The authoritative roster creates Subjects on receipt.
+func join_session(address: String,
+		port: int = NetworkSession.DEFAULT_PORT) -> Error:
+	_prepare_session_state()
+	return NetworkSession.join_session(address, port)
+
+
+## Starts the host-authored Trial once every connected Subject has a Verb.
+func start_hosted_trial(duration_override: float = -1.0) -> bool:
+	if not NetworkSession.is_host():
+		return false
+	for player_id: int in LobbyManager.lobby_players:
+		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
+				== Enums.VerbType.NONE:
+			return false
+	var started: bool = TrialCoordinator.start_trial(
+			active_seed, false, duration_override)
+	NetworkSession.publish_now()
+	return started
+
+
 func _build_local_playtest(trial_seed: int) -> void:
-	_teardown_local_playtest()
-	LobbyManager.reset()
-	VerbChainManager.reset()
-	ScoreManager.reset()
-	TrialCoordinator.reset()
+	NetworkSession.shutdown()
+	_prepare_session_state()
+	active_seed = trial_seed
 	seed(trial_seed)
 	_spawn_local_subjects()
 	TrialCoordinator.start_trial(trial_seed, true, -1.0,
 			local_playtest_config.protocol_classification)
+
+
+func _prepare_session_state() -> void:
+	_teardown_local_playtest()
+	LobbyManager.reset()
+	VerbChainManager.reset()
+	ScoreManager.reset()
+	RoundManager.reset()
+	TrialCoordinator.reset()
 
 
 ## Compatibility seam for existing lifetime tests and developer tooling.
@@ -133,6 +175,53 @@ func _spawn_local_subjects() -> void:
 		players_root.add_child(subject)
 		local_subjects.append(subject)
 	local_player = local_subjects[0] if not local_subjects.is_empty() else null
+
+
+func _on_network_roster_changed(player_ids: Array[int]) -> void:
+	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+		return
+	var existing: Dictionary = {}
+	for subject: Node3D in local_subjects:
+		if is_instance_valid(subject):
+			existing[subject.get_multiplayer_authority()] = subject
+	for player_id: int in player_ids:
+		if existing.has(player_id):
+			continue
+		var subject: Node3D = player_scene.instantiate() as Node3D
+		if subject == null:
+			continue
+		subject.name = "NetworkSubject%d" % player_id
+		subject.set_multiplayer_authority(player_id)
+		subject.set("accepts_local_input", player_id == multiplayer.get_unique_id())
+		players_root.add_child(subject)
+		local_subjects.append(subject)
+	for subject: Node3D in local_subjects.duplicate():
+		if not is_instance_valid(subject):
+			local_subjects.erase(subject)
+			continue
+		if subject.get_multiplayer_authority() not in player_ids:
+			players_root.remove_child(subject)
+			subject.queue_free()
+			local_subjects.erase(subject)
+	for subject: Node3D in local_subjects:
+		var verb: Enums.VerbType = VerbChainManager.active_players.get(
+				subject.get_multiplayer_authority(), Enums.VerbType.NONE)
+		subject.call("set_character_identity", verb)
+	local_player = null
+	for subject: Node3D in local_subjects:
+		if subject.get_multiplayer_authority() == multiplayer.get_unique_id():
+			local_player = subject
+			break
+
+
+func _on_network_verb_selected(player_id: int, verb: Enums.VerbType,
+		_seconds_taken: float) -> void:
+	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+		return
+	for subject: Node in local_subjects:
+		if subject.get_multiplayer_authority() == player_id:
+			subject.call("set_character_identity", verb)
+			return
 
 
 func _select_local_verb(player_id: int, subject_index: int) -> Enums.VerbType:

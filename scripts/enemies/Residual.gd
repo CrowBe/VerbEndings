@@ -12,9 +12,9 @@ extends CharacterBody3D
 ## Destabilisations all originate server-side and broadcast via the RPC hooks
 ## below.
 
-## NETWORK: @rpc replication hook — broadcast; PVERound scores it.
+## NETWORK: replication boundary — broadcast; PVERound scores it.
 signal residual_destabilised(residual: Residual, attacker_player_id: int)
-## NETWORK: @rpc replication hook — broadcast for evolution VFX/nameplate.
+## NETWORK: replication boundary — broadcast for evolution VFX/nameplate.
 signal adverb_developed(residual: Residual, adverb: AdverbType)
 signal verb_assumed(residual: Residual, verb: Enums.VerbType)
 
@@ -60,13 +60,13 @@ const VERB_MUTATIONS: Dictionary = {
 }
 
 ## Difficulty scale at spawn time (grows over the round).
-## NETWORK: @rpc replication hook — set at spawn, sync once.
+## NETWORK: replication boundary — set at spawn, sync once.
 var strength_multiplier: float = 1.0
-## NETWORK: @rpc replication hook — sync for Stability readouts.
+## NETWORK: replication boundary — sync for Stability readouts.
 var stability: float = BASE_STABILITY
-## NETWORK: @rpc replication hook — sync for verb glow/nameplate.
+## NETWORK: replication boundary — sync for verb glow/nameplate.
 var verb: Enums.VerbType = Enums.VerbType.NONE
-## NETWORK: @rpc replication hook — sync for behavioural overlay/nameplate.
+## NETWORK: replication boundary — sync for behavioural overlay/nameplate.
 var adverb: AdverbType = AdverbType.NONE
 var adverb_development_time: float = INF
 
@@ -74,7 +74,7 @@ var _attack_timer: float = 0.0
 var _survival_time: float = 0.0
 var _rng := RandomNumberGenerator.new()
 ## Movement slow from a player's FREEZE activation (1.0 = full speed).
-## NETWORK: @rpc replication hook — sync for a frost-tint shader later.
+## NETWORK: replication boundary — sync for a frost-tint shader later.
 var _slow_factor: float = 1.0
 var _slow_timer: float = 0.0
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -94,6 +94,8 @@ func setup(p_strength_multiplier: float, grammar_seed: int = 0) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		return
 	# NETWORK: AI runs on the server only; clients interpolate transforms.
 	_survival_time += delta
 	if adverb == AdverbType.NONE and _survival_time >= adverb_development_time:
@@ -133,7 +135,7 @@ func _physics_process(delta: float) -> void:
 
 
 ## Stability Loss from a player's verb attack.
-## NETWORK: @rpc replication hook — server applies, then broadcasts.
+## NETWORK: replication boundary — server applies, then broadcasts.
 func take_hit(amount: float, attacker_player_id: int) -> void:
 	if stability <= 0.0:
 		return
@@ -148,7 +150,7 @@ func take_hit(amount: float, attacker_player_id: int) -> void:
 
 ## FREEZE control effect: multiply speed down for a duration. Stacking
 ## applications keep the strongest slow and refresh the timer.
-## NETWORK: @rpc replication hook — server applies, broadcast for VFX.
+## NETWORK: replication boundary — server applies, broadcast for VFX.
 func apply_slow(factor: float, duration: float) -> void:
 	_slow_factor = minf(_slow_factor, factor)
 	_slow_timer = maxf(_slow_timer, duration)
@@ -170,7 +172,7 @@ func develop_adverb() -> void:
 
 ## Assumption only occurs on a Subject's Destabilisation and never replaces
 ## an already assumed Verb.
-## NETWORK: @rpc replication hook — server-side, from PVERound's
+## NETWORK: replication boundary — server-side, from PVERound's
 ## Destabilisation hook.
 func assume_verb(victim_verb: Enums.VerbType) -> void:
 	if victim_verb == Enums.VerbType.NONE or verb != Enums.VerbType.NONE:

@@ -11,19 +11,19 @@ extends Node
 ## NETWORK: Everything here is server-authoritative. Eliminations and the
 ## final winner are broadcast via the RPC hooks noted on the signals.
 
-## NETWORK: @rpc replication hook — broadcast so every client swaps to the
+## NETWORK: replication boundary — broadcast so every client swaps to the
 ## Collapse presentation and severs its local chain VFX.
 signal collapse_triggered(participant_ids: Array)
-## NETWORK: @rpc replication hook — broadcast each Elimination for the feed.
+## NETWORK: replication boundary — broadcast each Elimination for the feed.
 signal player_eliminated(player_id: int, survivors_left: int)
-## NETWORK: @rpc replication hook — broadcast the Trial result.
+## NETWORK: replication boundary — broadcast the Trial result.
 signal ultimate_winner_decided(player_id: int)
 
 ## True while The Collapse is running.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var is_active: bool = false
 ## Subjects not yet Eliminated from the Collapse.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var surviving_players: Array[int] = []
 
 
@@ -34,7 +34,7 @@ func reset() -> void:
 
 
 ## Resolves First Place from individual Trial Scores after Round Three.
-## NETWORK: @rpc replication hook — server-side, from the results screen.
+## NETWORK: replication boundary — server-side, from the results screen.
 func resolve_trial_end() -> bool:
 	if RoundManager.current_round_index < RoundManager.TOTAL_ROUNDS:
 		push_warning("CollapseManager: Trial resolution requires three completed Rounds.")
@@ -44,7 +44,7 @@ func resolve_trial_end() -> bool:
 
 ## The Collapse fires only when two or more Subjects share First Place.
 ## Ties below First Place do not affect Trial resolution.
-## NETWORK: @rpc replication hook — server-side, from the results screen.
+## NETWORK: replication boundary — server-side, from the results screen.
 func resolve_trial_scores(trial_scores: Dictionary) -> bool:
 	if trial_scores.is_empty():
 		return false
@@ -67,7 +67,7 @@ func resolve_trial_scores(trial_scores: Dictionary) -> bool:
 
 ## Starts the Collapse. Dissolves all Pairs, forces every participant Solo,
 ## and puts each of them into Overdrive.
-## NETWORK: @rpc replication hook — server executes, then broadcasts the
+## NETWORK: replication boundary — server executes, then broadcasts the
 ## solo-state assignments to every peer.
 func trigger_collapse(participant_ids: Array[int]) -> void:
 	is_active = true
@@ -91,7 +91,7 @@ func trigger_collapse(participant_ids: Array[int]) -> void:
 ## Template hazard callback: connect Collapse hazard Area3D body_entered
 ## signals here (hazard floors, crushers, failing routes).
 ## Eliminates the fallen Subject; the last Subject standing wins outright.
-## NETWORK: @rpc replication hook — hazards overlap on the server only;
+## NETWORK: replication boundary — hazards overlap on the server only;
 ## the resulting elimination is broadcast.
 func _on_player_fall_into_hazard(body: Node3D) -> void:
 	if not is_active or not body.is_in_group("players"):
