@@ -30,9 +30,16 @@ Exit status 124 is expected when `timeout` stops a healthy running process. The 
 
 ## Local Playtest Quick Start
 
-Running the project starts the developer quick start configured by
-`resources/local_playtest.tres`. The resource selects the Experiment Protocol,
-Trial seed, Subject count (one locally controlled Subject and up to eight
+Running the project opens the main menu. `resources/local_playtest.tres`
+configures the local roster, seed, and developer quick start. The menu offers a
+player-facing local Trial plus manual host and join flows. The local flow presents timed unique
+Verb claims for the configured roster, each Pair Draft, authored Experiment
+Briefs, the in-Experiment HUD, Result Announcements, and the final winner.
+Host and join use the entered address and port; the host starts after every
+connected Subject has claimed a Verb.
+
+The resource selects the Experiment Protocol used first by the developer quick
+start, Trial seed, Subject count (one locally controlled Subject and up to eight
 stationary participants), and preferred unique Verb assignments. Invalid or
 duplicate preferred Verbs receive the first available Verb in canonical order.
 
@@ -53,6 +60,18 @@ state. Edit the `.tres` resource in the Godot inspector to change the supported
 configuration without editing source code. This path uses the same domain
 services as the programmatic ENet host/join flow but does not create a
 multiplayer peer.
+
+Run the player-facing Trial presentation suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestTrialPresentation.tscn
+```
+
+It verifies the main menu and local/host/join entry points, timed unique Verb
+claims, authoritative Pair Draft choices and odd-roster Self-Chains,
+classification-free Experiment Briefs, viewport-contained lifecycle screens,
+the Stability/Verb Expression/Objective/Round Score HUD, non-colour Critical
+Stability cues, and individual Result Announcement rankings.
 
 ## Gameplay Tests
 
