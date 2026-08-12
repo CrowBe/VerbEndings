@@ -14,8 +14,9 @@ extends Node
 ##     LEAST Trial Score to most (ScoreManager totals, which persist
 ##     across rounds).
 ##
-## Both lobbies end at the Synced Insertion Vector: a complete partnership
-## must stand on the same platform to launch into the round together.
+## Each completed draft assigns Subjects to the Dispensing Line. Partners use
+## adjacent tubes, while a Self-Chain occupies one tube without a fabricated
+## Partner. Release remains an independent Subject action during the Drop.
 ##
 ## NETWORK: All drafting decisions are server-authoritative. NetworkSession
 ## binds client requests to their RPC sender and validates them here before
@@ -33,11 +34,10 @@ signal draft_started(round_index: int, draft_order: Array)
 signal draft_turn_started(chooser_id: int)
 ## NETWORK: replication boundary — broadcast each locked pairing.
 signal pair_locked(chooser_id: int, target_id: int, chain: Dictionary)
-## NETWORK: replication boundary — the lobby may proceed to the platforms.
+## NETWORK: replication boundary — the lobby may proceed to Laboratory Entry.
 signal draft_completed
-## Both partners are aboard the same Insertion Vector — launch the pod.
-## NETWORK: replication boundary — server confirms, then broadcasts.
-signal insertion_vector_launched(vector_id: int, player_ids: Array)
+## NETWORK: replication boundary — broadcast the complete Subject-to-tube map.
+signal dispensing_line_assigned(tube_assignments: Dictionary)
 
 ## Everyone currently in the lobby.
 ## NETWORK: replication boundary — sync to all peers.
@@ -57,9 +57,9 @@ var _claimed_identities: Dictionary = {}
 var _selection_open_msec: int = -1
 ## player_id -> seconds they took to lock a verb.
 var _verb_pick_seconds: Dictionary = {}
-## Insertion Vector occupancy: vector_id -> Array of player_ids aboard.
-## NETWORK: server-authoritative; derived from replicated player positions.
-var _vector_occupants: Dictionary = {}
+## Subject id -> zero-based Dispensing Line tube index for the current Round.
+## NETWORK: server-authoritative; replicate after every completed Pair Draft.
+var dispensing_line_tubes: Dictionary = {}
 
 
 ## Clears local Trial state before rebuilding a roster.
@@ -70,7 +70,7 @@ func reset() -> void:
 	_claimed_identities.clear()
 	_selection_open_msec = -1
 	_verb_pick_seconds.clear()
-	_vector_occupants.clear()
+	dispensing_line_tubes.clear()
 
 
 ## A player enters the lobby with no verb selected yet.
@@ -88,6 +88,7 @@ func join_lobby(player_id: int) -> void:
 func release_player(player_id: int) -> void:
 	lobby_players.erase(player_id)
 	draft_queue.erase(player_id)
+	dispensing_line_tubes.erase(player_id)
 	_verb_pick_seconds.erase(player_id)
 	for verb: Enums.VerbType in _claimed_identities.keys():
 		if _claimed_identities[verb] == player_id:
@@ -238,40 +239,9 @@ func request_pairing(chooser_id: int, target_id: int) -> bool:
 	return true
 
 
-## --- Synced Insertion Vector -------------------------------------------
-## Platforms (see scenes/InsertionVector.tscn) report bodies stepping on and
-## off. When a full partnership stands on one platform, it launches.
-
-## NETWORK: replication boundary — occupancy is derived server-side from
-## authoritative positions; clients never report their own occupancy.
-func notify_vector_entered(vector_id: int, player_id: int) -> void:
-	var occupants: Array = _vector_occupants.get_or_add(vector_id, [])
-	if player_id not in occupants:
-		occupants.append(player_id)
-	_check_synced_launch(vector_id)
-
-
-func notify_vector_exited(vector_id: int, player_id: int) -> void:
-	if _vector_occupants.has(vector_id):
-		_vector_occupants[vector_id].erase(player_id)
-
-
-## Launches the platform only when a complete chain is aboard: both partners
-## for a normal chain, or the lone player for a Self-Chain.
-func _check_synced_launch(vector_id: int) -> void:
-	var occupants: Array = _vector_occupants.get(vector_id, [])
-	for player_id: int in occupants:
-		var partner_id: int = VerbChainManager.get_partner_id(player_id)
-		if partner_id == -1:
-			continue
-		var synced: bool = partner_id == player_id or partner_id in occupants
-		if synced:
-			var pod: Array = [player_id] if partner_id == player_id \
-					else [player_id, partner_id]
-			for rider: int in pod:
-				occupants.erase(rider)
-			insertion_vector_launched.emit(vector_id, pod)
-			return
+## Returns the current Round's tube for one Subject, or -1 before assignment.
+func get_dispensing_line_tube(player_id: int) -> int:
+	return dispensing_line_tubes.get(player_id, -1)
 
 
 ## Any player who never locked a verb gets a random leftover. They forfeited
@@ -316,7 +286,30 @@ func _advance_draft_turn() -> void:
 		draft_turn_started.emit(candidate)
 		return
 	draft_queue.clear()
+	_assign_dispensing_line_tubes()
 	draft_completed.emit()
+
+
+## Assigns each complete Verb Chain as one contiguous tube group. Iterating the
+## sorted roster makes the layout deterministic while keeping every Pair
+## adjacent and allowing the architectural ceiling of 24 Subjects.
+func _assign_dispensing_line_tubes() -> void:
+	dispensing_line_tubes.clear()
+	var ordered_players: Array[int] = lobby_players.duplicate()
+	ordered_players.sort()
+	var next_tube: int = 0
+	for player_id: int in ordered_players:
+		if dispensing_line_tubes.has(player_id):
+			continue
+		var partner_id: int = VerbChainManager.get_partner_id(player_id)
+		if partner_id == -1:
+			continue
+		dispensing_line_tubes[player_id] = next_tube
+		next_tube += 1
+		if partner_id != player_id:
+			dispensing_line_tubes[partner_id] = next_tube
+			next_tube += 1
+	dispensing_line_assigned.emit(dispensing_line_tubes.duplicate())
 
 
 func _is_paired(player_id: int) -> bool:

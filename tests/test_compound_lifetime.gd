@@ -66,10 +66,11 @@ func _test_repeated_round_switching(failures: Array[String]) -> void:
 	config.initial_verbs = [Enums.VerbType.BURN]
 	game.local_playtest_config = config
 	game.start_local_playtest()
-	var expected_position: Vector3 = compound.get_laboratory(
-			&"AdaptiveContainment").to_global(Vector3(0.0, 1.0, 16.0))
-	_expect(game.local_player.global_position.is_equal_approx(expected_position),
-			"Round switching must preserve correct Subject placement", failures)
+	var tube_index: int = LobbyManager.get_dispensing_line_tube(1)
+	var expected_transform: Transform3D = compound.get_drop_socket_transform(
+			&"AdaptiveContainment", tube_index)
+	_expect(game.local_player.global_transform.is_equal_approx(expected_transform),
+			"Round switching must preserve the assigned Drop socket", failures)
 	game.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame

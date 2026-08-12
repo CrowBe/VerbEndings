@@ -43,6 +43,11 @@ func _run() -> void:
 			and game.local_subjects[1].paired_partner_id == 1,
 			"the Pair shares reciprocal Partner state")
 	_expect(VerbChainManager.get_partner_id(3) == 3, "the odd Subject Self-Chains")
+	_expect(abs(LobbyManager.get_dispensing_line_tube(1) \
+			- LobbyManager.get_dispensing_line_tube(2)) == 1,
+			"Partners receive adjacent Dispensing Line tubes")
+	_expect(LobbyManager.get_dispensing_line_tube(3) >= 0,
+			"a Self-Chain receives one real Dispensing Line tube")
 	_expect(game.local_subjects[0].accepts_local_input, "one Subject accepts local input")
 	_expect(not game.local_subjects[1].accepts_local_input,
 			"additional Subjects remain stationary")
