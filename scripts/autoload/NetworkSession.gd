@@ -174,6 +174,7 @@ func state_digest() -> Dictionary:
 		"winner_id": TrialCoordinator.get_winner_id(),
 		"collapse_active": CollapseManager.is_active,
 		"collapse_survivors": CollapseManager.surviving_players.duplicate(),
+		"facility_state": FacilityStateLedger.snapshot(false),
 		"subjects": _subject_gameplay_digest(),
 	}
 
@@ -404,6 +405,7 @@ func _apply_snapshot(snapshot: Dictionary) -> void:
 			snapshot.get("winner_id", -1))
 	CollapseManager.is_active = snapshot.get("collapse_active", false)
 	CollapseManager.surviving_players.assign(snapshot.get("collapse_survivors", []))
+	FacilityStateLedger.apply_replicated_snapshot(snapshot.get("facility_state", {}))
 	_apply_subject_snapshots(snapshot.get("subjects", []))
 	if previous_phase != TrialCoordinator.current_phase:
 		TrialCoordinator.phase_changed.emit(TrialCoordinator.current_phase,

@@ -216,6 +216,18 @@ distinct and recoverable Landing strategies per Laboratory, route redundancy,
 hooks, normal-Round confinement, retained Laboratory node identity, environment
 kit naming and origins, metric contracts, and Godot-owned collision.
 
+Run the facility state ledger suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestFacilityStateLedger.tscn
+```
+
+It verifies deterministic named transitions across the four presentation
+layers, retained authored Laboratory state, ordered prop thresholds,
+cosmetic-only structural state, explicit collision state, final-route preservation,
+Objective-safe and non-restorative event overlays, overlay channel conflict
+rejection, and Compound consumption of accepted transitions.
+
 Run the Material Dispenser visual-boundary suite with:
 
 ```bash
