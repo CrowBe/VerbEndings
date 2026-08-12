@@ -41,6 +41,8 @@ var laboratory_transit: LaboratoryTransit = null
 func _ready() -> void:
 	TrialCoordinator.experiment_requested.connect(_on_experiment_requested)
 	TrialCoordinator.phase_changed.connect(_on_trial_phase_changed)
+	CollapseManager.collapse_stage_changed.connect(_on_collapse_stage_changed)
+	CollapseManager.collapse_state_replicated.connect(_apply_collapse_composition)
 	NetworkSession.roster_changed.connect(_on_network_roster_changed)
 	LobbyManager.verb_selected.connect(_on_network_verb_selected)
 	laboratory_transit = LABORATORY_TRANSIT_SCRIPT.new() as LaboratoryTransit
@@ -173,6 +175,7 @@ func _build_local_playtest(trial_seed: int) -> void:
 func _prepare_session_state() -> void:
 	if laboratory_transit != null:
 		laboratory_transit.cancel()
+	compound.reset_collapse(local_subjects)
 	_teardown_local_playtest()
 	LobbyManager.reset()
 	VerbChainManager.reset()
@@ -345,6 +348,46 @@ func _on_trial_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
 		if not laboratory_transit.begin_recall(
 				compound, laboratory_id, local_subjects):
 			_on_recall_completed()
+	elif phase == TrialCoordinator.Phase.COLLAPSE:
+		_apply_collapse_composition()
+
+
+func _on_collapse_stage_changed(stage: CollapseManager.Stage,
+		laboratory_id: StringName) -> void:
+	match stage:
+		CollapseManager.Stage.PROTECTED_ORIENTATION:
+			compound.begin_collapse(
+					CollapseManager.entry_assignments, local_subjects)
+		CollapseManager.Stage.PERIMETER_ROUTES_OPEN:
+			compound.open_collapse_perimeter_routes(local_subjects)
+		CollapseManager.Stage.CORE_SHORTCUTS_OPEN:
+			compound.open_collapse_core_shortcuts()
+		CollapseManager.Stage.FAILURE_TELEGRAPH:
+			compound.telegraph_collapse_failure(laboratory_id)
+		CollapseManager.Stage.FAILURE_ACTIVE:
+			compound.apply_collapse_failure(laboratory_id)
+
+
+func _apply_collapse_composition() -> void:
+	if TrialCoordinator.current_phase != TrialCoordinator.Phase.COLLAPSE \
+			or CollapseManager.entry_assignments.is_empty():
+		return
+	compound.begin_collapse(CollapseManager.entry_assignments, local_subjects)
+	if CollapseManager.elapsed_seconds >= CollapseManager.ORIENTATION_SECONDS:
+		compound.open_collapse_perimeter_routes(local_subjects)
+	if CollapseManager.elapsed_seconds >= CollapseManager.CORE_SHORTCUT_SECONDS:
+		compound.open_collapse_core_shortcuts()
+	for laboratory_id: StringName in Compound.LABORATORY_IDS:
+		if not FacilityStateLedger.laboratories.has(laboratory_id):
+			continue
+		var laboratory_state: Dictionary = FacilityStateLedger.laboratories[
+				laboratory_id]
+		if laboratory_state.round_stage == &"containment_failure":
+			compound.telegraph_collapse_failure(laboratory_id)
+			compound.apply_collapse_failure(laboratory_id)
+	if not CollapseManager.telegraphed_laboratory.is_empty():
+		compound.telegraph_collapse_failure(
+				CollapseManager.telegraphed_laboratory)
 
 
 func _on_laboratory_entry_completed() -> void:
