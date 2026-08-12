@@ -11,6 +11,8 @@ script = ExtResource("1_compound")
 
 [node name="DispensingLine" type="Node3D" parent="AssignmentDeck"]
 
+[node name="CollapseSeals" type="Node3D" parent="AssignmentDeck"]
+
 [node name="SightlineTargets" type="Node3D" parent="AssignmentDeck"]
 
 [node name="ResearcherBoothReserved" type="Marker3D" parent="AssignmentDeck"]
@@ -19,6 +21,10 @@ position = Vector3(0, 6, -17)
 [node name="SeparatorSpines" type="Node3D" parent="."]
 
 [node name="PerimeterMaintenanceRoute" type="Node3D" parent="."]
+
+[node name="CollapseEntrySockets" type="Node3D" parent="."]
+
+[node name="CollapseHazards" type="Node3D" parent="."]
 
 [node name="DomeShell" type="Node3D" parent="."]
 

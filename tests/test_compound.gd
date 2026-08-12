@@ -588,8 +588,8 @@ func _test_cross_layer_sightlines(
 								and collision_body.collision_layer == 1,
 						"%s normal-Round route shutters must remain closed and collidable"
 						% laboratory_id, failures)
-		_expect(shutter_count == 2,
-				"%s must retain both authored route shutters"
+		_expect(shutter_count == 4,
+				"%s must retain all four authored route shutters"
 				% laboratory_id, failures)
 
 

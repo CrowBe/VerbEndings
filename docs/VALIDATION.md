@@ -228,6 +228,17 @@ cosmetic-only structural state, explicit collision state, final-route preservati
 Objective-safe and non-restorative event overlays, overlay channel conflict
 rejection, and Compound consumption of accepted transitions.
 
+Run the Compound-wide Collapse suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestCollapseCompound.tscn
+```
+
+It verifies reproducible and unique fair entry sockets, comparable initial
+hazard exposure, protected orientation, Assignment Deck sealing, staged
+perimeter and Core access, warned facility-ledger failures, route redundancy,
+permanent Elimination, and deterministic simultaneous final Eliminations.
+
 Run the Material Dispenser visual-boundary suite with:
 
 ```bash
