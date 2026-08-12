@@ -52,6 +52,12 @@ func _run() -> void:
 	_expect(not game.local_subjects[1].accepts_local_input,
 			"additional Subjects remain stationary")
 	_expect(game.local_subjects[2].is_overdrive, "the Self-Chain receives Overdrive")
+	var release_event := InputEventAction.new()
+	release_event.action = &"jump"
+	release_event.pressed = true
+	game._unhandled_input(release_event)
+	_expect(game.laboratory_transit._released.get(1, false),
+			"local Release uses the controlled Subject id without a multiplayer peer")
 
 	var first_verbs: Dictionary = VerbChainManager.active_players.duplicate()
 	game.restart_local_playtest(false)

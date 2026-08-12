@@ -141,8 +141,6 @@ func request_release() -> void:
 		# still validates the authoritative Release before simulating the Drop.
 		release_requested.emit(multiplayer.get_unique_id())
 		_request_action.rpc_id(1, &"release")
-	else:
-		release_requested.emit(multiplayer.get_unique_id())
 
 
 func get_movement_intent(player_id: int) -> Vector2:
