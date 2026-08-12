@@ -21,6 +21,8 @@ docs/art/               # Art bible, briefs, contact sheets, naming references
 
 Use lowercase snake_case filenames and matching concept names between source and export files. Runtime scenes reference exported files, never source files.
 
+[`docs/art/REFERENCE_ASSET_MAP.md`](art/REFERENCE_ASSET_MAP.md) records the current reference coverage for the complete 3D portfolio and distinguishes Integrated Production, Production Source, Context Reference, Greybox Contract, and Uncovered evidence. Those labels describe reference coverage; they do not replace the runtime-readiness levels below.
+
 ## Asset Readiness
 
 An asset has one of four readiness levels:
