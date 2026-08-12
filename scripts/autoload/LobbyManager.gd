@@ -127,6 +127,25 @@ func get_selectable_verbs(filter_text: String = "") -> Array[Dictionary]:
 ## NETWORK: @rpc replication hook — becomes @rpc("any_peer", "reliable");
 ## the SERVER clock stamps the pick, never the client's.
 func select_verb(player_id: int, verb: Enums.VerbType) -> bool:
+	var seconds_taken: float = (Time.get_ticks_msec() - _selection_open_msec) / 1000.0
+	return _select_verb(player_id, verb, seconds_taken)
+
+
+## Trusted local-development seam. Quick-start Subjects have no human pick
+## latency, so they all receive the same authored duration and deterministic
+## Subject-id tie-break instead of inheriting machine scheduling jitter.
+func select_verb_for_local_playtest(
+	player_id: int,
+	verb: Enums.VerbType,
+) -> bool:
+	return _select_verb(player_id, verb, 0.0)
+
+
+func _select_verb(
+	player_id: int,
+	verb: Enums.VerbType,
+	seconds_taken: float,
+) -> bool:
 	if _selection_open_msec < 0:
 		push_warning("LobbyManager: verb selection is not open.")
 		return false
@@ -143,7 +162,6 @@ func select_verb(player_id: int, verb: Enums.VerbType) -> bool:
 
 	_claimed_identities[verb] = player_id
 	VerbChainManager.register_player(player_id, verb)
-	var seconds_taken: float = (Time.get_ticks_msec() - _selection_open_msec) / 1000.0
 	_verb_pick_seconds[player_id] = seconds_taken
 	verb_selected.emit(player_id, verb, seconds_taken)
 	return true

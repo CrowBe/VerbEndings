@@ -10,7 +10,7 @@ VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Ga
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. Local automatic selections share a zero-duration pick time, so Round One uses the stable Subject-id tie-break instead of machine scheduling time. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
 
 ## Compound And Environment Kit
 
