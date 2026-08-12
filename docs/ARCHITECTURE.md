@@ -10,7 +10,7 @@ VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Ga
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. Local automatic selections share a zero-duration pick time, so Round One uses the stable Subject-id tie-break instead of machine scheduling time. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
 
 ## Compound And Environment Kit
 
@@ -51,7 +51,9 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 Experiment Protocols are authored resources containing an Objective, hazards, scoring rules, completion condition, and an internal development classification. The Semantic Engine authority in `RoundManager` selects a deterministic three-Protocol sequence from a Trial seed and derives each Experiment Brief from the selected resource.
 
-`PuzzleRound` executes the Precision Assembly Protocol. It scatters a configurable number of physics puzzle units — at least five, eight by default — cycling through five unit types, dispenses Material through a visible Semantic Engine apparatus, and ranks Players by completed-unit contributions. Dispensing stops while the Semantic Engine is offline during the Collapse. The unit types are:
+`EnvironmentRound` executes the Sustained Exposure Protocol in the Applied Attrition Laboratory. It applies configurable continuous atmospheric Stability Loss through the Subject hazard path, suppressing Impact shedding so only the Semantic Engine and authored housings supply Material. It records each Subject's survival time and Material absorbed, then ranks an authored weighted blend of both measures. Two elevated dispensers require named traversal routes, and two breakable hero-prop housings provide a damage route to Material. Dispensing stops while the Semantic Engine is offline during the Collapse.
+
+The controller scatters at least one of each of the following physics apparatuses as obstacles and traversal tools:
 
 - Momentum Turbine;
 - Counterweight Plate;
@@ -59,7 +61,7 @@ Experiment Protocols are authored resources containing an Objective, hazards, sc
 - Gravity Funnel; and
 - Domino Tower.
 
-`PuzzleUnit` provides shared contribution tracking, Verb power modifiers, completion signals, and helpers for procedural physics bodies.
+`PuzzleUnit` provides Verb power modifiers, internal apparatus progress, and helpers for procedural physics bodies. Apparatus interaction does not track contributors, award points, or complete the Experiment. The Sustained Exposure Protocol authors a hazard, route, or housing answer for each of the nine Verbs.
 
 `PVERound` executes the Adaptive Containment Protocol. It spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
 
@@ -76,21 +78,20 @@ All three Round controllers emit an ordered list when asked to end. None control
 | Autoload services | Cross-scene roster, chain, score, Round, and final-resolution state | Render geometry and per-frame actor simulation |
 | Round controllers | Experiment-local spawning, scoring inputs, ordering, cleanup | Verb Selection and persistent Trial presentation |
 | Actors | Input, movement, Impacts, Verb effects, actor-local state | Trial ranking and Round selection |
-| Puzzle units | One physics interaction and its contributors | Global score and Trial state |
+| Environment apparatus | One physics interaction and its local state | Subject contribution tracking, global score and Trial state |
 
 ## Current Capability Boundary
 
-The repository provides a deterministic local gameplay quick start and domain service prototypes. It does not currently provide an end-to-end canonical Trial. In particular:
+The repository provides a deterministic local gameplay quick start and a presentation-independent canonical three-Round lifecycle. The following capability boundaries remain:
 
-- the implemented Puzzle Experiment predates the Applied Attrition Laboratory charter in `CONTEXT.md`, so `PuzzleRound`, the `precision_assembly` Protocol resource, and the `PUZZLE` classification still score unit completion rather than survival;
-- Material dispensing is currently wired only into that Experiment;
+- Material dispensing and breakable Material housings are wired into Sustained Exposure; other Experiments rely on Impact shedding;
 - the Pair Draft has entry points for all three Rounds;
 - the local quick start configures one Protocol and a roster of one locally controlled Subject plus optional stationary participants; it is isolated from the unimplemented production host/join path;
 - the insertion platform is not the canonical Drop sequence, and no Round scene instances it;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place; the local runtime automatically advances the complete three-Round lifecycle, while physical Drop, Recall, announcement, and Thematic Moment presentation remain unimplemented;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
 - development classifications still key the scoring tables and travel in `RoundManager`'s transition signal, so any consumer of that signal must keep them out of player-facing text;
-- Material shedding and puzzle-unit scatter positions use the global random stream rather than the Trial seed;
+- Material shedding and Environment apparatus scatter positions use the global random stream, which the local quick start seeds from the Trial seed but multiplayer authority does not yet replicate;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
 - the Dispensing Line, Drop, Recall and Result Announcement presentation, and Thematic Moments remain design contracts only; and
 - multiplayer transport, replication, deterministic scenarios, UI, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.

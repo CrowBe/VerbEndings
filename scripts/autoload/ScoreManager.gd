@@ -18,7 +18,7 @@ signal trial_ranking_updated(trial_ranking: Array)
 const PLACEMENT_TABLES: Dictionary = {
 	"PVP": [100, 80, 60, 45, 30, 15],
 	"PVE": [90, 75, 60, 45, 30, 15],
-	"PUZZLE": [110, 85, 60, 40, 25, 10],
+	"ENVIRONMENT": [110, 85, 60, 40, 25, 10],
 }
 
 ## Bonus events per round type: reason -> points.
@@ -31,12 +31,7 @@ const BONUS_EVENTS: Dictionary = {
 		"swarm_kill": 8,
 		"survival_tick": 3,
 	},
-	"PUZZLE": {
-		"mechanism_solved": 15,
-		"no_hint_clear": 30,
-		"speed_bonus": 20,
-		"unit_complete": 10,
-	},
+	"ENVIRONMENT": {},
 }
 
 ## Cumulative totals: player_id -> points. Never reset between rounds.

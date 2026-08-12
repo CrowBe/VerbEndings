@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ExperimentProtocol" load_steps=2 format=3]
+
+[ext_resource path="res://scripts/resources/ExperimentProtocol.gd" type="Script" id="1"]
+
+[resource]
+script = ExtResource("1")
+protocol_id = &"sustained_exposure"
+display_name = "Sustained Exposure"
+objective = "Hold your form by securing the Semantic Engine's limited Material supply."
+hazards = Array[String](["Continuous atmospheric Stability Loss", "Elevated Material routes", "Moving apparatus"])
+scoring_rules = {"material_weight": 0.35, "placement": "survival_time_and_material_secured", "survival_weight": 1.0}
+verb_answers = {"Bounce": "Bank from the Gravity Funnel rim to reach an elevated dispenser.", "Burn": "Break a hero-prop housing to release Material.", "Freeze": "Control the Gravity Funnel and Momentum Turbine routes.", "Grow": "Move Counterweight Plate loads and break a hero-prop housing.", "Jump": "Leap directly towards an elevated dispensing platform.", "Rewind": "Retry a hazardous apparatus crossing from an earlier safe position.", "Roll": "Drive the Momentum Turbine and carry speed into a dispenser approach.", "Shield": "Cross atmospheric exposure while Shield absorbs Stability Loss.", "Stretch": "Lunge across a gap or reach a Wrecking Pendulum approach."}
+completion_condition = "The exposure timer expires."
+duration_seconds = 180.0
+completion_mode = "TIMER"
+classification = "ENVIRONMENT"

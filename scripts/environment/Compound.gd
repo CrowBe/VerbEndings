@@ -6,17 +6,17 @@ const KIT_PIECE_SCENE: PackedScene = preload(
 		"res://scenes/environment/EnvironmentKitPiece.tscn")
 
 const LABORATORY_IDS: Array[StringName] = [
-	&"AppliedCausality",
+	&"AppliedAttrition",
 	&"CompetitiveStress",
 	&"AdaptiveContainment",
 ]
 const LABORATORY_NODE_NAMES: Dictionary = {
-	&"AppliedCausality": &"AppliedCausalityLaboratory",
+	&"AppliedAttrition": &"AppliedAttritionLaboratory",
 	&"CompetitiveStress": &"CompetitiveStressLaboratory",
 	&"AdaptiveContainment": &"AdaptiveContainmentLaboratory",
 }
 const LABORATORY_APPARATUS: Dictionary = {
-	&"AppliedCausality": &"ElevatedDispensingArmature",
+	&"AppliedAttrition": &"ElevatedDispensingArmature",
 	&"CompetitiveStress": &"ReinforcedImpactCrucible",
 	&"AdaptiveContainment": &"SpecimenDeliveryColumn",
 }
@@ -52,7 +52,7 @@ func _ready() -> void:
 	_build_separator_spines()
 	_build_perimeter_route()
 	_build_dome_shell()
-	select_active_laboratory(&"AppliedCausality")
+	select_active_laboratory(&"AppliedAttrition")
 	set_process(false)
 
 
@@ -319,7 +319,7 @@ func _build_lab_apparatus(
 ) -> void:
 	var apparatus: Node3D = laboratory.get_node("DominantApparatus")
 	apparatus.name = LABORATORY_APPARATUS[laboratory_id]
-	if laboratory_id == &"AppliedCausality":
+	if laboratory_id == &"AppliedAttrition":
 		_add_piece(apparatus, &"ArmatureSupport",
 				EnvironmentKitPiece.Kind.COLUMN, Vector3(5.0, 12.0, 5.0),
 				Vector3(0.0, 5.5, 0.0), 0.0, COLOUR_HEAVY)

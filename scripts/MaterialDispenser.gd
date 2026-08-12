@@ -7,6 +7,9 @@ const MATERIAL_SCENE: PackedScene = preload("res://scenes/Material.tscn")
 
 @export_range(0.1, 60.0, 0.1) var dispense_interval: float = 12.0
 @export_range(0.0, 100.0, 0.1) var dispense_amount: float = 15.0
+## Every Applied Attrition dispenser names the non-walking route required to
+## reach it. The controller validates that it is also physically elevated.
+@export var traversal_route: StringName = &""
 
 @onready var dispense_socket: Marker3D = $DispenseSocket
 

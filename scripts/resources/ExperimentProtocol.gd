@@ -7,6 +7,9 @@ extends Resource
 @export_multiline var objective: String
 @export var hazards: Array[String] = []
 @export var scoring_rules: Dictionary = {}
+## Authored Subject-facing affordances keyed by canonical Verb name. Round
+## controllers may expose these as guidance without revealing classifications.
+@export var verb_answers: Dictionary = {}
 @export_multiline var completion_condition: String
 ## Machine-readable lifecycle data consumed by TrialCoordinator. The prose
 ## condition remains the player-facing explanation used by Experiment Briefs.
@@ -15,7 +18,7 @@ extends Resource
 var completion_mode: String = "TIMER"
 @export var includes_thematic_moment: bool = false
 ## Internal development/marketing classification. Never show this to Players.
-@export_enum("PVP", "PVE", "PUZZLE") var classification: String = "PUZZLE"
+@export_enum("PVP", "PVE", "ENVIRONMENT") var classification: String = "ENVIRONMENT"
 
 
 func experiment_brief() -> String:

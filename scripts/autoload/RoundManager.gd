@@ -32,7 +32,7 @@ signal round_banner_requested(text: String)
 const PROTOCOLS: Array[ExperimentProtocol] = [
 	preload("res://resources/protocols/competitive_stress.tres"),
 	preload("res://resources/protocols/adaptive_containment.tres"),
-	preload("res://resources/protocols/precision_assembly.tres"),
+	preload("res://resources/protocols/sustained_exposure.tres"),
 ]
 const TOTAL_ROUNDS: int = 3
 
@@ -142,7 +142,7 @@ func is_trial_complete() -> bool:
 	return current_round_index >= TOTAL_ROUNDS
 
 
-## Subject-versus-Subject Impacts are only legal during a PVP round; PUZZLE
+## Subject-versus-Subject Impacts are only legal during a PVP round; ENVIRONMENT
 ## and PVE rounds disable all Subject-on-Subject interference. Impact systems
 ## (see Player.apply_impact) consult this before applying anything.
 func is_pvp_enabled() -> bool:
