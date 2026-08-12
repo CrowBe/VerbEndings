@@ -3,9 +3,8 @@ extends Node
 ##
 ## Game is the composition root: it owns bootstrap, Round scene loading, and
 ## temporary local-player spawning until multiplayer spawning is implemented.
-## It does not drive the three-Round Trial lifecycle; RoundManager owns
-## Protocol selection and Game adopts the selected Protocol only when its
-## classification matches the requested Round.
+## TrialCoordinator drives lifecycle state; Game responds by composing the
+## requested Round scene and keeping presentation nodes out of domain logic.
 
 const DEFAULT_PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
 const DEFAULT_LOCAL_CONFIG: LocalPlaytestConfig = preload("res://resources/local_playtest.tres")
@@ -36,6 +35,8 @@ var active_seed: int = 0
 
 
 func _ready() -> void:
+	TrialCoordinator.experiment_requested.connect(_on_experiment_requested)
+	TrialCoordinator.phase_changed.connect(_on_trial_phase_changed)
 	if auto_start_greybox:
 		start_local_playtest()
 
@@ -68,14 +69,11 @@ func _build_local_playtest(trial_seed: int) -> void:
 	LobbyManager.reset()
 	VerbChainManager.reset()
 	ScoreManager.reset()
-	if not RoundManager.queue_local_protocol(
-			local_playtest_config.protocol_classification, trial_seed):
-		return
+	TrialCoordinator.reset()
 	seed(trial_seed)
-	var round_type: String = RoundManager.advance_to_next_round()
 	_spawn_local_subjects()
-	_pair_local_roster()
-	load_round(round_type)
+	TrialCoordinator.start_trial(trial_seed, true, -1.0,
+			local_playtest_config.protocol_classification)
 
 
 ## Compatibility seam for existing lifetime tests and developer tooling.
@@ -150,10 +148,6 @@ func _select_local_verb(player_id: int, subject_index: int) -> Enums.VerbType:
 	return Enums.VerbType.NONE
 
 
-func _pair_local_roster() -> void:
-	VerbChainManager.auto_pair_all_players()
-
-
 func _teardown_local_playtest() -> void:
 	if current_round != null:
 		round_root.remove_child(current_round)
@@ -165,6 +159,24 @@ func _teardown_local_playtest() -> void:
 			subject.queue_free()
 	local_subjects.clear()
 	local_player = null
+
+
+func _on_experiment_requested(_round_index: int, protocol: ExperimentProtocol) -> void:
+	var controller: Node3D = load_round(protocol.classification)
+	if controller == null:
+		return
+	if protocol.classification == "PVE":
+		controller.set("grammar_seed", active_seed + RoundManager.current_round_index)
+	TrialCoordinator.set_active_round_controller(controller)
+
+
+func _on_trial_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
+		_protocol: ExperimentProtocol) -> void:
+	if phase != TrialCoordinator.Phase.RECALL or current_round == null:
+		return
+	round_root.remove_child(current_round)
+	current_round.queue_free()
+	current_round = null
 
 
 func _place_local_subjects_for_round(round_type: String) -> void:

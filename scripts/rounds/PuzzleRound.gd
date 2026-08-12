@@ -86,6 +86,8 @@ func _on_unit_completed(_unit: PuzzleUnit, contributor_ids: Array) -> void:
 		completion_counts[player_id] = completion_counts.get(player_id, 0) + 1
 		ScoreManager.award_bonus(player_id, "PUZZLE", "unit_complete")
 		completion_scored.emit(player_id, completion_counts[player_id])
+	if get_completed_unit_count() == _units.size():
+		TrialCoordinator.notify_completion_condition("all_objectives")
 
 
 func _pick_clear_position(placed: Array[Vector3]) -> Vector3:

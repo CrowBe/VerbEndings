@@ -10,4 +10,6 @@ objective = "Complete distributed mechanisms through coordinated Verb use."
 hazards = Array[String](["Unstable mechanisms", "Time pressure"])
 scoring_rules = {"unit_complete": 10, "placement": "completion_count"}
 completion_condition = "The Experiment timer expires."
+duration_seconds = 180.0
+completion_mode = "TIMER_OR_ALL_OBJECTIVES"
 classification = "PUZZLE"
