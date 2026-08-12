@@ -1,0 +1,128 @@
+{
+  "generator": {
+    "family": "BFL FLUX",
+    "basis": "User-confirmed generation source; exact FLUX job identifier, model-version pin and prompt were not recoverable from local media metadata or searchable session history."
+  },
+  "source_video": {
+    "path": "docs/art/intro/flux/verbendings_intro_third_pass.mp4",
+    "bytes": 20532753,
+    "sha256": "00fafb7706e6e64d37b71dbecb7beebf01fa014143a0fffea6383ee539c94bd1",
+    "original_local_path": "/home/crowclaws/Downloads/_home_crowclaws_.openclaw_workspace_repos_VerbEndings_docs_art_intro_verbendings_intro_third_pass.mp4",
+    "media_probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 704,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "24/1"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "44100",
+          "channels": 1,
+          "channel_layout": "mono",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "20.041667",
+        "size": "20532753",
+        "bit_rate": "8196026"
+      }
+    }
+  },
+  "derived_contact_sheet": {
+    "path": "docs/art/intro/flux/contact_sheet.png",
+    "bytes": 563934,
+    "sha256": "d4c655e954271a2e7b585915348c3b3c0a08f9ef11f53eef6b9395bd53291d92",
+    "sample_times_seconds": [
+      0,
+      4,
+      8,
+      12,
+      16
+    ],
+    "dimensions": [
+      2000,
+      248
+    ]
+  },
+  "derived_frames": [
+    {
+      "path": "docs/art/intro/flux/frames/frame_00s.png",
+      "bytes": 788536,
+      "sha256": "5a33c49c0c4022f5aabe641c2b5853c105b5ac5e1d995307da966bca404bdd42",
+      "sample_time_seconds": 0,
+      "dimensions": [
+        1280,
+        704
+      ]
+    },
+    {
+      "path": "docs/art/intro/flux/frames/frame_04s.png",
+      "bytes": 663006,
+      "sha256": "ddf7d898c621ac2e2f0b94d382a405cf79f54e929f9c3f9074970074415471b9",
+      "sample_time_seconds": 4,
+      "dimensions": [
+        1280,
+        704
+      ]
+    },
+    {
+      "path": "docs/art/intro/flux/frames/frame_08s.png",
+      "bytes": 622142,
+      "sha256": "38e633c2177982da5a6006a86145e3e922bd090546f8e53dceec5a90acc51dc9",
+      "sample_time_seconds": 8,
+      "dimensions": [
+        1280,
+        704
+      ]
+    },
+    {
+      "path": "docs/art/intro/flux/frames/frame_12s.png",
+      "bytes": 697025,
+      "sha256": "bea61cfbec93105b689466d534d2f04a0dc912bcc62705a82e4df7127ae5e64b",
+      "sample_time_seconds": 12,
+      "dimensions": [
+        1280,
+        704
+      ]
+    },
+    {
+      "path": "docs/art/intro/flux/frames/frame_16s.png",
+      "bytes": 1104714,
+      "sha256": "f37ee308475afcf3ef0955b6b97922658605f52c7c388e00ba581ccd17fa7aae",
+      "sample_time_seconds": 16,
+      "dimensions": [
+        1280,
+        704
+      ]
+    }
+  ],
+  "visual_disposition": {
+    "role": "Retained third-pass generation source and production evidence; not the selected runtime placeholder.",
+    "accepted_elements": [
+      "Compound interior and elevated Researcher context",
+      "Semantic Engine machinery and forming area",
+      "cyan, green and pink Subject colour sequence",
+      "synchronised generated audio retained in the MP4"
+    ],
+    "blocking_canon_difference": "The ending presents three Subjects at adjacent outlets rather than visibly forming them sequentially through one shared nozzle and one landing pad."
+  },
+  "historical_selected_placeholder": {
+    "repository_commit": "fb98588ffa4c841ca26338333b1139046941d770",
+    "repository_path": "assets/video/cinematics/intro_placeholder.ogv",
+    "sha256": "2518c38cf8badf3e0e1987a1d6ba9d5b932d714816b7fc3499ddbfb9f59c1ae4",
+    "bytes": 11852976,
+    "status": "Selected fourth-pass placeholder in historical branch origin/docs/compound-visual-reference; distinct from this retained third-pass MP4 and not copied into this source-evidence directory."
+  },
+  "runtime_integration": false
+}
