@@ -45,6 +45,9 @@ const CRITICAL_STABILITY_MAX: float = 9.0
 ## Percentage of baseline Stability restored each second. This is balance
 ## data and may be overridden per Subject.
 @export_range(0.0, 100.0, 0.1) var stabilisation_rate: float = 1.0
+## Stability lost when this Subject's Partner is Eliminated during an
+## Experiment. Severance Loss is balance data and cannot Destabilise.
+@export_range(0.0, 100.0, 0.1) var severance_loss: float = 15.0
 ## Material shed by a Subject Impact is balance data. Destabilisation makes
 ## one additional shed roll because it is the strongest possible Impact.
 @export_range(0.0, 100.0, 0.1) var material_shed_amount: float = 10.0
@@ -292,6 +295,12 @@ func restabilise() -> void:
 	is_destabilised = false
 	_set_stability(BASELINE_STABILITY)
 	_clear_buffs()
+
+
+## Applies the canonical non-Destabilising cost of losing a Partner.
+## VerbChainManager calls this once while it removes the active Chain.
+func apply_severance_loss() -> void:
+	_set_stability(maxf(stability - maxf(severance_loss, 0.0), 1.0))
 
 
 ## Absorbs Material while this Subject is active and below baseline.

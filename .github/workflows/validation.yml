@@ -54,6 +54,9 @@ jobs:
       - name: Overdrive lifecycle tests
         run: godot --headless --path . tests/TestOverdrive.tscn
 
+      - name: Chain Severance tests
+        run: godot --headless --path . tests/TestChainSeverance.tscn
+
       - name: Stability and Verb Expression tests
         run: godot --headless --path . tests/TestStability.tscn
 

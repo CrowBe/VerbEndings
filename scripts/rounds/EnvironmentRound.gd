@@ -130,6 +130,7 @@ func _on_subject_destabilised(subject: Node, source: Node) -> void:
 	if source != self:
 		return
 	var player_id: int = subject.get_multiplayer_authority()
+	VerbChainManager.sever_chain_for(player_id)
 	subject_eliminated.emit(player_id, survival_seconds.get(player_id, 0.0))
 
 

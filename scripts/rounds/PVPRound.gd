@@ -92,6 +92,7 @@ func _on_subject_destabilised(player: Node, source: Node) -> void:
 		ScoreManager.award_protocol_bonus(source.get_multiplayer_authority(),
 				protocol, "knockout")
 	if not CollapseManager.is_active:
+		VerbChainManager.sever_chain_for(player.get_multiplayer_authority())
 		var eligible_count: int = 0
 		for body: Node in get_tree().get_nodes_in_group("players"):
 			if not body.get("is_destabilised"):
