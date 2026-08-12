@@ -50,8 +50,11 @@ var _sightline_targets: Dictionary = {}
 func _ready() -> void:
 	_build_central_core()
 	_build_assignment_deck()
+	_build_collapse_deck_seals()
 	_build_dispensing_line()
 	_build_laboratories()
+	_build_collapse_entry_sockets()
+	_build_collapse_hazards()
 	_build_separator_spines()
 	_build_perimeter_route()
 	_build_dome_shell()
@@ -117,6 +120,120 @@ func select_active_laboratory(laboratory_id: StringName) -> bool:
 			if shutter is EnvironmentKitPiece:
 				shutter.set_collision_active(true)
 	return true
+
+
+## Composes the initial protected Collapse state. Every Laboratory becomes
+## playable, the Assignment Deck is sealed, and Subjects occupy fair sockets
+## while the service connections remain closed for orientation.
+func begin_collapse(entry_assignments: Dictionary,
+		subjects: Array[Node3D]) -> bool:
+	if entry_assignments.is_empty():
+		return false
+	active_laboratory_id = &""
+	$AssignmentDeck.set_meta("access_sealed", true)
+	_set_collapse_deck_seals(true)
+	$PerimeterMaintenanceRoute.set_meta("collapse_open", false)
+	$SeparatorSpines.set_meta("collapse_open", false)
+	$CentralCore.set_meta("collapse_shortcuts_open", false)
+	for laboratory_id: StringName in LABORATORY_IDS:
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		laboratory.set_meta("round_active", true)
+		laboratory.set_meta("collapse_active", true)
+		laboratory.get_node("RoundContent").process_mode = Node.PROCESS_MODE_INHERIT
+		_set_connection_open(laboratory, &"PerimeterShutter4m", false)
+		_set_connection_open(laboratory, &"SeparatorShutter4m", false)
+		_set_connection_open(laboratory, &"CoreShutter4m", false)
+	for subject: Node3D in subjects:
+		var subject_id: int = subject.get_multiplayer_authority()
+		if not entry_assignments.has(subject_id) \
+				or subject_id not in CollapseManager.surviving_players:
+			subject.visible = false
+			subject.process_mode = Node.PROCESS_MODE_DISABLED
+			continue
+		var assignment: Dictionary = entry_assignments[subject_id]
+		subject.global_transform = get_collapse_entry_transform(
+				assignment.laboratory_id, assignment.socket_index)
+		subject.visible = true
+		subject.process_mode = Node.PROCESS_MODE_DISABLED
+	return true
+
+
+func open_collapse_perimeter_routes(subjects: Array[Node3D]) -> void:
+	$PerimeterMaintenanceRoute.set_meta("collapse_open", true)
+	$SeparatorSpines.set_meta("collapse_open", true)
+	for spine: Node in $SeparatorSpines.get_children():
+		if spine is EnvironmentKitPiece:
+			spine.set_collision_active(false)
+	for laboratory_id: StringName in LABORATORY_IDS:
+		_set_connection_open(get_laboratory(laboratory_id),
+				&"PerimeterShutter4m", true)
+		_set_connection_open(get_laboratory(laboratory_id),
+				&"SeparatorShutter4m", true)
+	for subject: Node3D in subjects:
+		if subject.get_multiplayer_authority() in CollapseManager.surviving_players:
+			subject.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func open_collapse_core_shortcuts() -> void:
+	$CentralCore.set_meta("collapse_shortcuts_open", true)
+	for laboratory_id: StringName in LABORATORY_IDS:
+		_set_connection_open(get_laboratory(laboratory_id),
+				&"CoreShutter4m", true)
+
+
+func telegraph_collapse_failure(laboratory_id: StringName) -> void:
+	set_laboratory_critical_state(laboratory_id, true)
+	var hazard: Area3D = $CollapseHazards.get_node_or_null(
+			NodePath("%sFailure" % laboratory_id)) as Area3D
+	if hazard != null:
+		hazard.set_meta("telegraphed", true)
+		var warning_visual := hazard.get_node_or_null(
+				"WarningVisual") as MeshInstance3D
+		if warning_visual != null:
+			warning_visual.visible = true
+
+
+func apply_collapse_failure(laboratory_id: StringName) -> void:
+	var hazard: Area3D = $CollapseHazards.get_node_or_null(
+			NodePath("%sFailure" % laboratory_id)) as Area3D
+	if hazard != null:
+		hazard.monitoring = true
+		hazard.set_meta("active", true)
+
+
+func reset_collapse(subjects: Array[Node3D] = []) -> void:
+	$AssignmentDeck.set_meta("access_sealed", false)
+	_set_collapse_deck_seals(false)
+	$PerimeterMaintenanceRoute.set_meta("collapse_open", false)
+	$SeparatorSpines.set_meta("collapse_open", false)
+	for spine: Node in $SeparatorSpines.get_children():
+		if spine is EnvironmentKitPiece:
+			spine.set_collision_active(true)
+	$CentralCore.set_meta("collapse_shortcuts_open", false)
+	for laboratory_id: StringName in LABORATORY_IDS:
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		laboratory.set_meta("collapse_active", false)
+		set_laboratory_critical_state(laboratory_id, false)
+		var hazard: Area3D = $CollapseHazards.get_node_or_null(
+				NodePath("%sFailure" % laboratory_id)) as Area3D
+		if hazard != null:
+			hazard.monitoring = false
+			hazard.set_meta("active", false)
+			hazard.set_meta("telegraphed", false)
+			var warning_visual := hazard.get_node_or_null(
+					"WarningVisual") as MeshInstance3D
+			if warning_visual != null:
+				warning_visual.visible = false
+	for subject: Node3D in subjects:
+		subject.visible = true
+		subject.process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func get_collapse_entry_transform(laboratory_id: StringName,
+		socket_index: int) -> Transform3D:
+	var socket := $CollapseEntrySockets.get_node_or_null(
+			"%sSocket%02d" % [laboratory_id, socket_index]) as Marker3D
+	return socket.global_transform if socket != null else Transform3D.IDENTITY
 
 
 func get_laboratory(laboratory_id: StringName) -> Node3D:
@@ -363,6 +480,26 @@ func _build_assignment_deck() -> void:
 		_sightline_targets[laboratory_id] = target
 
 
+func _build_collapse_deck_seals() -> void:
+	var seals: Node3D = $AssignmentDeck/CollapseSeals
+	for access_index: int in 3:
+		var angle: float = deg_to_rad(access_index * 120.0)
+		var seal: EnvironmentKitPiece = _add_piece(
+				seals, &"AssignmentDeckSeal", EnvironmentKitPiece.Kind.SHUTTER_4M,
+				Vector3(DOOR_CLEAR_WIDTH_M, DOOR_CLEAR_HEIGHT_M, 0.5),
+				Vector3(sin(angle) * 22.0, 5.5, -cos(angle) * 22.0),
+				angle, COLOUR_HEAVY)
+		seal.visible = false
+		seal.set_collision_active(false)
+
+
+func _set_collapse_deck_seals(active: bool) -> void:
+	for seal: Node in $AssignmentDeck/CollapseSeals.get_children():
+		if seal is EnvironmentKitPiece:
+			seal.visible = active
+			seal.set_collision_active(active)
+
+
 ## The Assignment Deck owns one visible overhead tube per supported Subject.
 ## Sequential indices are physically adjacent, which makes a Pair's canonical
 ## contiguous assignment visible without coupling either Subject's Release.
@@ -421,12 +558,83 @@ func _build_laboratories() -> void:
 		_build_lab_cue_hooks(laboratory)
 
 
+func _build_collapse_entry_sockets() -> void:
+	var sockets: Node3D = $CollapseEntrySockets
+	var local_positions: Array[Vector3] = [
+		Vector3(-17.0, 0.5, -15.0), Vector3(0.0, 0.5, -17.0),
+		Vector3(17.0, 0.5, -15.0), Vector3(-18.0, 0.5, 2.0),
+		Vector3(18.0, 0.5, 2.0), Vector3(-15.0, 0.5, 17.0),
+		Vector3(0.0, 0.5, 18.0), Vector3(15.0, 0.5, 17.0),
+	]
+	for laboratory_id: StringName in LABORATORY_IDS:
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		for socket_index: int in local_positions.size():
+			var socket := Marker3D.new()
+			socket.name = "%sSocket%02d" % [laboratory_id, socket_index]
+			socket.transform = laboratory.transform * Transform3D(
+					Basis.IDENTITY, local_positions[socket_index])
+			socket.set_meta("laboratory_id", laboratory_id)
+			socket.set_meta("hazard_exposure", 1.0)
+			socket.set_meta("exit_count", 2)
+			socket.set_meta("protected_orientation", true)
+			sockets.add_child(socket)
+
+
+func _build_collapse_hazards() -> void:
+	var hazards: Node3D = $CollapseHazards
+	for laboratory_id: StringName in LABORATORY_IDS:
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		var area := Area3D.new()
+		area.name = "%sFailure" % laboratory_id
+		area.transform = laboratory.transform * Transform3D(
+				Basis.IDENTITY, Vector3(0.0, 0.5, 0.0))
+		area.monitoring = false
+		area.set_meta("authored_failure", true)
+		area.set_meta("telegraphed", false)
+		area.set_meta("active", false)
+		var shape := CollisionShape3D.new()
+		var box := BoxShape3D.new()
+		box.size = Vector3(14.0, 2.0, 14.0)
+		shape.shape = box
+		area.add_child(shape)
+		var warning_visual := MeshInstance3D.new()
+		warning_visual.name = "WarningVisual"
+		var warning_mesh := BoxMesh.new()
+		warning_mesh.size = Vector3(14.0, 0.12, 14.0)
+		warning_visual.mesh = warning_mesh
+		warning_visual.position.y = 0.08
+		var warning_material := StandardMaterial3D.new()
+		warning_material.albedo_color = Color(0.933, 0.384, 0.373, 0.42)
+		warning_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		warning_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		warning_material.emission_enabled = true
+		warning_material.emission = Color("ee625f")
+		warning_mesh.material = warning_material
+		warning_visual.visible = false
+		area.add_child(warning_visual)
+		area.body_entered.connect(CollapseManager._on_player_fall_into_hazard)
+		hazards.add_child(area)
+
+
+func _set_connection_open(laboratory: Node3D,
+		shutter_prefix: StringName, is_open: bool) -> void:
+	for connection: Node in laboratory.get_node("Connections").get_children():
+		if connection is EnvironmentKitPiece \
+				and String(connection.name).begins_with(shutter_prefix):
+			connection.visible = not is_open
+			connection.set_collision_active(not is_open)
+
+
 func _build_lab_edges(laboratory: Node3D) -> void:
 	for edge_data: Dictionary in [
-		{"name": &"WestWall", "size": Vector3(1.0, 8.0, 52.0),
-				"position": Vector3(-26.0, 0.0, 0.0), "rotation": 0.0},
-		{"name": &"EastWall", "size": Vector3(1.0, 8.0, 52.0),
-				"position": Vector3(26.0, 0.0, 0.0), "rotation": 0.0},
+		{"name": &"WestWallNorth", "size": Vector3(1.0, 8.0, 24.0),
+				"position": Vector3(-26.0, 0.0, -14.0), "rotation": 0.0},
+		{"name": &"WestWallSouth", "size": Vector3(1.0, 8.0, 24.0),
+				"position": Vector3(-26.0, 0.0, 14.0), "rotation": 0.0},
+		{"name": &"EastWallNorth", "size": Vector3(1.0, 8.0, 24.0),
+				"position": Vector3(26.0, 0.0, -14.0), "rotation": 0.0},
+		{"name": &"EastWallSouth", "size": Vector3(1.0, 8.0, 24.0),
+				"position": Vector3(26.0, 0.0, 14.0), "rotation": 0.0},
 		{"name": &"OuterWallWest", "size": Vector3(32.0, 8.0, 1.0),
 				"position": Vector3(-10.0, 0.0, -26.0), "rotation": 0.0},
 		{"name": &"OuterWallEast", "size": Vector3(16.0, 8.0, 1.0),
@@ -457,6 +665,12 @@ func _build_lab_edges(laboratory: Node3D) -> void:
 			EnvironmentKitPiece.Kind.DOOR_FRAME_4M,
 			Vector3(DOOR_CLEAR_WIDTH_M, DOOR_CLEAR_HEIGHT_M, 1.0),
 			Vector3(8.0, 0.0, -25.5), 0.0, COLOUR_STRUCTURE)
+	for side: float in [-1.0, 1.0]:
+		_add_piece(connections, &"SeparatorDoorFrame4m",
+				EnvironmentKitPiece.Kind.DOOR_FRAME_4M,
+				Vector3(DOOR_CLEAR_WIDTH_M, DOOR_CLEAR_HEIGHT_M, 1.0),
+				Vector3(side * 25.5, 0.0, 0.0), PI * 0.5,
+				COLOUR_STRUCTURE)
 	_add_piece(connections, &"CoreShutter4m",
 			EnvironmentKitPiece.Kind.SHUTTER_4M,
 			Vector3(DOOR_CLEAR_WIDTH_M, DOOR_CLEAR_HEIGHT_M, 0.5),
@@ -465,6 +679,12 @@ func _build_lab_edges(laboratory: Node3D) -> void:
 			EnvironmentKitPiece.Kind.SHUTTER_4M,
 			Vector3(DOOR_CLEAR_WIDTH_M, DOOR_CLEAR_HEIGHT_M, 0.5),
 			Vector3(8.0, 0.0, -25.5), 0.0, COLOUR_HEAVY)
+	for side: float in [-1.0, 1.0]:
+		_add_piece(connections, &"SeparatorShutter4m",
+				EnvironmentKitPiece.Kind.SHUTTER_4M,
+				Vector3(DOOR_CLEAR_WIDTH_M, DOOR_CLEAR_HEIGHT_M, 0.5),
+				Vector3(side * 25.5, 0.0, 0.0), PI * 0.5,
+				COLOUR_HEAVY)
 
 
 func _build_landing_strategies(laboratory: Node3D) -> void:
