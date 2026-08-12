@@ -25,6 +25,8 @@ The main menu exposes local, host, and join flows over `Game.host_session()` and
 
 Normal-Round confinement is a selection operation on the persistent Compound. `Compound.select_active_laboratory()` enables only the selected Laboratory's `RoundContent` processing and keeps both of its route shutters closed. It does not hide, free, duplicate, or reset any Laboratory, so authored scene state remains attached to the original nodes.
 
+`FacilityStateLedger` is the server-authoritative presentation-state boundary for the persistent Compound. For each Laboratory it composes Round stage, persistent prop and structural-surface state, Experiment lifecycle, and compatible event overlays. Every state-changing transition has a stable name and seed-derived token. Structural walls and floors expose cosmetic state only; selected props declare ordered authored thresholds, explicit collision state, and any route they block. The ledger rejects backwards threshold changes, loss of the final valid route, conflicting overlay channels, overlays that repair persistent state, and changes that contradict an active Objective or overlay. Trial reset restores the authored baseline, while Round changes retain prior Laboratory state. The host includes the current composed ledger and transition sequence, but not its historical log, in explicit network snapshots; clients apply the replicated composition to their persistent Compound.
+
 `EnvironmentKitPiece` detaches old children before building their replacements so a live rebuild cannot attach new gameplay collision beneath a node queued for deletion. `EnvironmentKitPiece` and `PuzzleUnit` also detach their runtime-created `Mesh` resources from `MeshInstance3D` children during tree exit. Procedural render owners preserve this teardown boundary so Godot 4.3 unregisters each render instance before its final mesh resource reference is released.
 
 ## Autoload Services
@@ -37,6 +39,7 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 | `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
 | `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and deterministic Dispensing Line tube assignments. A Pair receives adjacent tubes and a Self-Chain receives one tube. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
 | `CollapseManager` | Resolves individual First Place, starts the Collapse for the Subjects tied at First Place, applies Overdrive to those participants, and declares the final survivor. |
+| `FacilityStateLedger` | Records and validates seeded, named transitions across the four Compound presentation layers, retains authored Laboratory state for the Trial, and supplies the host-authored snapshot consumed by clients. |
 | `TrialCoordinator` | Owns the host-authoritative Trial state machine: Verb Selection once; Pair Draft, Experiment Brief, Laboratory Entry, timed or condition-completed Experiment, Recall, Result Announcement, and optional Thematic Moment for each of exactly three Rounds; then sole-winner or Collapse resolution. It emits presentation-independent state and composition signals. |
 
 The domain services are stateful and in-process. `NetworkSession` is their transport boundary: only the host mutates canonical networked state, while local quick start continues to call the same services without a multiplayer peer.
@@ -95,14 +98,14 @@ The repository provides a deterministic local gameplay quick start and a present
 - the Pair Draft has entry points for all three Rounds;
 - the player-facing local flow and developer quick start share one configured roster of one locally controlled Subject plus optional stationary participants; network sessions use manual host address and port entry without matchmaking or discovery;
 - Trial resolution uses individual Trial Scores, presents Round Scores and Trial Ranking after each Recall, and starts the Collapse for tied First Place; Thematic Moment presentation remains unimplemented;
-- the full Compound-wide Collapse environment and Residual pacing are not implemented;
+- the Compound-wide Collapse flow and Residual pacing are not implemented; its layered facility-state ledger and route-preservation guards are available to authored Collapse transitions;
 - development classifications still key the scoring tables and travel in `RoundManager`'s transition signal, so any consumer of that signal must keep them out of player-facing text;
 - Material shedding and Environment apparatus scatter positions use the host's seeded global random stream; clients consume replicated gameplay outcomes rather than reproducing those draws;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
 - the Dispensing Line, Drop, Recall, and Result Announcement have structural greybox presentation; tube interiors use a presentation cut, and Thematic Moments remain a design contract only; and
 - large-roster multiplayer scenarios, reconnect support, latency compensation, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
-Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, player-facing Trial presentation, Laboratory Entry/Drop/Recall, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
+Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, player-facing Trial presentation, Laboratory Entry/Drop/Recall, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the facility state ledger, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 
