@@ -54,7 +54,12 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump") \
 			and TrialCoordinator.current_phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
-		NetworkSession.request_release()
+		if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+			if local_player != null:
+				laboratory_transit.request_release(
+						local_player.get_multiplayer_authority())
+		else:
+			NetworkSession.request_release()
 	elif event.is_action_pressed("restart_same_seed"):
 		restart_local_playtest(false)
 	elif event.is_action_pressed("restart_new_seed"):
