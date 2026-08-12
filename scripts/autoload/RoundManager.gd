@@ -17,10 +17,10 @@ extends Node
 ## Fired when the secret queue is locked in. Carries no queue contents.
 signal round_queue_locked
 ## Fired at each transition that reveals an eliminated type (Rounds 2 & 3).
-## NETWORK: @rpc replication hook — server broadcasts to all peers for UI.
+## NETWORK: replication boundary — server broadcasts to all peers for UI.
 signal round_type_eliminated(round_index: int, eliminated_type: String)
 ## Fired when a round actually begins.
-## NETWORK: @rpc replication hook — server broadcasts to all peers.
+## NETWORK: replication boundary — server broadcasts to all peers.
 signal round_started(round_index: int, protocol: ExperimentProtocol)
 ## Fired after Round 3 completes; carries the played order for the recap.
 signal all_rounds_completed(played_order: Array)
@@ -37,14 +37,14 @@ const PROTOCOLS: Array[ExperimentProtocol] = [
 const TOTAL_ROUNDS: int = 3
 
 ## 1-based index of the round in progress (0 = Trial not started).
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var current_round_index: int = 0
 ## Type of the round in progress ("" between rounds).
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var current_round_type: String = ""
 var current_protocol: ExperimentProtocol = null
 ## Types already played, in order.
-## NETWORK: @rpc replication hook — safe to sync (already revealed).
+## NETWORK: replication boundary — safe to sync (already revealed).
 var round_history: Array[String] = []
 
 ## The shuffled secret order for all three rounds.
@@ -52,9 +52,17 @@ var round_history: Array[String] = []
 var _secret_protocol_queue: Array[ExperimentProtocol] = []
 
 
+func reset() -> void:
+	current_round_index = 0
+	current_round_type = ""
+	current_protocol = null
+	round_history.clear()
+	_secret_protocol_queue.clear()
+
+
 ## Shuffles the round pool into a secret queue. Call once at Trial start,
 ## on the server only.
-## NETWORK: @rpc replication hook — server-side; clients only get the
+## NETWORK: replication boundary — server-side; clients only get the
 ## round_queue_locked notification, not the contents.
 func secretly_queue_rounds(seed: int = 0) -> void:
 	_secret_protocol_queue = PROTOCOLS.duplicate()
@@ -93,7 +101,7 @@ func queue_local_protocol(protocol_classification: String, seed: int) -> bool:
 
 ## Advances the Trial to the next round, handling the reveal rules for each
 ## transition. Returns the new round type, or "" when the Trial is over.
-## NETWORK: @rpc replication hook — server drives this; the resulting
+## NETWORK: replication boundary — server drives this; the resulting
 ## round_started / round_type_eliminated signals are what get broadcast.
 func advance_to_next_round() -> String:
 	if _secret_protocol_queue.is_empty():
@@ -147,6 +155,19 @@ func is_trial_complete() -> bool:
 ## (see Player.apply_impact) consult this before applying anything.
 func is_pvp_enabled() -> bool:
 	return current_round_type == "PVP"
+
+
+## Applies revealed Round state on clients without exposing the secret queue.
+func apply_replicated_state(round_index: int, round_type: String,
+		played_history: Array) -> void:
+	current_round_index = round_index
+	current_round_type = round_type
+	round_history.assign(played_history)
+	current_protocol = null
+	for protocol: ExperimentProtocol in PROTOCOLS:
+		if protocol.classification == current_round_type:
+			current_protocol = protocol
+			break
 
 
 ## Placeholder UI dispatch: emits the banner signal for a future HUD scene

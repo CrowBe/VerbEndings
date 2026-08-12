@@ -7,7 +7,7 @@ extends Node
 ##
 ## NETWORK: All mutating functions in this script are intended to run on the
 ## server only, then be replicated to clients via RPC hooks (see the
-## "@rpc replication hook" comments below).
+## "replication boundary" comments below).
 
 ## Emitted whenever a chain is created or recalculated.
 signal verb_chain_established(chain: Dictionary)
@@ -88,13 +88,29 @@ func reset() -> void:
 
 
 ## Adds a player to the roster with their assigned verb.
-## NETWORK: @rpc replication hook — server calls this, then broadcasts.
+## NETWORK: replication boundary — server calls this, then broadcasts.
 func register_player(player_id: int, verb: Enums.VerbType) -> void:
 	active_players[player_id] = verb
 
 
+## Rebuilds the client-side derived lookups from host-authored public state.
+func apply_replicated_state(players: Dictionary, chains: Dictionary) -> void:
+	active_players = players.duplicate(true)
+	verb_chains = chains.duplicate(true)
+	_player_to_chain.clear()
+	_round_chains = verb_chains.duplicate(true)
+	_player_to_round_chain.clear()
+	_next_chain_id = 1
+	for chain: Dictionary in verb_chains.values():
+		_player_to_chain[chain.player_a_id] = chain.chain_id
+		_player_to_chain[chain.player_b_id] = chain.chain_id
+		_player_to_round_chain[chain.player_a_id] = chain.chain_id
+		_player_to_round_chain[chain.player_b_id] = chain.chain_id
+		_next_chain_id = maxi(_next_chain_id, chain.chain_id + 1)
+
+
 ## Removes a player and dissolves any chain they were part of.
-## NETWORK: @rpc replication hook — call on peer disconnect (server-side).
+## NETWORK: replication boundary — call on peer disconnect (server-side).
 func unregister_player(player_id: int) -> void:
 	_dissolve_chain_for(player_id)
 	_dissolve_round_chain_for(player_id)
@@ -104,7 +120,7 @@ func unregister_player(player_id: int) -> void:
 ## Pairs two players into a verb chain and computes its power rating.
 ## Passing the same id twice creates a Self-Chain.
 ## Returns the chain Dictionary, or an empty Dictionary on invalid input.
-## NETWORK: @rpc replication hook — server-authoritative; result must be
+## NETWORK: replication boundary — server-authoritative; result must be
 ## broadcast to all peers so HUDs can display chain stats.
 func establish_verb_chain(player_a_id: int, player_b_id: int) -> Dictionary:
 	if not active_players.has(player_a_id) or not active_players.has(player_b_id):
@@ -135,7 +151,7 @@ func establish_verb_chain(player_a_id: int, player_b_id: int) -> Dictionary:
 
 ## Pairs the whole roster. With an odd player count, the leftover player is
 ## chained with themselves (Self-Chain).
-## NETWORK: @rpc replication hook — server runs this at Trial start.
+## NETWORK: replication boundary — server runs this at Trial start.
 func auto_pair_all_players() -> void:
 	var ids: Array = active_players.keys()
 	ids.sort()
@@ -175,7 +191,7 @@ func get_round_chain(chain_id: int) -> Dictionary:
 ## Ends a two-Subject Chain early because one Partner was Eliminated. The
 ## surviving Subject pays its configured Severance Loss once and receives no
 ## Overdrive. Returns whether a live Chain was Severed.
-## NETWORK: @rpc replication hook — server-side, broadcast the Severance and
+## NETWORK: replication boundary — server-side, broadcast the Severance and
 ## resulting Stability update.
 func sever_chain_for(eliminated_player_id: int) -> bool:
 	var chain_id: int = _player_to_chain.get(eliminated_player_id, -1)
@@ -268,7 +284,7 @@ func _dissolve_round_chain_for(player_id: int) -> void:
 
 ## Severs every Verb Chain. No Pair survives into the Collapse.
 ## Players stay registered in active_players — only the pairings die.
-## NETWORK: @rpc replication hook — server-side, broadcast the wipe.
+## NETWORK: replication boundary — server-side, broadcast the wipe.
 func dissolve_all_chains() -> void:
 	for player_id: int in _player_to_chain.keys():
 		_clear_player_overdrive(player_id)
