@@ -113,6 +113,8 @@ func _test_eliminated_partner_receives_shared_placement() -> void:
 	})
 	VerbChainManager.establish_verb_chain(6, 7)
 	VerbChainManager.establish_verb_chain(8, 9)
+	_expect(VerbChainManager.sever_chain_for(7),
+			"an Eliminated Partner Severs its active Verb Chain")
 	var protocol: ExperimentProtocol = load(
 			"res://resources/protocols/sustained_exposure.tres")
 	# Subject 7 was Eliminated, so only its surviving Partner appears in the
