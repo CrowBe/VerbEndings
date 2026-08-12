@@ -145,6 +145,7 @@ func _on_player_destabilised(player: Node, source: Node) -> void:
 	if source is Residual:
 		source.assume_verb(player.assigned_verb)
 	if not CollapseManager.is_active:
+		VerbChainManager.sever_chain_for(player.get_multiplayer_authority())
 		player.call_deferred("restabilise")
 
 

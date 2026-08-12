@@ -51,6 +51,8 @@ Chain Severance never grants Overdrive. Overdrive comes only from entering a Rou
 
 Scheduled dissolution is not Severance: a Pair and its Verb Chain end after every Experiment at no cost, and the Collapse dissolving all Pairs at once is a lifecycle transition rather than a loss. Points belong to Subjects, never to a Pair. `Team`, `partnership` and `Pair Score` are not canonical domain nouns.
 
+Severance does not itself award points. Competitive Stress retains its configured knockout bonus; the surviving Partner's Severance Loss is a shared-risk consequence, not an additional scoring event.
+
 ## Verb Expression And Stability
 
 ### Verb Expression

@@ -51,6 +51,16 @@ input or network transport.
 
 ## Gameplay Tests
 
+Run the Chain Severance suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestChainSeverance.tscn
+```
+
+It verifies configurable once-only Severance Loss, the 1-Stability floor,
+Self-Chain exemption, orphaned-Subject Overdrive state, and cost-free scheduled
+and Collapse dissolution.
+
 Run the focused Overdrive lifecycle suite with:
 
 ```bash
