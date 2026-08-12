@@ -72,6 +72,9 @@ jobs:
       - name: Compound topology and spatial-contract tests
         run: godot --headless --path . tests/TestCompound.tscn
 
+      - name: Material Dispenser visual-boundary tests
+        run: godot --headless --path . tests/TestMaterialDispenser.tscn
+
       - name: Compound lifetime and teardown tests
         run: python3 tests/run_compound_lifetime_test.py --godot godot --attempts 2
 
