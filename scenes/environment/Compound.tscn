@@ -22,20 +22,20 @@ position = Vector3(0, 6, -17)
 
 [node name="Laboratories" type="Node3D" parent="."]
 
-[node name="AppliedCausalityLaboratory" type="Node3D" parent="Laboratories"]
+[node name="AppliedAttritionLaboratory" type="Node3D" parent="Laboratories"]
 position = Vector3(0, 0, -44)
 
-[node name="RoundContent" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+[node name="RoundContent" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
-[node name="Connections" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+[node name="Connections" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
-[node name="LandingAreas" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+[node name="LandingAreas" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
-[node name="DominantApparatus" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+[node name="DominantApparatus" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
-[node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AppliedCausalityLaboratory"]
+[node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
-[node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/AppliedCausalityLaboratory"]
+[node name="SightlineToAssignmentDeck" type="Marker3D" parent="Laboratories/AppliedAttritionLaboratory"]
 position = Vector3(0, 4, 24)
 
 [node name="CompetitiveStressLaboratory" type="Node3D" parent="Laboratories"]

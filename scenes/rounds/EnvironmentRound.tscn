@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://cvbendpuzzler1"]
+
+[ext_resource type="Script" path="res://scripts/rounds/EnvironmentRound.gd" id="1_round"]
+[ext_resource type="PackedScene" path="res://scenes/MaterialDispenser.tscn" id="2_dispenser"]
+[ext_resource type="PackedScene" path="res://scenes/BreakableMaterialHousing.tscn" id="3_housing"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(6, 1, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(6, 1, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_platform"]
+albedo_color = Color(0.26, 0.31, 0.34, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_route"]
+albedo_color = Color(0.96, 0.79, 0.36, 1)
+
+[node name="EnvironmentRound" type="Node3D"]
+script = ExtResource("1_round")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 20, 0)
+shadow_enabled = true
+
+[node name="WestElevatedPlatform" type="StaticBody3D" parent="."]
+position = Vector3(-14, 4.5, -12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestElevatedPlatform"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WestElevatedPlatform"]
+mesh = SubResource("BoxMesh_platform")
+material_override = SubResource("StandardMaterial3D_platform")
+
+[node name="WestEngineMaterialDispenser" parent="." instance=ExtResource("2_dispenser")]
+position = Vector3(-14, 5, -12)
+traversal_route = &"momentum_or_vertical_expression"
+
+[node name="EastElevatedPlatform" type="StaticBody3D" parent="."]
+position = Vector3(14, 4.5, -12)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastElevatedPlatform"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EastElevatedPlatform"]
+mesh = SubResource("BoxMesh_platform")
+material_override = SubResource("StandardMaterial3D_route")
+
+[node name="EastEngineMaterialDispenser" parent="." instance=ExtResource("2_dispenser")]
+position = Vector3(14, 5, -12)
+traversal_route = &"funnel_or_elastic_expression"
+
+[node name="WestHeroHousing" parent="." instance=ExtResource("3_housing")]
+position = Vector3(-10, 0, 10)
+
+[node name="EastHeroHousing" parent="." instance=ExtResource("3_housing")]
+position = Vector3(10, 0, 10)

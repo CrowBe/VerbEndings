@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_config")
-protocol_classification = "PUZZLE"
+protocol_classification = "ENVIRONMENT"
 trial_seed = 20260812
 subject_count = 1
 initial_verbs = Array[int]([1])

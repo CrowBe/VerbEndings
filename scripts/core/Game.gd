@@ -11,12 +11,12 @@ const DEFAULT_LOCAL_CONFIG: LocalPlaytestConfig = preload("res://resources/local
 const ROUND_SCENES: Dictionary = {
 	"PVP": preload("res://scenes/rounds/PVPRound.tscn"),
 	"PVE": preload("res://scenes/rounds/PVERound.tscn"),
-	"PUZZLE": preload("res://scenes/rounds/PuzzleRound.tscn"),
+	"ENVIRONMENT": preload("res://scenes/rounds/EnvironmentRound.tscn"),
 }
 const ROUND_LABORATORIES: Dictionary = {
 	"PVP": &"CompetitiveStress",
 	"PVE": &"AdaptiveContainment",
-	"PUZZLE": &"AppliedCausality",
+	"ENVIRONMENT": &"AppliedAttrition",
 }
 
 @export var auto_start_greybox: bool = true
@@ -139,11 +139,12 @@ func _select_local_verb(player_id: int, subject_index: int) -> Enums.VerbType:
 	var configured: Enums.VerbType = local_playtest_config.verb_for_subject(subject_index)
 	var selectable: Array[Dictionary] = LobbyManager.get_selectable_verbs()
 	for entry: Dictionary in selectable:
-		if entry.verb == configured and LobbyManager.select_verb(player_id, configured):
+		if entry.verb == configured \
+				and LobbyManager.select_verb_for_local_playtest(player_id, configured):
 			return configured
 	for entry: Dictionary in selectable:
 		var fallback: Enums.VerbType = entry.verb
-		if LobbyManager.select_verb(player_id, fallback):
+		if LobbyManager.select_verb_for_local_playtest(player_id, fallback):
 			return fallback
 	return Enums.VerbType.NONE
 

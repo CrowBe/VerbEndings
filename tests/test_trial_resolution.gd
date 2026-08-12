@@ -30,8 +30,8 @@ func _run() -> void:
 
 	ScoreManager.reset()
 	RoundManager.current_round_index = 1
-	ScoreManager.add_points(1, 40, "PUZZLE", "test")
-	ScoreManager.add_points(2, 20, "PUZZLE", "test")
+	ScoreManager.add_points(1, 40, "ENVIRONMENT", "test")
+	ScoreManager.add_points(2, 20, "ENVIRONMENT", "test")
 	RoundManager.current_round_index = 2
 	ScoreManager.add_points(1, 10, "PVE", "test")
 	_expect(ScoreManager.get_round_score(1, 1) == 40,

@@ -356,7 +356,7 @@ func _test_laboratory_contracts(
 	failures: Array[String],
 ) -> void:
 	var expected_apparatus: Dictionary = {
-		&"AppliedCausality": &"ElevatedDispensingArmature",
+		&"AppliedAttrition": &"ElevatedDispensingArmature",
 		&"CompetitiveStress": &"ReinforcedImpactCrucible",
 		&"AdaptiveContainment": &"SpecimenDeliveryColumn",
 	}
@@ -451,8 +451,8 @@ func _test_laboratory_contracts(
 				"Laboratory centres must maintain 120-degree radial separation",
 				failures)
 
-	var cue_laboratory: Node3D = compound.get_laboratory(&"AppliedCausality")
-	_expect(compound.set_laboratory_critical_state(&"AppliedCausality", true),
+	var cue_laboratory: Node3D = compound.get_laboratory(&"AppliedAttrition")
+	_expect(compound.set_laboratory_critical_state(&"AppliedAttrition", true),
 			"critical-state cue activation must accept a valid Laboratory",
 			failures)
 	var active_cues: Node3D = cue_laboratory.get_node("CriticalCueHooks")
@@ -463,12 +463,12 @@ func _test_laboratory_contracts(
 	_expect(not is_equal_approx(
 			active_cues.get_node("MotionStateHook").rotation.y, motion_before),
 			"critical-state motion cue must visibly move", failures)
-	compound.set_laboratory_critical_state(&"AppliedCausality", false)
+	compound.set_laboratory_critical_state(&"AppliedAttrition", false)
 	_expect(not active_cues.visible,
 			"critical-state cues must hide when inactive", failures)
 	for repeat: int in 5:
-		compound.set_laboratory_critical_state(&"AppliedCausality", true)
-		compound.set_laboratory_critical_state(&"AppliedCausality", false)
+		compound.set_laboratory_critical_state(&"AppliedAttrition", true)
+		compound.set_laboratory_critical_state(&"AppliedAttrition", false)
 	_expect(not active_cues.visible,
 			"repeated critical-state changes must settle inactive", failures)
 
@@ -581,7 +581,7 @@ func _test_confinement_and_retained_state(
 	failures: Array[String],
 ) -> void:
 	var retained_laboratory: Node3D = compound.get_laboratory(
-			&"AppliedCausality")
+			&"AppliedAttrition")
 	retained_laboratory.set_meta("authored_scene_state", &"stressed")
 	var retained_instance_id: int = retained_laboratory.get_instance_id()
 	_expect(compound.select_active_laboratory(&"CompetitiveStress"),
@@ -597,11 +597,11 @@ func _test_confinement_and_retained_state(
 	_expect(active_count == 1,
 			"normal confinement must select exactly one active Laboratory",
 			failures)
-	_expect(compound.get_laboratory(&"AppliedCausality").get_instance_id()
+	_expect(compound.get_laboratory(&"AppliedAttrition").get_instance_id()
 			== retained_instance_id,
 			"Laboratory selection must not discard or recreate authored scenes",
 			failures)
-	_expect(compound.get_laboratory(&"AppliedCausality").get_meta(
+	_expect(compound.get_laboratory(&"AppliedAttrition").get_meta(
 			"authored_scene_state") == &"stressed",
 			"inactive Laboratory authored state must be retained", failures)
 
@@ -611,7 +611,7 @@ func _test_game_composition(failures: Array[String]) -> void:
 	game.auto_start_greybox = false
 	add_child(game)
 	var game_compound: Compound = game.get_node("World/Compound")
-	var retained_lab: Node3D = game_compound.get_laboratory(&"AppliedCausality")
+	var retained_lab: Node3D = game_compound.get_laboratory(&"AppliedAttrition")
 	var retained_id: int = retained_lab.get_instance_id()
 	_expect(game.load_round("PVP") != null,
 			"Game must load the Competitive Stress Round", failures)
@@ -630,14 +630,14 @@ func _test_game_composition(failures: Array[String]) -> void:
 			"Round switch must never render outgoing and incoming Rounds together",
 			failures)
 	await get_tree().process_frame
-	for round_type: String in ["PUZZLE", "PVP", "PVE", "PUZZLE", "PVP"]:
+	for round_type: String in ["ENVIRONMENT", "PVP", "PVE", "ENVIRONMENT", "PVP"]:
 		_expect(game.load_round(round_type) != null,
 				"repeated Round switching must load %s" % round_type, failures)
 		_expect(game.get_node("World/Round").get_child_count() == 1,
 				"repeated Round switching must keep one rendered Round",
 				failures)
 		await get_tree().process_frame
-	_expect(game_compound.get_laboratory(&"AppliedCausality").get_instance_id()
+	_expect(game_compound.get_laboratory(&"AppliedAttrition").get_instance_id()
 			== retained_id,
 			"Game Round changes must retain inactive Laboratory instances",
 			failures)
