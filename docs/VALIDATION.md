@@ -45,9 +45,9 @@ The quick-start controls are:
 The same seed reproduces the Protocol, global random stream used by current
 Round layouts, roster identities, Verb assignments, and Pair or Self-Chain
 state. Edit the `.tres` resource in the Godot inspector to change the supported
-configuration without editing source code. This path uses the same in-process
-services as the future host/join flow but does not provide local multiplayer
-input or network transport.
+configuration without editing source code. This path uses the same domain
+services as the programmatic ENet host/join flow but does not create a
+multiplayer peer.
 
 ## Gameplay Tests
 
@@ -103,6 +103,18 @@ It verifies deterministic three-Protocol sequencing, one Verb Selection,
 three Pair Drafts, authored Experiment completion, Recall and result signals,
 distinct Round Scores, cumulative Trial Scores, same-process replay, odd-roster
 Self-Chains, sole First Place, and tied First Place handoff to the Collapse.
+
+Run the two-process network session suite with:
+
+```bash
+python3 tests/run_network_session_test.py --godot godot4.3
+```
+
+It launches real headless ENet host and client processes, drives them through
+Verb Selection, all three Pair Drafts and Experiments, and compares their final
+replicated roster, Verbs, Pair state, scores, Protocol history, lifecycle, and
+result. A second scenario disconnects the client during an Experiment and
+verifies that the host safely releases it and completes the Trial.
 
 Run the Residual grammar suite with:
 
@@ -240,4 +252,4 @@ visual-boundary suite. New suites belong alongside them as separate steps,
 keeping failures isolated while using the same pinned engine and imported
 project.
 
-Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Compound silhouette readability during a Drop, comfortable 8–12 Subject use, practical 24-Subject circulation, route legibility, and cross-layer sightline quality require graphical inspection and human playtesting.
+Static and headless checks do not establish visual correctness, control quality, internet traversal, latency quality, large-roster multiplayer correctness, or representative performance. Compound silhouette readability during a Drop, comfortable 8–12 Subject use, practical 24-Subject circulation, route legibility, and cross-layer sightline quality require graphical inspection and human playtesting.

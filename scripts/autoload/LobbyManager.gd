@@ -17,36 +17,36 @@ extends Node
 ## Both lobbies end at the Synced Insertion Vector: a complete partnership
 ## must stand on the same platform to launch into the round together.
 ##
-## NETWORK: All drafting decisions are server-authoritative. Client requests
-## arrive through the simulated RPC hooks below and are validated before any
-## state changes; results are broadcast back via the signals.
+## NETWORK: All drafting decisions are server-authoritative. NetworkSession
+## binds client requests to their RPC sender and validates them here before
+## state changes; results return in authoritative snapshots.
 
-## NETWORK: @rpc replication hook — broadcast roster changes.
+## NETWORK: replication boundary — broadcast roster changes.
 signal lobby_joined(player_id: int)
-## NETWORK: @rpc replication hook — tells clients to show the verb list.
+## NETWORK: replication boundary — tells clients to show the verb list.
 signal verb_selection_opened
-## NETWORK: @rpc replication hook — broadcast each claim so lists refresh.
+## NETWORK: replication boundary — broadcast each claim so lists refresh.
 signal verb_selected(player_id: int, verb: Enums.VerbType, seconds_taken: float)
-## NETWORK: @rpc replication hook — broadcast the full draft order for UI.
+## NETWORK: replication boundary — broadcast the full draft order for UI.
 signal draft_started(round_index: int, draft_order: Array)
-## NETWORK: @rpc replication hook — tells everyone whose pick it is.
+## NETWORK: replication boundary — tells everyone whose pick it is.
 signal draft_turn_started(chooser_id: int)
-## NETWORK: @rpc replication hook — broadcast each locked pairing.
+## NETWORK: replication boundary — broadcast each locked pairing.
 signal pair_locked(chooser_id: int, target_id: int, chain: Dictionary)
-## NETWORK: @rpc replication hook — the lobby may proceed to the platforms.
+## NETWORK: replication boundary — the lobby may proceed to the platforms.
 signal draft_completed
 ## Both partners are aboard the same Insertion Vector — launch the pod.
-## NETWORK: @rpc replication hook — server confirms, then broadcasts.
+## NETWORK: replication boundary — server confirms, then broadcasts.
 signal insertion_vector_launched(vector_id: int, player_ids: Array)
 
 ## Everyone currently in the lobby.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var lobby_players: Array[int] = []
 ## Remaining draft turns, front = next chooser.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var draft_queue: Array[int] = []
 ## Whose pick it is right now (-1 = no draft running).
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var current_chooser_id: int = -1
 
 ## Character Identity registry: VerbType -> claiming player_id. Enforces
@@ -74,7 +74,7 @@ func reset() -> void:
 
 
 ## A player enters the lobby with no verb selected yet.
-## NETWORK: @rpc replication hook — server-side, on peer connect.
+## NETWORK: replication boundary — server-side, on peer connect.
 func join_lobby(player_id: int) -> void:
 	if player_id in lobby_players:
 		return
@@ -84,7 +84,7 @@ func join_lobby(player_id: int) -> void:
 
 
 ## Removes a leaving player: identity, roster slot, and any queued turn.
-## NETWORK: @rpc replication hook — server-side, on peer disconnect.
+## NETWORK: replication boundary — server-side, on peer disconnect.
 func release_player(player_id: int) -> void:
 	lobby_players.erase(player_id)
 	draft_queue.erase(player_id)
@@ -99,7 +99,7 @@ func release_player(player_id: int) -> void:
 
 
 ## Opens the Round 1 verb-selection phase and starts the clock.
-## NETWORK: @rpc replication hook — server-side, when the lobby fills.
+## NETWORK: replication boundary — server-side, when the lobby fills.
 func open_verb_selection() -> void:
 	_selection_open_msec = Time.get_ticks_msec()
 	_verb_pick_seconds.clear()
@@ -121,11 +121,11 @@ func get_selectable_verbs(filter_text: String = "") -> Array[Dictionary]:
 	return results
 
 
-## Simulated RPC hook: a player locks in their verb. First-come first-served
+## A player locks in their Verb. First-come first-served
 ## on uniqueness; time-to-choose is recorded and later decides draft order
 ## (slowest picks their pair first). One pick per player, no re-picks.
-## NETWORK: @rpc replication hook — becomes @rpc("any_peer", "reliable");
-## the SERVER clock stamps the pick, never the client's.
+## NetworkSession exposes this through a reliable sender-bound request; the
+## host clock stamps the pick, never the client's.
 func select_verb(player_id: int, verb: Enums.VerbType) -> bool:
 	var seconds_taken: float = (Time.get_ticks_msec() - _selection_open_msec) / 1000.0
 	return _select_verb(player_id, verb, seconds_taken)
@@ -155,7 +155,8 @@ func _select_verb(
 	if _verb_pick_seconds.has(player_id):
 		push_warning("LobbyManager: player %d already picked a verb." % player_id)
 		return false
-	if verb == Enums.VerbType.NONE or _claimed_identities.has(verb):
+	if verb not in Enums.VerbType.values() or verb == Enums.VerbType.NONE \
+			or _claimed_identities.has(verb):
 		push_warning("LobbyManager: verb '%s' is unavailable."
 				% Enums.verb_name(verb).capitalize())
 		return false
@@ -170,7 +171,7 @@ func _select_verb(
 ## Closes verb selection and starts the Round 1 draft. Draft order is
 ## SLOWEST pick first. Players who never picked get a random leftover verb
 ## and are treated as slowest of all (they head the queue).
-## NETWORK: @rpc replication hook — server-side, on selection timer expiry.
+## NETWORK: replication boundary — server-side, on selection timer expiry.
 func begin_round_one_draft() -> void:
 	_selection_open_msec = -1
 	_auto_assign_stragglers()
@@ -185,7 +186,7 @@ func begin_round_one_draft() -> void:
 
 
 ## Starts a Round Two or Three draft with the same Verbs and fresh Pairs.
-## NETWORK: @rpc replication hook — server-side, at the next Pair Draft.
+## NETWORK: replication boundary — server-side, at the next Pair Draft.
 func begin_subsequent_round_draft(round_index: int) -> void:
 	if round_index < 2 or round_index > RoundManager.TOTAL_ROUNDS:
 		push_warning("LobbyManager: subsequent draft requires Round 2 or 3.")
@@ -213,11 +214,11 @@ func complete_draft_automatically() -> void:
 			return
 
 
-## Simulated RPC hook: the current chooser drafts a partner by player id
+## The current chooser drafts a Partner by player id
 ## (their own id = deliberate Self-Chain). Validates turn order and target
 ## availability, then locks the chain through VerbChainManager.
-## NETWORK: @rpc replication hook — becomes @rpc("any_peer", "reliable");
-## the server must re-validate everything here since any client can call it.
+## NetworkSession exposes this through a reliable sender-bound request and
+## verifies that the sender is the current chooser before this validation.
 func request_pairing(chooser_id: int, target_id: int) -> bool:
 	if chooser_id != current_chooser_id:
 		push_warning("LobbyManager: it is not player %d's turn to choose." % chooser_id)
@@ -241,7 +242,7 @@ func request_pairing(chooser_id: int, target_id: int) -> bool:
 ## Platforms (see scenes/InsertionVector.tscn) report bodies stepping on and
 ## off. When a full partnership stands on one platform, it launches.
 
-## NETWORK: @rpc replication hook — occupancy is derived server-side from
+## NETWORK: replication boundary — occupancy is derived server-side from
 ## authoritative positions; clients never report their own occupancy.
 func notify_vector_entered(vector_id: int, player_id: int) -> void:
 	var occupants: Array = _vector_occupants.get_or_add(vector_id, [])

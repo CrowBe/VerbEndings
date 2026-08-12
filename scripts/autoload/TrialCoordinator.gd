@@ -121,6 +121,18 @@ func phase_name(phase: Phase = current_phase) -> String:
 	return Phase.keys()[phase].capitalize().replace("_", " ")
 
 
+func get_winner_id() -> int:
+	return _winner_id
+
+
+## Applies host-authored presentation state without advancing client logic.
+func apply_replicated_state(phase: Phase, seconds_remaining: float,
+		winner_id: int) -> void:
+	current_phase = phase
+	experiment_seconds_remaining = seconds_remaining
+	_winner_id = winner_id
+
+
 func _begin_pair_draft() -> void:
 	if current_phase != Phase.VERB_SELECTION and current_phase != Phase.RESULT_ANNOUNCEMENT:
 		return

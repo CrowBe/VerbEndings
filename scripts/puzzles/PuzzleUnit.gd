@@ -14,7 +14,7 @@ extends Node3D
 ## NETWORK: Physics simulation is server-authoritative; apparatus state is
 ## broadcast through the progress signal.
 
-## NETWORK: @rpc replication hook — broadcast for per-unit progress bars.
+## NETWORK: replication boundary — broadcast for per-unit progress bars.
 signal progress_changed(unit: PuzzleUnit, progress: float)
 
 ## Verb assist profiles: interaction force multiplier + flavor text.
@@ -35,7 +35,7 @@ const VERB_ASSISTS: Dictionary = {
 
 @export var unit_name: String = "Puzzle Unit"
 
-## NETWORK: @rpc replication hook — sync both to all peers.
+## NETWORK: replication boundary — sync both to all peers.
 var is_completed: bool = false
 var progress: float = 0.0
 
@@ -50,11 +50,10 @@ func _exit_tree() -> void:
 	_detach_procedural_meshes(self)
 
 
-## Simulated RPC hook: a player interacts with the unit (shove, stomp,
-## spin — the subclass decides). `direction` is the player's aim; ZERO lets
-## the subclass pick a sensible default (usually "toward the goal").
-## NETWORK: @rpc replication hook — becomes @rpc("any_peer", "reliable");
-## server validates range/liveness before applying.
+## A Subject interacts with the unit (shove, stomp, spin — the subclass
+## decides). `direction` is the Subject's aim; ZERO lets the subclass pick a
+## sensible default (usually "toward the goal"). Network clients reach this
+## only through a host-resolved basic Impact, which validates contact first.
 func interact(verb: Enums.VerbType, direction: Vector3 = Vector3.ZERO) -> void:
 	if is_completed:
 		return

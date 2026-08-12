@@ -9,16 +9,15 @@ extends CharacterBody3D
 ## unique move and spends Stability.
 ## A loose "Tether Check" penalizes drifting too far from the chain partner.
 ##
-## NETWORK: This scene will be spawned once per peer via MultiplayerSpawner.
-## Variables marked with "@rpc replication hook" are the ones that need
-## MultiplayerSynchronizer entries (or explicit RPCs) once netcode lands.
+## Network sessions use host simulation with explicit state snapshots. The
+## owning client submits input intent; it never writes gameplay state.
 
 ## Fired when an external Impact reduces Stability to zero.
-## NETWORK: @rpc replication hook — server decides, then broadcasts.
+## NETWORK: replication boundary — server decides, then broadcasts.
 signal destabilised(player: Node, source: Node)
 signal critical_stability_changed(is_critical: bool)
 signal material_absorbed(amount: float)
-## NETWORK: @rpc replication hook — broadcast so remote peers play the
+## NETWORK: replication boundary — broadcast so remote peers play the
 ## punch/Expression animation on their copy of this body.
 signal hit_performed
 signal verb_expressed(verb: Enums.VerbType)
@@ -87,12 +86,12 @@ const REWIND_SECONDS: float = 4.0
 
 ## The verb this player wields. Set via set_character_identity() so the
 ## Character Identity name stays in lockstep with the verb.
-## NETWORK: @rpc replication hook — server-assigned, sync to all peers.
+## NETWORK: replication boundary — server-assigned, sync to all peers.
 var assigned_verb: Enums.VerbType = Enums.VerbType.NONE
 
 ## Character Identity: display name derived from the verb (e.g. "Burn").
 ## Uniqueness is enforced by LobbyManager.select_verb().
-## NETWORK: @rpc replication hook — sync to all peers for nameplates.
+## NETWORK: replication boundary — sync to all peers for nameplates.
 var character_name: String = ""
 
 ## Only one Subject consumes keyboard and mouse input in local quick start.
@@ -103,25 +102,25 @@ var accepts_local_input: bool = true
 ##   int  = partner's peer id (own id = Self-Chain)
 ##   -1   = not yet paired
 ##   null = Solo state (the Collapse dissolved every Pair)
-## NETWORK: @rpc replication hook — server-assigned, sync to all peers.
+## NETWORK: replication boundary — server-assigned, sync to all peers.
 var paired_partner_id = -1
 
 ## How "in sync" this chain is, 0.0 (severed) to 1.0 (fully linked).
-## NETWORK: @rpc replication hook — server-computed, sync to all peers.
+## NETWORK: replication boundary — server-computed, sync to all peers.
 var chain_sync: float = 1.0
 
 ## True while a Self-Chain or the Collapse grants Overdrive.
-## NETWORK: @rpc replication hook — server-assigned, sync to all peers.
+## NETWORK: replication boundary — server-assigned, sync to all peers.
 var is_overdrive: bool = false
 
-## NETWORK: @rpc replication hook — server-authoritative, sync to all peers.
+## NETWORK: replication boundary — server-authoritative, sync to all peers.
 var stability: float = BASELINE_STABILITY
-## NETWORK: @rpc replication hook — server-authoritative, sync to all peers.
+## NETWORK: replication boundary — server-authoritative, sync to all peers.
 var is_destabilised: bool = false
 var is_critical_stability: bool = false
 
 ## SHIELD Expression: absorbs external Stability loss while true.
-## NETWORK: @rpc replication hook — server-authoritative, sync to peers.
+## NETWORK: replication boundary — server-authoritative, sync to peers.
 var shield_active: bool = false
 
 ## Cached reference to the partner's body. Local-only; never replicated.
@@ -150,8 +149,6 @@ var _position_history: Array[Dictionary] = []
 
 
 func _ready() -> void:
-	# NETWORK: gate this on is_multiplayer_authority() once peers exist —
-	# only the local player captures the mouse and keeps an active camera.
 	if accepts_local_input:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = accepts_local_input
@@ -180,6 +177,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	# The top-level rig follows the body's position but keeps its own yaw.
 	camera_rig.global_position = global_position + Vector3.UP * 1.2
+	if NetworkSession.mode == NetworkSession.Mode.CLIENT:
+		if accepts_local_input:
+			var client_input := Input.get_vector(
+					"move_left", "move_right", "move_forward", "move_back")
+			NetworkSession.submit_movement(client_input,
+					Input.is_action_just_pressed("jump"))
+			if Input.is_action_just_pressed("basic_hit"):
+				NetworkSession.request_basic_hit()
+			if Input.is_action_just_pressed("verb_expression"):
+				NetworkSession.request_verb_expression()
+		return
 
 	if is_destabilised:
 		return
@@ -188,12 +196,13 @@ func _physics_process(delta: float) -> void:
 	_tick_combat_timers(delta)
 	_record_rewind_breadcrumb()
 
-	# NETWORK: movement is authority-side; remote peers will interpolate
-	# replicated transforms instead of simulating this block.
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 
-	if accepts_local_input and Input.is_action_just_pressed("jump") and is_on_floor():
+	var network_jump: bool = NetworkSession.consume_jump_intent(
+			get_multiplayer_authority()) if NetworkSession.is_host() else false
+	if (accepts_local_input and Input.is_action_just_pressed("jump") \
+			or network_jump) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 		animation_adapter.play_jump_start()
 	if accepts_local_input and Input.is_action_just_pressed("basic_hit"):
@@ -204,11 +213,15 @@ func _physics_process(delta: float) -> void:
 	var speed: float = WALK_SPEED * _speed_buff * _tether_check(delta)
 
 	# Camera-relative movement: input is rotated by the rig's yaw.
-	var input_dir: Vector2 = Input.get_vector(
-			"move_left", "move_right", "move_forward", "move_back") \
-			if accepts_local_input else Vector2.ZERO
-	var direction: Vector3 = camera_rig.global_transform.basis * Vector3(
-			input_dir.x, 0.0, input_dir.y)
+	var input_dir: Vector2 = Vector2.ZERO
+	if accepts_local_input:
+		input_dir = Input.get_vector(
+				"move_left", "move_right", "move_forward", "move_back")
+	elif NetworkSession.is_host():
+		input_dir = NetworkSession.get_movement_intent(get_multiplayer_authority())
+	var direction: Vector3 = Vector3(input_dir.x, 0.0, input_dir.y)
+	if accepts_local_input:
+		direction = camera_rig.global_transform.basis * direction
 	direction.y = 0.0
 	direction = direction.normalized()
 
@@ -235,7 +248,7 @@ func _physics_process(delta: float) -> void:
 
 ## Assigns this player's verb and the matching Character Identity name.
 ## Call through LobbyManager.select_verb() so uniqueness holds.
-## NETWORK: @rpc replication hook — server assigns, then broadcasts.
+## NETWORK: replication boundary — server assigns, then broadcasts.
 func set_character_identity(verb: Enums.VerbType) -> void:
 	assigned_verb = verb
 	character_name = Enums.verb_name(verb).capitalize()
@@ -290,7 +303,7 @@ func apply_hazard_stability_loss(amount: float, source: Node = null) -> void:
 
 
 ## Restabilises a Subject during normal Experiment Recall.
-## NETWORK: @rpc replication hook — server-side, at round transitions.
+## NETWORK: replication boundary — server-side, at round transitions.
 func restabilise() -> void:
 	is_destabilised = false
 	_set_stability(BASELINE_STABILITY)
@@ -330,7 +343,7 @@ func _apply_stabilisation(delta: float) -> void:
 ## at full extension, then it snaps back in. One move drives everything —
 ## residuals take hits, Subjects take PVP-gated Stability loss, and the nearest
 ## environment apparatus within reach gets a Verb-scaled interaction.
-## NETWORK: @rpc replication hook — authority requests, server resolves
+## NETWORK: replication boundary — authority requests, server resolves
 ## the hit, hit_performed replicates the animation to remote peers.
 func basic_hit() -> void:
 	if _hit_timer > 0.0 or is_destabilised:
@@ -364,7 +377,7 @@ func _resolve_hit() -> void:
 ## Fires this Subject's Verb move (5s cooldown). Effects are deliberately
 ## mixed — some Impacts, some buffs, some reposition — and each has its own
 ## placeholder animation.
-## NETWORK: @rpc replication hook — authority requests, server validates
+## NETWORK: replication boundary — authority requests, server validates
 ## cooldown and resolves; verb_expressed replicates the animation.
 func express_verb() -> void:
 	if _verb_timer > 0.0 or is_destabilised:
@@ -536,7 +549,9 @@ func _tether_check(delta: float) -> float:
 func _resolve_partner() -> Node3D:
 	if paired_partner_id == null or paired_partner_id == -1:
 		return null
-	if paired_partner_id == multiplayer.get_unique_id():
+	var subject_id: int = multiplayer.get_unique_id() \
+			if multiplayer.has_multiplayer_peer() else get_multiplayer_authority()
+	if paired_partner_id == subject_id:
 		return self  # Self-Chain
 	if _partner_body == null or not is_instance_valid(_partner_body):
 		# NETWORK: partner bodies will live under a shared "players" group
