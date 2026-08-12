@@ -142,6 +142,12 @@ func select_verb_for_local_playtest(
 	return _select_verb(player_id, verb, 0.0)
 
 
+## Completes a timed player-facing selection by assigning every unclaimed
+## Subject one remaining unique Verb. The host remains the only authority.
+func complete_verb_selection_automatically() -> void:
+	_auto_assign_stragglers()
+
+
 func _select_verb(
 	player_id: int,
 	verb: Enums.VerbType,

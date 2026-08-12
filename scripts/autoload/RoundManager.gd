@@ -170,8 +170,7 @@ func apply_replicated_state(round_index: int, round_type: String,
 			break
 
 
-## Placeholder UI dispatch: emits the banner signal for a future HUD scene
-## and mirrors it to the console so headless runs stay observable.
+## Dispatches canonical, classification-free presentation copy to the local
+## player-facing banner. The secret Protocol queue remains host-only.
 func _display_banner(text: String) -> void:
 	round_banner_requested.emit(text)
-	print("[RoundManager] %s" % text)

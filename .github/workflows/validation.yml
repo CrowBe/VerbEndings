@@ -69,6 +69,9 @@ jobs:
       - name: Laboratory Entry, Drop, and Recall tests
         run: godot --headless --path . tests/TestLaboratoryTransit.tscn
 
+      - name: Player-facing Trial presentation tests
+        run: godot --headless --path . tests/TestTrialPresentation.tscn
+
       - name: Network session tests
         run: python3 tests/run_network_session_test.py --godot godot
 

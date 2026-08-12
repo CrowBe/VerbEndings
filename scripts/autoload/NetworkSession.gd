@@ -346,6 +346,7 @@ func _subject_snapshots() -> Array[Dictionary]:
 			"transform": subject.global_transform,
 			"velocity": subject.velocity,
 			"stability": subject.stability,
+			"verb_cooldown": subject.get_verb_cooldown_remaining(),
 			"destabilised": subject.is_destabilised,
 			"partner_id": subject.paired_partner_id,
 			"chain_sync": subject.chain_sync,
@@ -428,6 +429,7 @@ func _apply_subject_snapshots(snapshots: Array) -> void:
 			subject.global_transform = subject_state.transform
 			subject.velocity = subject_state.velocity
 			subject.stability = subject_state.stability
+			subject._verb_timer = subject_state.get("verb_cooldown", 0.0)
 			subject.is_destabilised = subject_state.destabilised
 			subject.paired_partner_id = subject_state.partner_id
 			subject.chain_sync = subject_state.chain_sync
