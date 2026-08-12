@@ -1,0 +1,183 @@
+{
+  "portfolio_role": {
+    "evidence_class": "Production Source",
+    "scope": "shared Subject anatomy and high-detail reconstruction source; not a runtime export"
+  },
+  "generator": {
+    "service": "Meshy",
+    "task_type": "multi-image-to-3d",
+    "task_id": "019ff59e-649d-7005-b011-169bebc58f30",
+    "model": "meshy-6",
+    "status": "SUCCEEDED",
+    "credits_before": 2231,
+    "credits_after": 2201,
+    "credits_consumed": 30
+  },
+  "generation_parameters": {
+    "model_type": "standard",
+    "pose_mode": "t-pose",
+    "should_texture": true,
+    "should_remesh": false,
+    "enable_pbr": true,
+    "remove_lighting": true,
+    "hd_texture": true,
+    "image_enhancement": true,
+    "alpha_thumbnail": true,
+    "multi_view_thumbnails": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "source_artifact": {
+    "path": "assets/source/subjects/shared_subject/shared_subject_meshy6_concept.glb",
+    "bytes": 28025972,
+    "sha256": "215880e66b5bd76a528565cc1eff37b3d37d5dfbf0a82db7e706263972c7a6e7",
+    "self_contained_glb": true
+  },
+  "gltf_structure": {
+    "version": 2,
+    "nodes": 1,
+    "meshes": 1,
+    "materials": 1,
+    "embedded_images": 4,
+    "textures": 4,
+    "skins": 0,
+    "animations": 0,
+    "cameras": 0
+  },
+  "blender_inspection": {
+    "blender_version": "5.2.0 LTS",
+    "object_count": 1,
+    "mesh_count": 1,
+    "total_vertices": 145482,
+    "total_edges": 417072,
+    "total_polygons": 271798,
+    "total_triangles": 271798,
+    "total_connected_components": 208,
+    "total_welded_connected_components": 1,
+    "total_raw_non_manifold_edges": 18750,
+    "total_non_manifold_edges": 0,
+    "total_degenerate_polygons": 0,
+    "material_names": [
+      "Material_0"
+    ],
+    "bounds_min": [
+      -0.667365,
+      -0.544169,
+      -0.950716
+    ],
+    "bounds_max": [
+      0.665605,
+      0.546836,
+      0.94853
+    ],
+    "dimensions": [
+      1.33297,
+      1.091005,
+      1.899246
+    ],
+    "floor_offset": -0.950716,
+    "root_objects": [
+      {
+        "name": "Mesh_0",
+        "type": "MESH",
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "normalised_evidence_dimensions_metres": [
+    0.84221,
+    0.689329,
+    1.2
+  ],
+  "canonical_orientation": {
+    "front": "model negative Y",
+    "back": "model positive Y",
+    "note": "Established from eyes, open jacket and badge at front; back panel at positive Y."
+  },
+  "controlled_renders": [
+    {
+      "path": "docs/art/subjects/shared_subject/renders/back.png",
+      "bytes": 639317,
+      "sha256": "e2bfab95f93d5328b75b1f0f5496d0d997c6aea4b79a81a67b36d8ac183fad18",
+      "dimensions": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "docs/art/subjects/shared_subject/renders/front.png",
+      "bytes": 663783,
+      "sha256": "e1c7d6dcc7c85883656c8984ca28ba7f6ca81dd9b1c2438a54c02a5c2b2f6d18",
+      "dimensions": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "docs/art/subjects/shared_subject/renders/front_three_quarter.png",
+      "bytes": 635620,
+      "sha256": "ed191668ba1f4e06f2c2bafc889348d6c0c8ec96f30de94676f2ba821c6c8b27",
+      "dimensions": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "docs/art/subjects/shared_subject/renders/model_neg_x_side.png",
+      "bytes": 647366,
+      "sha256": "441e967989686aca7f1f89af917b100c88f7cc241937491262e461d9beb30710",
+      "dimensions": [
+        768,
+        768
+      ]
+    },
+    {
+      "path": "docs/art/subjects/shared_subject/renders/model_pos_x_side.png",
+      "bytes": 653960,
+      "sha256": "40301de26ea93e7c8234d94411e97de9be7fea2801398220b34a5a8ca8dc4ac1",
+      "dimensions": [
+        768,
+        768
+      ]
+    }
+  ],
+  "source_disposition": {
+    "production_source": "PASS",
+    "direct_runtime": "FAIL",
+    "direct_rigging": "FAIL",
+    "required_next_stage": "Blender reference-driven retopology/reconstruction, semantic material separation, exact scale/origin/facing, rig and deformation validation, then Godot-owned integration."
+  },
+  "blocking_defects_for_runtime": [
+    "271798 triangles",
+    "single fused mesh",
+    "single material",
+    "no skin",
+    "no animations",
+    "source origin is vertically centred rather than floor-contact",
+    "source height is 1.899246 m rather than the 1.2 m runtime target",
+    "generated SAD SHIELD text and back barcode/status details are baked concept artefacts",
+    "body, eyes, jacket and identity panel are not independently controllable runtime surfaces"
+  ],
+  "nonfatal_environment_note": "Blender 5.2.0 used OpenColorIO fallback because its packaged config is 2.5 while the linked library supports up to 2.4; inspection and renders exited zero and data validated.",
+  "texture_retention": {
+    "embedded_texture_count": 4,
+    "self_contained_glb_retained": true,
+    "external_convenience_copies_retained": false,
+    "reason": "The downloaded GLB embeds its texture images. Redundant extracted convenience copies were removed to avoid repository bloat."
+  }
+}
