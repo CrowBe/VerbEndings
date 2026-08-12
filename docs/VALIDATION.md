@@ -28,6 +28,27 @@ timeout --signal=INT --kill-after=3s 8s godot4.3 --headless --path .
 
 Exit status 124 is expected when `timeout` stops a healthy running process. The complete output must contain no runtime errors or unexpected warnings.
 
+## Local Playtest Quick Start
+
+Running the project starts the developer quick start configured by
+`resources/local_playtest.tres`. The resource selects the Experiment Protocol,
+Trial seed, Subject count (one locally controlled Subject and up to eight
+stationary participants), and preferred unique Verb assignments. Invalid or
+duplicate preferred Verbs receive the first available Verb in canonical order.
+
+The quick-start controls are:
+
+- F5: start from the configured seed;
+- F6: restart with the same seed; and
+- F7: restart with the next seed.
+
+The same seed reproduces the Protocol, global random stream used by current
+Round layouts, roster identities, Verb assignments, and Pair or Self-Chain
+state. Edit the `.tres` resource in the Godot inspector to change the supported
+configuration without editing source code. This path uses the same in-process
+services as the future host/join flow but does not provide local multiplayer
+input or network transport.
+
 ## Gameplay Tests
 
 Run the focused Overdrive lifecycle suite with:
@@ -78,6 +99,16 @@ godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
 
 It verifies deterministic seeded Protocol sequences, required authored fields,
 and Experiment Brief terminology that does not expose internal classifications.
+
+Run the local playtest bootstrap suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestLocalPlaytestBootstrap.tscn
+```
+
+It verifies configured Protocol and seed selection, deterministic unique Verb
+fallbacks, roster and actor identity, Pair and odd-roster Self-Chain state,
+Overdrive, scoring reset, and same-seed/new-seed restart behaviour.
 
 Run the animation adapter suite with:
 
