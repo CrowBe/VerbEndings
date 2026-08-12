@@ -27,7 +27,7 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 | Service | Current responsibility |
 | --- | --- |
 | `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, calculates synergy and versatility values, and pushes Overdrive state onto Self-Chained actors. |
-| `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes competition-ranked Trial Ranking, awards placements individually or to a whole Verb Chain, and provides lowest-Trial-Score-first draft ordering. Its placement and bonus tables are keyed by development classification. |
+| `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes competition-ranked Trial Ranking, applies each Protocol's authored individual or Verb-Chain reward policy, and provides lowest-Trial-Score-first draft ordering. Shared rewards credit each Partner separately, optionally use the Synergy Coefficient, and pay a Self-Chain once without Synergy scaling. Its placement and bonus tables are keyed by development classification. |
 | `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
 | `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and shared insertion-platform occupancy. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
 | `CollapseManager` | Resolves individual First Place, starts the Collapse for the Subjects tied at First Place, applies Overdrive to those participants, and declares the final survivor. |
@@ -49,9 +49,9 @@ The implemented input map is WASD movement, Space jump, left mouse basic hit, ri
 
 ## Experiments
 
-Experiment Protocols are authored resources containing an Objective, hazards, scoring rules, completion condition, and an internal development classification. The Semantic Engine authority in `RoundManager` selects a deterministic three-Protocol sequence from a Trial seed and derives each Experiment Brief from the selected resource.
+Experiment Protocols are authored resources containing an Objective, hazards, scoring rules, completion condition, and an internal development classification. Scoring rules declare whether placements are individual or Verb-Chain-shared, which bonus events are cooperative, and whether shared rewards use the Synergy Coefficient. Round controllers submit Subject performance order and bonus events through `ScoreManager`, which applies that authored policy while retaining Subject-owned Round Scores and Trial Scores. The Semantic Engine authority in `RoundManager` selects a deterministic three-Protocol sequence from a Trial seed and derives each Experiment Brief from the selected resource.
 
-`EnvironmentRound` executes the Sustained Exposure Protocol in the Applied Attrition Laboratory. It applies configurable continuous atmospheric Stability Loss through the Subject hazard path, suppressing Impact shedding so only the Semantic Engine and authored housings supply Material. It records each Subject's survival time and Material absorbed, then ranks an authored weighted blend of both measures. Two elevated dispensers require named traversal routes, and two breakable hero-prop housings provide a damage route to Material. Dispensing stops while the Semantic Engine is offline during the Collapse.
+`EnvironmentRound` executes the Sustained Exposure Protocol in the Applied Attrition Laboratory. It applies configurable continuous atmospheric Stability Loss through the Subject hazard path, suppressing Impact shedding so only the Semantic Engine and authored housings supply Material. It records each Subject's survival time and Material absorbed, ranks an authored weighted blend of both measures, then pays placement through each Verb Chain with Synergy scaling. Two elevated dispensers require named traversal routes, and two breakable hero-prop housings provide a damage route to Material. Dispensing stops while the Semantic Engine is offline during the Collapse.
 
 The controller scatters at least one of each of the following physics apparatuses as obstacles and traversal tools:
 
@@ -63,7 +63,7 @@ The controller scatters at least one of each of the following physics apparatuse
 
 `PuzzleUnit` provides Verb power modifiers, internal apparatus progress, and helpers for procedural physics bodies. Apparatus interaction does not track contributors, award points, or complete the Experiment. The Sustained Exposure Protocol authors a hazard, route, or housing answer for each of the nine Verbs.
 
-`PVERound` executes the Adaptive Containment Protocol. It spawns increasingly frequent and strong hostile waves around living Players. It scores kills and survival ticks, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
+`PVERound` executes the Adaptive Containment Protocol. It spawns increasingly frequent and strong hostile waves around living Players. It pays placement and Residual Destabilisation bonuses through the Verb Chain with Synergy scaling, keeps survival ticks individual, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
 
 `PVPRound` executes the Competitive Stress Protocol in an open impact crucible with measurement pylons, force plates, launch markings, shelters, and barricades. It samples Subject-owned dominance, displacement, and resilience metrics, awards knockout bonuses, and Recalls Destabilised Subjects.
 

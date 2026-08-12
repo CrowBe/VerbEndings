@@ -79,7 +79,9 @@ godot4.3 --headless --path . tests/TestTrialResolution.tscn
 ```
 
 It verifies individual Round and Trial Scores, sole and tied First Place,
-Collapse participation, and odd-roster Self-Chains.
+Collapse participation, protocol-authored Verb-Chain placement and bonus
+sharing, Synergy-scaled shared rewards, an Eliminated Partner's shared result,
+and single-payment odd-roster Self-Chains.
 
 Run the complete non-presentation Trial lifecycle suite with:
 
@@ -109,7 +111,8 @@ godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
 ```
 
 It verifies deterministic seeded Protocol sequences, required authored fields,
-and Experiment Brief terminology that does not expose internal classifications.
+explicit reward-sharing policies, and Experiment Brief terminology that does
+not expose internal classifications.
 
 Run the Sustained Exposure suite with:
 
