@@ -103,6 +103,23 @@ distinct and recoverable Landing strategies per Laboratory, route redundancy,
 hooks, normal-Round confinement, retained Laboratory node identity, environment
 kit naming and origins, metric contracts, and Godot-owned collision.
 
+Run the Material Dispenser visual-boundary suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestMaterialDispenser.tscn
+```
+
+It instantiates the production scene and verifies the imported GLB `Visual`
+child exists with mesh instances and no collision descendants, the Godot-owned
+cylinder collision remains outside `Visual` and enabled while `Visual` is
+hidden, the overall presentation bounds (approximately 1.6 m wide, 2.0 m high,
+floor offset zero, depth no more than 1.92 m, front extent approximately
+1.1 m in Godot +Z), the 8,000-to-15,000 production-preparation triangle budget,
+the expected surface materials, the `DispenseSocket` alignment, and dispensing
+Material at the socket while `Visual` is hidden. Tight physical tolerances retain
+the authored envelope while the triangle range permits deliberate topology
+revision.
+
 Run the Compound lifetime and teardown regression twice with:
 
 ```bash
@@ -152,8 +169,9 @@ timeout --signal=INT --kill-after=3s 8s godot --headless --path .
 ```
 
 Focused gameplay test suites run as separate steps after the runtime smoke
-check in `.github/workflows/validation.yml`. New suites belong alongside them
-as separate steps, keeping failures isolated while using the same pinned
-engine and imported project.
+check in `.github/workflows/validation.yml`, including the Material Dispenser
+visual-boundary suite. New suites belong alongside them as separate steps,
+keeping failures isolated while using the same pinned engine and imported
+project.
 
 Static and headless checks do not establish visual correctness, control quality, complete Trial behaviour, multiplayer correctness, or representative performance. Compound silhouette readability during a Drop, comfortable 8–12 Subject use, practical 24-Subject circulation, route legibility, and cross-layer sightline quality require graphical inspection and human playtesting.

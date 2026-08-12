@@ -8,7 +8,7 @@ The retained result is a paired concept-to-proxy set rather than one winner:
 - `assets/source/props/material_dispenser/material_dispenser_blender_mcp.blend` is the editable authored source.
 - `assets/exports/props/material_dispenser_blender_mcp.glb` is the cleaned proxy export. It satisfies the scale, origin, topology-budget, naming, material-separation, and collision-boundary contracts.
 
-The live `MaterialDispenser.tscn` continues to use its greybox. The retained export is evidence for the asset pipeline and is not a production replacement.
+The comparison export remains evidence for the asset pipeline and is not referenced by gameplay scenes. The live `MaterialDispenser.tscn` references the separate production-preparation export at `assets/exports/props/material_dispenser.glb`.
 
 ## Measured Results
 

@@ -4,7 +4,7 @@
 
 Gameplay scenes own root node types, collision, signals, and behaviour. Imported assets provide presentation behind those interfaces. Replacing a primitive or proxy does not require changes to gameplay logic.
 
-The repository currently contains primitive Godot meshes and procedural tweens. Production assets use this layout:
+The repository contains primitive Godot meshes and procedural tweens alongside an imported production-preparation Material Dispenser prop behind a Godot-owned gameplay boundary. Production assets use this layout:
 
 ```text
 assets/
