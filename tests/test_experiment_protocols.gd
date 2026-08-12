@@ -24,6 +24,12 @@ func _ready() -> void:
 				"brief must include the authored Objective", failures)
 		_expect(not brief.contains(protocol.classification),
 				"brief must not expose development classifications", failures)
+		_expect(protocol.scoring_rules.has("placement_sharing"),
+				"every Protocol must author its placement-sharing policy", failures)
+		_expect(protocol.scoring_rules.has("shared_bonus_events"),
+				"every Protocol must nominate cooperative bonus events", failures)
+		_expect(protocol.scoring_rules.has("shared_reward_synergy"),
+				"every Protocol must decide whether shared rewards use Synergy", failures)
 
 	if failures.is_empty():
 		print("Experiment Protocol tests passed.")

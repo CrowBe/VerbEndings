@@ -52,7 +52,7 @@ func end_round() -> void:
 		if score_a != score_b:
 			return score_a > score_b
 		return a < b)
-	ScoreManager.award_placements("PVP", ordered)
+	ScoreManager.award_protocol_placements(protocol, ordered)
 	round_finished.emit(ordered)
 
 
@@ -89,8 +89,8 @@ func _sample_subject(body: Node3D, sample_delta: float) -> void:
 
 func _on_subject_destabilised(player: Node, source: Node) -> void:
 	if source != null and source.is_in_group("players"):
-		ScoreManager.award_bonus(source.get_multiplayer_authority(), "PVP",
-				"knockout")
+		ScoreManager.award_protocol_bonus(source.get_multiplayer_authority(),
+				protocol, "knockout")
 	if not CollapseManager.is_active:
 		var eligible_count: int = 0
 		for body: Node in get_tree().get_nodes_in_group("players"):

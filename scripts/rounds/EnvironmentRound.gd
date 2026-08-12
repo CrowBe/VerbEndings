@@ -67,7 +67,7 @@ func apply_exposure(delta: float) -> void:
 ## Subject id ordering resolves exact ties on every peer.
 func end_round() -> void:
 	var ordered: Array = get_ordered_placements()
-	ScoreManager.award_placements("ENVIRONMENT", ordered)
+	ScoreManager.award_protocol_placements(protocol, ordered)
 	round_finished.emit(ordered)
 
 

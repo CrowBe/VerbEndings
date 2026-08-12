@@ -64,12 +64,41 @@ func award_placements(round_type: String, ordered_player_ids: Array) -> void:
 				"placement_%d" % (placement + 1))
 
 
+## Applies the Protocol's authored placement policy to a Subject performance
+## order. Chain-shared Protocols collapse that order to each Verb Chain's best
+## placed member before awarding points to both Partners.
+func award_protocol_placements(protocol: ExperimentProtocol,
+		ordered_player_ids: Array) -> void:
+	var sharing: String = protocol.scoring_rules.get(
+			"placement_sharing", "individual")
+	if sharing != "verb_chain":
+		award_placements(protocol.classification, ordered_player_ids)
+		return
+	award_chain_placements(protocol.classification,
+			get_ordered_chain_ids(ordered_player_ids),
+			protocol.scoring_rules.get("shared_reward_synergy", false))
+
+
+## Collapses a Subject performance order to unique active Verb Chains. The
+## first member encountered determines the Chain's placement, so an Eliminated
+## Partner may be absent without losing the shared result.
+func get_ordered_chain_ids(ordered_player_ids: Array) -> Array[int]:
+	var ordered_chain_ids: Array[int] = []
+	for player_id: int in ordered_player_ids:
+		var chain: Dictionary = VerbChainManager.get_chain_for_player(player_id)
+		if chain.is_empty() or ordered_chain_ids.has(chain.chain_id):
+			continue
+		ordered_chain_ids.append(chain.chain_id)
+	return ordered_chain_ids
+
+
 ## Awards placement points to whole chains at once (partners always place
 ## together). `ordered_chain_ids` is finish order, winning chain first;
 ## both members receive the full placement award. A Self-Chain's lone
 ## player is only paid once.
 ## NETWORK: @rpc replication hook — server-side, at round end.
-func award_chain_placements(round_type: String, ordered_chain_ids: Array) -> void:
+func award_chain_placements(round_type: String, ordered_chain_ids: Array,
+		apply_synergy: bool = false) -> void:
 	var reward_table: Array = PLACEMENT_TABLES.get(round_type, [])
 	if reward_table.is_empty():
 		push_warning("ScoreManager: unknown round type '%s'." % round_type)
@@ -79,7 +108,8 @@ func award_chain_placements(round_type: String, ordered_chain_ids: Array) -> voi
 				ordered_chain_ids[placement], {})
 		if chain.is_empty():
 			continue
-		var amount: int = reward_table[mini(placement, reward_table.size() - 1)]
+		var base_amount: int = reward_table[mini(placement, reward_table.size() - 1)]
+		var amount: int = _shared_reward_amount(base_amount, chain, apply_synergy)
 		var reason: String = "placement_%d" % (placement + 1)
 		add_points(chain.player_a_id, amount, round_type, reason)
 		if not chain.is_self_chain:
@@ -94,6 +124,37 @@ func award_bonus(player_id: int, round_type: String, event: String) -> void:
 		push_warning("ScoreManager: unknown bonus '%s' for %s." % [event, round_type])
 		return
 	add_points(player_id, events[event], round_type, event)
+
+
+## Applies the Protocol's authored bonus-sharing policy. Cooperative events
+## credit both Partners separately; all other events remain individual.
+func award_protocol_bonus(player_id: int, protocol: ExperimentProtocol,
+		event: String) -> void:
+	var shared_events: Array = protocol.scoring_rules.get("shared_bonus_events", [])
+	if not shared_events.has(event):
+		award_bonus(player_id, protocol.classification, event)
+		return
+	var chain: Dictionary = VerbChainManager.get_chain_for_player(player_id)
+	if chain.is_empty():
+		award_bonus(player_id, protocol.classification, event)
+		return
+	var events: Dictionary = BONUS_EVENTS.get(protocol.classification, {})
+	if not events.has(event):
+		push_warning("ScoreManager: unknown bonus '%s' for %s."
+				% [event, protocol.classification])
+		return
+	var amount: int = _shared_reward_amount(events[event], chain,
+			protocol.scoring_rules.get("shared_reward_synergy", false))
+	add_points(chain.player_a_id, amount, protocol.classification, event)
+	if not chain.is_self_chain:
+		add_points(chain.player_b_id, amount, protocol.classification, event)
+
+
+func _shared_reward_amount(base_amount: int, chain: Dictionary,
+		apply_synergy: bool) -> int:
+	if not apply_synergy or chain.is_self_chain:
+		return base_amount
+	return roundi(base_amount * float(chain.synergy_coefficient))
 
 
 ## Low-level award. All point mutations funnel through here so replication
