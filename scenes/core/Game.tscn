@@ -13,3 +13,5 @@ script = ExtResource("1_game")
 [node name="Players" type="Node3D" parent="World"]
 
 [node name="Round" type="Node3D" parent="World"]
+
+[node name="LaboratoryTransit" type="Node" parent="World"]

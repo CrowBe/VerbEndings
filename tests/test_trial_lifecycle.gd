@@ -116,6 +116,10 @@ func _prepare_roster(subject_count: int) -> void:
 func _on_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
 		_protocol: ExperimentProtocol) -> void:
 	_phases.append(phase)
+	if phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
+		TrialCoordinator.call_deferred("complete_laboratory_entry")
+	elif phase == TrialCoordinator.Phase.RECALL:
+		TrialCoordinator.call_deferred("complete_recall")
 
 
 func _on_experiment_requested(_round_index: int, protocol: ExperimentProtocol) -> void:

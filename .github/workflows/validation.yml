@@ -66,6 +66,9 @@ jobs:
       - name: Trial lifecycle tests
         run: godot --headless --path . tests/TestTrialLifecycle.tscn
 
+      - name: Laboratory Entry, Drop, and Recall tests
+        run: godot --headless --path . tests/TestLaboratoryTransit.tscn
+
       - name: Network session tests
         run: python3 tests/run_network_session_test.py --godot godot
 

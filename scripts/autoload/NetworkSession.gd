@@ -137,6 +137,9 @@ func request_release() -> void:
 	if is_host():
 		_resolve_action(multiplayer.get_unique_id(), &"release")
 	elif mode == Mode.CLIENT:
+		# Start the owning client's presentation handoff immediately; the host
+		# still validates the authoritative Release before simulating the Drop.
+		release_requested.emit(multiplayer.get_unique_id())
 		_request_action.rpc_id(1, &"release")
 
 
@@ -161,6 +164,7 @@ func state_digest() -> Dictionary:
 		"roster": LobbyManager.lobby_players.duplicate(),
 		"verbs": VerbChainManager.active_players.duplicate(true),
 		"chains": VerbChainManager.verb_chains.duplicate(true),
+		"dispensing_line_tubes": LobbyManager.dispensing_line_tubes.duplicate(),
 		"scores": ScoreManager.player_points.duplicate(true),
 		"round_scores": ScoreManager.round_scores.duplicate(true),
 		"round_index": RoundManager.current_round_index,
@@ -383,6 +387,8 @@ func _apply_snapshot(snapshot: Dictionary) -> void:
 	LobbyManager.lobby_players.assign(snapshot.get("roster", []))
 	LobbyManager.draft_queue.assign(snapshot.get("draft_queue", []))
 	LobbyManager.current_chooser_id = snapshot.get("current_chooser_id", -1)
+	LobbyManager.dispensing_line_tubes = snapshot.get(
+			"dispensing_line_tubes", {}).duplicate()
 	VerbChainManager.apply_replicated_state(
 			snapshot.get("verbs", {}), snapshot.get("chains", {}))
 	ScoreManager.player_points = snapshot.get("scores", {}).duplicate(true)

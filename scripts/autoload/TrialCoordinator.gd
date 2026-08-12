@@ -19,6 +19,8 @@ enum Phase {
 signal trial_started(trial_seed: int)
 signal phase_changed(phase: Phase, round_index: int, protocol: ExperimentProtocol)
 signal experiment_requested(round_index: int, protocol: ExperimentProtocol)
+signal laboratory_entry_requested(round_index: int, protocol: ExperimentProtocol)
+signal recall_requested(round_index: int, protocol: ExperimentProtocol)
 signal experiment_time_changed(seconds_remaining: float)
 signal round_result_announced(round_index: int, ordered_player_ids: Array,
 		trial_ranking: Array)
@@ -158,7 +160,6 @@ func _on_draft_completed() -> void:
 	_set_phase(Phase.EXPERIMENT_BRIEF)
 	if automatic_drafts:
 		_begin_laboratory_entry()
-		_begin_experiment()
 	else:
 		call_deferred("_begin_laboratory_entry")
 
@@ -167,7 +168,17 @@ func _begin_laboratory_entry() -> void:
 	if current_phase != Phase.EXPERIMENT_BRIEF:
 		return
 	_set_phase(Phase.LABORATORY_ENTRY)
-	call_deferred("_begin_experiment")
+	laboratory_entry_requested.emit(
+			RoundManager.current_round_index, RoundManager.current_protocol)
+
+
+## Host-authoritative presentation completion seam. The Experiment cannot
+## begin until every Subject has independently Released and Landed.
+func complete_laboratory_entry() -> bool:
+	if not _is_host() or current_phase != Phase.LABORATORY_ENTRY:
+		return false
+	_begin_experiment()
+	return true
 
 
 func _begin_experiment() -> void:
@@ -197,7 +208,16 @@ func _on_round_finished(ordered_player_ids: Array) -> void:
 	_disconnect_round_controller()
 	_set_phase(Phase.RECALL)
 	_recall_subjects()
-	call_deferred("_announce_result")
+	recall_requested.emit(RoundManager.current_round_index, RoundManager.current_protocol)
+
+
+## Host-authoritative presentation completion seam. Result Announcement waits
+## until every eligible Subject has traversed Recall to the Assignment Deck.
+func complete_recall() -> bool:
+	if not _is_host() or current_phase != Phase.RECALL:
+		return false
+	_announce_result()
+	return true
 
 
 func _announce_result() -> void:
