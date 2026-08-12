@@ -92,6 +92,12 @@ func _on_subject_destabilised(player: Node, source: Node) -> void:
 		ScoreManager.award_bonus(source.get_multiplayer_authority(), "PVP",
 				"knockout")
 	if not CollapseManager.is_active:
+		var eligible_count: int = 0
+		for body: Node in get_tree().get_nodes_in_group("players"):
+			if not body.get("is_destabilised"):
+				eligible_count += 1
+		if eligible_count <= 1:
+			TrialCoordinator.notify_completion_condition("one_eligible_subject")
 		player.call_deferred("restabilise")
 
 

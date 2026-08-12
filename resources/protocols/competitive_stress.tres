@@ -10,4 +10,6 @@ objective = "Destabilise competing Subjects while preserving your Chain."
 hazards = Array[String](["Subject Impacts", "Critical Stability"])
 scoring_rules = {"placement": "last_stable_subject"}
 completion_condition = "The Experiment timer expires or one eligible Subject remains."
+duration_seconds = 180.0
+completion_mode = "TIMER_OR_ONE_ELIGIBLE"
 classification = "PVP"
