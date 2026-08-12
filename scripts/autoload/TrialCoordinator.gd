@@ -125,7 +125,8 @@ func _begin_pair_draft() -> void:
 	if current_phase != Phase.VERB_SELECTION and current_phase != Phase.RESULT_ANNOUNCEMENT:
 		return
 	_set_phase(Phase.PAIR_DRAFT)
-	if not LobbyManager.draft_completed.is_connected(_on_draft_completed):
+	if not automatic_drafts \
+			and not LobbyManager.draft_completed.is_connected(_on_draft_completed):
 		LobbyManager.draft_completed.connect(_on_draft_completed, CONNECT_ONE_SHOT)
 	if RoundManager.current_round_index == 0:
 		LobbyManager.begin_round_one_draft()
@@ -133,9 +134,7 @@ func _begin_pair_draft() -> void:
 		LobbyManager.begin_subsequent_round_draft(RoundManager.current_round_index + 1)
 	if automatic_drafts:
 		LobbyManager.complete_draft_automatically()
-	# An odd roster can complete synchronously before the connection above.
-	if LobbyManager.current_chooser_id == -1 and LobbyManager.draft_queue.is_empty():
-		call_deferred("_on_draft_completed")
+		_on_draft_completed()
 
 
 func _on_draft_completed() -> void:
