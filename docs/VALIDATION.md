@@ -81,6 +81,17 @@ godot4.3 --headless --path . tests/TestTrialResolution.tscn
 It verifies individual Round and Trial Scores, sole and tied First Place,
 Collapse participation, and odd-roster Self-Chains.
 
+Run the complete non-presentation Trial lifecycle suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestTrialLifecycle.tscn
+```
+
+It verifies deterministic three-Protocol sequencing, one Verb Selection,
+three Pair Drafts, authored Experiment completion, Recall and result signals,
+distinct Round Scores, cumulative Trial Scores, same-process replay, odd-roster
+Self-Chains, sole First Place, and tied First Place handoff to the Collapse.
+
 Run the Residual grammar suite with:
 
 ```bash

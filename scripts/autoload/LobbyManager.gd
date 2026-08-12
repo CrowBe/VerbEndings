@@ -178,6 +178,23 @@ func begin_subsequent_round_draft(round_index: int) -> void:
 			ScoreManager.get_draft_order_by_trial_score(lobby_players))
 
 
+## Deterministic local-host fallback used when no Pair Draft UI is present.
+## It follows the live draft queue and therefore exercises the same validation,
+## signals, and forced odd-roster Self-Chain path as player choices.
+func complete_draft_automatically() -> void:
+	while current_chooser_id != -1:
+		var chooser_id: int = current_chooser_id
+		var target_id: int = -1
+		for candidate_id: int in lobby_players:
+			if candidate_id != chooser_id and not _is_paired(candidate_id):
+				target_id = candidate_id
+				break
+		if target_id == -1:
+			target_id = chooser_id
+		if not request_pairing(chooser_id, target_id):
+			return
+
+
 ## Simulated RPC hook: the current chooser drafts a partner by player id
 ## (their own id = deliberate Self-Chain). Validates turn order and target
 ## availability, then locks the chain through VerbChainManager.
