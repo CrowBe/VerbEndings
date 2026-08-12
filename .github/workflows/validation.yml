@@ -93,6 +93,9 @@ jobs:
       - name: Compound topology and spatial-contract tests
         run: godot --headless --path . tests/TestCompound.tscn
 
+      - name: Facility state ledger tests
+        run: godot --headless --path . tests/TestFacilityStateLedger.tscn
+
       - name: Material Dispenser visual-boundary tests
         run: godot --headless --path . tests/TestMaterialDispenser.tscn
 

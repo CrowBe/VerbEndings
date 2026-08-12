@@ -55,8 +55,32 @@ func _ready() -> void:
 	_build_separator_spines()
 	_build_perimeter_route()
 	_build_dome_shell()
+	_register_facility_state_contracts()
+	if not FacilityStateLedger.transition_recorded.is_connected(
+			_on_facility_transition_recorded):
+		FacilityStateLedger.transition_recorded.connect(
+				_on_facility_transition_recorded)
+	if not FacilityStateLedger.ledger_reset.is_connected(_on_facility_ledger_reset):
+		FacilityStateLedger.ledger_reset.connect(_on_facility_ledger_reset)
+	if not FacilityStateLedger.ledger_replicated.is_connected(
+			_apply_replicated_facility_ledger):
+		FacilityStateLedger.ledger_replicated.connect(
+				_apply_replicated_facility_ledger)
 	select_active_laboratory(&"AppliedAttrition")
 	set_process(false)
+
+
+func _exit_tree() -> void:
+	if FacilityStateLedger.transition_recorded.is_connected(
+			_on_facility_transition_recorded):
+		FacilityStateLedger.transition_recorded.disconnect(
+				_on_facility_transition_recorded)
+	if FacilityStateLedger.ledger_reset.is_connected(_on_facility_ledger_reset):
+		FacilityStateLedger.ledger_reset.disconnect(_on_facility_ledger_reset)
+	if FacilityStateLedger.ledger_replicated.is_connected(
+			_apply_replicated_facility_ledger):
+		FacilityStateLedger.ledger_replicated.disconnect(
+				_apply_replicated_facility_ledger)
 
 
 func _process(delta: float) -> void:
@@ -168,6 +192,104 @@ func get_environment_kit_contract() -> Dictionary:
 		"origin_contract": &"floor_centred",
 		"collision_owner": &"GodotScene",
 	}
+
+
+func _register_facility_state_contracts() -> void:
+	var thresholds: Array[StringName] = [
+		&"pristine", &"stressed", &"breached", &"destroyed",
+	]
+	for laboratory_id: StringName in LABORATORY_IDS:
+		FacilityStateLedger.register_laboratory(laboratory_id, [
+			&"apparatus_approach", &"perimeter_shelter", &"service_access",
+		])
+		FacilityStateLedger.register_structural_surface(
+				laboratory_id, &"TestFloor", &"floor")
+		FacilityStateLedger.register_structural_surface(
+				laboratory_id, &"StructuralWalls", &"wall")
+		FacilityStateLedger.register_prop(laboratory_id,
+				LABORATORY_APPARATUS[laboratory_id], thresholds,
+				{
+					&"pristine": true,
+					&"stressed": true,
+					&"breached": true,
+					&"destroyed": false,
+				}, {
+					&"breached": [&"apparatus_approach"],
+					&"destroyed": [&"apparatus_approach"],
+				})
+
+
+func _on_facility_transition_recorded(entry: Dictionary) -> void:
+	var laboratory_id: StringName = entry.get("laboratory_id", &"")
+	var laboratory: Node3D = get_laboratory(laboratory_id)
+	if laboratory == null:
+		return
+	laboratory.set_meta("facility_round_stage",
+			FacilityStateLedger.laboratories[laboratory_id].round_stage)
+	laboratory.set_meta("facility_experiment_lifecycle",
+			FacilityStateLedger.laboratories[laboratory_id].experiment_lifecycle)
+	var details: Dictionary = entry.get("details", {})
+	if details.has("surface_id"):
+		laboratory.set_meta("%s_cosmetic_state" % details.surface_id,
+				details.cosmetic_state)
+	if not details.has("prop_id"):
+		return
+	var apparatus_name: StringName = LABORATORY_APPARATUS.get(laboratory_id, &"")
+	if details.prop_id != apparatus_name:
+		return
+	laboratory.set_meta("authored_scene_state", details.threshold)
+	var apparatus: Node3D = laboratory.get_node_or_null(
+			NodePath(apparatus_name)) as Node3D
+	if apparatus != null and details.collision_active != null:
+		_set_descendant_collision_active(apparatus, details.collision_active)
+
+
+func _on_facility_ledger_reset() -> void:
+	for laboratory_id: StringName in LABORATORY_IDS:
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		laboratory.set_meta("facility_round_stage", &"controlled")
+		laboratory.set_meta("facility_experiment_lifecycle", &"idle")
+		laboratory.set_meta("authored_scene_state", &"pristine")
+		laboratory.set_meta("TestFloor_cosmetic_state", &"pristine")
+		laboratory.set_meta("StructuralWalls_cosmetic_state", &"pristine")
+		var apparatus: Node3D = laboratory.get_node_or_null(
+				NodePath(LABORATORY_APPARATUS[laboratory_id])) as Node3D
+		if apparatus != null:
+			_set_descendant_collision_active(apparatus, true)
+
+
+func _apply_replicated_facility_ledger() -> void:
+	for laboratory_id: StringName in LABORATORY_IDS:
+		if not FacilityStateLedger.laboratories.has(laboratory_id):
+			continue
+		var state: Dictionary = FacilityStateLedger.laboratories[laboratory_id]
+		var laboratory: Node3D = get_laboratory(laboratory_id)
+		laboratory.set_meta("facility_round_stage", state.round_stage)
+		laboratory.set_meta(
+				"facility_experiment_lifecycle", state.experiment_lifecycle)
+		for surface_id: StringName in state.structural_surfaces:
+			laboratory.set_meta("%s_cosmetic_state" % surface_id,
+					state.structural_surfaces[surface_id].cosmetic_state)
+		var apparatus_name: StringName = LABORATORY_APPARATUS[laboratory_id]
+		if not state.props.has(apparatus_name):
+			continue
+		var prop: Dictionary = state.props[apparatus_name]
+		var threshold: StringName = prop.thresholds[prop.threshold_index]
+		laboratory.set_meta("authored_scene_state", threshold)
+		var apparatus: Node3D = laboratory.get_node_or_null(
+				NodePath(apparatus_name)) as Node3D
+		var collision_active: Variant = prop.collision_by_threshold.get(
+				threshold, null)
+		if apparatus != null and collision_active != null:
+			_set_descendant_collision_active(apparatus, collision_active)
+
+
+func _set_descendant_collision_active(node: Node,
+		collision_active: bool) -> void:
+	if node is EnvironmentKitPiece:
+		(node as EnvironmentKitPiece).set_collision_active(collision_active)
+	for child: Node in node.get_children():
+		_set_descendant_collision_active(child, collision_active)
 
 
 func _build_central_core() -> void:

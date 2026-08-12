@@ -63,6 +63,7 @@ func start_trial(trial_seed: int, auto_complete_drafts: bool = false,
 			push_warning("TrialCoordinator: every Subject needs a Verb before the Trial.")
 			return false
 	reset()
+	FacilityStateLedger.reset_for_trial(trial_seed)
 	automatic_drafts = auto_complete_drafts
 	experiment_duration_override = duration_override
 	if preferred_protocol.is_empty():
@@ -289,8 +290,40 @@ func _disconnect_round_controller() -> void:
 
 func _set_phase(next_phase: Phase) -> void:
 	current_phase = next_phase
+	_update_facility_lifecycle()
 	phase_changed.emit(current_phase, RoundManager.current_round_index,
 			RoundManager.current_protocol)
+
+
+func _update_facility_lifecycle() -> void:
+	if RoundManager.current_protocol == null:
+		return
+	var laboratory_id: StringName = {
+		"ENVIRONMENT": &"AppliedAttrition",
+		"PVP": &"CompetitiveStress",
+		"PVE": &"AdaptiveContainment",
+	}.get(RoundManager.current_protocol.classification, &"")
+	if laboratory_id.is_empty():
+		return
+	var stage_index: int = clampi(RoundManager.current_round_index - 1, 0, 2)
+	FacilityStateLedger.set_round_stage(laboratory_id,
+			FacilityStateLedger.ROUND_STAGES[stage_index],
+			&"round_%d_stage" % RoundManager.current_round_index)
+	var lifecycle: StringName = {
+		Phase.EXPERIMENT_BRIEF: &"brief",
+		Phase.LABORATORY_ENTRY: &"entry",
+		Phase.EXPERIMENT: &"live",
+		Phase.RECALL: &"recall",
+		Phase.RESULT_ANNOUNCEMENT: &"resolve",
+		Phase.THEMATIC_MOMENT: &"resolve",
+	}.get(current_phase, &"idle")
+	FacilityStateLedger.set_experiment_lifecycle(laboratory_id, lifecycle,
+			&"%s_%s" % [
+				laboratory_id, phase_name(current_phase).to_lower().replace(" ", "_")])
+	var objective: StringName = RoundManager.current_protocol.objective \
+			if lifecycle in [&"brief", &"entry", &"live"] else &""
+	FacilityStateLedger.set_active_objective(laboratory_id, objective,
+			&"%s_objective_%s" % [laboratory_id, lifecycle])
 
 
 func _is_host() -> bool:

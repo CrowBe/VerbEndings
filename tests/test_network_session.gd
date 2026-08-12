@@ -27,6 +27,7 @@ func _ready() -> void:
 	_disconnect_scenario = "--disconnect" in arguments
 	var port: int = _argument_value(arguments, "--port", 28714)
 	_deadline_msec = Time.get_ticks_msec() + 15000
+	_register_facility_ledger_contract()
 	NetworkSession.roster_changed.connect(_on_roster_changed)
 	NetworkSession.authoritative_state_received.connect(_on_state_received)
 	TrialCoordinator.phase_changed.connect(_on_phase_changed)
@@ -127,6 +128,10 @@ func _on_trial_completed(_winner_id: int) -> void:
 func _report_success() -> void:
 	if _reported:
 		return
+	if FacilityStateLedger.transition_sequence == 0 \
+			or FacilityStateLedger.trial_seed != TEST_SEED:
+		_fail("client did not receive the host-authored facility ledger")
+		return
 	_print_success()
 	get_tree().quit(0)
 
@@ -156,6 +161,13 @@ func _argument_value(arguments: PackedStringArray, key: String,
 		if argument.begins_with(key + "="):
 			return argument.trim_prefix(key + "=").to_int()
 	return fallback
+
+
+func _register_facility_ledger_contract() -> void:
+	for laboratory_id: StringName in [
+		&"AppliedAttrition", &"CompetitiveStress", &"AdaptiveContainment",
+	]:
+		FacilityStateLedger.register_laboratory(laboratory_id, [&"test_route"])
 
 
 func _spawn_subjects(player_ids: Array[int]) -> void:
