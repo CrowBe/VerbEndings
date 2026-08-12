@@ -9,6 +9,8 @@ script = ExtResource("1_compound")
 
 [node name="AssignmentDeck" type="Node3D" parent="."]
 
+[node name="DispensingLine" type="Node3D" parent="AssignmentDeck"]
+
 [node name="SightlineTargets" type="Node3D" parent="AssignmentDeck"]
 
 [node name="ResearcherBoothReserved" type="Marker3D" parent="AssignmentDeck"]
@@ -31,6 +33,10 @@ position = Vector3(0, 0, -44)
 
 [node name="LandingAreas" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
+[node name="DropSockets" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
+
+[node name="RecallApertures" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
+
 [node name="DominantApparatus" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
 
 [node name="CriticalCueHooks" type="Node3D" parent="Laboratories/AppliedAttritionLaboratory"]
@@ -48,6 +54,10 @@ rotation = Vector3(0, 4.18879, 0)
 
 [node name="LandingAreas" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
 
+[node name="DropSockets" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
+[node name="RecallApertures" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
+
 [node name="DominantApparatus" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
 
 [node name="CriticalCueHooks" type="Node3D" parent="Laboratories/CompetitiveStressLaboratory"]
@@ -64,6 +74,10 @@ rotation = Vector3(0, 2.094395, 0)
 [node name="Connections" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 
 [node name="LandingAreas" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="DropSockets" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
+
+[node name="RecallApertures" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 
 [node name="DominantApparatus" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 

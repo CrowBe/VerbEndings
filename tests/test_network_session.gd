@@ -29,6 +29,7 @@ func _ready() -> void:
 	_deadline_msec = Time.get_ticks_msec() + 15000
 	NetworkSession.roster_changed.connect(_on_roster_changed)
 	NetworkSession.authoritative_state_received.connect(_on_state_received)
+	TrialCoordinator.phase_changed.connect(_on_phase_changed)
 	TrialCoordinator.experiment_requested.connect(_on_experiment_requested)
 	TrialCoordinator.trial_completed.connect(_on_trial_completed)
 	if _is_server:
@@ -77,6 +78,16 @@ func _on_state_received(_snapshot: Dictionary) -> void:
 			and TrialCoordinator.current_phase == TrialCoordinator.Phase.EXPERIMENT:
 		_reported = true
 		get_tree().quit(0)
+
+
+func _on_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
+		_protocol: ExperimentProtocol) -> void:
+	if not _is_server:
+		return
+	if phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
+		TrialCoordinator.call_deferred("complete_laboratory_entry")
+	elif phase == TrialCoordinator.Phase.RECALL:
+		TrialCoordinator.call_deferred("complete_recall")
 
 
 func _physics_process(_delta: float) -> void:

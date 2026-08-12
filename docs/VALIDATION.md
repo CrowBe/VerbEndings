@@ -42,6 +42,11 @@ The quick-start controls are:
 - F6: restart with the same seed; and
 - F7: restart with the next seed.
 
+During Laboratory Entry, Space Releases the locally controlled Subject from
+its assigned Drop tube and WASD steers the descent. Every unreleased Subject
+is automatically Released after a short presentation window so unattended
+local participants cannot block the Trial.
+
 The same seed reproduces the Protocol, global random stream used by current
 Round layouts, roster identities, Verb assignments, and Pair or Self-Chain
 state. Edit the `.tres` resource in the Godot inspector to change the supported
@@ -103,6 +108,17 @@ It verifies deterministic three-Protocol sequencing, one Verb Selection,
 three Pair Drafts, authored Experiment completion, Recall and result signals,
 distinct Round Scores, cumulative Trial Scores, same-process replay, odd-roster
 Self-Chains, sole First Place, and tied First Place handoff to the Collapse.
+
+Run the Laboratory Entry, Drop, and Recall suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestLaboratoryTransit.tscn
+```
+
+It verifies deterministic unique tube assignment, adjacent Pair tubes,
+single-tube Self-Chains, the 24-Subject socket ceiling, independent Release,
+steerable physics handoff, all-Subject Landing completion, floor collection
+apertures, reversed-pressure Recall, and return to the Assignment Deck.
 
 Run the two-process network session suite with:
 

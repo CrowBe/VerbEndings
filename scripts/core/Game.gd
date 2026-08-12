@@ -8,6 +8,8 @@ extends Node
 
 const DEFAULT_PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
 const DEFAULT_LOCAL_CONFIG: LocalPlaytestConfig = preload("res://resources/local_playtest.tres")
+const LABORATORY_TRANSIT_SCRIPT: Script = preload(
+		"res://scripts/presentation/LaboratoryTransit.gd")
 const ROUND_SCENES: Dictionary = {
 	"PVP": preload("res://scenes/rounds/PVPRound.tscn"),
 	"PVE": preload("res://scenes/rounds/PVERound.tscn"),
@@ -27,11 +29,13 @@ const ROUND_LABORATORIES: Dictionary = {
 @onready var compound: Compound = $World/Compound
 @onready var players_root: Node3D = $World/Players
 @onready var round_root: Node3D = $World/Round
+@onready var transit_root: Node = $World/LaboratoryTransit
 
 var current_round: Node3D = null
 var local_player: Node3D = null
 var local_subjects: Array[Node3D] = []
 var active_seed: int = 0
+var laboratory_transit: LaboratoryTransit = null
 
 
 func _ready() -> void:
@@ -39,12 +43,24 @@ func _ready() -> void:
 	TrialCoordinator.phase_changed.connect(_on_trial_phase_changed)
 	NetworkSession.roster_changed.connect(_on_network_roster_changed)
 	LobbyManager.verb_selected.connect(_on_network_verb_selected)
+	laboratory_transit = LABORATORY_TRANSIT_SCRIPT.new() as LaboratoryTransit
+	transit_root.add_child(laboratory_transit)
+	laboratory_transit.entry_completed.connect(_on_laboratory_entry_completed)
+	laboratory_transit.recall_completed.connect(_on_recall_completed)
 	if auto_start_greybox:
 		start_local_playtest()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("restart_same_seed"):
+	if event.is_action_pressed("jump") \
+			and TrialCoordinator.current_phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
+		if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+			if local_player != null:
+				laboratory_transit.request_release(
+						local_player.get_multiplayer_authority())
+		else:
+			NetworkSession.request_release()
+	elif event.is_action_pressed("restart_same_seed"):
 		restart_local_playtest(false)
 	elif event.is_action_pressed("restart_new_seed"):
 		restart_local_playtest(true)
@@ -110,6 +126,8 @@ func _build_local_playtest(trial_seed: int) -> void:
 
 
 func _prepare_session_state() -> void:
+	if laboratory_transit != null:
+		laboratory_transit.cancel()
 	_teardown_local_playtest()
 	LobbyManager.reset()
 	VerbChainManager.reset()
@@ -147,7 +165,6 @@ func load_round(round_type: String) -> Node3D:
 	if RoundManager.current_protocol != null \
 			and RoundManager.current_protocol.classification == round_type:
 		current_round.set("protocol", RoundManager.current_protocol)
-	_place_local_subjects_for_round(round_type)
 	round_root.add_child(current_round)
 	RoundManager.current_round_type = round_type
 	return current_round
@@ -252,7 +269,9 @@ func _teardown_local_playtest() -> void:
 
 
 func _on_experiment_requested(_round_index: int, protocol: ExperimentProtocol) -> void:
-	var controller: Node3D = load_round(protocol.classification)
+	var controller: Node3D = current_round
+	if controller == null:
+		controller = load_round(protocol.classification)
 	if controller == null:
 		return
 	if protocol.classification == "PVE":
@@ -261,22 +280,35 @@ func _on_experiment_requested(_round_index: int, protocol: ExperimentProtocol) -
 
 
 func _on_trial_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
-		_protocol: ExperimentProtocol) -> void:
-	if phase != TrialCoordinator.Phase.RECALL or current_round == null:
-		return
-	round_root.remove_child(current_round)
-	current_round.queue_free()
-	current_round = null
+		protocol: ExperimentProtocol) -> void:
+	if phase == TrialCoordinator.Phase.LABORATORY_ENTRY and protocol != null:
+		var controller: Node3D = load_round(protocol.classification)
+		if controller == null:
+			return
+		var laboratory_id: StringName = ROUND_LABORATORIES.get(
+				protocol.classification, &"")
+		if not laboratory_transit.begin_entry(
+				compound, laboratory_id, local_subjects):
+			TrialCoordinator.complete_laboratory_entry()
+	elif phase == TrialCoordinator.Phase.RECALL:
+		if current_round != null:
+			current_round.process_mode = Node.PROCESS_MODE_DISABLED
+		var laboratory_id: StringName = ROUND_LABORATORIES.get(
+				RoundManager.current_round_type, &"")
+		if not laboratory_transit.begin_recall(
+				compound, laboratory_id, local_subjects):
+			_on_recall_completed()
 
 
-func _place_local_subjects_for_round(round_type: String) -> void:
-	if local_subjects.is_empty():
-		return
-	var laboratory_id: StringName = ROUND_LABORATORIES.get(round_type, &"")
-	var laboratory: Node3D = compound.get_laboratory(laboratory_id)
-	if laboratory == null:
-		return
-	var centre_offset: float = (local_subjects.size() - 1) * 1.5
-	for subject_index: int in local_subjects.size():
-		local_subjects[subject_index].global_position = laboratory.to_global(Vector3(
-			subject_index * 3.0 - centre_offset, 1.0, 16.0))
+func _on_laboratory_entry_completed() -> void:
+	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+		TrialCoordinator.complete_laboratory_entry()
+
+
+func _on_recall_completed() -> void:
+	if current_round != null:
+		round_root.remove_child(current_round)
+		current_round.queue_free()
+		current_round = null
+	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+		TrialCoordinator.complete_recall()

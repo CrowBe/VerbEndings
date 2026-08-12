@@ -32,6 +32,8 @@ const DOOR_CLEAR_WIDTH_M: float = 4.0
 const DOOR_CLEAR_HEIGHT_M: float = 4.5
 const BARRIER_HEIGHT_M: float = 1.2
 const SUBJECT_CAPACITY: int = 24
+const DISPENSING_TUBE_COLUMNS: int = 8
+const DISPENSING_TUBE_SPACING_M: float = 2.0
 const CRITICAL_CUE_ROTATION_SPEED: float = 2.4
 
 const COLOUR_FLOOR := Color("c8ced1")
@@ -48,6 +50,7 @@ var _sightline_targets: Dictionary = {}
 func _ready() -> void:
 	_build_central_core()
 	_build_assignment_deck()
+	_build_dispensing_line()
 	_build_laboratories()
 	_build_separator_spines()
 	_build_perimeter_route()
@@ -109,6 +112,28 @@ func get_round_content(laboratory_id: StringName) -> Node3D:
 	if laboratory == null:
 		return null
 	return laboratory.get_node("RoundContent") as Node3D
+
+
+func get_dispensing_line_tube_transform(tube_index: int) -> Transform3D:
+	if tube_index < 0 or tube_index >= SUBJECT_CAPACITY:
+		return Transform3D.IDENTITY
+	var socket := $AssignmentDeck/DispensingLine.get_node_or_null(
+			"Tube%02d" % tube_index) as Marker3D
+	return socket.global_transform if socket != null else Transform3D.IDENTITY
+
+
+func get_drop_socket_transform(
+	laboratory_id: StringName,
+	tube_index: int,
+) -> Transform3D:
+	return _laboratory_socket_transform(laboratory_id, &"DropSockets", tube_index)
+
+
+func get_recall_aperture_transform(
+	laboratory_id: StringName,
+	tube_index: int,
+) -> Transform3D:
+	return _laboratory_socket_transform(laboratory_id, &"RecallApertures", tube_index)
 
 
 func set_laboratory_critical_state(
@@ -216,6 +241,35 @@ func _build_assignment_deck() -> void:
 		_sightline_targets[laboratory_id] = target
 
 
+## The Assignment Deck owns one visible overhead tube per supported Subject.
+## Sequential indices are physically adjacent, which makes a Pair's canonical
+## contiguous assignment visible without coupling either Subject's Release.
+func _build_dispensing_line() -> void:
+	var line: Node3D = $AssignmentDeck/DispensingLine
+	line.set_meta("subject_capacity", SUBJECT_CAPACITY)
+	line.set_meta("pair_tubes_adjacent", true)
+	_add_piece(line, &"OverheadCarrier", EnvironmentKitPiece.Kind.TRUSS,
+			Vector3(18.0, 1.0, 8.0), Vector3(0.0, 10.0, 0.0), 0.0,
+			COLOUR_STRUCTURE, false)
+	for tube_index: int in SUBJECT_CAPACITY:
+		var row: int = tube_index / DISPENSING_TUBE_COLUMNS
+		var raw_column: int = tube_index % DISPENSING_TUBE_COLUMNS
+		var column: int = raw_column if row % 2 == 0 \
+				else DISPENSING_TUBE_COLUMNS - 1 - raw_column
+		var socket := Marker3D.new()
+		socket.name = "Tube%02d" % tube_index
+		socket.position = Vector3(
+				(column - (DISPENSING_TUBE_COLUMNS - 1) * 0.5)
+						* DISPENSING_TUBE_SPACING_M,
+				7.0 + row * 0.15,
+				(row - 1) * DISPENSING_TUBE_SPACING_M)
+		socket.set_meta("tube_index", tube_index)
+		line.add_child(socket)
+		_add_piece(socket, &"TubeHousing", EnvironmentKitPiece.Kind.COLUMN,
+				Vector3(1.4, 3.0, 1.4), Vector3(0.0, 0.0, 0.0), 0.0,
+				COLOUR_PANEL, false)
+
+
 func _build_laboratories() -> void:
 	for laboratory_id: StringName in LABORATORY_IDS:
 		var laboratory: Node3D = get_laboratory(laboratory_id)
@@ -240,6 +294,7 @@ func _build_laboratories() -> void:
 				Vector3(0.0, -0.5, 0.0), 0.0, COLOUR_FLOOR)
 		_build_lab_edges(laboratory)
 		_build_landing_strategies(laboratory)
+		_build_laboratory_transit(laboratory)
 		_build_lab_apparatus(laboratory_id, laboratory)
 		_build_lab_cue_hooks(laboratory)
 
@@ -311,6 +366,45 @@ func _build_landing_strategies(laboratory: Node3D) -> void:
 		landing_areas.add_child(area)
 		_add_piece(area, &"LandingPad", EnvironmentKitPiece.Kind.PANEL,
 				Vector3(8.0, 0.1, 8.0), Vector3.ZERO, 0.0, COLOUR_CUE, false)
+
+
+func _build_laboratory_transit(laboratory: Node3D) -> void:
+	var drop_sockets: Node3D = laboratory.get_node("DropSockets")
+	var recall_apertures: Node3D = laboratory.get_node("RecallApertures")
+	for tube_index: int in SUBJECT_CAPACITY:
+		var row: int = tube_index / DISPENSING_TUBE_COLUMNS
+		var column: int = tube_index % DISPENSING_TUBE_COLUMNS
+		var lateral: float = (column - (DISPENSING_TUBE_COLUMNS - 1) * 0.5) * 3.0
+		var depth: float = (row - 1) * 4.0
+		var drop_socket := Marker3D.new()
+		drop_socket.name = "Socket%02d" % tube_index
+		drop_socket.position = Vector3(lateral, 16.0, depth)
+		drop_socket.set_meta("independent_release", true)
+		drop_sockets.add_child(drop_socket)
+
+		var recall_aperture := Marker3D.new()
+		recall_aperture.name = "Socket%02d" % tube_index
+		recall_aperture.position = Vector3(lateral, 0.05, 18.0 + row * 2.0)
+		recall_aperture.set_meta("reversed_pressure", true)
+		recall_apertures.add_child(recall_aperture)
+		_add_piece(recall_aperture, &"CollectionAperture",
+				EnvironmentKitPiece.Kind.PANEL, Vector3(2.4, 0.08, 1.6),
+				Vector3.ZERO, 0.0, COLOUR_HEAVY, false)
+
+
+func _laboratory_socket_transform(
+	laboratory_id: StringName,
+	container_name: StringName,
+	tube_index: int,
+) -> Transform3D:
+	if tube_index < 0 or tube_index >= SUBJECT_CAPACITY:
+		return Transform3D.IDENTITY
+	var laboratory: Node3D = get_laboratory(laboratory_id)
+	if laboratory == null:
+		return Transform3D.IDENTITY
+	var socket := laboratory.get_node_or_null(
+			"%s/Socket%02d" % [container_name, tube_index]) as Marker3D
+	return socket.global_transform if socket != null else Transform3D.IDENTITY
 
 
 func _build_lab_apparatus(

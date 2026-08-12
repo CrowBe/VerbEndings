@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Changes"
+  short_description: "Validate changes with Godot and visual QA"
+  default_prompt: "Use $verify-changes to validate the current changes and report review-ready evidence."
