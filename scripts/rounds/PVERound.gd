@@ -87,7 +87,7 @@ func end_round() -> void:
 		if score_a != score_b:
 			return score_a > score_b
 		return a < b)
-	ScoreManager.award_placements("PVE", ordered)
+	ScoreManager.award_protocol_placements(protocol, ordered)
 	round_finished.emit(ordered)
 
 
@@ -129,13 +129,13 @@ func _award_survival_ticks() -> void:
 			continue
 		var player_id: int = body.get_multiplayer_authority()
 		survival_ticks[player_id] = survival_ticks.get(player_id, 0) + 1
-		ScoreManager.award_bonus(player_id, "PVE", "survival_tick")
+		ScoreManager.award_protocol_bonus(player_id, protocol, "survival_tick")
 
 
 func _on_residual_destabilised(_residual: Residual, attacker_player_id: int) -> void:
 	destabilisation_counts[attacker_player_id] = \
 			destabilisation_counts.get(attacker_player_id, 0) + 1
-	ScoreManager.award_bonus(attacker_player_id, "PVE", "swarm_kill")
+	ScoreManager.award_protocol_bonus(attacker_player_id, protocol, "swarm_kill")
 	residual_destabilised.emit(
 			attacker_player_id, destabilisation_counts[attacker_player_id])
 
