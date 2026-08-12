@@ -1,25 +1,21 @@
 class_name PuzzleUnit
 extends Node3D
-## Base class for the PUZZLE round's small scorable units.
+## Base class for Applied Attrition's reusable physics apparatus.
 ##
-## Each unit is a self-contained physics toy scattered across the Round's
-## scatter area.
-## Progress runs 0..1; on completion, every player who contributed gains a
-## completion (PuzzleRound handles scoring — players chase a high completion
-## COUNT, not a single big finish).
+## Each unit is a self-contained obstacle or traversal tool. Progress runs
+## 0..1 only to drive its physical threshold; it never awards points or ends
+## the Experiment.
 ##
 ## ANY verb adds value: every VerbType has an assist profile that scales the
 ## force of that player's interactions, so no verb is dead weight at any
 ## unit. Subclasses build their own greybox physics bodies in _ready() via
 ## the helpers below and override _apply_interaction().
 ##
-## NETWORK: Physics simulation is server-authoritative; progress and
-## completion are broadcast via the RPC hooks on the signals.
+## NETWORK: Physics simulation is server-authoritative; apparatus state is
+## broadcast through the progress signal.
 
 ## NETWORK: @rpc replication hook — broadcast for per-unit progress bars.
 signal progress_changed(unit: PuzzleUnit, progress: float)
-## NETWORK: @rpc replication hook — broadcast; PuzzleRound scores it.
-signal puzzle_completed(unit: PuzzleUnit, contributor_ids: Array)
 
 ## Verb assist profiles: interaction force multiplier + flavor text.
 ## Every verb is at least 1.0, so any pair composition can clear any unit —
@@ -43,15 +39,11 @@ const VERB_ASSISTS: Dictionary = {
 var is_completed: bool = false
 var progress: float = 0.0
 
-## Players who touched this unit before it completed; all of them score.
-var _contributor_ids: Array[int] = []
-
-
 ## Group registration lives in _enter_tree (not _ready) so subclasses can
-## override _ready without needing a super() call. Player._nearest_puzzle_unit
+## override _ready without needing a super() call. Player._nearest_apparatus
 ## finds units through this group.
 func _enter_tree() -> void:
-	add_to_group("puzzle_units")
+	add_to_group("environment_apparatus")
 
 
 func _exit_tree() -> void:
@@ -63,11 +55,9 @@ func _exit_tree() -> void:
 ## the subclass pick a sensible default (usually "toward the goal").
 ## NETWORK: @rpc replication hook — becomes @rpc("any_peer", "reliable");
 ## server validates range/liveness before applying.
-func interact(player_id: int, verb: Enums.VerbType, direction: Vector3 = Vector3.ZERO) -> void:
+func interact(verb: Enums.VerbType, direction: Vector3 = Vector3.ZERO) -> void:
 	if is_completed:
 		return
-	if player_id not in _contributor_ids:
-		_contributor_ids.append(player_id)
 	_apply_interaction(get_verb_power(verb), direction)
 
 
@@ -88,7 +78,6 @@ func _set_progress(value: float) -> void:
 	progress_changed.emit(self, progress)
 	if progress >= 1.0:
 		is_completed = true
-		puzzle_completed.emit(self, _contributor_ids.duplicate())
 
 
 ## --- Greybox body builders ---------------------------------------------

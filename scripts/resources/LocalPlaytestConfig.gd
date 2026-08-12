@@ -6,7 +6,8 @@ extends Resource
 ## spawned as stationary participants so Pair behaviour can be inspected
 ## without pretending that local multiplayer transport exists.
 
-@export_enum("PVP", "PVE", "PUZZLE") var protocol_classification: String = "PUZZLE"
+@export_enum("PVP", "PVE", "ENVIRONMENT") \
+var protocol_classification: String = "ENVIRONMENT"
 @export var trial_seed: int = 1
 @export_range(1, 9, 1) var subject_count: int = 1
 @export var initial_verbs: Array[Enums.VerbType] = [Enums.VerbType.BURN]

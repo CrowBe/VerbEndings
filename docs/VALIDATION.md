@@ -111,6 +111,17 @@ godot4.3 --headless --path . tests/TestExperimentProtocols.tscn
 It verifies deterministic seeded Protocol sequences, required authored fields,
 and Experiment Brief terminology that does not expose internal classifications.
 
+Run the Sustained Exposure suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestSustainedExposure.tscn
+```
+
+It verifies continuous atmospheric Stability Loss and eventual Destabilisation,
+the absence of Impact-shed Material, survival-and-Material placement, all five
+physics apparatuses as non-scoring traversal tools, elevated dispenser routes,
+breakable Material housings, and an authored use for every Verb.
+
 Run the local playtest bootstrap suite with:
 
 ```bash
@@ -168,7 +179,7 @@ Run the Compound lifetime and teardown regression twice with:
 python3 tests/run_compound_lifetime_test.py --godot godot4.3 --attempts 2
 ```
 
-It verifies direct Compound teardown and twelve repeated Puzzle, PVP, and PVE
+It verifies direct Compound teardown and twelve repeated Environment, PVP, and PVE
 Round transitions while retaining Laboratory identity, authored state, one
 active Round, and correct Player placement. The subprocess wrapper rejects
 Godot errors and warnings even when the engine exits with status zero.
