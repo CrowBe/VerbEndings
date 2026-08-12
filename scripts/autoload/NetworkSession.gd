@@ -39,6 +39,7 @@ func _ready() -> void:
 	LobbyManager.draft_started.connect(_on_draft_started)
 	LobbyManager.pair_locked.connect(_on_pair_locked)
 	CollapseManager.collapse_triggered.connect(_on_collapse_triggered)
+	CollapseManager.collapse_stage_changed.connect(_on_collapse_stage_changed)
 	CollapseManager.player_eliminated.connect(_on_player_eliminated)
 
 
@@ -174,6 +175,7 @@ func state_digest() -> Dictionary:
 		"winner_id": TrialCoordinator.get_winner_id(),
 		"collapse_active": CollapseManager.is_active,
 		"collapse_survivors": CollapseManager.surviving_players.duplicate(),
+		"collapse_state": CollapseManager.snapshot(),
 		"facility_state": FacilityStateLedger.snapshot(false),
 		"subjects": _subject_gameplay_digest(),
 	}
@@ -279,6 +281,11 @@ func _on_pair_locked(_chooser_id: int, _target_id: int,
 
 
 func _on_collapse_triggered(_participant_ids: Array) -> void:
+	publish_now()
+
+
+func _on_collapse_stage_changed(_stage: CollapseManager.Stage,
+		_laboratory_id: StringName) -> void:
 	publish_now()
 
 
@@ -403,9 +410,11 @@ func _apply_snapshot(snapshot: Dictionary) -> void:
 			snapshot.get("phase", TrialCoordinator.Phase.IDLE),
 			snapshot.get("experiment_seconds", 0.0),
 			snapshot.get("winner_id", -1))
-	CollapseManager.is_active = snapshot.get("collapse_active", false)
-	CollapseManager.surviving_players.assign(snapshot.get("collapse_survivors", []))
 	FacilityStateLedger.apply_replicated_snapshot(snapshot.get("facility_state", {}))
+	CollapseManager.apply_replicated_state(snapshot.get("collapse_state", {
+		"is_active": snapshot.get("collapse_active", false),
+		"surviving_players": snapshot.get("collapse_survivors", []),
+	}))
 	_apply_subject_snapshots(snapshot.get("subjects", []))
 	if previous_phase != TrialCoordinator.current_phase:
 		TrialCoordinator.phase_changed.emit(TrialCoordinator.current_phase,
