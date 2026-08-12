@@ -8,9 +8,9 @@ extends Node
 ## NETWORK: The server is the only writer. Clients receive ranking updates
 ## via the RPC hooks on the signals below.
 
-## NETWORK: @rpc replication hook — broadcast each award for score-feed UI.
+## NETWORK: replication boundary — broadcast each award for score-feed UI.
 signal points_awarded(player_id: int, amount: int, round_type: String, reason: String)
-## NETWORK: @rpc replication hook — broadcast the re-sorted Trial Ranking.
+## NETWORK: replication boundary — broadcast the re-sorted Trial Ranking.
 signal trial_ranking_updated(trial_ranking: Array)
 
 ## Placement points per round type, index 0 = 1st place. Placements beyond
@@ -35,7 +35,7 @@ const BONUS_EVENTS: Dictionary = {
 }
 
 ## Cumulative totals: player_id -> points. Never reset between rounds.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var player_points: Dictionary = {}
 ## Round index -> {player_id -> Round Score}.
 var round_scores: Dictionary = {}
@@ -50,9 +50,17 @@ func register_player(player_id: int) -> void:
 	trial_ranking_updated.emit(get_trial_ranking())
 
 
+## Removes a disconnected Subject from current and accumulated score state.
+func release_player(player_id: int) -> void:
+	player_points.erase(player_id)
+	for scores: Dictionary in round_scores.values():
+		scores.erase(player_id)
+	trial_ranking_updated.emit(get_trial_ranking())
+
+
 ## Awards placement points for a finished round. `ordered_player_ids` is
 ## finish order, winner first.
-## NETWORK: @rpc replication hook — server-side, at round end.
+## NETWORK: replication boundary — server-side, at round end.
 func award_placements(round_type: String, ordered_player_ids: Array) -> void:
 	var reward_table: Array = PLACEMENT_TABLES.get(round_type, [])
 	if reward_table.is_empty():
@@ -96,7 +104,7 @@ func get_ordered_chain_ids(ordered_player_ids: Array) -> Array[int]:
 ## together). `ordered_chain_ids` is finish order, winning chain first;
 ## both members receive the full placement award. A Self-Chain's lone
 ## player is only paid once.
-## NETWORK: @rpc replication hook — server-side, at round end.
+## NETWORK: replication boundary — server-side, at round end.
 func award_chain_placements(round_type: String, ordered_chain_ids: Array,
 		apply_synergy: bool = false) -> void:
 	var reward_table: Array = PLACEMENT_TABLES.get(round_type, [])
@@ -117,7 +125,7 @@ func award_chain_placements(round_type: String, ordered_chain_ids: Array,
 
 
 ## Awards a named bonus event (e.g. "knockout" in PVP).
-## NETWORK: @rpc replication hook — server-side, from gameplay systems.
+## NETWORK: replication boundary — server-side, from gameplay systems.
 func award_bonus(player_id: int, round_type: String, event: String) -> void:
 	var events: Dictionary = BONUS_EVENTS.get(round_type, {})
 	if not events.has(event):
@@ -159,7 +167,7 @@ func _shared_reward_amount(base_amount: int, chain: Dictionary,
 
 ## Low-level award. All point mutations funnel through here so replication
 ## has a single choke point.
-## NETWORK: @rpc replication hook — server-side only.
+## NETWORK: replication boundary — server-side only.
 func add_points(player_id: int, amount: int, round_type: String, reason: String) -> void:
 	player_points[player_id] = get_total(player_id) + amount
 	var current_round_scores: Dictionary = round_scores.get_or_add(

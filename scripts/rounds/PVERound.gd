@@ -16,9 +16,9 @@ extends Node3D
 ##
 ## NETWORK: Spawning, AI, evolution, and scoring are all server-side.
 
-## NETWORK: @rpc replication hook — broadcast for the Elimination-feed HUD.
+## NETWORK: replication boundary — broadcast for the Elimination-feed HUD.
 signal residual_destabilised(player_id: int, new_destabilisation_count: int)
-## NETWORK: @rpc replication hook — broadcast the final round placements.
+## NETWORK: replication boundary — broadcast the final round placements.
 signal round_finished(ordered_player_ids: Array)
 
 const RESIDUAL_SCENE: PackedScene = preload("res://scenes/Residual.tscn")
@@ -38,13 +38,13 @@ const SURVIVAL_TICK_SECONDS: float = 10.0
 const DESTABILISATION_WEIGHT: float = 3.0
 const SURVIVAL_WEIGHT: float = 1.0
 
-## NETWORK: @rpc replication hook — sync elapsed for the round clock HUD.
+## NETWORK: replication boundary — sync elapsed for the round clock HUD.
 var elapsed: float = 0.0
 ## player_id -> Residuals Destabilised this round.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var destabilisation_counts: Dictionary = {}
 ## player_id -> survival ticks earned this round.
-## NETWORK: @rpc replication hook — sync to all peers.
+## NETWORK: replication boundary — sync to all peers.
 var survival_ticks: Dictionary = {}
 ## Stable input for deterministic Residual grammar. Multiplayer hosts provide
 ## the authoritative Trial seed here.
@@ -63,7 +63,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# NETWORK: the whole director loop is server-only.
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		return
 	elapsed += delta
 
 	_spawn_timer += delta
@@ -78,7 +79,7 @@ func _physics_process(delta: float) -> void:
 
 ## Ends the round: placements by weighted Destabilisations + survival,
 ## best first.
-## NETWORK: @rpc replication hook — server-side, on round timer expiry.
+## NETWORK: replication boundary — server-side, on round timer expiry.
 func end_round() -> void:
 	var ordered: Array = VerbChainManager.active_players.keys()
 	ordered.sort_custom(func(a: int, b: int) -> bool:
@@ -97,6 +98,7 @@ func _spawn_wave() -> void:
 		if body.is_destabilised:
 			continue
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
+		residual.name = "NetworkResidual%d" % _residual_sequence
 		residual.setup(_current_strength_multiplier(), grammar_seed + _residual_sequence)
 		_residual_sequence += 1
 		residual.position = to_local(_ring_position_around(body))

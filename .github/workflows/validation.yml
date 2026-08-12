@@ -66,6 +66,9 @@ jobs:
       - name: Trial lifecycle tests
         run: godot --headless --path . tests/TestTrialLifecycle.tscn
 
+      - name: Network session tests
+        run: python3 tests/run_network_session_test.py --godot godot
+
       - name: Residual grammar tests
         run: godot --headless --path . tests/TestResidualGrammar.tscn
 

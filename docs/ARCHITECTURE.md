@@ -10,7 +10,9 @@ VerbEndings is a Godot 4.3 project using Forward Plus rendering. `scenes/core/Ga
 - `Players`, the actor container; and
 - `Round`, the active Experiment scene container.
 
-On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. Local automatic selections share a zero-duration pick time, so Round One uses the stable Subject-id tie-break instead of machine scheduling time. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound. There is no menu, lobby scene, UI, network peer, `MultiplayerSpawner`, or `MultiplayerSynchronizer` in the runtime.
+On startup, `Game.gd` reads `resources/local_playtest.tres`, resets the in-process Trial services, registers the configured roster through `LobbyManager`, and assigns deterministic unique Verbs. Local automatic selections share a zero-duration pick time, so Round One uses the stable Subject-id tie-break instead of machine scheduling time. `TrialCoordinator` then runs the canonical three-Round lifecycle and asks `Game` to compose each selected Protocol's Round scene in its Laboratory. One Subject accepts local input; optional additional Subjects are stationary participants. Same-seed and next-seed restart actions rebuild the roster, lifecycle, Round, scores, and seeded global random stream without replacing the persistent Compound.
+
+`Game.host_session()` and `Game.join_session()` provide the programmatic ENet host/join path used before player-facing session UI exists. `NetworkSession` enrols peers into the same domain services, accepts movement and action intent from owning clients, simulates gameplay on the host, and sends explicit snapshots for roster, revealed lifecycle state, Pair state, scores, Collapse state, Subjects, and Residuals. The host's secret Protocol queue is never included. Clients compose the revealed Round and render replicated actors without advancing Round simulation. There is no menu, lobby scene, player-facing UI, `MultiplayerSpawner`, or `MultiplayerSynchronizer`; explicit replication is the implemented equivalent transport boundary.
 
 ## Compound And Environment Kit
 
@@ -26,6 +28,7 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 
 | Service | Current responsibility |
 | --- | --- |
+| `NetworkSession` | Creates ENet host and client peers, enrols and releases connected Subjects, validates sender-bound Verb, Pairing, movement, Release, Impact, and Verb Expression requests, and publishes host-authored state snapshots without disclosing the secret Protocol queue. |
 | `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, calculates synergy and versatility values, pushes Overdrive state onto Self-Chained actors, and Severs a live Pair when one Partner is Eliminated. A Severed bond is removed immediately while its Round-scoped Chain record remains available for symmetric scoring until scheduled dissolution. |
 | `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes competition-ranked Trial Ranking, applies each Protocol's authored individual or Verb-Chain reward policy, and provides lowest-Trial-Score-first draft ordering. Shared rewards credit each Partner separately, optionally use the Synergy Coefficient, and pay a Self-Chain once without Synergy scaling. Its placement and bonus tables are keyed by development classification. |
 | `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
@@ -33,11 +36,11 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 | `CollapseManager` | Resolves individual First Place, starts the Collapse for the Subjects tied at First Place, applies Overdrive to those participants, and declares the final survivor. |
 | `TrialCoordinator` | Owns the host-authoritative Trial state machine: Verb Selection once; Pair Draft, Experiment Brief, Laboratory Entry, timed or condition-completed Experiment, Recall, Result Announcement, and optional Thematic Moment for each of exactly three Rounds; then sole-winner or Collapse resolution. It emits presentation-independent state and composition signals. |
 
-These are stateful in-process services. Comments identify intended RPC and replication boundaries, but the methods and signals currently execute locally.
+The domain services are stateful and in-process. `NetworkSession` is their transport boundary: only the host mutates canonical networked state, while local quick start continues to call the same services without a multiplayer peer.
 
 ## Actors And Interaction
 
-`Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, and timed buffs. Every Subject has baseline Stability, configurable per-Verb Expression Costs, configurable Severance Loss with a 1-Stability floor, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, a configurable always-on Stabilisation Rate expressed as a percentage of baseline per second, and full Restabilisation at Recall. Subjects and Residuals shed configurable Material on Impact and Destabilisation. A live Subject below baseline absorbs Material on contact to Restabilise without exceeding baseline.
+`Player.gd` is a third-person `CharacterBody3D` controller with camera-relative movement, jumping, a basic fist Impact, a tether penalty, nine Verbs, and timed buffs. In a network session the owning client submits bounded intent and the host performs physics, Impacts, Verb Expressions, Stability changes, and cooldown validation. Remote transforms and gameplay state are explicit snapshots. Every Subject has baseline Stability, configurable per-Verb Expression Costs, configurable Severance Loss with a 1-Stability floor, a 1-Stability self-spend floor, Critical Stability hooks, external-Impact Destabilisation, a configurable always-on Stabilisation Rate expressed as a percentage of baseline per second, and full Restabilisation at Recall. Subjects and Residuals shed configurable Material on Impact and Destabilisation. A live Subject below baseline absorbs Material on contact to Restabilise without exceeding baseline.
 
 `Residual.gd` is a pursuing `CharacterBody3D`. It finds the nearest stable Subject, attacks in range, and scales over time. A per-Residual seeded survival threshold develops one Adverb that modifies movement, attacks, and any assumed Verb; Destabilising a Subject is the only path to assuming one Verb. Separate mesh layers present the standard Verb colour treatment and a neutral Adverb overlay. PVE code addresses these actors through the `residuals` group.
 
@@ -86,17 +89,17 @@ The repository provides a deterministic local gameplay quick start and a present
 
 - Material dispensing and breakable Material housings are wired into Sustained Exposure; other Experiments rely on Impact shedding;
 - the Pair Draft has entry points for all three Rounds;
-- the local quick start configures one Protocol and a roster of one locally controlled Subject plus optional stationary participants; it is isolated from the unimplemented production host/join path;
+- the local quick start configures one Protocol and a roster of one locally controlled Subject plus optional stationary participants; the programmatic ENet host/join path has no player-facing session UI;
 - the insertion platform is not the canonical Drop sequence, and no Round scene instances it;
 - Trial resolution uses individual Trial Scores and starts the Collapse for tied First Place; the local runtime automatically advances the complete three-Round lifecycle, while physical Drop, Recall, announcement, and Thematic Moment presentation remain unimplemented;
 - the full Compound-wide Collapse environment and Residual pacing are not implemented;
 - development classifications still key the scoring tables and travel in `RoundManager`'s transition signal, so any consumer of that signal must keep them out of player-facing text;
-- Material shedding and Environment apparatus scatter positions use the global random stream, which the local quick start seeds from the Trial seed but multiplayer authority does not yet replicate;
+- Material shedding and Environment apparatus scatter positions use the host's seeded global random stream; clients consume replicated gameplay outcomes rather than reproducing those draws;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
 - the Dispensing Line, Drop, Recall and Result Announcement presentation, and Thematic Moments remain design contracts only; and
-- multiplayer transport, replication, deterministic scenarios, UI, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
+- large-roster multiplayer scenarios, reconnect support, latency compensation, UI, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
-Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
+Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 

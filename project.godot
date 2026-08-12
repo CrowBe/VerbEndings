@@ -24,6 +24,7 @@ RoundManager="*res://scripts/autoload/RoundManager.gd"
 LobbyManager="*res://scripts/autoload/LobbyManager.gd"
 CollapseManager="*res://scripts/autoload/CollapseManager.gd"
 TrialCoordinator="*res://scripts/autoload/TrialCoordinator.gd"
+NetworkSession="*res://scripts/autoload/NetworkSession.gd"
 
 [input]
 
