@@ -33,7 +33,7 @@ The third pass is retained because it establishes useful intro evidence:
 - cyan, green, and pink Subject colour ordering; and
 - the synchronised generated audio supplied with the clip.
 
-It is **not** the selected runtime placeholder. Its ending presents the three Subjects at adjacent outlets rather than visibly forming them one by one through one shared nozzle and one landing pad. That difference conflicts with the current intro staging contract in [`WORLD_DESIGN.md`](../../../WORLD_DESIGN.md).
+It is **not** the selected runtime placeholder. Its ending presents the three Subjects at adjacent outlets rather than visibly forming them one by one through one shared nozzle and one landing pad. That difference separates it from the historical selected fourth-pass staging retained in repository commit `fb98588ffa4c841ca26338333b1139046941d770`; current [`WORLD_DESIGN.md`](../../../WORLD_DESIGN.md) remains authoritative for implemented spatial and visual rules.
 
 The distinct selected fourth-pass placeholder remains recoverable from repository commit `fb98588ffa4c841ca26338333b1139046941d770` at `assets/video/cinematics/intro_placeholder.ogv`, SHA-256 `2518c38cf8badf3e0e1987a1d6ba9d5b932d714816b7fc3499ddbfb9f59c1ae4`. This directory does not silently substitute that historical OGV for the requested raw third-pass MP4.
 
