@@ -28,6 +28,11 @@ var stability_label: Label
 var cooldown_label: Label
 var score_label: Label
 var critical_label: Label
+var diagnostics_strip: Button
+var diagnostics_backdrop: ColorRect
+var diagnostics_panel: PanelContainer
+var diagnostics_text: TextEdit
+var diagnostics_status: Label
 var address_edit: LineEdit
 var port_spin: SpinBox
 var selection_timer_label: Label
@@ -52,6 +57,15 @@ func _process(delta: float) -> void:
 		_refresh_hud()
 	elif current_screen == SCREEN_VERB_SELECTION and not LobbyManager.verb_selection_complete():
 		_refresh_selection_timer()
+	_refresh_diagnostics_strip()
+	if diagnostics_panel.visible:
+		_refresh_diagnostics_view()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("show_diagnostics"):
+		toggle_diagnostics()
+		get_viewport().set_input_as_handled()
 
 
 func _build_shell() -> void:
@@ -129,6 +143,71 @@ func _build_shell() -> void:
 	hud.add_child(objective_label)
 	hud_panel.hide()
 
+	diagnostics_strip = Button.new()
+	diagnostics_strip.name = "DiagnosticsStrip"
+	diagnostics_strip.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	diagnostics_strip.offset_left = -390.0
+	diagnostics_strip.offset_top = -46.0
+	diagnostics_strip.offset_right = -18.0
+	diagnostics_strip.offset_bottom = -14.0
+	diagnostics_strip.add_theme_font_size_override("font_size", 13)
+	diagnostics_strip.tooltip_text = "Show the reproducibility summary (F8)."
+	diagnostics_strip.pressed.connect(toggle_diagnostics)
+	add_child(diagnostics_strip)
+
+	diagnostics_backdrop = ColorRect.new()
+	diagnostics_backdrop.name = "DiagnosticsBackdrop"
+	diagnostics_backdrop.color = Color(0.01, 0.02, 0.035, 0.78)
+	diagnostics_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(diagnostics_backdrop)
+	diagnostics_panel = PanelContainer.new()
+	diagnostics_panel.name = "DiagnosticsPanel"
+	diagnostics_panel.custom_minimum_size = Vector2(720.0, 500.0)
+	diagnostics_panel.set_anchors_preset(Control.PRESET_CENTER)
+	diagnostics_panel.offset_left = -360.0
+	diagnostics_panel.offset_top = -250.0
+	diagnostics_panel.offset_right = 360.0
+	diagnostics_panel.offset_bottom = 250.0
+	diagnostics_panel.add_theme_stylebox_override("panel", _panel_style(
+			Color(0.04, 0.065, 0.10, 0.99), Color(0.31, 0.83, 0.98), 3))
+	add_child(diagnostics_panel)
+	var diagnostics_content := VBoxContainer.new()
+	diagnostics_content.add_theme_constant_override("separation", 10)
+	diagnostics_panel.add_child(diagnostics_content)
+	var diagnostics_heading := Label.new()
+	diagnostics_heading.text = "SESSION DIAGNOSTICS"
+	diagnostics_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	diagnostics_heading.add_theme_font_size_override("font_size", 24)
+	diagnostics_heading.add_theme_color_override("font_color", Color(0.76, 0.94, 1.0))
+	diagnostics_content.add_child(diagnostics_heading)
+	diagnostics_text = TextEdit.new()
+	diagnostics_text.name = "SessionSummary"
+	diagnostics_text.editable = false
+	diagnostics_text.custom_minimum_size.y = 340.0
+	diagnostics_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	diagnostics_text.add_theme_font_size_override("font_size", 14)
+	diagnostics_content.add_child(diagnostics_text)
+	diagnostics_status = Label.new()
+	diagnostics_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	diagnostics_status.add_theme_font_size_override("font_size", 13)
+	diagnostics_content.add_child(diagnostics_status)
+	var diagnostics_actions := HBoxContainer.new()
+	diagnostics_actions.add_theme_constant_override("separation", 10)
+	diagnostics_content.add_child(diagnostics_actions)
+	var copy_button := Button.new()
+	copy_button.text = "COPY SUMMARY"
+	copy_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	copy_button.pressed.connect(_copy_diagnostics)
+	diagnostics_actions.add_child(copy_button)
+	var close_button := Button.new()
+	close_button.text = "CLOSE"
+	close_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	close_button.pressed.connect(toggle_diagnostics)
+	diagnostics_actions.add_child(close_button)
+	diagnostics_backdrop.hide()
+	diagnostics_panel.hide()
+	_refresh_diagnostics_strip()
+
 
 func _connect_signals() -> void:
 	TrialCoordinator.phase_changed.connect(_on_phase_changed)
@@ -178,7 +257,8 @@ func _show_main_menu() -> void:
 	_add_button("HOST SESSION", _host_session)
 	_add_button("JOIN SESSION", _join_session)
 	_add_body("WASD move • Space jumps or Releases during a Drop • "
-			+ "Left mouse creates an Impact • Right mouse Expresses your Verb • Esc releases the mouse")
+			+ "Left mouse creates an Impact • Right mouse Expresses your Verb • "
+			+ "F8 shows diagnostics • Esc releases the mouse")
 
 
 func _host_session() -> void:
@@ -505,7 +585,51 @@ func presentation_snapshot() -> Dictionary:
 		"hud_text": _control_text(hud_panel),
 		"critical_cue_visible": critical_label.is_visible_in_tree(),
 		"critical_cue_text": critical_label.text,
+		"diagnostics_strip_text": diagnostics_strip.text,
+		"diagnostics_visible": diagnostics_panel.visible,
+		"diagnostics_text": diagnostics_text.text,
 	}
+
+
+func toggle_diagnostics() -> void:
+	var show_view: bool = not diagnostics_panel.visible
+	diagnostics_backdrop.visible = show_view
+	diagnostics_panel.visible = show_view
+	if show_view:
+		_refresh_diagnostics_view()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif not panel.visible:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func _copy_diagnostics() -> void:
+	DisplayServer.clipboard_set(SessionDiagnostics.summary_json())
+	diagnostics_status.text = "Summary copied. It is also stored at %s" \
+			% SessionDiagnostics.summary_file_path()
+
+
+func _refresh_diagnostics_strip() -> void:
+	if diagnostics_strip == null:
+		return
+	diagnostics_strip.text = "BUILD %s  •  SEED %d  •  F8 DIAGNOSTICS" % [
+			SessionDiagnostics.build_identifier(), _display_seed()]
+
+
+func _refresh_diagnostics_view() -> void:
+	diagnostics_text.text = SessionDiagnostics.summary_json()
+	if diagnostics_status.text.is_empty():
+		diagnostics_status.text = "Privacy-safe local summary • %s" \
+				% SessionDiagnostics.summary_file_path()
+
+
+func _display_seed() -> int:
+	if NetworkSession.trial_seed != 0:
+		return NetworkSession.trial_seed
+	if game != null and game.active_seed != 0:
+		return game.active_seed
+	if SessionDiagnostics.current_seed() != 0:
+		return SessionDiagnostics.current_seed()
+	return game.local_playtest_config.trial_seed if game != null else 0
 
 
 func _selection_subject_id() -> int:
@@ -576,7 +700,8 @@ func _hide_lifecycle_panel() -> void:
 	backdrop.hide()
 	panel.hide()
 	hud_panel.hide()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if diagnostics_panel.visible \
+			else Input.MOUSE_MODE_CAPTURED
 
 
 func _clear_content() -> void:

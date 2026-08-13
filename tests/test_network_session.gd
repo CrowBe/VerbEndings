@@ -140,8 +140,11 @@ func _print_success() -> void:
 	var role: String = "SERVER" if _is_server else "CLIENT"
 	var prefix: String = "NETWORK_DISCONNECT" if _disconnect_scenario \
 			else "NETWORK_SCENARIO"
-	print("%s_%s %s" % [prefix, role,
-			JSON.stringify(NetworkSession.state_digest())])
+	var digest: Dictionary = NetworkSession.state_digest()
+	if _disconnect_scenario and _is_server:
+		digest["diagnostic_disconnect_count"] = SessionDiagnostics.summary() \
+				.get("disconnects", []).size()
+	print("%s_%s %s" % [prefix, role, JSON.stringify(digest)])
 
 
 func _fail(message: String) -> void:

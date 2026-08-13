@@ -7,7 +7,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Check out repository
@@ -18,7 +18,7 @@ jobs:
         with:
           version: 4.3.0
           use-dotnet: false
-          include-templates: false
+          include-templates: true
 
       - name: Static project check
         run: python3 tools/validate_project.py
@@ -72,6 +72,9 @@ jobs:
       - name: Player-facing Trial presentation tests
         run: godot --headless --path . tests/TestTrialPresentation.tscn
 
+      - name: Session diagnostics tests
+        run: godot --headless --path . tests/TestSessionDiagnostics.tscn
+
       - name: Network session tests
         run: python3 tests/run_network_session_test.py --godot godot
 
@@ -112,3 +115,13 @@ jobs:
         run: >-
           python3 tests/run_environment_kit_piece_rebuild_test.py
           --godot godot --attempts 2 --timeout-seconds 30
+
+      - name: Linux playtest export and launch check
+        run: python3 tools/check_export.py --godot godot
+
+      - name: Upload Linux playtest build
+        uses: actions/upload-artifact@v4
+        with:
+          name: VerbEndings-linux-x86_64
+          path: build/linux/
+          if-no-files-found: error
