@@ -94,12 +94,9 @@ func _on_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
 func _physics_process(_delta: float) -> void:
 	if not _is_server or _trial_started:
 		return
-	if LobbyManager.lobby_players.size() != 2:
+	if LobbyManager.lobby_players.size() != 2 \
+			or not LobbyManager.verb_selection_complete():
 		return
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			return
 	_trial_started = TrialCoordinator.start_trial(TEST_SEED, true, 0.03)
 	NetworkSession.publish_now()
 

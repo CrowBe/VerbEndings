@@ -94,12 +94,8 @@ func select_local_lobby_verb(player_id: int, verb: Enums.VerbType) -> bool:
 
 
 func start_interactive_local_trial() -> bool:
-	if not NetworkSession.is_local():
+	if not NetworkSession.is_local() or not LobbyManager.verb_selection_complete():
 		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			return false
 	for subject: Node3D in local_subjects:
 		subject.call("set_character_identity", VerbChainManager.active_players.get(
 				subject.get_multiplayer_authority(), Enums.VerbType.NONE))
@@ -150,12 +146,8 @@ func join_session(address: String,
 
 ## Starts the host-authored Trial once every connected Subject has a Verb.
 func start_hosted_trial(duration_override: float = -1.0) -> bool:
-	if not NetworkSession.is_host():
+	if not NetworkSession.is_host() or not LobbyManager.verb_selection_complete():
 		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			return false
 	var started: bool = TrialCoordinator.start_trial(
 			active_seed, false, duration_override)
 	NetworkSession.publish_now()

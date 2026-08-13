@@ -246,6 +246,36 @@ func _physics_process(delta: float) -> void:
 	_was_on_floor = is_on_floor()
 
 
+## This Subject's replicated gameplay state. The owning peer's remaining Verb
+## Expression cooldown travels with it for that peer's HUD.
+## NETWORK: host-authored, applied verbatim by every client.
+func snapshot() -> Dictionary:
+	return {
+		"player_id": get_multiplayer_authority(),
+		"transform": global_transform,
+		"velocity": velocity,
+		"stability": stability,
+		"verb_cooldown": _verb_timer,
+		"destabilised": is_destabilised,
+		"partner_id": paired_partner_id,
+		"chain_sync": chain_sync,
+		"overdrive": is_overdrive,
+		"shield_active": shield_active,
+	}
+
+
+func apply_replicated_state(state: Dictionary) -> void:
+	global_transform = state.get("transform", global_transform)
+	velocity = state.get("velocity", velocity)
+	stability = state.get("stability", stability)
+	_verb_timer = state.get("verb_cooldown", 0.0)
+	is_destabilised = state.get("destabilised", is_destabilised)
+	paired_partner_id = state.get("partner_id", paired_partner_id)
+	chain_sync = state.get("chain_sync", chain_sync)
+	is_overdrive = state.get("overdrive", is_overdrive)
+	shield_active = state.get("shield_active", shield_active)
+
+
 ## Assigns this player's verb and the matching Character Identity name.
 ## Call through LobbyManager.select_verb() so uniqueness holds.
 ## NETWORK: replication boundary — server assigns, then broadcasts.

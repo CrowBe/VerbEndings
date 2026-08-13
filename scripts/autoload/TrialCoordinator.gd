@@ -55,13 +55,11 @@ func _process(delta: float) -> void:
 ## Starts a complete Trial after the host has registered the roster and Verbs.
 func start_trial(trial_seed: int, auto_complete_drafts: bool = false,
 		duration_override: float = -1.0, preferred_protocol: String = "") -> bool:
-	if not NetworkSession.can_simulate() or LobbyManager.lobby_players.is_empty():
+	if not NetworkSession.can_simulate():
 		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			push_warning("TrialCoordinator: every Subject needs a Verb before the Trial.")
-			return false
+	if not LobbyManager.verb_selection_complete():
+		push_warning("TrialCoordinator: every Subject needs a Verb before the Trial.")
+		return false
 	reset()
 	FacilityStateLedger.reset_for_trial(trial_seed)
 	automatic_drafts = auto_complete_drafts
@@ -128,12 +126,31 @@ func get_winner_id() -> int:
 	return _winner_id
 
 
-## Applies host-authored presentation state without advancing client logic.
+## Applies host-authored lifecycle state without advancing client logic, and
+## announces a transition the client has not seen yet. The coordinator emits
+## its own signals on every peer; the transport never emits them for it.
 func apply_replicated_state(phase: Phase, seconds_remaining: float,
-		winner_id: int) -> void:
+		winner_id: int, replicated_seed: int = 0) -> void:
+	var previous_phase: Phase = current_phase
 	current_phase = phase
 	experiment_seconds_remaining = seconds_remaining
 	_winner_id = winner_id
+	if previous_phase == current_phase:
+		return
+	phase_changed.emit(current_phase, RoundManager.current_round_index,
+			RoundManager.current_protocol)
+	if current_phase == Phase.EXPERIMENT and RoundManager.current_protocol != null:
+		# Round composition draws from the host's stream, so match its seed.
+		seed(replicated_seed)
+		experiment_requested.emit(RoundManager.current_round_index,
+				RoundManager.current_protocol)
+	elif current_phase == Phase.COMPLETE:
+		trial_completed.emit(_winner_id)
+
+
+## Applies the host's Experiment clock between full snapshots.
+func apply_replicated_experiment_clock(seconds_remaining: float) -> void:
+	experiment_seconds_remaining = seconds_remaining
 
 
 func _begin_pair_draft() -> void:
