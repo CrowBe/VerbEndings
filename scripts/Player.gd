@@ -431,7 +431,7 @@ func _area_hit(impact_strength: float) -> void:
 	for residual: Node in get_tree().get_nodes_in_group("residuals"):
 		if _in_verb_radius(residual):
 			residual.take_hit(impact_strength, get_multiplayer_authority())
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		if body != self and _in_verb_radius(body):
 			body.apply_impact(impact_strength, self)
 	for receiver: Node in get_tree().get_nodes_in_group("impact_receivers"):
@@ -552,10 +552,5 @@ func _resolve_partner() -> Node3D:
 	if paired_partner_id == get_multiplayer_authority():
 		return self  # Self-Chain
 	if _partner_body == null or not is_instance_valid(_partner_body):
-		# NETWORK: partner bodies will live under a shared "players" group
-		# once the MultiplayerSpawner exists; find ours by peer id.
-		for body: Node in get_tree().get_nodes_in_group("players"):
-			if body != self and body.get_multiplayer_authority() == paired_partner_id:
-				_partner_body = body
-				break
+		_partner_body = SubjectRoster.body_of(paired_partner_id) as Node3D
 	return _partner_body

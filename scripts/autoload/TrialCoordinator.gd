@@ -269,9 +269,7 @@ func _finish_round_lifecycle() -> void:
 
 
 func _recall_subjects() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.has_method("restabilise"):
-			body.call("restabilise")
+	SubjectRoster.recall_all()
 
 
 func _on_winner_decided(player_id: int) -> void:

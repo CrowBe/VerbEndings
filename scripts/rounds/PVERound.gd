@@ -58,8 +58,7 @@ var _residual_sequence: int = 0
 
 
 func _ready() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		body.destabilised.connect(_on_player_destabilised)
+	SubjectRoster.connect_destabilised(_on_player_destabilised)
 
 
 func _physics_process(delta: float) -> void:
@@ -94,7 +93,7 @@ func end_round() -> void:
 
 ## One residual per stable player, on that player's spawn ring.
 func _spawn_wave() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		if body.is_destabilised:
 			continue
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
@@ -126,10 +125,7 @@ func _current_strength_multiplier() -> float:
 
 
 func _award_survival_ticks() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.is_destabilised:
-			continue
-		var player_id: int = body.get_multiplayer_authority()
+	for player_id: int in SubjectRoster.stable_ids():
 		survival_ticks[player_id] = survival_ticks.get(player_id, 0) + 1
 		ScoreManager.award_protocol_bonus(player_id, protocol, "survival_tick")
 

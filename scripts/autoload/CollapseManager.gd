@@ -132,16 +132,10 @@ func trigger_collapse(participant_ids: Array[int]) -> void:
 	# No Pair survives into the Collapse.
 	VerbChainManager.dissolve_all_chains()
 
-	# Force every participant's body into Solo Overdrive. Bodies register
-	# in the "players" group (see Player.tscn).
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		var peer_id: int = body.get_multiplayer_authority()
-		if peer_id not in surviving_players:
-			continue
-		body.enter_overdrive()
-		if body.has_signal("destabilised") \
-				and not body.destabilised.is_connected(_on_subject_destabilised):
-			body.destabilised.connect(_on_subject_destabilised)
+	# Force every participant's body into Solo Overdrive.
+	for peer_id: int in surviving_players:
+		SubjectRoster.set_solo_overdrive(peer_id)
+	SubjectRoster.connect_destabilised(_on_subject_destabilised)
 
 	for laboratory_id: StringName in LABORATORY_IDS:
 		FacilityStateLedger.set_experiment_lifecycle(laboratory_id, &"live",
@@ -373,13 +367,7 @@ func eliminate_players(eliminations: Array[Dictionary]) -> void:
 
 
 func _remove_subject_from_play(player_id: int) -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.get_multiplayer_authority() != player_id:
-			continue
-		body.process_mode = Node.PROCESS_MODE_DISABLED
-		if body is Node3D:
-			(body as Node3D).visible = false
-		return
+	SubjectRoster.remove_from_play(player_id)
 
 
 func _finish_with_winner(player_id: int) -> void:
@@ -387,12 +375,8 @@ func _finish_with_winner(player_id: int) -> void:
 	stage = Stage.COMPLETE
 	_disconnect_subjects()
 	ultimate_winner_decided.emit(player_id)
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		body.exit_overdrive()
+	SubjectRoster.set_unpaired_all()
 
 
 func _disconnect_subjects() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.has_signal("destabilised") \
-				and body.destabilised.is_connected(_on_subject_destabilised):
-			body.destabilised.disconnect(_on_subject_destabilised)
+	SubjectRoster.disconnect_destabilised(_on_subject_destabilised)
