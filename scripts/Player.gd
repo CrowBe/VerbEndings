@@ -177,7 +177,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	# The top-level rig follows the body's position but keeps its own yaw.
 	camera_rig.global_position = global_position + Vector3.UP * 1.2
-	if NetworkSession.mode == NetworkSession.Mode.CLIENT:
+	if NetworkSession.is_client():
 		if accepts_local_input:
 			var client_input := Input.get_vector(
 					"move_left", "move_right", "move_forward", "move_back")
@@ -244,6 +244,36 @@ func _physics_process(delta: float) -> void:
 	elif is_on_floor() and not _was_on_floor:
 		animation_adapter.play_land()
 	_was_on_floor = is_on_floor()
+
+
+## This Subject's replicated gameplay state. The owning peer's remaining Verb
+## Expression cooldown travels with it for that peer's HUD.
+## NETWORK: host-authored, applied verbatim by every client.
+func snapshot() -> Dictionary:
+	return {
+		"player_id": get_multiplayer_authority(),
+		"transform": global_transform,
+		"velocity": velocity,
+		"stability": stability,
+		"verb_cooldown": _verb_timer,
+		"destabilised": is_destabilised,
+		"partner_id": paired_partner_id,
+		"chain_sync": chain_sync,
+		"overdrive": is_overdrive,
+		"shield_active": shield_active,
+	}
+
+
+func apply_replicated_state(state: Dictionary) -> void:
+	global_transform = state.get("transform", global_transform)
+	velocity = state.get("velocity", velocity)
+	stability = state.get("stability", stability)
+	_verb_timer = state.get("verb_cooldown", 0.0)
+	is_destabilised = state.get("destabilised", is_destabilised)
+	paired_partner_id = state.get("partner_id", paired_partner_id)
+	chain_sync = state.get("chain_sync", chain_sync)
+	is_overdrive = state.get("overdrive", is_overdrive)
+	shield_active = state.get("shield_active", shield_active)
 
 
 ## Assigns this player's verb and the matching Character Identity name.
@@ -431,7 +461,7 @@ func _area_hit(impact_strength: float) -> void:
 	for residual: Node in get_tree().get_nodes_in_group("residuals"):
 		if _in_verb_radius(residual):
 			residual.take_hit(impact_strength, get_multiplayer_authority())
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		if body != self and _in_verb_radius(body):
 			body.apply_impact(impact_strength, self)
 	for receiver: Node in get_tree().get_nodes_in_group("impact_receivers"):
@@ -549,15 +579,8 @@ func _tether_check(delta: float) -> float:
 func _resolve_partner() -> Node3D:
 	if paired_partner_id == null or paired_partner_id == -1:
 		return null
-	var subject_id: int = multiplayer.get_unique_id() \
-			if multiplayer.has_multiplayer_peer() else get_multiplayer_authority()
-	if paired_partner_id == subject_id:
+	if paired_partner_id == get_multiplayer_authority():
 		return self  # Self-Chain
 	if _partner_body == null or not is_instance_valid(_partner_body):
-		# NETWORK: partner bodies will live under a shared "players" group
-		# once the MultiplayerSpawner exists; find ours by peer id.
-		for body: Node in get_tree().get_nodes_in_group("players"):
-			if body != self and body.get_multiplayer_authority() == paired_partner_id:
-				_partner_body = body
-				break
+		_partner_body = SubjectRoster.body_of(paired_partner_id) as Node3D
 	return _partner_body

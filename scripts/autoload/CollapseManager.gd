@@ -53,14 +53,15 @@ var entry_assignments: Dictionary = {}
 var failure_order: Array[StringName] = []
 var stage: Stage = Stage.INACTIVE
 var elapsed_seconds: float = 0.0
-var _next_failure_index: int = 0
+## Authored failures before this index have already run to completion.
+var next_failure_index: int = 0
 var telegraphed_laboratory: StringName = &""
 var _queued_eliminations: Dictionary = {}
 var _elimination_resolution_queued: bool = false
 
 
 func _process(delta: float) -> void:
-	if is_active and NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if is_active and NetworkSession.can_simulate():
 		advance_timeline(delta)
 
 
@@ -73,7 +74,7 @@ func reset() -> void:
 	failure_order.clear()
 	stage = Stage.INACTIVE
 	elapsed_seconds = 0.0
-	_next_failure_index = 0
+	next_failure_index = 0
 	telegraphed_laboratory = &""
 	_queued_eliminations.clear()
 	_elimination_resolution_queued = false
@@ -124,7 +125,7 @@ func trigger_collapse(participant_ids: Array[int]) -> void:
 	surviving_players = participant_ids.duplicate()
 	surviving_players.sort()
 	elapsed_seconds = 0.0
-	_next_failure_index = 0
+	next_failure_index = 0
 	telegraphed_laboratory = &""
 	stage = Stage.PROTECTED_ORIENTATION
 	_build_seeded_plan(FacilityStateLedger.trial_seed)
@@ -132,16 +133,10 @@ func trigger_collapse(participant_ids: Array[int]) -> void:
 	# No Pair survives into the Collapse.
 	VerbChainManager.dissolve_all_chains()
 
-	# Force every participant's body into Solo Overdrive. Bodies register
-	# in the "players" group (see Player.tscn).
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		var peer_id: int = body.get_multiplayer_authority()
-		if peer_id not in surviving_players:
-			continue
-		body.enter_overdrive()
-		if body.has_signal("destabilised") \
-				and not body.destabilised.is_connected(_on_subject_destabilised):
-			body.destabilised.connect(_on_subject_destabilised)
+	# Force every participant's body into Solo Overdrive.
+	for peer_id: int in surviving_players:
+		SubjectRoster.set_solo_overdrive(peer_id)
+	SubjectRoster.connect_destabilised(_on_subject_destabilised)
 
 	for laboratory_id: StringName in LABORATORY_IDS:
 		FacilityStateLedger.set_experiment_lifecycle(laboratory_id, &"live",
@@ -178,7 +173,7 @@ func snapshot() -> Dictionary:
 		"failure_order": failure_order.duplicate(),
 		"stage": stage,
 		"elapsed_seconds": elapsed_seconds,
-		"next_failure_index": _next_failure_index,
+		"next_failure_index": next_failure_index,
 		"telegraphed_laboratory": telegraphed_laboratory,
 	}
 
@@ -190,7 +185,7 @@ func apply_replicated_state(state: Dictionary) -> void:
 	failure_order.assign(state.get("failure_order", []))
 	stage = state.get("stage", Stage.INACTIVE)
 	elapsed_seconds = state.get("elapsed_seconds", 0.0)
-	_next_failure_index = state.get("next_failure_index", 0)
+	next_failure_index = state.get("next_failure_index", 0)
 	telegraphed_laboratory = state.get("telegraphed_laboratory", &"")
 	collapse_state_replicated.emit()
 
@@ -231,11 +226,11 @@ func _shuffle(values: Array, rng: RandomNumberGenerator) -> void:
 
 
 func _process_failures() -> void:
-	while _next_failure_index < failure_order.size():
+	while next_failure_index < failure_order.size():
 		var telegraph_time: float = FIRST_FAILURE_TELEGRAPH_SECONDS \
-				+ _next_failure_index * FAILURE_INTERVAL_SECONDS
+				+ next_failure_index * FAILURE_INTERVAL_SECONDS
 		var failure_time: float = telegraph_time + FAILURE_WARNING_SECONDS
-		var laboratory_id: StringName = failure_order[_next_failure_index]
+		var laboratory_id: StringName = failure_order[next_failure_index]
 		if telegraphed_laboratory.is_empty():
 			if elapsed_seconds < telegraph_time:
 				return
@@ -243,7 +238,7 @@ func _process_failures() -> void:
 		if elapsed_seconds < failure_time:
 			return
 		_apply_failure(laboratory_id)
-		_next_failure_index += 1
+		next_failure_index += 1
 		telegraphed_laboratory = &""
 
 
@@ -286,11 +281,11 @@ func _apparatus_id(laboratory_id: StringName) -> StringName:
 			return &"SpecimenDeliveryColumn"
 
 
-## Collapse hazard callback used by authored Laboratory failure volumes.
+## Reports a Subject falling into an authored Laboratory failure volume.
 ## Eliminates the fallen Subject; the last Subject standing wins outright.
 ## NETWORK: replication boundary — hazards overlap on the server only;
 ## the resulting elimination is broadcast.
-func _on_player_fall_into_hazard(body: Node3D) -> void:
+func report_hazard_fall(body: Node3D) -> void:
 	if not is_active or not body.is_in_group("players"):
 		return
 	queue_elimination(body.get_multiplayer_authority())
@@ -373,13 +368,7 @@ func eliminate_players(eliminations: Array[Dictionary]) -> void:
 
 
 func _remove_subject_from_play(player_id: int) -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.get_multiplayer_authority() != player_id:
-			continue
-		body.process_mode = Node.PROCESS_MODE_DISABLED
-		if body is Node3D:
-			(body as Node3D).visible = false
-		return
+	SubjectRoster.remove_from_play(player_id)
 
 
 func _finish_with_winner(player_id: int) -> void:
@@ -387,12 +376,8 @@ func _finish_with_winner(player_id: int) -> void:
 	stage = Stage.COMPLETE
 	_disconnect_subjects()
 	ultimate_winner_decided.emit(player_id)
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		body.exit_overdrive()
+	SubjectRoster.set_unpaired_all()
 
 
 func _disconnect_subjects() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.has_signal("destabilised") \
-				and body.destabilised.is_connected(_on_subject_destabilised):
-			body.destabilised.disconnect(_on_subject_destabilised)
+	SubjectRoster.disconnect_destabilised(_on_subject_destabilised)

@@ -94,7 +94,7 @@ func setup(p_strength_multiplier: float, grammar_seed: int = 0) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+	if not NetworkSession.can_simulate():
 		return
 	# NETWORK: AI runs on the server only; clients interpolate transforms.
 	_survival_time += delta
@@ -231,7 +231,7 @@ func _adverb_action_speed() -> float:
 func _nearest_stable_player() -> Node3D:
 	var best: Node3D = null
 	var best_distance: float = INF
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		if body.is_destabilised:
 			continue
 		var distance: float = global_position.distance_to(body.global_position)

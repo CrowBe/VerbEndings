@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+SubjectRoster="*res://scripts/autoload/SubjectRoster.gd"
 VerbChainManager="*res://scripts/autoload/VerbChainManager.gd"
 ScoreManager="*res://scripts/autoload/ScoreManager.gd"
 RoundManager="*res://scripts/autoload/RoundManager.gd"

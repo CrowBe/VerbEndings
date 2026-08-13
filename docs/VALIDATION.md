@@ -75,6 +75,18 @@ Stability cues, and individual Result Announcement rankings.
 
 ## Gameplay Tests
 
+Run the shared Experiment lifecycle suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestExperimentController.tscn
+```
+
+It verifies the contract every Protocol controller inherits: canonical
+Elimination that keeps a Destabilised Subject out until Recall, Chain
+Severance and its Collapse exemption, placement scoring before the result is
+announced, single payment per Experiment, and performance ordering with a
+stable Subject-id tie-break.
+
 Run the Chain Severance suite with:
 
 ```bash
