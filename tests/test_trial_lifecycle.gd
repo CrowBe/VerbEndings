@@ -66,6 +66,14 @@ func _run() -> void:
 				"every Round controller emits exactly one result")
 	_expect(ScoreManager.round_scores.size() == 3,
 			"Round Scores remain distinct while Trial Scores accumulate")
+	var diagnostic_summary: Dictionary = SessionDiagnostics.summary()
+	_expect(diagnostic_summary.trial_seed == 24680 \
+			and diagnostic_summary.protocol_order.size() == 3,
+			"session diagnostics observe the seed and complete Protocol order")
+	_expect(diagnostic_summary.lifecycle_transitions.size() == _phases.size() \
+			and diagnostic_summary.final_result.status == "complete" \
+			and diagnostic_summary.final_result.winner_subject_id == 1,
+			"session diagnostics observe lifecycle transitions and the final result")
 
 	_phases.clear()
 	_round_protocol_ids.clear()

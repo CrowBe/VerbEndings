@@ -28,6 +28,26 @@ timeout --signal=INT --kill-after=3s 8s godot4.3 --headless --path .
 
 Exit status 124 is expected when `timeout` stops a healthy running process. The complete output must contain no runtime errors or unexpected warnings.
 
+## Playtest Export Check
+
+Godot 4.3 export templates must be installed. Build the supported Linux x86_64
+playtest and run its exported main menu for a bounded smoke window with:
+
+```bash
+python3 tools/check_export.py --godot godot4.3
+```
+
+The command writes `build/linux/VerbEndings.x86_64`,
+`build/linux/VerbEndings.pck`, and a copy of `docs/PLAYTEST.md`; verifies that
+Godot 4.3 produced both runtime files; launches the executable outside the
+editor; and rejects engine errors, script errors, parse errors and warnings.
+The `build/` directory is ignored by Git. Use
+`--output /tmp/verbendings-export/VerbEndings.x86_64` when a retained local
+build is not required.
+
+The tester-facing installation, host/join, Trial, diagnostic capture and smoke
+procedure is [`docs/PLAYTEST.md`](PLAYTEST.md).
+
 ## Local Playtest Quick Start
 
 Running the project opens the main menu. `resources/local_playtest.tres`
@@ -71,7 +91,18 @@ It verifies the main menu and local/host/join entry points, timed unique Verb
 claims, authoritative Pair Draft choices and odd-roster Self-Chains,
 classification-free Experiment Briefs, viewport-contained lifecycle screens,
 the Stability/Verb Expression/Objective/Round Score HUD, non-colour Critical
-Stability cues, and individual Result Announcement rankings.
+Stability cues, individual Result Announcement rankings, and the build/seed
+diagnostics view.
+
+Run the bounded session-summary suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestSessionDiagnostics.tscn
+```
+
+It verifies build and seed identity, Protocol order, explicit lifecycle and
+disconnect bounds, final result capture, valid JSON persistence, and exclusion
+of addresses and machine-specific paths from the summary.
 
 ## Gameplay Tests
 
@@ -318,8 +349,10 @@ timeout --signal=INT --kill-after=3s 8s godot --headless --path .
 
 Focused gameplay test suites run as separate steps after the runtime smoke
 check in `.github/workflows/validation.yml`, including the Material Dispenser
-visual-boundary suite. New suites belong alongside them as separate steps,
-keeping failures isolated while using the same pinned engine and imported
-project.
+visual-boundary and session-diagnostics suites. CI installs the Godot 4.3
+export templates, runs the same Linux export-and-launch check, and uploads the
+playtest build and runbook as `VerbEndings-linux-x86_64`. New suites belong
+alongside the existing focused steps, keeping failures isolated while using
+the same pinned engine and imported project.
 
 Static and headless checks do not establish visual correctness, control quality, internet traversal, latency quality, large-roster multiplayer correctness, or representative performance. Compound silhouette readability during a Drop, comfortable 8–12 Subject use, practical 24-Subject circulation, route legibility, and cross-layer sightline quality require graphical inspection and human playtesting.
