@@ -44,7 +44,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if current_phase != Phase.EXPERIMENT or _round_result_received:
 		return
-	if not _is_host():
+	if not NetworkSession.can_simulate():
 		return
 	experiment_seconds_remaining = maxf(experiment_seconds_remaining - delta, 0.0)
 	experiment_time_changed.emit(experiment_seconds_remaining)
@@ -55,13 +55,11 @@ func _process(delta: float) -> void:
 ## Starts a complete Trial after the host has registered the roster and Verbs.
 func start_trial(trial_seed: int, auto_complete_drafts: bool = false,
 		duration_override: float = -1.0, preferred_protocol: String = "") -> bool:
-	if not _is_host() or LobbyManager.lobby_players.is_empty():
+	if not NetworkSession.can_simulate():
 		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			push_warning("TrialCoordinator: every Subject needs a Verb before the Trial.")
-			return false
+	if not LobbyManager.verb_selection_complete():
+		push_warning("TrialCoordinator: every Subject needs a Verb before the Trial.")
+		return false
 	reset()
 	FacilityStateLedger.reset_for_trial(trial_seed)
 	automatic_drafts = auto_complete_drafts
@@ -128,12 +126,31 @@ func get_winner_id() -> int:
 	return _winner_id
 
 
-## Applies host-authored presentation state without advancing client logic.
+## Applies host-authored lifecycle state without advancing client logic, and
+## announces a transition the client has not seen yet. The coordinator emits
+## its own signals on every peer; the transport never emits them for it.
 func apply_replicated_state(phase: Phase, seconds_remaining: float,
-		winner_id: int) -> void:
+		winner_id: int, replicated_seed: int = 0) -> void:
+	var previous_phase: Phase = current_phase
 	current_phase = phase
 	experiment_seconds_remaining = seconds_remaining
 	_winner_id = winner_id
+	if previous_phase == current_phase:
+		return
+	phase_changed.emit(current_phase, RoundManager.current_round_index,
+			RoundManager.current_protocol)
+	if current_phase == Phase.EXPERIMENT and RoundManager.current_protocol != null:
+		# Round composition draws from the host's stream, so match its seed.
+		seed(replicated_seed)
+		experiment_requested.emit(RoundManager.current_round_index,
+				RoundManager.current_protocol)
+	elif current_phase == Phase.COMPLETE:
+		trial_completed.emit(_winner_id)
+
+
+## Applies the host's Experiment clock between full snapshots.
+func apply_replicated_experiment_clock(seconds_remaining: float) -> void:
+	experiment_seconds_remaining = seconds_remaining
 
 
 func _begin_pair_draft() -> void:
@@ -166,7 +183,7 @@ func _on_draft_completed() -> void:
 ## Player-facing presentation completion seam. Interactive Trials remain on
 ## the Experiment Brief until the local presentation explicitly continues.
 func complete_experiment_brief() -> bool:
-	if not _is_host() or current_phase != Phase.EXPERIMENT_BRIEF:
+	if not NetworkSession.can_simulate() or current_phase != Phase.EXPERIMENT_BRIEF:
 		return false
 	_begin_laboratory_entry()
 	return true
@@ -183,7 +200,7 @@ func _begin_laboratory_entry() -> void:
 ## Host-authoritative presentation completion seam. The Experiment cannot
 ## begin until every Subject has independently Released and Landed.
 func complete_laboratory_entry() -> bool:
-	if not _is_host() or current_phase != Phase.LABORATORY_ENTRY:
+	if not NetworkSession.can_simulate() or current_phase != Phase.LABORATORY_ENTRY:
 		return false
 	_begin_experiment()
 	return true
@@ -222,7 +239,7 @@ func _on_round_finished(ordered_player_ids: Array) -> void:
 ## Host-authoritative presentation completion seam. Result Announcement waits
 ## until every eligible Subject has traversed Recall to the Assignment Deck.
 func complete_recall() -> bool:
-	if not _is_host() or current_phase != Phase.RECALL:
+	if not NetworkSession.can_simulate() or current_phase != Phase.RECALL:
 		return false
 	_announce_result()
 	return true
@@ -242,7 +259,7 @@ func _announce_result() -> void:
 ## Player-facing presentation completion seam. Interactive Trials keep the
 ## Result Announcement visible until the local presentation acknowledges it.
 func complete_result_announcement() -> bool:
-	if not _is_host() or current_phase != Phase.RESULT_ANNOUNCEMENT:
+	if not NetworkSession.can_simulate() or current_phase != Phase.RESULT_ANNOUNCEMENT:
 		return false
 	_complete_result_presentation()
 	return true
@@ -269,9 +286,7 @@ func _finish_round_lifecycle() -> void:
 
 
 func _recall_subjects() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.has_method("restabilise"):
-			body.call("restabilise")
+	SubjectRoster.recall_all()
 
 
 func _on_winner_decided(player_id: int) -> void:
@@ -324,7 +339,3 @@ func _update_facility_lifecycle() -> void:
 			if lifecycle in [&"brief", &"entry", &"live"] else &""
 	FacilityStateLedger.set_active_objective(laboratory_id, objective,
 			&"%s_objective_%s" % [laboratory_id, lifecycle])
-
-
-func _is_host() -> bool:
-	return not multiplayer.has_multiplayer_peer() or multiplayer.is_server()

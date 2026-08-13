@@ -1,4 +1,4 @@
-extends Node3D
+extends ExperimentController
 ## PVE round controller: the swarm.
 ##
 ## Residuals spawn on a ring around each stable player — never closer than
@@ -18,8 +18,6 @@ extends Node3D
 
 ## NETWORK: replication boundary — broadcast for the Elimination-feed HUD.
 signal residual_destabilised(player_id: int, new_destabilisation_count: int)
-## NETWORK: replication boundary — broadcast the final round placements.
-signal round_finished(ordered_player_ids: Array)
 
 const RESIDUAL_SCENE: PackedScene = preload("res://scenes/Residual.tscn")
 
@@ -49,21 +47,18 @@ var survival_ticks: Dictionary = {}
 ## Stable input for deterministic Residual grammar. Multiplayer hosts provide
 ## the authoritative Trial seed here.
 @export var grammar_seed: int = 0
-@export var protocol: ExperimentProtocol = preload(
-		"res://resources/protocols/adaptive_containment.tres")
 
 var _spawn_timer: float = 0.0
 var _survival_timer: float = 0.0
 var _residual_sequence: int = 0
 
 
-func _ready() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		body.destabilised.connect(_on_player_destabilised)
+func _default_protocol() -> ExperimentProtocol:
+	return preload("res://resources/protocols/adaptive_containment.tres")
 
 
 func _physics_process(delta: float) -> void:
-	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+	if not NetworkSession.can_simulate():
 		return
 	elapsed += delta
 
@@ -77,24 +72,16 @@ func _physics_process(delta: float) -> void:
 		_survival_timer = 0.0
 		_award_survival_ticks()
 
-## Ends the round: placements by weighted Destabilisations + survival,
-## best first.
-## NETWORK: replication boundary — server-side, on round timer expiry.
-func end_round() -> void:
-	var ordered: Array = VerbChainManager.active_players.keys()
-	ordered.sort_custom(func(a: int, b: int) -> bool:
-		var score_a: float = _round_score(a)
-		var score_b: float = _round_score(b)
-		if score_a != score_b:
-			return score_a > score_b
-		return a < b)
-	ScoreManager.award_protocol_placements(protocol, ordered)
-	round_finished.emit(ordered)
+## Placements blend Residuals Destabilised with survival time.
+func get_performance(player_id: int) -> float:
+	return destabilisation_counts.get(player_id, 0) * DESTABILISATION_WEIGHT \
+			+ survival_ticks.get(player_id, 0) * SURVIVAL_WEIGHT
 
 
 ## One residual per stable player, on that player's spawn ring.
 func _spawn_wave() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	refresh_subjects()
+	for body: Node in SubjectRoster.bodies():
 		if body.is_destabilised:
 			continue
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
@@ -126,10 +113,7 @@ func _current_strength_multiplier() -> float:
 
 
 func _award_survival_ticks() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.is_destabilised:
-			continue
-		var player_id: int = body.get_multiplayer_authority()
+	for player_id: int in SubjectRoster.stable_ids():
 		survival_ticks[player_id] = survival_ticks.get(player_id, 0) + 1
 		ScoreManager.award_protocol_bonus(player_id, protocol, "survival_tick")
 
@@ -143,14 +127,6 @@ func _on_residual_destabilised(_residual: Residual, attacker_player_id: int) -> 
 
 
 ## A last hit is the sole Assumption path.
-func _on_player_destabilised(player: Node, source: Node) -> void:
+func _on_subject_eliminated(_player_id: int, subject: Node, source: Node) -> void:
 	if source is Residual:
-		source.assume_verb(player.assigned_verb)
-	if not CollapseManager.is_active:
-		VerbChainManager.sever_chain_for(player.get_multiplayer_authority())
-		player.call_deferred("restabilise")
-
-
-func _round_score(player_id: int) -> float:
-	return destabilisation_counts.get(player_id, 0) * DESTABILISATION_WEIGHT \
-			+ survival_ticks.get(player_id, 0) * SURVIVAL_WEIGHT
+		source.assume_verb(subject.assigned_verb)

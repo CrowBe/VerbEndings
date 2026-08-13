@@ -43,7 +43,7 @@ func _ready() -> void:
 
 	CollapseManager.collapse_stage_changed.connect(
 			func(stage: CollapseManager.Stage, laboratory_id: StringName) -> void:
-				_apply_stage(compound, stage, laboratory_id))
+				CollapseComposition.apply_stage(compound, stage, laboratory_id))
 	CollapseManager.ultimate_winner_decided.connect(
 			func(player_id: int) -> void: _winner_id = player_id)
 
@@ -112,6 +112,24 @@ func _ready() -> void:
 	_expect(_available_route_count(failing_laboratory) >= 2,
 			"authored failure retains at least two exits from its Laboratory")
 
+	# A client composes the same facility from replicated state alone, without
+	# having observed any stage signal.
+	compound.reset_collapse(_subjects)
+	_expect(not hazard.get_meta("active", false),
+			"resetting the Compound clears an active failure hazard")
+	CollapseComposition.apply_current_state(compound)
+	_expect(compound.get_node("AssignmentDeck").get_meta("access_sealed", false)
+			and compound.get_node("PerimeterMaintenanceRoute").get_meta(
+				"collapse_open", false)
+			and compound.get_node("CentralCore").get_meta(
+				"collapse_shortcuts_open", false),
+			"catching up to replicated state composes every stage already reached")
+	_expect(hazard.monitoring and hazard.get_meta("active", false),
+			"catching up re-applies authored failures the Collapse has run")
+	CollapseComposition.apply_current_state(compound)
+	_expect(hazard.monitoring and _available_route_count(failing_laboratory) >= 2,
+			"composing the same state twice changes nothing")
+
 	CollapseManager.reset()
 	compound.reset_collapse(_subjects)
 	FacilityStateLedger.reset_for_trial(20260812)
@@ -139,21 +157,6 @@ func _ready() -> void:
 		for failure: String in _failures:
 			push_error(failure)
 		get_tree().quit(1)
-
-
-func _apply_stage(compound: Compound, stage: CollapseManager.Stage,
-		laboratory_id: StringName) -> void:
-	match stage:
-		CollapseManager.Stage.PROTECTED_ORIENTATION:
-			compound.begin_collapse(CollapseManager.entry_assignments, _subjects)
-		CollapseManager.Stage.PERIMETER_ROUTES_OPEN:
-			compound.open_collapse_perimeter_routes(_subjects)
-		CollapseManager.Stage.CORE_SHORTCUTS_OPEN:
-			compound.open_collapse_core_shortcuts()
-		CollapseManager.Stage.FAILURE_TELEGRAPH:
-			compound.telegraph_collapse_failure(laboratory_id)
-		CollapseManager.Stage.FAILURE_ACTIVE:
-			compound.apply_collapse_failure(laboratory_id)
 
 
 func _test_entry_plan(plan: Dictionary) -> void:

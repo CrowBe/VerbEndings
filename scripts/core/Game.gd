@@ -56,7 +56,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump") \
 			and TrialCoordinator.current_phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
-		if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+		if NetworkSession.is_local():
 			if local_player != null:
 				laboratory_transit.request_release(
 						local_player.get_multiplayer_authority())
@@ -88,18 +88,14 @@ func open_local_lobby() -> void:
 
 
 func select_local_lobby_verb(player_id: int, verb: Enums.VerbType) -> bool:
-	if NetworkSession.mode != NetworkSession.Mode.LOCAL:
+	if not NetworkSession.is_local():
 		return false
 	return LobbyManager.select_verb(player_id, verb)
 
 
 func start_interactive_local_trial() -> bool:
-	if NetworkSession.mode != NetworkSession.Mode.LOCAL:
+	if not NetworkSession.is_local() or not LobbyManager.verb_selection_complete():
 		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			return false
 	for subject: Node3D in local_subjects:
 		subject.call("set_character_identity", VerbChainManager.active_players.get(
 				subject.get_multiplayer_authority(), Enums.VerbType.NONE))
@@ -107,10 +103,10 @@ func start_interactive_local_trial() -> bool:
 
 
 func complete_timed_verb_selection() -> bool:
-	if NetworkSession.mode == NetworkSession.Mode.CLIENT:
+	if NetworkSession.is_client():
 		return false
 	LobbyManager.complete_verb_selection_automatically()
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return start_interactive_local_trial()
 	return start_hosted_trial()
 
@@ -150,12 +146,8 @@ func join_session(address: String,
 
 ## Starts the host-authored Trial once every connected Subject has a Verb.
 func start_hosted_trial(duration_override: float = -1.0) -> bool:
-	if not NetworkSession.is_host():
+	if not NetworkSession.is_host() or not LobbyManager.verb_selection_complete():
 		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			return false
 	var started: bool = TrialCoordinator.start_trial(
 			active_seed, false, duration_override)
 	NetworkSession.publish_now()
@@ -245,7 +237,7 @@ func _spawn_local_subjects(assign_configured_verbs: bool = true) -> void:
 
 
 func _on_network_roster_changed(player_ids: Array[int]) -> void:
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return
 	var existing: Dictionary = {}
 	for subject: Node3D in local_subjects:
@@ -283,7 +275,7 @@ func _on_network_roster_changed(player_ids: Array[int]) -> void:
 
 func _on_network_verb_selected(player_id: int, verb: Enums.VerbType,
 		_seconds_taken: float) -> void:
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return
 	for subject: Node in local_subjects:
 		if subject.get_multiplayer_authority() == player_id:
@@ -354,44 +346,17 @@ func _on_trial_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
 
 func _on_collapse_stage_changed(stage: CollapseManager.Stage,
 		laboratory_id: StringName) -> void:
-	match stage:
-		CollapseManager.Stage.PROTECTED_ORIENTATION:
-			compound.begin_collapse(
-					CollapseManager.entry_assignments, local_subjects)
-		CollapseManager.Stage.PERIMETER_ROUTES_OPEN:
-			compound.open_collapse_perimeter_routes(local_subjects)
-		CollapseManager.Stage.CORE_SHORTCUTS_OPEN:
-			compound.open_collapse_core_shortcuts()
-		CollapseManager.Stage.FAILURE_TELEGRAPH:
-			compound.telegraph_collapse_failure(laboratory_id)
-		CollapseManager.Stage.FAILURE_ACTIVE:
-			compound.apply_collapse_failure(laboratory_id)
+	CollapseComposition.apply_stage(compound, stage, laboratory_id)
 
 
 func _apply_collapse_composition() -> void:
-	if TrialCoordinator.current_phase != TrialCoordinator.Phase.COLLAPSE \
-			or CollapseManager.entry_assignments.is_empty():
+	if TrialCoordinator.current_phase != TrialCoordinator.Phase.COLLAPSE:
 		return
-	compound.begin_collapse(CollapseManager.entry_assignments, local_subjects)
-	if CollapseManager.elapsed_seconds >= CollapseManager.ORIENTATION_SECONDS:
-		compound.open_collapse_perimeter_routes(local_subjects)
-	if CollapseManager.elapsed_seconds >= CollapseManager.CORE_SHORTCUT_SECONDS:
-		compound.open_collapse_core_shortcuts()
-	for laboratory_id: StringName in Compound.LABORATORY_IDS:
-		if not FacilityStateLedger.laboratories.has(laboratory_id):
-			continue
-		var laboratory_state: Dictionary = FacilityStateLedger.laboratories[
-				laboratory_id]
-		if laboratory_state.round_stage == &"containment_failure":
-			compound.telegraph_collapse_failure(laboratory_id)
-			compound.apply_collapse_failure(laboratory_id)
-	if not CollapseManager.telegraphed_laboratory.is_empty():
-		compound.telegraph_collapse_failure(
-				CollapseManager.telegraphed_laboratory)
+	CollapseComposition.apply_current_state(compound)
 
 
 func _on_laboratory_entry_completed() -> void:
-	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if NetworkSession.can_simulate():
 		TrialCoordinator.complete_laboratory_entry()
 
 
@@ -400,5 +365,5 @@ func _on_recall_completed() -> void:
 		round_root.remove_child(current_round)
 		current_round.queue_free()
 		current_round = null
-	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if NetworkSession.can_simulate():
 		TrialCoordinator.complete_recall()

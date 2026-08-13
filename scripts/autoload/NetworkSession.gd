@@ -92,8 +92,27 @@ func shutdown() -> void:
 	session_closed.emit()
 
 
+## Transport authority: this process owns the ENet server peer. Use this for
+## transport work only — enrolling peers, resolving RPC requests, publishing.
 func is_host() -> bool:
 	return mode == Mode.HOST and multiplayer.is_server()
+
+
+## Domain authority: this process decides gameplay and lifecycle state. True
+## for a local Trial and for the host; false for a client, which only applies
+## replicated state. Every simulation and lifecycle guard asks this.
+func can_simulate() -> bool:
+	return mode != Mode.CLIENT
+
+
+## This process receives authoritative state instead of producing it.
+func is_client() -> bool:
+	return mode == Mode.CLIENT
+
+
+## No multiplayer peer: one process owns every Subject.
+func is_local() -> bool:
+	return mode == Mode.LOCAL
 
 
 func request_verb(verb: Enums.VerbType) -> void:
@@ -159,15 +178,19 @@ func publish_now() -> void:
 		_publish_snapshot(true)
 
 
+## Human-readable summary of replicated state, used by logging and the
+## two-process suite to compare peers.
 func state_digest() -> Dictionary:
+	var lobby: Dictionary = LobbyManager.snapshot()
+	var scores: Dictionary = ScoreManager.snapshot()
 	return {
 		"seed": trial_seed,
-		"roster": LobbyManager.lobby_players.duplicate(),
+		"roster": lobby.lobby_players,
 		"verbs": VerbChainManager.active_players.duplicate(true),
 		"chains": VerbChainManager.verb_chains.duplicate(true),
-		"dispensing_line_tubes": LobbyManager.dispensing_line_tubes.duplicate(),
-		"scores": ScoreManager.player_points.duplicate(true),
-		"round_scores": ScoreManager.round_scores.duplicate(true),
+		"dispensing_line_tubes": lobby.dispensing_line_tubes,
+		"scores": scores.player_points,
+		"round_scores": scores.round_scores,
 		"round_index": RoundManager.current_round_index,
 		"round_type": RoundManager.current_round_type,
 		"round_history": RoundManager.round_history.duplicate(),
@@ -221,8 +244,8 @@ func _receive_full_state(snapshot: Dictionary) -> void:
 func _receive_actor_snapshot(snapshot: Dictionary) -> void:
 	if mode != Mode.CLIENT:
 		return
-	TrialCoordinator.experiment_seconds_remaining = snapshot.get(
-			"experiment_seconds", 0.0)
+	TrialCoordinator.apply_replicated_experiment_clock(
+			snapshot.get("experiment_seconds", 0.0))
 	_apply_subject_snapshots(snapshot.get("subjects", []))
 	_apply_residual_snapshots(snapshot.get("residuals", []))
 
@@ -313,14 +336,13 @@ func _resolve_action(player_id: int, action: StringName) -> void:
 	if action == &"release":
 		release_requested.emit(player_id)
 		return
-	for subject: Node in get_tree().get_nodes_in_group("players"):
-		if subject.get_multiplayer_authority() != player_id:
-			continue
-		if action == &"basic_hit":
-			subject.basic_hit()
-		elif action == &"verb_expression":
-			subject.express_verb()
+	var subject: Node = SubjectRoster.body_of(player_id)
+	if subject == null:
 		return
+	if action == &"basic_hit":
+		subject.basic_hit()
+	elif action == &"verb_expression":
+		subject.express_verb()
 
 
 func _publish_snapshot(reliable: bool) -> void:
@@ -336,10 +358,13 @@ func _publish_snapshot(reliable: bool) -> void:
 		})
 
 
+## The authoritative wire snapshot. Each module composes its own state; this
+## transport routes those compositions and adds nothing of its own beyond the
+## session seed.
 func _build_snapshot() -> Dictionary:
 	var snapshot: Dictionary = state_digest()
-	snapshot["draft_queue"] = LobbyManager.draft_queue.duplicate()
-	snapshot["current_chooser_id"] = LobbyManager.current_chooser_id
+	snapshot["lobby_state"] = LobbyManager.snapshot()
+	snapshot["score_state"] = ScoreManager.snapshot()
 	snapshot["experiment_seconds"] = TrialCoordinator.experiment_seconds_remaining
 	snapshot["subjects"] = _subject_snapshots()
 	snapshot["residuals"] = _residual_snapshots()
@@ -348,25 +373,14 @@ func _build_snapshot() -> Dictionary:
 
 func _subject_snapshots() -> Array[Dictionary]:
 	var subjects: Array[Dictionary] = []
-	for subject: Node3D in get_tree().get_nodes_in_group("players"):
-		subjects.append({
-			"player_id": subject.get_multiplayer_authority(),
-			"transform": subject.global_transform,
-			"velocity": subject.velocity,
-			"stability": subject.stability,
-			"verb_cooldown": subject.get_verb_cooldown_remaining(),
-			"destabilised": subject.is_destabilised,
-			"partner_id": subject.paired_partner_id,
-			"chain_sync": subject.chain_sync,
-			"overdrive": subject.is_overdrive,
-			"shield_active": subject.shield_active,
-		})
+	for subject: Node in SubjectRoster.bodies():
+		subjects.append(subject.snapshot())
 	return subjects
 
 
 func _subject_gameplay_digest() -> Dictionary:
 	var subjects: Dictionary = {}
-	for subject: Node in get_tree().get_nodes_in_group("players"):
+	for subject: Node in SubjectRoster.bodies():
 		subjects[subject.get_multiplayer_authority()] = {
 			"stability": subject.stability,
 			"destabilised": subject.is_destabilised,
@@ -389,43 +403,29 @@ func _residual_snapshots() -> Array[Dictionary]:
 	return residuals
 
 
+## Hands each module its own replicated state. Every module announces its own
+## transitions, so the transport emits no domain signals of its own.
 func _apply_snapshot(snapshot: Dictionary) -> void:
 	if mode != Mode.CLIENT:
 		return
 	trial_seed = snapshot.get("seed", 0)
-	LobbyManager.lobby_players.assign(snapshot.get("roster", []))
-	LobbyManager.draft_queue.assign(snapshot.get("draft_queue", []))
-	LobbyManager.current_chooser_id = snapshot.get("current_chooser_id", -1)
-	LobbyManager.dispensing_line_tubes = snapshot.get(
-			"dispensing_line_tubes", {}).duplicate()
+	LobbyManager.apply_replicated_state(snapshot.get("lobby_state", {}))
 	VerbChainManager.apply_replicated_state(
 			snapshot.get("verbs", {}), snapshot.get("chains", {}))
-	ScoreManager.player_points = snapshot.get("scores", {}).duplicate(true)
-	ScoreManager.round_scores = snapshot.get("round_scores", {}).duplicate(true)
+	ScoreManager.apply_replicated_state(snapshot.get("score_state", {}))
 	RoundManager.apply_replicated_state(
 			snapshot.get("round_index", 0), snapshot.get("round_type", ""),
 			snapshot.get("round_history", []))
-	var previous_phase: TrialCoordinator.Phase = TrialCoordinator.current_phase
-	TrialCoordinator.apply_replicated_state(
-			snapshot.get("phase", TrialCoordinator.Phase.IDLE),
-			snapshot.get("experiment_seconds", 0.0),
-			snapshot.get("winner_id", -1))
 	FacilityStateLedger.apply_replicated_snapshot(snapshot.get("facility_state", {}))
 	CollapseManager.apply_replicated_state(snapshot.get("collapse_state", {
 		"is_active": snapshot.get("collapse_active", false),
 		"surviving_players": snapshot.get("collapse_survivors", []),
 	}))
 	_apply_subject_snapshots(snapshot.get("subjects", []))
-	if previous_phase != TrialCoordinator.current_phase:
-		TrialCoordinator.phase_changed.emit(TrialCoordinator.current_phase,
-				RoundManager.current_round_index, RoundManager.current_protocol)
-		if TrialCoordinator.current_phase == TrialCoordinator.Phase.EXPERIMENT \
-				and RoundManager.current_protocol != null:
-			seed(trial_seed)
-			TrialCoordinator.experiment_requested.emit(
-					RoundManager.current_round_index, RoundManager.current_protocol)
-		elif TrialCoordinator.current_phase == TrialCoordinator.Phase.COMPLETE:
-			TrialCoordinator.trial_completed.emit(TrialCoordinator.get_winner_id())
+	TrialCoordinator.apply_replicated_state(
+			snapshot.get("phase", TrialCoordinator.Phase.IDLE),
+			snapshot.get("experiment_seconds", 0.0),
+			snapshot.get("winner_id", -1), trial_seed)
 	_apply_residual_snapshots(snapshot.get("residuals", []))
 	roster_changed.emit(LobbyManager.lobby_players.duplicate())
 	authoritative_state_received.emit(snapshot)
@@ -433,20 +433,10 @@ func _apply_snapshot(snapshot: Dictionary) -> void:
 
 func _apply_subject_snapshots(snapshots: Array) -> void:
 	for subject_state: Dictionary in snapshots:
-		var player_id: int = subject_state.player_id
-		for subject: Node3D in get_tree().get_nodes_in_group("players"):
-			if subject.get_multiplayer_authority() != player_id:
-				continue
-			subject.global_transform = subject_state.transform
-			subject.velocity = subject_state.velocity
-			subject.stability = subject_state.stability
-			subject._verb_timer = subject_state.get("verb_cooldown", 0.0)
-			subject.is_destabilised = subject_state.destabilised
-			subject.paired_partner_id = subject_state.partner_id
-			subject.chain_sync = subject_state.chain_sync
-			subject.is_overdrive = subject_state.overdrive
-			subject.shield_active = subject_state.shield_active
-			break
+		var subject: Node = SubjectRoster.body_of(subject_state.player_id)
+		if subject == null:
+			continue
+		subject.apply_replicated_state(subject_state)
 
 
 func _apply_residual_snapshots(snapshots: Array) -> void:

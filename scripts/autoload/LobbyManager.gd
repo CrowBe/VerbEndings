@@ -73,6 +73,37 @@ func reset() -> void:
 	dispensing_line_tubes.clear()
 
 
+## Host-authored lobby state for replication. The Verb claim registry travels
+## with it so a client's selectable list matches the host's.
+func snapshot() -> Dictionary:
+	return {
+		"lobby_players": lobby_players.duplicate(),
+		"draft_queue": draft_queue.duplicate(),
+		"current_chooser_id": current_chooser_id,
+		"dispensing_line_tubes": dispensing_line_tubes.duplicate(),
+		"claimed_identities": _claimed_identities.duplicate(),
+	}
+
+
+func apply_replicated_state(state: Dictionary) -> void:
+	lobby_players.assign(state.get("lobby_players", []))
+	draft_queue.assign(state.get("draft_queue", []))
+	current_chooser_id = state.get("current_chooser_id", -1)
+	dispensing_line_tubes = state.get("dispensing_line_tubes", {}).duplicate()
+	_claimed_identities = state.get("claimed_identities", {}).duplicate()
+
+
+## Every roster Subject has claimed a unique Verb, so the Trial can start.
+func verb_selection_complete() -> bool:
+	if lobby_players.is_empty():
+		return false
+	for player_id: int in lobby_players:
+		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
+				== Enums.VerbType.NONE:
+			return false
+	return true
+
+
 ## A player enters the lobby with no verb selected yet.
 ## NETWORK: replication boundary — server-side, on peer connect.
 func join_lobby(player_id: int) -> void:

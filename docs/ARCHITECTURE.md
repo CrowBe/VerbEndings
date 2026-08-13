@@ -29,7 +29,7 @@ Normal-Round confinement is a selection operation on the persistent Compound. `C
 
 `FacilityStateLedger` is the server-authoritative presentation-state boundary for the persistent Compound. For each Laboratory it composes Round stage, persistent prop and structural-surface state, Experiment lifecycle, and compatible event overlays. Every state-changing transition has a stable name and seed-derived token. Structural walls and floors expose cosmetic state only; selected props declare ordered authored thresholds, explicit collision state, and any route they block. The ledger rejects backwards threshold changes, loss of the final valid route, conflicting overlay channels, overlays that repair persistent state, and changes that contradict an active Objective or overlay. Trial reset restores the authored baseline, while Round changes retain prior Laboratory state. The host includes the current composed ledger and transition sequence, but not its historical log, in explicit network snapshots; clients apply the replicated composition to their persistent Compound.
 
-The Compound exposes 24 Collapse entry sockets distributed evenly across the three Laboratories. Every socket declares comparable initial hazard exposure and two exit options. Three physical Assignment Deck seals, the twelve Laboratory route shutters, the dependable perimeter connection, and three authored failure volumes are composed from `CollapseManager` stage signals. A failure first raises the Laboratory's geometry, icon and motion warning hooks, then records the structural and apparatus transition in `FacilityStateLedger` before its hazard becomes active.
+The Compound exposes 24 Collapse entry sockets distributed evenly across the three Laboratories. Every socket declares comparable initial hazard exposure and two exit options. Three physical Assignment Deck seals, the twelve Laboratory route shutters, the dependable perimeter connection, and three authored failure volumes are composed by `CollapseComposition`, which owns the one mapping from Collapse stage to facility state. The host applies each stage as `CollapseManager` announces it, a client composes every stage its replicated snapshot has already reached, and both paths are idempotent. `Compound` receives the survivor list and Subject bodies as arguments and reads no Collapse state itself. A failure first raises the Laboratory's geometry, icon and motion warning hooks, then records the structural and apparatus transition in `FacilityStateLedger` before its hazard becomes active.
 
 `EnvironmentKitPiece` detaches old children before building their replacements so a live rebuild cannot attach new gameplay collision beneath a node queued for deletion. `EnvironmentKitPiece` and `PuzzleUnit` also detach their runtime-created `Mesh` resources from `MeshInstance3D` children during tree exit. Procedural render owners preserve this teardown boundary so Godot 4.3 unregisters each render instance before its final mesh resource reference is released.
 
@@ -37,16 +37,19 @@ The Compound exposes 24 Collapse entry sockets distributed evenly across the thr
 
 | Service | Current responsibility |
 | --- | --- |
-| `NetworkSession` | Creates ENet host and client peers, enrols and releases connected Subjects, validates sender-bound Verb, Pairing, movement, Release, Impact, and Verb Expression requests, and publishes host-authored state snapshots without disclosing the secret Protocol queue. |
+| `SubjectRoster` | Binds a Subject id to its live body and owns the operations services previously performed by walking the scene tree: Self-Chain, Partnered, Unpaired and Solo-Overdrive chain state, Severance Loss, Recall Restabilisation, Collapse removal from play, and `destabilised` signal wiring. Overdrive is granted and cleared only through this service. |
+| `NetworkSession` | Creates ENet host and client peers, enrols and releases connected Subjects, validates sender-bound Verb, Pairing, movement, Release, Impact, and Verb Expression requests, and routes host-authored state snapshots without disclosing the secret Protocol queue. Each replicated module composes and applies its own state, so the transport holds no field layouts and emits no domain signals. |
 | `VerbChainManager` | Registers Players and Verbs, forms and dissolves two-Subject or Self-Chains, calculates synergy and versatility values, pushes Overdrive state onto Self-Chained actors, and Severs a live Pair when one Partner is Eliminated. A Severed bond is removed immediately while its Round-scoped Chain record remains available for symmetric scoring until scheduled dissolution. |
 | `ScoreManager` | Stores Subject-owned Round Scores and cumulative Trial Scores, exposes competition-ranked Trial Ranking, applies each Protocol's authored individual or Verb-Chain reward policy, and provides lowest-Trial-Score-first draft ordering. Shared rewards credit each Partner separately, optionally use the Synergy Coefficient, and pay a Self-Chain once without Synergy scaling. Its placement and bonus tables are keyed by development classification. |
 | `RoundManager` | Uses a Trial seed to shuffle the three authored Experiment Protocols into a host-only queue, plays one per Round without replacement, announces at each transition which classification left the pool, derives banner text from the selected Protocol, and gates Player-versus-Player Impacts using that Protocol's internal classification. |
-| `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and deterministic Dispensing Line tube assignments. A Pair receives adjacent tubes and a Self-Chain receives one tube. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
+| `LobbyManager` | Tracks the roster, unique Verb claims, timed Verb Selection, Pair Draft turn order, forced Self-Chains for an odd roster, and deterministic Dispensing Line tube assignments. It answers whether Verb Selection is complete, so no caller reconstructs that from the roster and Verb registry. A Pair receives adjacent tubes and a Self-Chain receives one tube. Round One drafts slowest-Verb-pick-first; later Rounds use `ScoreManager`'s lowest-Trial-Score-first order. |
 | `CollapseManager` | Resolves individual First Place; creates seeded fair entry and Laboratory-failure plans; advances protected orientation, route, Core-shortcut and warned-failure stages; batches simultaneous Eliminations; applies Overdrive; and declares the final survivor. |
 | `FacilityStateLedger` | Records and validates seeded, named transitions across the four Compound presentation layers, retains authored Laboratory state for the Trial, and supplies the host-authored snapshot consumed by clients. |
 | `TrialCoordinator` | Owns the host-authoritative Trial state machine: Verb Selection once; Pair Draft, Experiment Brief, Laboratory Entry, timed or condition-completed Experiment, Recall, Result Announcement, and optional Thematic Moment for each of exactly three Rounds; then sole-winner or Collapse resolution. It emits presentation-independent state and composition signals. |
 
-The domain services are stateful and in-process. `NetworkSession` is their transport boundary: only the host mutates canonical networked state, while local quick start continues to call the same services without a multiplayer peer.
+The domain services are stateful and in-process. `NetworkSession` is their transport boundary: only the host mutates canonical networked state, while local quick start continues to call the same services without a multiplayer peer. Every replicated module exposes a `snapshot()` and `apply_replicated_state()` pair and announces its own transitions on each peer.
+
+`NetworkSession` also answers the session's authority questions. `can_simulate()` is true for a local Trial and the host and gates every simulation and lifecycle decision; `is_client()` and `is_local()` distinguish the remaining cases; `is_host()` covers transport work alone. No caller re-derives authority from the multiplayer peer.
 
 ## Actors And Interaction
 
@@ -61,6 +64,8 @@ Subject and Residual scenes own gameplay collision separately from a replaceable
 The implemented input map is WASD movement, Space jump, left mouse basic hit, right mouse Verb use, and Escape mouse capture.
 
 ## Experiments
+
+`ExperimentController` is the base class for every Protocol controller and owns the lifecycle contract `TrialCoordinator` depends on: Subject registration, canonical Elimination, Chain Severance for an Eliminated Subject outside the Collapse, reporting when one Subject is left standing, placement ordering by performance with a stable Subject-id tie-break, and submitting placements before announcing the result. A subclass supplies its authored Protocol, per-Subject measurements, and any Protocol-specific consequence of an Elimination. A Destabilised Subject is out of the Experiment and stays down; `TrialCoordinator` Recalls every Subject to baseline Stability at the end of the Round.
 
 Experiment Protocols are authored resources containing an Objective, hazards, scoring rules, completion condition, and an internal development classification. Scoring rules declare whether placements are individual or Verb-Chain-shared, which bonus events are cooperative, and whether shared rewards use the Synergy Coefficient. Round controllers submit Subject performance order and bonus events through `ScoreManager`, which applies that authored policy while retaining Subject-owned Round Scores and Trial Scores. The Semantic Engine authority in `RoundManager` selects a deterministic three-Protocol sequence from a Trial seed and derives each Experiment Brief from the selected resource.
 
@@ -78,9 +83,9 @@ The controller scatters at least one of each of the following physics apparatuse
 
 `PVERound` executes the Adaptive Containment Protocol. It spawns increasingly frequent and strong hostile waves around living Players. It pays placement and Residual Destabilisation bonuses through the Verb Chain with Synergy scaling, keeps survival ticks individual, supplies deterministic per-Residual grammar seeds, and transfers a Destabilised Player's Verb to the responsible hostile.
 
-`PVPRound` executes the Competitive Stress Protocol in an open impact crucible with measurement pylons, force plates, launch markings, shelters, and barricades. It samples Subject-owned dominance, displacement, and resilience metrics, awards knockout bonuses, and Recalls Destabilised Subjects.
+`PVPRound` executes the Competitive Stress Protocol in an open impact crucible with measurement pylons, force plates, launch markings, shelters, and barricades. It samples Subject-owned dominance, displacement, and resilience metrics and awards knockout bonuses. Its authored completion mode ends the Experiment once one Subject is left standing.
 
-All three Round controllers emit an ordered list when asked to end. None controls the complete three-Round Trial lifecycle from the main scene.
+All three Round controllers inherit `ExperimentController`, so each supplies only its performance measure and Elimination consequences. None controls the complete three-Round Trial lifecycle from the main scene.
 
 ## Scene And State Boundaries
 
@@ -88,7 +93,7 @@ All three Round controllers emit an ordered list when asked to end. None control
 | --- | --- | --- |
 | `Game` | Scene composition, persistent Compound instance, deterministic local bootstrap, local Subject instances, and active Round placement | Laboratory geometry internals, scoring formulas, Pair rules, actor behaviour |
 | `Compound` | Facility topology, environment-kit instances, Laboratory anchors, normal-Round spatial confinement | Experiment objectives, spawning, scoring, Trial lifecycle |
-| Autoload services | Cross-scene roster, chain, score, Round, and final-resolution state | Render geometry and per-frame actor simulation |
+| Autoload services | Cross-scene roster, chain, score, Round, and final-resolution state, plus the Subject id-to-body binding | Render geometry and per-frame actor simulation |
 | Round controllers | Experiment-local spawning, scoring inputs, ordering, cleanup | Verb Selection and persistent Trial presentation |
 | Actors | Input, movement, Impacts, Verb effects, actor-local state | Trial ranking and Round selection |
 | Environment apparatus | One physics interaction and its local state | Subject contribution tracking, global score and Trial state |
@@ -109,7 +114,7 @@ The repository provides a deterministic local gameplay quick start and a present
 - the Dispensing Line, Drop, Recall, and Result Announcement have structural greybox presentation; tube interiors use a presentation cut, and Thematic Moments remain a design contract only; and
 - large-roster multiplayer scenarios, reconnect support, latency compensation, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
-Focused headless gameplay suites cover Overdrive, Stability, Trial resolution, player-facing Trial presentation, Laboratory Entry/Drop/Recall, the Compound-wide Collapse, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the facility state ledger, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
+Focused headless gameplay suites cover Overdrive, Stability, the shared Experiment lifecycle, Trial resolution, player-facing Trial presentation, Laboratory Entry/Drop/Recall, the Compound-wide Collapse and its client catch-up composition, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the facility state ledger, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 

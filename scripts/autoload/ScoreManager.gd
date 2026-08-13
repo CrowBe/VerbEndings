@@ -41,6 +41,19 @@ var player_points: Dictionary = {}
 var round_scores: Dictionary = {}
 
 
+## Host-authored score state for replication.
+func snapshot() -> Dictionary:
+	return {
+		"player_points": player_points.duplicate(true),
+		"round_scores": round_scores.duplicate(true),
+	}
+
+
+func apply_replicated_state(state: Dictionary) -> void:
+	player_points = state.get("player_points", {}).duplicate(true)
+	round_scores = state.get("round_scores", {}).duplicate(true)
+
+
 ## Enrols a Subject at zero so the scoring and ranking service recognises the
 ## complete roster before the first award.
 func register_player(player_id: int) -> void:
