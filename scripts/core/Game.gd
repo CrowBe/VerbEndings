@@ -56,7 +56,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("jump") \
 			and TrialCoordinator.current_phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
-		if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+		if NetworkSession.is_local():
 			if local_player != null:
 				laboratory_transit.request_release(
 						local_player.get_multiplayer_authority())
@@ -88,13 +88,13 @@ func open_local_lobby() -> void:
 
 
 func select_local_lobby_verb(player_id: int, verb: Enums.VerbType) -> bool:
-	if NetworkSession.mode != NetworkSession.Mode.LOCAL:
+	if not NetworkSession.is_local():
 		return false
 	return LobbyManager.select_verb(player_id, verb)
 
 
 func start_interactive_local_trial() -> bool:
-	if NetworkSession.mode != NetworkSession.Mode.LOCAL:
+	if not NetworkSession.is_local():
 		return false
 	for player_id: int in LobbyManager.lobby_players:
 		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
@@ -107,10 +107,10 @@ func start_interactive_local_trial() -> bool:
 
 
 func complete_timed_verb_selection() -> bool:
-	if NetworkSession.mode == NetworkSession.Mode.CLIENT:
+	if NetworkSession.is_client():
 		return false
 	LobbyManager.complete_verb_selection_automatically()
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return start_interactive_local_trial()
 	return start_hosted_trial()
 
@@ -245,7 +245,7 @@ func _spawn_local_subjects(assign_configured_verbs: bool = true) -> void:
 
 
 func _on_network_roster_changed(player_ids: Array[int]) -> void:
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return
 	var existing: Dictionary = {}
 	for subject: Node3D in local_subjects:
@@ -283,7 +283,7 @@ func _on_network_roster_changed(player_ids: Array[int]) -> void:
 
 func _on_network_verb_selected(player_id: int, verb: Enums.VerbType,
 		_seconds_taken: float) -> void:
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return
 	for subject: Node in local_subjects:
 		if subject.get_multiplayer_authority() == player_id:
@@ -391,7 +391,7 @@ func _apply_collapse_composition() -> void:
 
 
 func _on_laboratory_entry_completed() -> void:
-	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if NetworkSession.can_simulate():
 		TrialCoordinator.complete_laboratory_entry()
 
 
@@ -400,5 +400,5 @@ func _on_recall_completed() -> void:
 		round_root.remove_child(current_round)
 		current_round.queue_free()
 		current_round = null
-	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if NetworkSession.can_simulate():
 		TrialCoordinator.complete_recall()

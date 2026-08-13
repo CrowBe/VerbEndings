@@ -44,7 +44,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+	if not NetworkSession.can_simulate():
 		return
 	apply_exposure(delta)
 

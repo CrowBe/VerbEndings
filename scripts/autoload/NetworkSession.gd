@@ -92,8 +92,27 @@ func shutdown() -> void:
 	session_closed.emit()
 
 
+## Transport authority: this process owns the ENet server peer. Use this for
+## transport work only — enrolling peers, resolving RPC requests, publishing.
 func is_host() -> bool:
 	return mode == Mode.HOST and multiplayer.is_server()
+
+
+## Domain authority: this process decides gameplay and lifecycle state. True
+## for a local Trial and for the host; false for a client, which only applies
+## replicated state. Every simulation and lifecycle guard asks this.
+func can_simulate() -> bool:
+	return mode != Mode.CLIENT
+
+
+## This process receives authoritative state instead of producing it.
+func is_client() -> bool:
+	return mode == Mode.CLIENT
+
+
+## No multiplayer peer: one process owns every Subject.
+func is_local() -> bool:
+	return mode == Mode.LOCAL
 
 
 func request_verb(verb: Enums.VerbType) -> void:

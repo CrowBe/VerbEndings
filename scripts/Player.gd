@@ -177,7 +177,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	# The top-level rig follows the body's position but keeps its own yaw.
 	camera_rig.global_position = global_position + Vector3.UP * 1.2
-	if NetworkSession.mode == NetworkSession.Mode.CLIENT:
+	if NetworkSession.is_client():
 		if accepts_local_input:
 			var client_input := Input.get_vector(
 					"move_left", "move_right", "move_forward", "move_back")
@@ -549,9 +549,7 @@ func _tether_check(delta: float) -> float:
 func _resolve_partner() -> Node3D:
 	if paired_partner_id == null or paired_partner_id == -1:
 		return null
-	var subject_id: int = multiplayer.get_unique_id() \
-			if multiplayer.has_multiplayer_peer() else get_multiplayer_authority()
-	if paired_partner_id == subject_id:
+	if paired_partner_id == get_multiplayer_authority():
 		return self  # Self-Chain
 	if _partner_body == null or not is_instance_valid(_partner_body):
 		# NETWORK: partner bodies will live under a shared "players" group

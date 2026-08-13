@@ -60,7 +60,7 @@ var _elimination_resolution_queued: bool = false
 
 
 func _process(delta: float) -> void:
-	if is_active and NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if is_active and NetworkSession.can_simulate():
 		advance_timeline(delta)
 
 
