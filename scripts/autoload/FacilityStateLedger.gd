@@ -335,4 +335,4 @@ func _can_author_transition(transition_name: StringName) -> bool:
 
 
 func _is_authority() -> bool:
-	return not multiplayer.has_multiplayer_peer() or multiplayer.is_server()
+	return NetworkSession.can_simulate()

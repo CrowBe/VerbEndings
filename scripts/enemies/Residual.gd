@@ -94,7 +94,7 @@ func setup(p_strength_multiplier: float, grammar_seed: int = 0) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+	if not NetworkSession.can_simulate():
 		return
 	# NETWORK: AI runs on the server only; clients interpolate transforms.
 	_survival_time += delta

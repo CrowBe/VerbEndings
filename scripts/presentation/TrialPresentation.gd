@@ -202,7 +202,7 @@ func _join_session() -> void:
 func _show_verb_selection() -> void:
 	current_screen = SCREEN_VERB_SELECTION
 	if _selection_deadline_msec < 0 \
-			and NetworkSession.mode == NetworkSession.Mode.CLIENT:
+			and NetworkSession.is_client():
 		_selection_deadline_msec = Time.get_ticks_msec() \
 				+ roundi(VERB_SELECTION_SECONDS * 1000.0)
 	_show_lifecycle_panel()
@@ -213,7 +213,7 @@ func _show_verb_selection() -> void:
 		return
 	if _all_verbs_selected():
 		_add_heading("VERB SELECTION COMPLETE", _roster_summary())
-		if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+		if NetworkSession.is_local():
 			if TrialCoordinator.current_phase == TrialCoordinator.Phase.IDLE \
 					and not game.start_interactive_local_trial():
 				_add_body("The Trial cannot start until every Subject has a unique Verb.")
@@ -252,7 +252,7 @@ func choose_verb(verb: Enums.VerbType) -> bool:
 	var subject_id := _selection_subject_id()
 	if subject_id == -1:
 		return false
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return game.select_local_lobby_verb(subject_id, verb)
 	NetworkSession.request_verb(verb)
 	return true
@@ -272,7 +272,7 @@ func _refresh_selection_timer() -> void:
 		return
 	var remaining := maxf((_selection_deadline_msec - Time.get_ticks_msec()) / 1000.0, 0.0)
 	selection_timer_label.text = "SELECTION CLOSES IN %02d SECONDS" % ceili(remaining)
-	if is_zero_approx(remaining) and NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if is_zero_approx(remaining) and NetworkSession.can_simulate():
 		_selection_deadline_msec = -1
 		game.complete_timed_verb_selection()
 
@@ -287,7 +287,7 @@ func _show_pair_draft() -> void:
 	if chooser_id == -1:
 		_add_body("The Semantic Engine is assigning the Dispensing Line.")
 		return
-	var local_can_choose := NetworkSession.mode == NetworkSession.Mode.LOCAL \
+	var local_can_choose := NetworkSession.is_local() \
 			or chooser_id == multiplayer.get_unique_id()
 	_add_body("Subject %d chooses a Partner.%s" % [chooser_id,
 			"" if local_can_choose else " Waiting for their choice."])
@@ -321,7 +321,7 @@ func choose_partner(target_id: int) -> bool:
 	var chooser_id: int = LobbyManager.current_chooser_id
 	if chooser_id == -1:
 		return false
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		return LobbyManager.request_pairing(chooser_id, target_id)
 	NetworkSession.request_pairing(target_id)
 	return true
@@ -341,7 +341,7 @@ func _show_experiment_brief(protocol: ExperimentProtocol) -> void:
 	_add_body("CONDITIONS\n%s" % protocol.completion_condition)
 	if not protocol.hazards.is_empty():
 		_add_body("HAZARDS\n• %s" % "\n• ".join(protocol.hazards))
-	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if NetworkSession.can_simulate():
 		_add_button("ENTER LABORATORY", func() -> void:
 			TrialCoordinator.complete_experiment_brief())
 	else:
@@ -360,7 +360,7 @@ func _show_result(round_index: int, ranking: Array) -> void:
 				entry.rank, player_id,
 				ScoreManager.get_round_score(round_index, player_id),
 				entry.trial_score])
-	if NetworkSession.mode != NetworkSession.Mode.CLIENT:
+	if NetworkSession.can_simulate():
 		_add_button("CONTINUE", func() -> void:
 			TrialCoordinator.complete_result_announcement())
 	else:
@@ -455,7 +455,7 @@ func _refresh_pair_draft_if_active() -> void:
 
 func _on_authoritative_state(_snapshot: Dictionary) -> void:
 	if TrialCoordinator.current_phase == TrialCoordinator.Phase.IDLE \
-			and NetworkSession.mode == NetworkSession.Mode.CLIENT:
+			and NetworkSession.is_client():
 		_show_verb_selection()
 	elif TrialCoordinator.current_phase == TrialCoordinator.Phase.PAIR_DRAFT:
 		_show_pair_draft()
@@ -509,7 +509,7 @@ func presentation_snapshot() -> Dictionary:
 
 
 func _selection_subject_id() -> int:
-	if NetworkSession.mode == NetworkSession.Mode.LOCAL:
+	if NetworkSession.is_local():
 		for player_id: int in LobbyManager.lobby_players:
 			if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
 					== Enums.VerbType.NONE:
