@@ -50,7 +50,7 @@ func _process(delta: float) -> void:
 			banner_panel.hide()
 	if current_screen == SCREEN_HUD:
 		_refresh_hud()
-	elif current_screen == SCREEN_VERB_SELECTION and not _all_verbs_selected():
+	elif current_screen == SCREEN_VERB_SELECTION and not LobbyManager.verb_selection_complete():
 		_refresh_selection_timer()
 
 
@@ -211,7 +211,7 @@ func _show_verb_selection() -> void:
 	if subject_id == -1:
 		_add_heading("VERB SELECTION", "Waiting for the roster…")
 		return
-	if _all_verbs_selected():
+	if LobbyManager.verb_selection_complete():
 		_add_heading("VERB SELECTION COMPLETE", _roster_summary())
 		if NetworkSession.is_local():
 			if TrialCoordinator.current_phase == TrialCoordinator.Phase.IDLE \
@@ -517,16 +517,6 @@ func _selection_subject_id() -> int:
 		return LobbyManager.lobby_players[0] if not LobbyManager.lobby_players.is_empty() else -1
 	var own_id: int = multiplayer.get_unique_id()
 	return own_id if own_id in LobbyManager.lobby_players else -1
-
-
-func _all_verbs_selected() -> bool:
-	if LobbyManager.lobby_players.is_empty():
-		return false
-	for player_id: int in LobbyManager.lobby_players:
-		if VerbChainManager.active_players.get(player_id, Enums.VerbType.NONE) \
-				== Enums.VerbType.NONE:
-			return false
-	return true
 
 
 func _draft_order_explanation() -> String:
