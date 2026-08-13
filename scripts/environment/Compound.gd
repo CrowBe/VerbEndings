@@ -126,7 +126,7 @@ func select_active_laboratory(laboratory_id: StringName) -> bool:
 ## playable, the Assignment Deck is sealed, and Subjects occupy fair sockets
 ## while the service connections remain closed for orientation.
 func begin_collapse(entry_assignments: Dictionary,
-		subjects: Array[Node3D]) -> bool:
+		subjects: Array[Node3D], surviving_ids: Array = []) -> bool:
 	if entry_assignments.is_empty():
 		return false
 	active_laboratory_id = &""
@@ -146,7 +146,7 @@ func begin_collapse(entry_assignments: Dictionary,
 	for subject: Node3D in subjects:
 		var subject_id: int = subject.get_multiplayer_authority()
 		if not entry_assignments.has(subject_id) \
-				or subject_id not in CollapseManager.surviving_players:
+				or subject_id not in surviving_ids:
 			subject.visible = false
 			subject.process_mode = Node.PROCESS_MODE_DISABLED
 			continue
@@ -158,7 +158,8 @@ func begin_collapse(entry_assignments: Dictionary,
 	return true
 
 
-func open_collapse_perimeter_routes(subjects: Array[Node3D]) -> void:
+func open_collapse_perimeter_routes(subjects: Array[Node3D],
+		surviving_ids: Array = []) -> void:
 	$PerimeterMaintenanceRoute.set_meta("collapse_open", true)
 	$SeparatorSpines.set_meta("collapse_open", true)
 	for spine: Node in $SeparatorSpines.get_children():
@@ -170,7 +171,7 @@ func open_collapse_perimeter_routes(subjects: Array[Node3D]) -> void:
 		_set_connection_open(get_laboratory(laboratory_id),
 				&"SeparatorShutter4m", true)
 	for subject: Node3D in subjects:
-		if subject.get_multiplayer_authority() in CollapseManager.surviving_players:
+		if subject.get_multiplayer_authority() in surviving_ids:
 			subject.process_mode = Node.PROCESS_MODE_INHERIT
 
 
@@ -612,7 +613,7 @@ func _build_collapse_hazards() -> void:
 		warning_mesh.material = warning_material
 		warning_visual.visible = false
 		area.add_child(warning_visual)
-		area.body_entered.connect(CollapseManager._on_player_fall_into_hazard)
+		area.body_entered.connect(CollapseManager.report_hazard_fall)
 		hazards.add_child(area)
 
 
