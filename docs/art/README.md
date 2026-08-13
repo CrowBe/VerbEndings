@@ -6,6 +6,7 @@ This directory contains the approved visual evidence used to brief, reconstruct,
 
 Current retained packages:
 
+- [`reference_sheets/`](reference_sheets/) — generated focused visual-development sheets covering every mapped asset family that lacked one; these are review candidates rather than runtime or production-source assets;
 - [`subjects/shared_subject/`](subjects/shared_subject/) — approved shared Subject anatomy, exact Meshy inputs, controlled renders, and a high-detail production-source mesh;
 - [`intro/flux/`](intro/flux/) — non-runtime motion, audio, composition, and facility-context evidence from the third-pass FLUX intro;
 - [`material_dispenser/`](material_dispenser/) — the integrated production-preparation Material Dispenser and its controlled renders; and
