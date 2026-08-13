@@ -28,7 +28,7 @@ var _previous_positions: Dictionary = {}
 
 
 func _ready() -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		_register_subject(body)
 
 
@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 		return
 	var sample_delta: float = _sample_timer
 	_sample_timer = 0.0
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		if not _previous_positions.has(body):
 			_register_subject(body)
 		_sample_subject(body, sample_delta)
@@ -95,11 +95,7 @@ func _on_subject_destabilised(player: Node, source: Node) -> void:
 				protocol, "knockout")
 	if not CollapseManager.is_active:
 		VerbChainManager.sever_chain_for(player.get_multiplayer_authority())
-		var eligible_count: int = 0
-		for body: Node in get_tree().get_nodes_in_group("players"):
-			if not body.get("is_destabilised"):
-				eligible_count += 1
-		if eligible_count <= 1:
+		if SubjectRoster.stable_count() <= 1:
 			TrialCoordinator.notify_completion_condition("one_eligible_subject")
 		player.call_deferred("restabilise")
 

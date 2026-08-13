@@ -203,10 +203,7 @@ func sever_chain_for(eliminated_player_id: int) -> bool:
 	var surviving_player_id: int = chain.player_b_id \
 			if chain.player_a_id == eliminated_player_id else chain.player_a_id
 	_remove_active_chain(chain)
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.get_multiplayer_authority() == surviving_player_id:
-			body.apply_severance_loss()
-			break
+	SubjectRoster.apply_severance_loss(surviving_player_id)
 	return true
 
 
@@ -295,22 +292,15 @@ func dissolve_all_chains() -> void:
 
 
 func _sync_player_overdrive(chain: Dictionary) -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		var player_id: int = body.get_multiplayer_authority()
-		if player_id == chain.player_a_id:
-			if chain.is_self_chain:
-				body.enter_overdrive(player_id)
-			else:
-				body.exit_overdrive(chain.player_b_id)
-		elif player_id == chain.player_b_id:
-			body.exit_overdrive(chain.player_a_id)
+	if chain.is_self_chain:
+		SubjectRoster.set_self_chained(chain.player_a_id)
+		return
+	SubjectRoster.set_partnered(chain.player_a_id, chain.player_b_id)
+	SubjectRoster.set_partnered(chain.player_b_id, chain.player_a_id)
 
 
 func _clear_player_overdrive(player_id: int) -> void:
-	for body: Node in get_tree().get_nodes_in_group("players"):
-		if body.get_multiplayer_authority() == player_id:
-			body.exit_overdrive()
-			return
+	SubjectRoster.set_unpaired(player_id)
 
 
 ## Canonical dictionary key for an unordered verb pair.

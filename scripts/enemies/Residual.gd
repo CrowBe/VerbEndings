@@ -231,7 +231,7 @@ func _adverb_action_speed() -> float:
 func _nearest_stable_player() -> Node3D:
 	var best: Node3D = null
 	var best_distance: float = INF
-	for body: Node in get_tree().get_nodes_in_group("players"):
+	for body: Node in SubjectRoster.bodies():
 		if body.is_destabilised:
 			continue
 		var distance: float = global_position.distance_to(body.global_position)

@@ -332,14 +332,13 @@ func _resolve_action(player_id: int, action: StringName) -> void:
 	if action == &"release":
 		release_requested.emit(player_id)
 		return
-	for subject: Node in get_tree().get_nodes_in_group("players"):
-		if subject.get_multiplayer_authority() != player_id:
-			continue
-		if action == &"basic_hit":
-			subject.basic_hit()
-		elif action == &"verb_expression":
-			subject.express_verb()
+	var subject: Node = SubjectRoster.body_of(player_id)
+	if subject == null:
 		return
+	if action == &"basic_hit":
+		subject.basic_hit()
+	elif action == &"verb_expression":
+		subject.express_verb()
 
 
 func _publish_snapshot(reliable: bool) -> void:
@@ -367,7 +366,7 @@ func _build_snapshot() -> Dictionary:
 
 func _subject_snapshots() -> Array[Dictionary]:
 	var subjects: Array[Dictionary] = []
-	for subject: Node3D in get_tree().get_nodes_in_group("players"):
+	for subject: Node in SubjectRoster.bodies():
 		subjects.append({
 			"player_id": subject.get_multiplayer_authority(),
 			"transform": subject.global_transform,
@@ -385,7 +384,7 @@ func _subject_snapshots() -> Array[Dictionary]:
 
 func _subject_gameplay_digest() -> Dictionary:
 	var subjects: Dictionary = {}
-	for subject: Node in get_tree().get_nodes_in_group("players"):
+	for subject: Node in SubjectRoster.bodies():
 		subjects[subject.get_multiplayer_authority()] = {
 			"stability": subject.stability,
 			"destabilised": subject.is_destabilised,
@@ -452,20 +451,18 @@ func _apply_snapshot(snapshot: Dictionary) -> void:
 
 func _apply_subject_snapshots(snapshots: Array) -> void:
 	for subject_state: Dictionary in snapshots:
-		var player_id: int = subject_state.player_id
-		for subject: Node3D in get_tree().get_nodes_in_group("players"):
-			if subject.get_multiplayer_authority() != player_id:
-				continue
-			subject.global_transform = subject_state.transform
-			subject.velocity = subject_state.velocity
-			subject.stability = subject_state.stability
-			subject._verb_timer = subject_state.get("verb_cooldown", 0.0)
-			subject.is_destabilised = subject_state.destabilised
-			subject.paired_partner_id = subject_state.partner_id
-			subject.chain_sync = subject_state.chain_sync
-			subject.is_overdrive = subject_state.overdrive
-			subject.shield_active = subject_state.shield_active
-			break
+		var subject: Node = SubjectRoster.body_of(subject_state.player_id)
+		if subject == null:
+			continue
+		subject.global_transform = subject_state.transform
+		subject.velocity = subject_state.velocity
+		subject.stability = subject_state.stability
+		subject._verb_timer = subject_state.get("verb_cooldown", 0.0)
+		subject.is_destabilised = subject_state.destabilised
+		subject.paired_partner_id = subject_state.partner_id
+		subject.chain_sync = subject_state.chain_sync
+		subject.is_overdrive = subject_state.overdrive
+		subject.shield_active = subject_state.shield_active
 
 
 func _apply_residual_snapshots(snapshots: Array) -> void:

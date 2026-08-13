@@ -103,7 +103,7 @@ func _apply_authored_scoring_rules() -> void:
 
 
 func _refresh_subjects() -> void:
-	for subject: Node in get_tree().get_nodes_in_group("players"):
+	for subject: Node in SubjectRoster.bodies():
 		if not subject.has_method("apply_hazard_stability_loss"):
 			continue
 		var player_id: int = subject.get_multiplayer_authority()
