@@ -248,6 +248,7 @@ func _receive_actor_snapshot(snapshot: Dictionary) -> void:
 			snapshot.get("experiment_seconds", 0.0))
 	_apply_subject_snapshots(snapshot.get("subjects", []))
 	_apply_residual_snapshots(snapshot.get("residuals", []))
+	_apply_containment_tool_snapshots(snapshot.get("containment_tools", []))
 
 
 func _on_peer_connected(peer_id: int) -> void:
@@ -355,6 +356,7 @@ func _publish_snapshot(reliable: bool) -> void:
 			"experiment_seconds": TrialCoordinator.experiment_seconds_remaining,
 			"subjects": _subject_snapshots(),
 			"residuals": _residual_snapshots(),
+			"containment_tools": _containment_tool_snapshots(),
 		})
 
 
@@ -368,6 +370,7 @@ func _build_snapshot() -> Dictionary:
 	snapshot["experiment_seconds"] = TrialCoordinator.experiment_seconds_remaining
 	snapshot["subjects"] = _subject_snapshots()
 	snapshot["residuals"] = _residual_snapshots()
+	snapshot["containment_tools"] = _containment_tool_snapshots()
 	return snapshot
 
 
@@ -396,11 +399,22 @@ func _residual_snapshots() -> Array[Dictionary]:
 		residuals.append({
 			"name": residual.name,
 			"transform": residual.global_transform,
+			"visible": residual.visible,
 			"stability": residual.stability,
 			"verb": residual.verb,
 			"adverb": residual.adverb,
+			"entry_opening_id": residual.entry_opening_id,
+			"entry_complete": residual.entry_complete,
 		})
 	return residuals
+
+
+func _containment_tool_snapshots() -> Array[Dictionary]:
+	var tools: Array[Dictionary] = []
+	for tool: Node in get_tree().get_nodes_in_group("containment_tools"):
+		if tool.has_method("snapshot"):
+			tools.append(tool.snapshot())
+	return tools
 
 
 ## Hands each module its own replicated state. Every module announces its own
@@ -427,6 +441,7 @@ func _apply_snapshot(snapshot: Dictionary) -> void:
 			snapshot.get("experiment_seconds", 0.0),
 			snapshot.get("winner_id", -1), trial_seed)
 	_apply_residual_snapshots(snapshot.get("residuals", []))
+	_apply_containment_tool_snapshots(snapshot.get("containment_tools", []))
 	roster_changed.emit(LobbyManager.lobby_players.duplicate())
 	authoritative_state_received.emit(snapshot)
 
@@ -459,11 +474,26 @@ func _apply_residual_snapshots(snapshots: Array) -> void:
 			residual.name = residual_name
 			parent.add_child(residual)
 		residual.global_transform = residual_state.transform
+		residual.visible = residual_state.get("visible", true)
 		residual.stability = residual_state.stability
 		residual.verb = residual_state.verb
 		residual.adverb = residual_state.adverb
+		residual.entry_opening_id = residual_state.get("entry_opening_id", &"")
+		residual.entry_complete = residual_state.get("entry_complete", true)
 		residual.animation_adapter.apply_verb_treatment(residual.verb)
 		residual.animation_adapter.apply_adverb_treatment(residual.adverb)
 	for residual_name: StringName in existing:
 		if residual_name not in received_names:
 			existing[residual_name].queue_free()
+
+
+func _apply_containment_tool_snapshots(snapshots: Array) -> void:
+	if mode != Mode.CLIENT:
+		return
+	var tools: Dictionary = {}
+	for tool: Node in get_tree().get_nodes_in_group("containment_tools"):
+		tools[tool.name] = tool
+	for tool_state: Dictionary in snapshots:
+		var tool: Node = tools.get(StringName(tool_state.get("name", &"")))
+		if tool != null and tool.has_method("apply_replicated_state"):
+			tool.apply_replicated_state(tool_state)

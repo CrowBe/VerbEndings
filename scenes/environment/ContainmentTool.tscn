@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/environment/ContainmentTool.gd" id="1_tool"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tool"]
+size = Vector3(2, 1.2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_base"]
+albedo_color = Color(0.152941, 0.196078, 0.219608, 1)
+metallic = 0.35
+roughness = 0.58
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+material = SubResource("StandardMaterial3D_base")
+size = Vector3(2, 1.2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_panel"]
+albedo_color = Color(0.4, 0.447059, 0.478431, 1)
+metallic = 0.2
+roughness = 0.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+material = SubResource("StandardMaterial3D_panel")
+size = Vector3(1.4, 0.18, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_active"]
+albedo_color = Color(0.956863, 0.788235, 0.364706, 1)
+emission_enabled = true
+emission = Color(0.956863, 0.788235, 0.364706, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_active"]
+material = SubResource("StandardMaterial3D_active")
+top_radius = 0.28
+bottom_radius = 0.28
+height = 0.35
+
+[node name="ContainmentTool" type="StaticBody3D"]
+script = ExtResource("1_tool")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("BoxShape3D_tool")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.6, 0)
+mesh = SubResource("BoxMesh_base")
+
+[node name="ControlPanel" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.26, -0.28)
+rotation = Vector3(0.349066, 0, 0)
+mesh = SubResource("BoxMesh_panel")
+
+[node name="ActiveCue" type="MeshInstance3D" parent="."]
+visible = false
+position = Vector3(0, 1.65, 0)
+mesh = SubResource("CylinderMesh_active")
