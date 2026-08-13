@@ -77,6 +77,10 @@ rotation = Vector3(0, 2.094395, 0)
 
 [node name="RoundContent" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 
+[node name="ResidualEntryOpenings" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory/RoundContent"]
+
+[node name="EncounterTools" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory/RoundContent"]
+
 [node name="Connections" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
 
 [node name="LandingAreas" type="Node3D" parent="Laboratories/AdaptiveContainmentLaboratory"]
