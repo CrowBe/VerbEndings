@@ -173,6 +173,18 @@ It verifies seeded Adverb timing and selection, one-Verb and one-Adverb caps,
 the separation of Assumption from self-development, and independently visible
 behaviour changes on a Verbless Residual.
 
+Run the Adaptive Containment entry and encounter-tool suite with:
+
+```bash
+godot4.3 --headless --path . tests/TestAdaptiveContainment.tscn
+```
+
+It verifies named physical entries through the specimen column, perimeter
+pens, vents and wall cavities; concealed-to-threshold Residual staging; the
+absence of a positional fallback; Subject-operated bait, emergency shutter
+and defensive power effects; and the retained configurable cadence and
+strength curve.
+
 Run the Experiment Protocol suite with:
 
 ```bash

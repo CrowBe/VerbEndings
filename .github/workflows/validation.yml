@@ -78,6 +78,9 @@ jobs:
       - name: Residual grammar tests
         run: godot --headless --path . tests/TestResidualGrammar.tscn
 
+      - name: Adaptive Containment entry and encounter-tool tests
+        run: godot --headless --path . tests/TestAdaptiveContainment.tscn
+
       - name: Experiment Protocol tests
         run: godot --headless --path . tests/TestExperimentProtocols.tscn
 

@@ -4,6 +4,8 @@ extends Node3D
 
 const KIT_PIECE_SCENE: PackedScene = preload(
 		"res://scenes/environment/EnvironmentKitPiece.tscn")
+const CONTAINMENT_TOOL_SCENE: PackedScene = preload(
+		"res://scenes/environment/ContainmentTool.tscn")
 
 const LABORATORY_IDS: Array[StringName] = [
 	&"AppliedAttrition",
@@ -41,6 +43,8 @@ const COLOUR_STRUCTURE := Color("66727a")
 const COLOUR_HEAVY := Color("273238")
 const COLOUR_PANEL := Color("f1eee6")
 const COLOUR_CUE := Color("f4c95d")
+const COLOUR_SYSTEM := Color("56d6d2")
+const COLOUR_DANGER := Color("ee625f")
 
 var active_laboratory_id: StringName = &""
 var _piece_sequence: int = 0
@@ -254,6 +258,49 @@ func get_round_content(laboratory_id: StringName) -> Node3D:
 	if laboratory == null:
 		return null
 	return laboratory.get_node("RoundContent") as Node3D
+
+
+## Authored Adaptive Containment openings. Each entry exposes a concealed
+## staging transform and a visible Test Floor threshold; PVERound never invents
+## a positional fallback when this contract is unavailable.
+func get_residual_entry_openings() -> Array[Dictionary]:
+	var openings: Array[Dictionary] = []
+	var laboratory: Node3D = get_laboratory(&"AdaptiveContainment")
+	if laboratory == null:
+		return openings
+	var container := laboratory.get_node_or_null(
+			"RoundContent/ResidualEntryOpenings") as Node3D
+	if container == null:
+		return openings
+	for child: Node in container.get_children():
+		if not child is Node3D or not child.has_node("Staging") \
+				or not child.has_node("Threshold"):
+			continue
+		var opening := child as Node3D
+		openings.append({
+			"id": StringName(opening.get_meta("entry_id", opening.name)),
+			"kind": StringName(opening.get_meta("entry_kind", &"")),
+			"blocked_by": StringName(opening.get_meta("blocked_by", &"")),
+			"staging_transform": (opening.get_node("Staging") as Marker3D).global_transform,
+			"threshold_transform": (opening.get_node("Threshold") as Marker3D).global_transform,
+			"node": opening,
+		})
+	return openings
+
+
+func get_containment_tools() -> Array[ContainmentTool]:
+	var tools: Array[ContainmentTool] = []
+	var laboratory: Node3D = get_laboratory(&"AdaptiveContainment")
+	if laboratory == null:
+		return tools
+	var container := laboratory.get_node_or_null(
+			"RoundContent/EncounterTools") as Node3D
+	if container == null:
+		return tools
+	for child: Node in container.get_children():
+		if child is ContainmentTool:
+			tools.append(child)
+	return tools
 
 
 func get_dispensing_line_tube_transform(tube_index: int) -> Transform3D:
@@ -556,6 +603,8 @@ func _build_laboratories() -> void:
 		_build_landing_strategies(laboratory)
 		_build_laboratory_transit(laboratory)
 		_build_lab_apparatus(laboratory_id, laboratory)
+		if laboratory_id == &"AdaptiveContainment":
+			_build_adaptive_containment_infrastructure(laboratory)
 		_build_lab_cue_hooks(laboratory)
 
 
@@ -798,6 +847,180 @@ func _build_lab_apparatus(
 					EnvironmentKitPiece.Kind.VENT, Vector3(4.0, 3.0, 2.0),
 					Vector3(sin(angle) * 12.0, 0.0, -cos(angle) * 12.0),
 					angle, COLOUR_CUE)
+
+
+func _build_adaptive_containment_infrastructure(laboratory: Node3D) -> void:
+	var openings: Node3D = laboratory.get_node(
+			"RoundContent/ResidualEntryOpenings")
+	_add_residual_entry_opening(openings, &"SpecimenColumnChute",
+			&"specimen_column", Vector3(0.0, 0.0, -5.5), PI)
+	_add_residual_entry_opening(openings, &"PerimeterPenWest",
+			&"perimeter_pen", Vector3(-17.0, 0.0, -20.0), 0.0,
+			&"EmergencyShutterWest")
+	_add_residual_entry_opening(openings, &"PerimeterPenEast",
+			&"perimeter_pen", Vector3(17.0, 0.0, -20.0), 0.0,
+			&"EmergencyShutterEast")
+	_add_residual_entry_opening(openings, &"WestVent",
+			&"vent", Vector3(-22.0, 0.0, -8.0), PI * 0.5,
+			&"EmergencyShutterWest")
+	_add_residual_entry_opening(openings, &"EastVent",
+			&"vent", Vector3(22.0, 0.0, -8.0), -PI * 0.5,
+			&"EmergencyShutterEast")
+	_add_residual_entry_opening(openings, &"WestWallCavity",
+			&"wall_cavity", Vector3(-22.0, 0.0, 12.0), PI * 0.5,
+			&"EmergencyShutterWest")
+	_add_residual_entry_opening(openings, &"EastWallCavity",
+			&"wall_cavity", Vector3(22.0, 0.0, 12.0), -PI * 0.5,
+			&"EmergencyShutterEast")
+
+	var tools: Node3D = laboratory.get_node("RoundContent/EncounterTools")
+	_add_containment_tool(tools, &"BaitMachinery",
+			ContainmentTool.EFFECT_BAIT, Vector3(-10.0, 0.0, 5.0), [], 8.0, 12.0)
+	_add_containment_tool(tools, &"EmergencyShutterWest",
+			ContainmentTool.EFFECT_SHUTTER, Vector3(-16.0, 0.0, -12.0), [
+				&"PerimeterPenWest", &"WestVent", &"WestWallCavity",
+			], 7.0, 12.0)
+	_add_containment_tool(tools, &"EmergencyShutterEast",
+			ContainmentTool.EFFECT_SHUTTER, Vector3(16.0, 0.0, -12.0), [
+				&"PerimeterPenEast", &"EastVent", &"EastWallCavity",
+			], 7.0, 12.0)
+	_add_containment_tool(tools, &"DefensivePowerNode",
+			ContainmentTool.EFFECT_POWER, Vector3(0.0, 0.0, 12.0), [], 6.0, 14.0)
+	laboratory.set_meta("residual_entry_types", PackedStringArray([
+		"specimen_column", "perimeter_pen", "vent", "wall_cavity",
+	]))
+	laboratory.set_meta("encounter_tools", PackedStringArray([
+		"bait", "shutter", "power",
+	]))
+
+
+func _add_residual_entry_opening(
+	parent: Node3D,
+	entry_id: StringName,
+	entry_kind: StringName,
+	position: Vector3,
+	rotation_y: float,
+	blocked_by: StringName = &"",
+) -> void:
+	var opening := Node3D.new()
+	opening.name = entry_id
+	opening.position = position
+	opening.rotation.y = rotation_y
+	opening.set_meta("entry_id", entry_id)
+	opening.set_meta("entry_kind", entry_kind)
+	opening.set_meta("blocked_by", blocked_by)
+	opening.set_meta("physical_opening", true)
+	opening.set_meta("clear_width_m", DOOR_CLEAR_WIDTH_M)
+	parent.add_child(opening)
+
+	var staging := Marker3D.new()
+	staging.name = "Staging"
+	staging.position = Vector3(0.0, 0.0, -2.2)
+	staging.set_meta("concealed", true)
+	opening.add_child(staging)
+	var threshold := Marker3D.new()
+	threshold.name = "Threshold"
+	threshold.position = Vector3(0.0, 0.0, 2.2)
+	threshold.set_meta("on_test_floor", true)
+	opening.add_child(threshold)
+
+	_add_piece(opening, &"OpeningPost", EnvironmentKitPiece.Kind.COLUMN,
+			Vector3(0.5, 3.4, 0.8), Vector3(-2.0, 0.0, 0.0), 0.0,
+			COLOUR_STRUCTURE, false)
+	_add_piece(opening, &"OpeningPost", EnvironmentKitPiece.Kind.COLUMN,
+			Vector3(0.5, 3.4, 0.8), Vector3(2.0, 0.0, 0.0), 0.0,
+			COLOUR_STRUCTURE, false)
+	_add_piece(opening, &"OpeningHeader", EnvironmentKitPiece.Kind.TRUSS,
+			Vector3(4.5, 0.6, 0.8), Vector3(0.0, 3.0, 0.0), 0.0,
+			COLOUR_STRUCTURE, false)
+	_add_piece(opening, &"ConcealmentBacking", EnvironmentKitPiece.Kind.PANEL,
+			Vector3(4.5, 3.4, 0.4), Vector3(0.0, 0.0, -2.8), 0.0,
+			COLOUR_HEAVY, false)
+	var type_colour: Color = COLOUR_SYSTEM
+	if entry_kind == &"perimeter_pen":
+		type_colour = COLOUR_CUE
+	elif entry_kind == &"wall_cavity":
+		type_colour = COLOUR_DANGER
+	_add_piece(opening, &"EntryTypePanel", EnvironmentKitPiece.Kind.PANEL,
+			Vector3(2.5, 0.4, 0.2), Vector3(0.0, 2.4, 0.5), 0.0,
+			type_colour, false)
+	if entry_kind == &"specimen_column":
+		_add_piece(opening, &"DeliveryChute", EnvironmentKitPiece.Kind.VENT,
+				Vector3(3.2, 1.4, 2.8), Vector3(0.0, 1.0, -1.3), 0.0,
+				COLOUR_HEAVY, false)
+	elif entry_kind == &"perimeter_pen":
+		for side: float in [-1.0, 1.0]:
+			_add_piece(opening, &"PenRail", EnvironmentKitPiece.Kind.DECK_RAIL,
+					Vector3(0.25, 1.4, 5.0), Vector3(side * 2.8, 0.0, -1.0),
+					0.0, COLOUR_CUE, false)
+	elif entry_kind == &"vent":
+		for louvre_index: int in 3:
+			_add_piece(opening, &"VentLouvre", EnvironmentKitPiece.Kind.PANEL,
+					Vector3(3.4, 0.25, 0.35),
+					Vector3(0.0, 0.8 + louvre_index * 0.7, -0.35),
+					0.0, COLOUR_SYSTEM, false)
+	elif entry_kind == &"wall_cavity":
+		for side: float in [-1.0, 1.0]:
+			_add_piece(opening, &"CavityCheek", EnvironmentKitPiece.Kind.WALL_BAY,
+					Vector3(0.8, 3.4, 3.0), Vector3(side * 2.2, 0.0, -1.2),
+					0.0, COLOUR_HEAVY, false)
+	if not blocked_by.is_empty():
+		var blade: EnvironmentKitPiece = _add_piece(opening,
+				&"EmergencyShutterBlade", EnvironmentKitPiece.Kind.SHUTTER_4M,
+				Vector3(3.6, 3.0, 0.25), Vector3(0.0, 0.0, 0.15), 0.0,
+				COLOUR_DANGER, false)
+		blade.visible = false
+
+
+func _add_containment_tool(
+	parent: Node3D,
+	tool_name: StringName,
+	effect_id: StringName,
+	position: Vector3,
+	linked_opening_ids: Array[StringName],
+	active_seconds: float,
+	cooldown_seconds: float,
+) -> ContainmentTool:
+	var tool := CONTAINMENT_TOOL_SCENE.instantiate() as ContainmentTool
+	tool.name = tool_name
+	tool.position = position
+	tool.configure(effect_id, active_seconds, cooldown_seconds, linked_opening_ids)
+	parent.add_child(tool)
+	tool.active_state_changed.connect(_on_containment_tool_state_changed)
+	tool.set_meta("subject_operated", true)
+	tool.set_meta("encounter_effect", effect_id)
+	if effect_id == ContainmentTool.EFFECT_BAIT:
+		_add_piece(tool, &"BaitBeacon", EnvironmentKitPiece.Kind.COLUMN,
+				Vector3(0.7, 4.5, 0.7), Vector3(0.0, 1.2, 0.0), 0.0,
+				COLOUR_CUE, false)
+	elif effect_id == ContainmentTool.EFFECT_SHUTTER:
+		_add_piece(tool, &"ShutterControlArch", EnvironmentKitPiece.Kind.TRUSS,
+				Vector3(3.5, 3.0, 0.5), Vector3(0.0, 0.0, 0.8), 0.0,
+				COLOUR_DANGER, false)
+	else:
+		_add_piece(tool, &"PowerNodeCoil", EnvironmentKitPiece.Kind.COLUMN,
+				Vector3(1.4, 3.5, 1.4), Vector3(0.0, 1.2, 0.0), 0.0,
+				COLOUR_SYSTEM, false)
+	return tool
+
+
+func _on_containment_tool_state_changed(
+	tool: ContainmentTool,
+	active: bool,
+) -> void:
+	if tool.effect_id != ContainmentTool.EFFECT_SHUTTER:
+		return
+	var laboratory: Node3D = get_laboratory(&"AdaptiveContainment")
+	var openings: Node3D = laboratory.get_node(
+			"RoundContent/ResidualEntryOpenings")
+	for opening_id: StringName in tool.linked_opening_ids:
+		var opening := openings.get_node_or_null(NodePath(opening_id)) as Node3D
+		if opening == null:
+			continue
+		for child: Node in opening.get_children():
+			if child is EnvironmentKitPiece \
+					and String(child.name).begins_with("EmergencyShutterBlade"):
+				child.visible = active
 
 
 func _build_lab_cue_hooks(laboratory: Node3D) -> void:

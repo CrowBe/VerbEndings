@@ -1,8 +1,8 @@
 class_name Residual
 extends CharacterBody3D
 ## Basic PVE hostile that attacks in swarms. Chases the nearest stable
-## player and bites on contact. Spawned by PVERound at a ring around each
-## player and scaled by the round's strength multiplier.
+## Subject and bites on contact. PVERound stages every Residual behind a
+## physical Adaptive Containment opening before it crosses onto the Test Floor.
 ##
 ## Residuals start without grammar. Survival develops one seeded Adverb,
 ## while Destabilising a Subject may grant that Subject's Verb. These are
@@ -14,6 +14,7 @@ extends CharacterBody3D
 
 ## NETWORK: replication boundary — broadcast; PVERound scores it.
 signal residual_destabilised(residual: Residual, attacker_player_id: int)
+signal facility_entry_completed(residual: Residual, opening_id: StringName)
 ## NETWORK: replication boundary — broadcast for evolution VFX/nameplate.
 signal adverb_developed(residual: Residual, adverb: AdverbType)
 signal verb_assumed(residual: Residual, verb: Enums.VerbType)
@@ -31,6 +32,7 @@ const BASE_IMPACT_STRENGTH: float = 6.0
 const BASE_SPEED: float = 3.0
 const ATTACK_RANGE: float = 1.6
 const ATTACK_COOLDOWN: float = 1.2
+const FACILITY_ENTRY_SPEED: float = 4.5
 
 @export_range(0.0, 100.0, 0.1) var material_shed_amount: float = 10.0
 @export_range(0.0, 1.0, 0.01) var material_shed_probability: float = 0.35
@@ -69,6 +71,10 @@ var verb: Enums.VerbType = Enums.VerbType.NONE
 ## NETWORK: replication boundary — sync for behavioural overlay/nameplate.
 var adverb: AdverbType = AdverbType.NONE
 var adverb_development_time: float = INF
+## The authored physical opening used for this Residual's entry.
+## NETWORK: replicated for presentation diagnostics; the host owns movement.
+var entry_opening_id: StringName = &""
+var entry_complete: bool = true
 
 var _attack_timer: float = 0.0
 var _survival_time: float = 0.0
@@ -78,6 +84,10 @@ var _rng := RandomNumberGenerator.new()
 var _slow_factor: float = 1.0
 var _slow_timer: float = 0.0
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var _entry_target: Vector3 = Vector3.ZERO
+var _entry_reveal_delay: float = 0.0
+var _lure_target: Vector3 = Vector3.ZERO
+var _lure_time_remaining: float = 0.0
 
 
 ## Configure at spawn, before add_child.
@@ -107,28 +117,93 @@ func _physics_process(delta: float) -> void:
 		_slow_timer -= delta
 		if _slow_timer <= 0.0:
 			_slow_factor = 1.0
+	_lure_time_remaining = maxf(_lure_time_remaining - delta, 0.0)
 
-	var target: Node3D = _nearest_stable_player()
-	if target == null:
-		velocity.x = 0.0
-		velocity.z = 0.0
-		move_and_slide()
+	if not entry_complete:
+		_advance_facility_entry(delta)
 		return
 
-	var to_target: Vector3 = target.global_position - global_position
+	var target: Node3D = null
+	var target_position: Vector3
+	var is_lured: bool = _lure_time_remaining > 0.0
+	if is_lured:
+		target_position = _lure_target
+	else:
+		target = _nearest_stable_player()
+		if target == null:
+			velocity.x = 0.0
+			velocity.z = 0.0
+			move_and_slide()
+			return
+		target_position = target.global_position
+
+	var to_target: Vector3 = target_position - global_position
 	to_target.y = 0.0
 	var distance: float = to_target.length()
 	if distance > ATTACK_RANGE:
 		var chase: Vector3 = to_target.normalized() * get_speed()
 		velocity.x = chase.x
 		velocity.z = chase.z
-	else:
+	elif not is_lured:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		if _attack_timer == 0.0:
 			_attack_timer = ATTACK_COOLDOWN / _adverb_action_speed()
 			animation_adapter.play_basic_hit()
 			target.apply_impact(get_impact_strength(), self)
+	else:
+		velocity.x = 0.0
+		velocity.z = 0.0
+	move_and_slide()
+	animation_adapter.update_locomotion(
+			Vector2(velocity.x, velocity.z).length(), is_on_floor())
+
+
+## Begins concealed behind an authored opening, then becomes visible while
+## crossing its threshold. There is deliberately no generic spawn-effect path.
+func begin_facility_entry(
+	opening_id: StringName,
+	staging_position: Vector3,
+	threshold_position: Vector3,
+	reveal_delay: float = 0.15,
+) -> void:
+	entry_opening_id = opening_id
+	entry_complete = false
+	_entry_target = threshold_position
+	_entry_reveal_delay = maxf(reveal_delay, 0.0)
+	global_position = staging_position
+	velocity = Vector3.ZERO
+	visible = false
+
+
+func lure_to(target_position: Vector3, duration: float) -> void:
+	_lure_target = target_position
+	_lure_time_remaining = maxf(duration, 0.0)
+
+
+func is_lured() -> bool:
+	return _lure_time_remaining > 0.0
+
+
+func _advance_facility_entry(delta: float) -> void:
+	if _entry_reveal_delay > 0.0:
+		_entry_reveal_delay = maxf(_entry_reveal_delay - delta, 0.0)
+		if _entry_reveal_delay > 0.0:
+			return
+		visible = true
+	var to_threshold: Vector3 = _entry_target - global_position
+	to_threshold.y = 0.0
+	if to_threshold.length() <= 0.2:
+		global_position.x = _entry_target.x
+		global_position.z = _entry_target.z
+		velocity.x = 0.0
+		velocity.z = 0.0
+		entry_complete = true
+		facility_entry_completed.emit(self, entry_opening_id)
+		return
+	var entry_velocity: Vector3 = to_threshold.normalized() * FACILITY_ENTRY_SPEED
+	velocity.x = entry_velocity.x
+	velocity.z = entry_velocity.z
 	move_and_slide()
 	animation_adapter.update_locomotion(
 			Vector2(velocity.x, velocity.z).length(), is_on_floor())
