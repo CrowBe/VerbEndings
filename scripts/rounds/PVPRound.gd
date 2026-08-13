@@ -1,4 +1,4 @@
-extends Node3D
+extends ExperimentController
 ## Competitive Stress round controller. Subjects contest one open impact
 ## crucible while measurement pylons sample displacement and resilience.
 ##
@@ -6,7 +6,6 @@ extends Node3D
 
 signal metrics_updated(player_id: int, dominance: float, displacement: float,
 		resilience: float)
-signal round_finished(ordered_player_ids: Array)
 
 const SAMPLE_INTERVAL: float = 0.25
 const DOMINANCE_RADIUS: float = 12.0
@@ -14,9 +13,6 @@ const DOMINANCE_WEIGHT: float = 3.0
 const DISPLACEMENT_WEIGHT: float = 1.0
 const RESILIENCE_WEIGHT: float = 0.5
 const BASELINE_STABILITY: float = 100.0
-
-@export var protocol: ExperimentProtocol = preload(
-		"res://resources/protocols/competitive_stress.tres")
 
 ## Subject-owned measurements for the current Experiment.
 var dominance_seconds: Dictionary = {}
@@ -27,9 +23,8 @@ var _sample_timer: float = 0.0
 var _previous_positions: Dictionary = {}
 
 
-func _ready() -> void:
-	for body: Node in SubjectRoster.bodies():
-		_register_subject(body)
+func _default_protocol() -> ExperimentProtocol:
+	return preload("res://resources/protocols/competitive_stress.tres")
 
 
 func _physics_process(delta: float) -> void:
@@ -40,31 +35,21 @@ func _physics_process(delta: float) -> void:
 		return
 	var sample_delta: float = _sample_timer
 	_sample_timer = 0.0
+	refresh_subjects()
 	for body: Node in SubjectRoster.bodies():
-		if not _previous_positions.has(body):
-			_register_subject(body)
 		_sample_subject(body, sample_delta)
 
 
-func end_round() -> void:
-	var ordered: Array = VerbChainManager.active_players.keys()
-	ordered.sort_custom(func(a: int, b: int) -> bool:
-		var score_a: float = _round_metric(a)
-		var score_b: float = _round_metric(b)
-		if score_a != score_b:
-			return score_a > score_b
-		return a < b)
-	ScoreManager.award_protocol_placements(protocol, ordered)
-	round_finished.emit(ordered)
+## Dominance, displacement and resilience, weighted as authored.
+func get_performance(player_id: int) -> float:
+	return dominance_seconds.get(player_id, 0.0) * DOMINANCE_WEIGHT \
+			+ displacement_metres.get(player_id, 0.0) * DISPLACEMENT_WEIGHT \
+			+ resilience_samples.get(player_id, 0.0) * RESILIENCE_WEIGHT
 
 
-func _register_subject(body: Node) -> void:
-	if not body is Node3D:
-		return
-	_previous_positions[body] = body.global_position
-	if body.has_signal("destabilised") \
-			and not body.destabilised.is_connected(_on_subject_destabilised):
-		body.destabilised.connect(_on_subject_destabilised)
+func _on_subject_registered(_player_id: int, body: Node) -> void:
+	if body is Node3D:
+		_previous_positions[body] = (body as Node3D).global_position
 
 
 func _sample_subject(body: Node3D, sample_delta: float) -> void:
@@ -89,18 +74,8 @@ func _sample_subject(body: Node3D, sample_delta: float) -> void:
 			resilience_samples.get(player_id, 0.0))
 
 
-func _on_subject_destabilised(player: Node, source: Node) -> void:
+## The Subject that landed the Impact takes the authored knockout bonus.
+func _on_subject_eliminated(_player_id: int, _subject: Node, source: Node) -> void:
 	if source != null and source.is_in_group("players"):
 		ScoreManager.award_protocol_bonus(source.get_multiplayer_authority(),
 				protocol, "knockout")
-	if not CollapseManager.is_active:
-		VerbChainManager.sever_chain_for(player.get_multiplayer_authority())
-		if SubjectRoster.stable_count() <= 1:
-			TrialCoordinator.notify_completion_condition("one_eligible_subject")
-		player.call_deferred("restabilise")
-
-
-func _round_metric(player_id: int) -> float:
-	return dominance_seconds.get(player_id, 0.0) * DOMINANCE_WEIGHT \
-			+ displacement_metres.get(player_id, 0.0) * DISPLACEMENT_WEIGHT \
-			+ resilience_samples.get(player_id, 0.0) * RESILIENCE_WEIGHT
