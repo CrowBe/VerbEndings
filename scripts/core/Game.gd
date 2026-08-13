@@ -202,6 +202,8 @@ func load_round(round_type: String) -> Node3D:
 		push_warning("Game: round scene for '%s' must instantiate a Node3D root." % round_type)
 		return null
 	round_root.transform = compound.get_laboratory_anchor_transform(laboratory_id)
+	if current_round.has_method("configure_compound"):
+		current_round.call("configure_compound", compound)
 	if RoundManager.current_protocol != null \
 			and RoundManager.current_protocol.classification == round_type:
 		current_round.set("protocol", RoundManager.current_protocol)

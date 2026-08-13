@@ -397,9 +397,9 @@ func _resolve_hit() -> void:
 			body.apply_impact(HIT_IMPACT_STRENGTH * _power_buff, self)
 		elif body.has_method("take_hit"):
 			body.take_hit(HIT_IMPACT_STRENGTH * _power_buff, self)
-	var unit: PuzzleUnit = _nearest_apparatus()
+	var unit: Node3D = _nearest_apparatus()
 	if unit != null:
-		unit.interact(assigned_verb, facing)
+		unit.call("interact", assigned_verb, facing)
 
 
 ## --- Verb Expression ---------------------------------------------------
@@ -544,14 +544,17 @@ func _teleport_to_breadcrumb() -> void:
 	velocity = Vector3.ZERO
 
 
-func _nearest_apparatus() -> PuzzleUnit:
-	var best: PuzzleUnit = null
+func _nearest_apparatus() -> Node3D:
+	var best: Node3D = null
 	var best_distance: float = INF
 	for unit: Node in get_tree().get_nodes_in_group("environment_apparatus"):
-		var distance: float = global_position.distance_to(unit.global_position)
+		if not unit is Node3D or not unit.has_method("interact"):
+			continue
+		var apparatus := unit as Node3D
+		var distance: float = global_position.distance_to(apparatus.global_position)
 		if distance <= APPARATUS_REACH and distance < best_distance:
 			best_distance = distance
-			best = unit
+			best = apparatus
 	return best
 
 

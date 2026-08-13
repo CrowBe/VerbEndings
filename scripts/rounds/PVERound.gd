@@ -1,11 +1,12 @@
+class_name PVERound
 extends ExperimentController
-## PVE round controller: the swarm.
+## Adaptive Containment Experiment controller.
 ##
-## Residuals spawn on a ring around each stable player — never closer than
-## MIN_SPAWN_DISTANCE — and both the spawn rate and per-residual strength
-## grow over the round. Each Residual independently develops one seeded
-## Adverb after surviving its configured threshold. A Residual may separately
-## assume one Verb only by Destabilising its Subject.
+## Each wave stages through the Compound's authored specimen column, perimeter
+## pens, vents, or wall cavities. Bait machinery diverts active Residuals,
+## emergency shutters remove linked entries from selection, and the defensive
+## power node temporarily slows the active encounter. Spawn cadence and
+## per-Residual strength continue to grow over the round.
 ##
 ## Scoring combines DESTABILISATIONS and SURVIVAL TIME: swarm_kill bonuses
 ## per Residual Destabilised (the bonus key is serialised Protocol data),
@@ -21,9 +22,6 @@ signal residual_destabilised(player_id: int, new_destabilisation_count: int)
 
 const RESIDUAL_SCENE: PackedScene = preload("res://scenes/Residual.tscn")
 
-## Spawn ring around each player.
-const MIN_SPAWN_DISTANCE: float = 8.0
-const MAX_SPAWN_DISTANCE: float = 14.0
 ## Spawn cadence: starts relaxed, tightens as the round ages.
 const BASE_SPAWN_INTERVAL: float = 4.0
 const MIN_SPAWN_INTERVAL: float = 1.2
@@ -35,6 +33,8 @@ const SURVIVAL_TICK_SECONDS: float = 10.0
 ## Placement blend: one Destabilisation outweighs one survival tick 3:1.
 const DESTABILISATION_WEIGHT: float = 3.0
 const SURVIVAL_WEIGHT: float = 1.0
+const FACILITY_ENTRY_REVEAL_SECONDS: float = 0.15
+const POWER_NODE_SLOW_FACTOR: float = 0.35
 
 ## NETWORK: replication boundary — sync elapsed for the round clock HUD.
 var elapsed: float = 0.0
@@ -51,6 +51,35 @@ var survival_ticks: Dictionary = {}
 var _spawn_timer: float = 0.0
 var _survival_timer: float = 0.0
 var _residual_sequence: int = 0
+var _compound: Compound = null
+var _entry_openings: Array[Dictionary] = []
+var _containment_tools: Dictionary = {}
+
+
+## Game injects the persistent facility boundary before this controller enters
+## the tree. Tests and other composition roots use the same public seam.
+func configure_compound(compound: Compound) -> void:
+	_disconnect_containment_tools()
+	_compound = compound
+	_entry_openings = compound.get_residual_entry_openings() \
+			if compound != null else []
+	_containment_tools.clear()
+	if compound == null:
+		return
+	for tool: ContainmentTool in compound.get_containment_tools():
+		_containment_tools[tool.name] = tool
+		if NetworkSession.can_simulate():
+			tool.reset()
+		if not tool.activated.is_connected(_on_containment_tool_activated):
+			tool.activated.connect(_on_containment_tool_activated)
+
+
+func _exit_tree() -> void:
+	if NetworkSession.can_simulate():
+		for tool: ContainmentTool in _containment_tools.values():
+			if is_instance_valid(tool):
+				tool.reset()
+	_disconnect_containment_tools()
 
 
 func _default_protocol() -> ExperimentProtocol:
@@ -65,7 +94,7 @@ func _physics_process(delta: float) -> void:
 	_spawn_timer += delta
 	if _spawn_timer >= _current_spawn_interval():
 		_spawn_timer = 0.0
-		_spawn_wave()
+		spawn_wave()
 
 	_survival_timer += delta
 	if _survival_timer >= SURVIVAL_TICK_SECONDS:
@@ -78,28 +107,80 @@ func get_performance(player_id: int) -> float:
 			+ survival_ticks.get(player_id, 0) * SURVIVAL_WEIGHT
 
 
-## One residual per stable player, on that player's spawn ring.
-func _spawn_wave() -> void:
+## One Residual per stable Subject, each crossing an available facility opening.
+func spawn_wave() -> void:
 	refresh_subjects()
+	var available_openings: Array[Dictionary] = _available_entry_openings()
+	if available_openings.is_empty():
+		return
 	for body: Node in SubjectRoster.bodies():
 		if body.is_destabilised:
 			continue
+		var opening: Dictionary = available_openings[
+				_residual_sequence % available_openings.size()]
 		var residual: Residual = RESIDUAL_SCENE.instantiate()
 		residual.name = "NetworkResidual%d" % _residual_sequence
 		residual.setup(_current_strength_multiplier(), grammar_seed + _residual_sequence)
 		_residual_sequence += 1
-		residual.position = to_local(_ring_position_around(body))
 		residual.residual_destabilised.connect(_on_residual_destabilised)
 		add_child(residual)
+		residual.set_meta("entry_kind", opening.kind)
+		residual.begin_facility_entry(
+				opening.id,
+				(opening.staging_transform as Transform3D).origin,
+				(opening.threshold_transform as Transform3D).origin,
+				FACILITY_ENTRY_REVEAL_SECONDS)
+		var bait: ContainmentTool = _active_tool(ContainmentTool.EFFECT_BAIT)
+		if bait != null:
+			residual.lure_to(bait.global_position, bait.active_time_remaining)
+		var power_node: ContainmentTool = _active_tool(ContainmentTool.EFFECT_POWER)
+		if power_node != null:
+			residual.apply_slow(
+					POWER_NODE_SLOW_FACTOR, power_node.active_time_remaining)
 
 
-## Random point on the ring: MIN..MAX spawn distance, random bearing.
-## The minimum guarantees no residual ever materializes on top of a player.
-func _ring_position_around(body: Node3D) -> Vector3:
-	var angle: float = randf() * TAU
-	var distance: float = randf_range(MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE)
-	var offset := Vector3(cos(angle) * distance, 0.0, sin(angle) * distance)
-	return body.global_position + offset
+func available_entry_ids() -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for opening: Dictionary in _available_entry_openings():
+		ids.append(opening.id)
+	return ids
+
+
+func _available_entry_openings() -> Array[Dictionary]:
+	var available: Array[Dictionary] = []
+	for opening: Dictionary in _entry_openings:
+		var blocker_name: StringName = opening.blocked_by
+		if not blocker_name.is_empty():
+			var blocker: ContainmentTool = _containment_tools.get(blocker_name)
+			if blocker != null and blocker.is_active():
+				continue
+		available.append(opening)
+	return available
+
+
+func _active_tool(effect_id: StringName) -> ContainmentTool:
+	for tool: ContainmentTool in _containment_tools.values():
+		if tool.effect_id == effect_id and tool.is_active():
+			return tool
+	return null
+
+
+func _on_containment_tool_activated(tool: ContainmentTool) -> void:
+	if tool.effect_id == ContainmentTool.EFFECT_BAIT:
+		for residual: Node in get_tree().get_nodes_in_group("residuals"):
+			if residual is Residual:
+				residual.lure_to(tool.global_position, tool.active_seconds)
+	elif tool.effect_id == ContainmentTool.EFFECT_POWER:
+		for residual: Node in get_tree().get_nodes_in_group("residuals"):
+			if residual is Residual:
+				residual.apply_slow(POWER_NODE_SLOW_FACTOR, tool.active_seconds)
+
+
+func _disconnect_containment_tools() -> void:
+	for tool: ContainmentTool in _containment_tools.values():
+		if is_instance_valid(tool) \
+				and tool.activated.is_connected(_on_containment_tool_activated):
+			tool.activated.disconnect(_on_containment_tool_activated)
 
 
 func _current_spawn_interval() -> float:
