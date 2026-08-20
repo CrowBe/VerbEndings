@@ -17,7 +17,9 @@ When Round Three ends in tied First Place, `CollapseManager` creates a seeded, s
 
 The main menu exposes local, host, and join flows over `Game.host_session()` and `Game.join_session()`. `TrialPresentation` submits the owning peer's Verb and Pair Draft choices through `NetworkSession`; the host remains authoritative and starts the Trial after every connected Subject has a unique Verb. `NetworkSession` enrols peers into the same domain services, accepts movement and action intent from owning clients, simulates gameplay on the host, and sends explicit snapshots for roster, revealed lifecycle state, Pair state, scores, Collapse state, Subjects, Residuals, and the owning HUD's Verb Expression cooldown. The host's secret Protocol queue is never included. Clients compose the revealed Round and render replicated actors without advancing Round simulation. There is no separate lobby scene, matchmaking or discovery service, `MultiplayerSpawner`, or `MultiplayerSynchronizer`; explicit replication is the implemented equivalent transport boundary.
 
-`TrialPresentation` is a replaceable `CanvasLayer` boundary over the persistent 3D world. It renders menu and connection controls, the timed Verb list, Pair Draft turn and Partner choices, classification-free Experiment Briefs and banners, Drop and Recall prompts, Result Announcements, and the final winner. During an Experiment its HUD shows the authored Objective, remaining Verb Expression cooldown, Stability, individual Round Score, and a text-and-shape Critical Stability cue. Rankings always come from `ScoreManager` and remain Subject-owned.
+`TrialPresentation` is a replaceable `CanvasLayer` boundary over the persistent 3D world. It renders menu and connection controls, the timed Verb list, Pair Draft turn and Partner choices, classification-free Experiment Briefs and banners, Drop and Recall prompts, Result Announcements, and the final winner. During an Experiment its HUD shows the authored Objective, remaining Verb Expression cooldown, Stability, individual Round Score, and a text-and-shape Critical Stability cue. A compact build-and-seed strip opens a copyable diagnostics view without obscuring normal play. Rankings always come from `ScoreManager` and remain Subject-owned.
+
+The supported external playtest artefact is a Linux x86_64 release export containing the executable, adjacent PCK, and tester runbook. `tools/check_export.py` creates the runtime files with Godot 4.3, copies the runbook, and launches the exported main menu through a bounded smoke check. CI runs the same check and publishes the playtest package as an artefact.
 
 ## Compound And Environment Kit
 
@@ -46,6 +48,7 @@ The Compound exposes 24 Collapse entry sockets distributed evenly across the thr
 | `CollapseManager` | Resolves individual First Place; creates seeded fair entry and Laboratory-failure plans; advances protected orientation, route, Core-shortcut and warned-failure stages; batches simultaneous Eliminations; applies Overdrive; and declares the final survivor. |
 | `FacilityStateLedger` | Records and validates seeded, named transitions across the four Compound presentation layers, retains authored Laboratory state for the Trial, and supplies the host-authored snapshot consumed by clients. |
 | `TrialCoordinator` | Owns the host-authoritative Trial state machine: Verb Selection once; Pair Draft, Experiment Brief, Laboratory Entry, timed or condition-completed Experiment, Recall, Result Announcement, and optional Thematic Moment for each of exactly three Rounds; then sole-winner or Collapse resolution. It emits presentation-independent state and composition signals. |
+| `SessionDiagnostics` | Records a bounded, privacy-safe local summary of build and seed identity, revealed Protocol order, lifecycle transitions, Subject disconnects, and final result; persists the latest JSON summary under `user://` for the presentation to display and copy. |
 
 The domain services are stateful and in-process. `NetworkSession` is their transport boundary: only the host mutates canonical networked state, while local quick start continues to call the same services without a multiplayer peer. Every replicated module exposes a `snapshot()` and `apply_replicated_state()` pair and announces its own transitions on each peer.
 
@@ -97,7 +100,7 @@ All three Round controllers inherit `ExperimentController`, so each supplies onl
 | Round controllers | Experiment-local spawning, scoring inputs, ordering, cleanup | Verb Selection and persistent Trial presentation |
 | Actors | Input, movement, Impacts, Verb effects, actor-local state | Trial ranking and Round selection |
 | Environment apparatus | One physics interaction and its local state | Subject contribution tracking, global score and Trial state |
-| `TrialPresentation` | Menu and connection input, lifecycle screens, banners, HUD, and presentation acknowledgements | Roster authority, scoring, Pair validation, Protocol selection, actor simulation |
+| `TrialPresentation` | Menu and connection input, lifecycle screens, banners, HUD, build/seed diagnostics, summary copying, and presentation acknowledgements | Roster authority, scoring, Pair validation, Protocol selection, actor simulation |
 
 ## Current Capability Boundary
 

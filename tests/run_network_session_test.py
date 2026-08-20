@@ -85,6 +85,9 @@ def _run_scenario(godot: str, timeout_seconds: float, disconnect: bool) -> bool:
         if server_digest is None or server_digest.get("phase") != 10:
             print("host did not complete after the client disconnected", file=sys.stderr)
             return False
+        if server_digest.get("diagnostic_disconnect_count", 0) < 1:
+            print("host session summary did not capture the disconnect", file=sys.stderr)
+            return False
         return True
     client_digest = _digest(client_output, "NETWORK_SCENARIO_CLIENT")
     if server_digest is None or client_digest is None:

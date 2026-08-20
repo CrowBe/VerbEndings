@@ -3,6 +3,7 @@
 *.translation
 export.cfg
 export_credentials.cfg
+build/
 
 # Python tooling caches
 __pycache__/

@@ -11,6 +11,8 @@ signal session_joined(peer_id: int)
 signal session_closed
 signal roster_changed(player_ids: Array[int])
 signal authoritative_state_received(snapshot: Dictionary)
+signal participant_disconnected(subject_id: int)
+signal host_disconnected
 ## Validated client Release intent for the Drop implementation to consume.
 signal release_requested(player_id: int)
 
@@ -261,6 +263,7 @@ func _on_peer_connected(peer_id: int) -> void:
 func _on_peer_disconnected(peer_id: int) -> void:
 	if not is_host():
 		return
+	participant_disconnected.emit(peer_id)
 	LobbyManager.release_player(peer_id)
 	ScoreManager.release_player(peer_id)
 	_movement_intents.erase(peer_id)
@@ -278,6 +281,7 @@ func _on_connection_failed() -> void:
 
 
 func _on_server_disconnected() -> void:
+	host_disconnected.emit()
 	shutdown()
 
 
