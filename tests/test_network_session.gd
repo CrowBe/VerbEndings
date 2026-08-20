@@ -11,8 +11,8 @@ class FakeNetworkRound:
 		round_finished.emit(ordered)
 
 
-const TEST_SEED: int = 91427
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player.tscn")
+var _test_seed: int = 91427
 var _is_server: bool = false
 var _trial_started: bool = false
 var _reported: bool = false
@@ -26,6 +26,7 @@ func _ready() -> void:
 	_is_server = "--server" in arguments
 	_disconnect_scenario = "--disconnect" in arguments
 	var port: int = _argument_value(arguments, "--port", 28714)
+	_test_seed = _argument_value(arguments, "--seed", _test_seed)
 	_deadline_msec = Time.get_ticks_msec() + 15000
 	_register_facility_ledger_contract()
 	NetworkSession.roster_changed.connect(_on_roster_changed)
@@ -34,7 +35,7 @@ func _ready() -> void:
 	TrialCoordinator.experiment_requested.connect(_on_experiment_requested)
 	TrialCoordinator.trial_completed.connect(_on_trial_completed)
 	if _is_server:
-		if NetworkSession.host_session(port, 2, TEST_SEED) != OK:
+		if NetworkSession.host_session(port, 2, _test_seed) != OK:
 			_fail("server could not create its ENet peer")
 	else:
 		if NetworkSession.join_session("127.0.0.1", port) != OK:
@@ -97,7 +98,7 @@ func _physics_process(_delta: float) -> void:
 	if LobbyManager.lobby_players.size() != 2 \
 			or not LobbyManager.verb_selection_complete():
 		return
-	_trial_started = TrialCoordinator.start_trial(TEST_SEED, true, 0.03)
+	_trial_started = TrialCoordinator.start_trial(_test_seed, true, 0.03)
 	NetworkSession.publish_now()
 
 
@@ -126,7 +127,7 @@ func _report_success() -> void:
 	if _reported:
 		return
 	if FacilityStateLedger.transition_sequence == 0 \
-			or FacilityStateLedger.trial_seed != TEST_SEED:
+			or FacilityStateLedger.trial_seed != _test_seed:
 		_fail("client did not receive the host-authored facility ledger")
 		return
 	_print_success()

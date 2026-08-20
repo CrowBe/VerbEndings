@@ -75,8 +75,8 @@ jobs:
       - name: Session diagnostics tests
         run: godot --headless --path . tests/TestSessionDiagnostics.tscn
 
-      - name: Network session tests
-        run: python3 tests/run_network_session_test.py --godot godot
+      - name: Deterministic multiplayer scenario tests
+        run: python3 tests/run_multiplayer_scenarios.py --godot godot --seed 24680
 
       - name: Residual grammar tests
         run: godot --headless --path . tests/TestResidualGrammar.tscn
