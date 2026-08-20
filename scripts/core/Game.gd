@@ -49,6 +49,7 @@ func _ready() -> void:
 	transit_root.add_child(laboratory_transit)
 	laboratory_transit.entry_completed.connect(_on_laboratory_entry_completed)
 	laboratory_transit.recall_completed.connect(_on_recall_completed)
+	SessionDiagnostics.prepare_session(local_playtest_config.trial_seed)
 	if auto_start_greybox:
 		start_local_playtest()
 
@@ -83,6 +84,7 @@ func open_local_lobby() -> void:
 	NetworkSession.shutdown()
 	_prepare_session_state()
 	active_seed = local_playtest_config.trial_seed
+	SessionDiagnostics.prepare_session(active_seed)
 	seed(active_seed)
 	_spawn_local_subjects(false)
 
@@ -130,6 +132,7 @@ func host_session(port: int = NetworkSession.DEFAULT_PORT,
 		trial_seed: int = local_playtest_config.trial_seed) -> Error:
 	_prepare_session_state()
 	active_seed = trial_seed
+	SessionDiagnostics.prepare_session(active_seed)
 	seed(active_seed)
 	var error: Error = NetworkSession.host_session(port, max_clients, trial_seed)
 	if error == OK:
@@ -141,6 +144,8 @@ func host_session(port: int = NetworkSession.DEFAULT_PORT,
 func join_session(address: String,
 		port: int = NetworkSession.DEFAULT_PORT) -> Error:
 	_prepare_session_state()
+	active_seed = 0
+	SessionDiagnostics.prepare_session(0)
 	return NetworkSession.join_session(address, port)
 
 

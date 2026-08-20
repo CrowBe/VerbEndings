@@ -25,6 +25,19 @@ func _run() -> void:
 			and snapshot.lifecycle_text.contains("HOST SESSION") \
 			and snapshot.lifecycle_text.contains("JOIN SESSION"),
 			"the main menu exposes local, host, and join flows")
+	_expect(snapshot.diagnostics_strip_text.contains("BUILD mvp-playtest.1") \
+			and snapshot.diagnostics_strip_text.contains("SEED 21021"),
+			"the non-intrusive diagnostics strip identifies the build and Trial seed")
+	presentation.toggle_diagnostics()
+	snapshot = presentation.presentation_snapshot()
+	_expect(snapshot.diagnostics_visible \
+			and snapshot.diagnostics_text.contains("\"build_identifier\"") \
+			and snapshot.diagnostics_text.contains("\"trial_seed\": 21021"),
+			"F8 diagnostics exposes the copyable privacy-safe session summary")
+	presentation._hide_lifecycle_panel()
+	_expect(Input.mouse_mode == Input.MOUSE_MODE_VISIBLE,
+			"phase transitions keep the mouse usable while diagnostics remains open")
+	presentation.toggle_diagnostics()
 
 	game.open_local_lobby()
 	await get_tree().process_frame
