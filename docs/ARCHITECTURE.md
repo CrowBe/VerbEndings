@@ -115,9 +115,9 @@ The repository provides a deterministic local gameplay quick start and a present
 - Material shedding and Environment apparatus scatter positions use the host's seeded global random stream; clients consume replicated gameplay outcomes rather than reproducing those draws;
 - the Compound, Assignment Deck, three Laboratories, separator shutters, and perimeter route have a locally runnable structural greybox;
 - the Dispensing Line, Drop, Recall, and Result Announcement have structural greybox presentation; tube interiors use a presentation cut, and Thematic Moments remain a design contract only; and
-- large-roster multiplayer scenarios, reconnect support, latency compensation, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
+- seeded 12- and 24-Subject capacity scenarios validate Compound entry and replicated Collapse state, while the complete canonical lifecycle is covered at the current nine-unique-Verb ceiling and by a real two-peer ENet scenario; a 24-peer soak, reconnect support, latency compensation, audio, production art beyond the Material Dispenser visual, and comprehensive automated gameplay coverage are absent.
 
-Focused headless gameplay suites cover Overdrive, Stability, the shared Experiment lifecycle, Trial resolution, player-facing Trial presentation, Laboratory Entry/Drop/Recall, the Compound-wide Collapse and its client catch-up composition, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the facility state ledger, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
+Focused headless gameplay suites cover Overdrive, Stability, the shared Experiment lifecycle, Trial resolution, player-facing Trial presentation, Laboratory Entry/Drop/Recall, seeded 8-, 9-, 12-, and 24-Subject lifecycle or capacity scenarios, the Compound-wide Collapse and its client catch-up composition, two-process ENet authority and disconnect handling, Residual grammar, Experiment Protocols, the facility state ledger, the animation adapter, the Material Dispenser visual boundary, and the Compound greybox; `docs/VALIDATION.md` records how to run them.
 
 GitHub issues own implementation work. This document records capability boundaries only.
 

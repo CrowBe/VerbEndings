@@ -182,17 +182,37 @@ single-tube Self-Chains, the 24-Subject socket ceiling, independent Release,
 steerable physics handoff, all-Subject Landing completion, floor collection
 apertures, reversed-pressure Recall, and return to the Assignment Deck.
 
-Run the two-process network session suite with:
+Run the deterministic multiplayer scenario suite with:
 
 ```bash
-python3 tests/run_network_session_test.py --godot godot4.3
+python3 tests/run_multiplayer_scenarios.py --godot godot4.3 --seed 24680
 ```
 
-It launches real headless ENet host and client processes, drives them through
-Verb Selection, all three Pair Drafts and Experiments, and compares their final
-replicated roster, Verbs, Pair state, scores, Protocol history, lifecycle, and
-result. A second scenario disconnects the client during an Experiment and
-verifies that the host safely releases it and completes the Trial.
+The command runs every seeded scenario twice and rejects divergent Pairing,
+score, lifecycle, Compound-entry, or final-result digests. Eight- and
+nine-Subject scenarios drive the complete unique-Verb roster through Verb
+Selection, all three Pair Drafts, Laboratory Entry, Expression spending,
+Impact Destabilisation, Experiments, Recall, Result Announcements, and both
+sole-winner and Collapse resolution. Twelve- and 24-Subject capacity scenarios
+exercise the authored Compound entry sockets, physical spacing, seeded failure
+order, and authoritative Collapse snapshot round trip. They deliberately do
+not claim that the current nine-Verb roster supports a canonical Trial above
+nine Subjects.
+
+The same command launches a real headless ENet host and client through the
+canonical three-Round lifecycle and compares their final replicated roster,
+Verbs, Pair state, Stability, scores, Protocol history, lifecycle, and result.
+A second real-peer scenario disconnects the client during an Experiment and
+verifies that the host records the disconnect, safely releases the Subject,
+and completes the Trial. The JSON summary includes per-scenario wall-clock
+duration, physical socket spacing, divergence status, and disconnect count.
+This is not a 24-peer soak and does not establish 24-Player support.
+
+The focused real-peer runner remains available with:
+
+```bash
+python3 tests/run_network_session_test.py --godot godot4.3 --seed 24680
+```
 
 Run the Residual grammar suite with:
 
