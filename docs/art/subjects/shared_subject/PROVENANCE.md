@@ -2,7 +2,7 @@
 
 ## Role
 
-This directory contains the project-owned visual and generated three-dimensional sources for the common Subject body. `CONTEXT.md`, `docs/WORLD_DESIGN.md`, and `docs/VISUAL_ASSET_PIPELINE.md` remain authoritative wherever generated evidence is ambiguous.
+This directory contains the project-owned visual and generated three-dimensional sources for the common Subject body. `GLOSSARY.md`, `docs/WORLD_DESIGN.md`, and `docs/VISUAL_ASSET_PIPELINE.md` remain authoritative wherever generated evidence is ambiguous.
 
 ## Reference Lineage
 

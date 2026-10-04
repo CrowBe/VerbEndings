@@ -1,6 +1,6 @@
 # Architecture
 
-[`CONTEXT.md`](../CONTEXT.md) defines canonical product rules and domain language. This document describes the software currently present in the repository. Names in backticks are literal code identifiers, including identifiers that do not yet match the domain language.
+[`GLOSSARY.md`](../GLOSSARY.md) defines canonical product rules and domain language. This document describes the software currently present in the repository. Names in backticks are literal code identifiers, including identifiers that do not yet match the domain language.
 
 ## Runtime
 
@@ -123,7 +123,7 @@ GitHub issues own implementation work. This document records capability boundari
 
 ## Non-Canonical Identifiers
 
-Several code identifiers and internal comments do not match `CONTEXT.md`. They are load-bearing today, so the mismatch is recorded here rather than hidden:
+Several code identifiers and internal comments do not match `GLOSSARY.md`. They are load-bearing today, so the mismatch is recorded here rather than hidden:
 
 - `Player`, `player_id`, `players` group, and `active_players` stand for Subject and Subject identity;
 - `swarm_kill` is a serialised bonus key in the `adaptive_containment` Protocol resource and `ScoreManager.BONUS_EVENTS`, so the string stays until a data migration renames it.

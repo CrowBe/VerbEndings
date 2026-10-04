@@ -4,7 +4,7 @@ Use this workflow for rendered UI, spatial layout, camera, lighting, animation, 
 
 ## Establish the visual contract
 
-Read the issue acceptance criteria and the current product rules that apply to the changed experience. Relevant sources commonly include `CONTEXT.md`, `docs/WORLD_DESIGN.md`, scene tests, and resource defaults.
+Read the issue acceptance criteria and the current product rules that apply to the changed experience. Relevant sources commonly include `GLOSSARY.md`, `docs/WORLD_DESIGN.md`, scene tests, and resource defaults.
 
 Translate qualitative requirements into observations and measurements before launching the application. Examples include:
 

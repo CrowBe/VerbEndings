@@ -48,7 +48,7 @@ func _run() -> void:
 	get_tree().quit(1)
 
 
-## CONTEXT.md: a Destabilised Subject is Eliminated from that Experiment and
+## GLOSSARY.md: a Destabilised Subject is Eliminated from that Experiment and
 ## automatically Recalled — it returns in the next Round, not mid-Experiment.
 func _test_elimination_is_canonical() -> void:
 	var fixture: Dictionary = _fixture([21, 22])

@@ -2,7 +2,7 @@
 
 This package provides focused visual-development coverage for every asset family in [`REFERENCE_ASSET_MAP.md`](../REFERENCE_ASSET_MAP.md). It contains 47 generated sheets. Together with the retained shared Subject turnaround, they cover all 48 rows in the map.
 
-These images are candidate modelling and review inputs. They do not by themselves promote an asset to Production Source, Proxy, Production, or Polish. [`CONTEXT.md`](../../../CONTEXT.md), [`WORLD_DESIGN.md`](../../WORLD_DESIGN.md), the map's written requirements, and focused production briefs override any ambiguous or conflicting generated detail.
+These images are candidate modelling and review inputs. They do not by themselves promote an asset to Production Source, Proxy, Production, or Polish. [`GLOSSARY.md`](../../../GLOSSARY.md), [`WORLD_DESIGN.md`](../../WORLD_DESIGN.md), the map's written requirements, and focused production briefs override any ambiguous or conflicting generated detail.
 
 The sheets use neutral presentation, complete silhouettes, clean cells, large physical relationships, and the established facility palette. Text and loose presentation effects are excluded from the retained outputs wherever they would contaminate reconstruction input. Generated metre relationships remain visual guidance until a focused brief fixes exact dimensions, origin, facing, collision owner, and runtime target.
 

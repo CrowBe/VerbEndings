@@ -21,7 +21,7 @@ The generation set uses these retained project references according to family:
 - `docs/art/material_dispenser_comparison/references/turnaround_approved.png` — facility hard-surface language, palette, roughness, panel hierarchy, and bounded emission;
 - `docs/art/reference_sheets/compound/complete_compound.png` — Compound topology and environment relationships: one continuous Test Floor, one elevated Assignment Deck annulus, and three Laboratory territories;
 - generated focused sheets within this package — only as supporting references for descendant families such as the Residual overlay, Laboratory apparatus thresholds, and the Collapse; and
-- the written requirements in `CONTEXT.md`, `docs/WORLD_DESIGN.md`, and `docs/art/REFERENCE_ASSET_MAP.md`.
+- the written requirements in `GLOSSARY.md`, `docs/WORLD_DESIGN.md`, and `docs/art/REFERENCE_ASSET_MAP.md`.
 
 Each input image serves as a visual reference. No existing source image is overwritten.
 
