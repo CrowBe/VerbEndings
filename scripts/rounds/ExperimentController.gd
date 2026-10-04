@@ -8,7 +8,7 @@ extends Node3D
 ## award-then-announce sequence. A subclass supplies its authored Protocol and
 ## how that Protocol measures a Subject's performance.
 ##
-## Elimination follows CONTEXT.md: a Destabilised Subject is out of the
+## Elimination follows GLOSSARY.md: a Destabilised Subject is out of the
 ## Experiment and stays down. Recall restores every Subject to baseline at the
 ## end of the Round.
 ##

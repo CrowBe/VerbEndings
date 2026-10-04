@@ -1,6 +1,6 @@
 # World And Visual Design
 
-[`CONTEXT.md`](../CONTEXT.md) defines the domain language and Trial rules. This document defines the durable spatial, visual, narrative, and production contracts for the Compound.
+[`GLOSSARY.md`](../GLOSSARY.md) defines the domain language and Trial rules. This document defines the durable spatial, visual, narrative, and production contracts for the Compound.
 
 ## Creative Direction
 
