@@ -16,7 +16,7 @@ The helper emits compact JSON. Exit `0` means its invariant passed, `1` means a 
 Finish only when all of these are true:
 
 - One open, actionable issue has been implemented without unrelated scope.
-- Current code and affected documentation agree with `AGENTS.md`, `CONTEXT.md`, and `docs/ARCHITECTURE.md`.
+- Current code and affected documentation agree with `AGENTS.md`, `GLOSSARY.md`, and `docs/ARCHITECTURE.md`.
 - `$verify-changes` reports `PASS` for the final local change using Godot 4.3.
 - The branch is pushed and a PR links the issue with `Closes #<number>`.
 - The final pushed commit is the commit whose required CI checks passed.
@@ -89,7 +89,7 @@ Diagnose a non-fast-forward `main` rather than rebasing or resetting automatical
 
 ## 4. Implement the smallest complete solution
 
-Inspect neighbouring code, tests, and terminology. Preserve `CONTEXT.md` invariants and use Australian/British spelling in prose.
+Inspect neighbouring code, tests, and terminology. Preserve `GLOSSARY.md` invariants and use Australian/British spelling in prose.
 
 Test changed behaviour through stable public seams established by the issue, specification, architecture, or neighbouring tests. When practical, add a failing focused test before each smallest passing slice. Update focused regressions and present-state documentation with the implementation; do not add changelogs, dated audits, migration narratives, ADRs, or planned-work lists.
 

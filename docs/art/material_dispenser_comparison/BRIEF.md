@@ -10,7 +10,7 @@ The asset is the Semantic Engine's Material Dispenser: facility machinery that d
 
 Repository sources:
 
-- `CONTEXT.md`: Material is dispensed by the Semantic Engine as an environmental supply.
+- `GLOSSARY.md`: Material is dispensed by the Semantic Engine as an environmental supply.
 - `docs/WORLD_DESIGN.md`: the facility is clinical, buoyant, tactile, overconfident and quietly uncanny; production art uses rounded simplified stylised-PBR forms with believable mass.
 - `scenes/MaterialDispenser.tscn`: the greybox body is a 1.6 m diameter, 2.0 m high cylinder with a floor-contact origin; `DispenseSocket` is at Godot position `(0, 0.4, 1.1)`.
 - `scripts/MaterialDispenser.gd`: gameplay owns timing, Collapse gating and Material creation.

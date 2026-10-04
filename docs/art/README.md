@@ -1,6 +1,6 @@
 # Art Reference Library
 
-This directory contains the approved visual evidence used to brief, reconstruct, and review VerbEndings assets. [`CONTEXT.md`](../../CONTEXT.md) governs domain language, [`WORLD_DESIGN.md`](../WORLD_DESIGN.md) governs visual and spatial rules, and [`VISUAL_ASSET_PIPELINE.md`](../VISUAL_ASSET_PIPELINE.md) governs production boundaries.
+This directory contains the approved visual evidence used to brief, reconstruct, and review VerbEndings assets. [`GLOSSARY.md`](../../GLOSSARY.md) governs domain language, [`WORLD_DESIGN.md`](../WORLD_DESIGN.md) governs visual and spatial rules, and [`VISUAL_ASSET_PIPELINE.md`](../VISUAL_ASSET_PIPELINE.md) governs production boundaries.
 
 [`REFERENCE_ASSET_MAP.md`](REFERENCE_ASSET_MAP.md) records the current reference coverage for the complete 3D asset portfolio. A generated image, video, or mesh is not a runtime asset unless its focused brief and evidence explicitly say that it satisfies the Production readiness contract.
 
