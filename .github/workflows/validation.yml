@@ -12,6 +12,22 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      # Godot only needs runtime LFS files; docs/art and assets/source are .gdignore'd art/source.
+      - name: List runtime LFS files
+        run: git lfs ls-files -l --exclude="docs/art/**,assets/source/**" | cut -d' ' -f1 | sort > .lfs-runtime-ids
+
+      - name: Cache LFS objects
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: lfs-${{ hashFiles('.lfs-runtime-ids') }}
+          restore-keys: lfs-
+
+      - name: Pull runtime LFS files
+        run: git lfs pull --exclude="docs/art/**,assets/source/**"
 
       - name: Install Godot 4.3
         uses: chickensoft-games/setup-godot@v2
