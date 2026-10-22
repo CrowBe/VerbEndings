@@ -103,6 +103,9 @@ jobs:
       - name: Experiment Protocol tests
         run: godot --headless --path . tests/TestExperimentProtocols.tscn
 
+      - name: Experiment Controller tests
+        run: godot --headless --path . tests/TestExperimentController.tscn
+
       - name: Sustained Exposure tests
         run: godot --headless --path . tests/TestSustainedExposure.tscn
 
