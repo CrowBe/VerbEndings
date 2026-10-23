@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shared Subject · VerbEndings Wiki</title>
+  <link rel="stylesheet" href="/styles/wiki.css" />
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <p class="brand">VerbEndings</p>
+      <p class="brand-sub">In-repo game wiki (spike)</p>
+      <nav class="nav" aria-label="Wiki">
+        <div class="nav-section">Overview</div>
+        <a href="/" >Home</a>
+        <a href="/story/" >Story &amp; world</a>
+        <div class="nav-section">Assets</div>
+        <a href="/assets/" >Catalog</a>
+        <a href="/assets/shared-subject.html" aria-current="page">Shared Subject</a>
+        <a href="/assets/material-dispenser.html" >Material Dispenser</a>
+        <div class="nav-section">Sources</div>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
+      </nav>
+    </aside>
+    <main class="main">
+
+      <p class="crumb"><a href="/">Wiki</a> / <a href="/assets/">Assets</a> / Shared Subject</p>
+      <h1>Shared Subject</h1>
+      <p class="lede">Common playable anatomy. Concept mesh for Blender retopology — not rigged, not under <code>assets/exports/</code>.</p>
+      <div class="note"><strong>Production Source.</strong> Written brief overrides generated markings (SAD SHIELD text, Verb colour, barcodes).</div>
+
+      <div class="viewer-wrap">
+        <model-viewer
+          src="/models/shared_subject_meshy6b_concept.glb"
+          alt="Shared Subject Meshy 6b concept"
+          camera-controls
+          touch-action="pan-y"
+          shadow-intensity="0.6"
+          exposure="1.05"
+          auto-rotate
+          ar-status="not-presenting"
+        ></model-viewer>
+      </div>
+
+      <table class="meta-table">
+        <tr><th>Disposition</th><td>Production Source (Meshy 6b re-run)</td></tr>
+        <tr><th>GLB</th><td><code class="path">assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb</code></td></tr>
+        <tr><th>Brief</th><td><code class="path">docs/art/subjects/shared_subject/BRIEF.md</code></td></tr>
+        <tr><th>Provenance</th><td><code class="path">docs/art/subjects/shared_subject/PROVENANCE.md</code></td></tr>
+        <tr><th>Viewer</th><td>@google/model-viewer 4.0.0 (CDN)</td></tr>
+      </table>
+
+      <h2>Canon (from brief)</h2>
+      <p class="source">Source: <code>docs/art/subjects/shared_subject/BRIEF.md</code></p>
+      <div class="prose">
+        <ul>
+          <li>one soft jelly/droplet body with a curved peak;</li>
+          <li>two glossy black oval eyes and no mouth, nose, eyebrows, ears, or hair;</li>
+          <li>two short jelly arms and two broad jelly feet;</li>
+          <li>stable warm off-white laboratory jacket or suit treatment;</li>
+          <li>target height ≈ 1.2 m matching the gameplay capsule.</li>
+        </ul>
+      </div>
+
+      <h2>Reference crops</h2>
+      <div class="card-grid">
+        <div class="card"><img src="/art/shared_subject_inputs/subject_shield_front.png" alt="Front crop" /><div class="body"><h3>Front</h3></div></div>
+        <div class="card"><img src="/art/shared_subject_inputs/subject_shield_front_three_quarter.png" alt="Front three-quarter crop" /><div class="body"><h3>Front ¾</h3></div></div>
+        <div class="card"><img src="/art/shared_subject_inputs/subject_shield_side.png" alt="Side crop" /><div class="body"><h3>Side</h3></div></div>
+        <div class="card"><img src="/art/shared_subject_inputs/subject_shield_back.png" alt="Back crop" /><div class="body"><h3>Back</h3></div></div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
