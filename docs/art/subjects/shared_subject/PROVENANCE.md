@@ -51,3 +51,29 @@ Blender 5.2.0 LTS inspection records one mesh and one material with `145,482` ve
 Controlled `1.2 m`-high renders establish model negative Y as front and model positive Y as back. The mesh is retained as a Production Source for Blender retopology or reconstruction. It is not a runtime export and does not satisfy the rigging contract. Exact machine-readable evidence remains in `BUILD_EVIDENCE.json`.
 
 The Blender inspection and rendering environment used its nonfatal OpenColorIO fallback because the packaged configuration was newer than the linked library. Both operations completed and their output evidence validated.
+
+## Generation Record (pipeline handoff re-run — meshy6b)
+
+Live Meshy Desk pipeline test (Benjamin OK on Shared Subject re-run, ~30 credits). Prior `shared_subject_meshy6_concept.glb` retained unchanged.
+
+- Service: Meshy multi-image-to-3D.
+- Model: Meshy 6 (`meshy-6`).
+- Task identifier: `01a16653-6775-7468-8025-365233db76a3`.
+- Result: succeeded.
+- Credits: `1100` before, `1070` after, `30` consumed.
+- Inputs: same four `meshy_inputs/` crops (SHA-256 unchanged; listed above).
+- Model type: standard.
+- Pose request: T-pose.
+- Texturing: PBR and HD texture enabled, baked-light removal enabled.
+- Image enhancement, alpha thumbnail, and multi-view thumbnails: enabled.
+- Remesh: disabled so the high-resolution source remains intact.
+- Format: self-contained GLB.
+- No rigging, animation, retexture, resize, conversion, or additional generation is applied.
+
+The retained source is `assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb`, `31,361,764` bytes, SHA-256 `9bc0e67c533ae22d6d862ca6d9b2687cd800f758f0f75dfc8a6aa0642c983922`.
+
+### Inspection (meshy6b)
+
+Blender 5.2.0 LTS inspection records one mesh and one material with `161,604` vertices and `298,732` triangles. Raw bounds are approximately `1.349 × 1.130 × 1.899 m`, centred around the source origin. Zero non-manifold edges after positional weld; two welded connected components. Machine-readable evidence: `BUILD_EVIDENCE_meshy6b.json`.
+
+This file is Production Source for Blender retopology or reconstruction, not a runtime export. Tidy/retopo/Godot export remains with VerbEndings Bench.

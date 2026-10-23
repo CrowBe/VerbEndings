@@ -1,0 +1,138 @@
+{
+  "portfolio_role": {
+    "evidence_class": "Production Source",
+    "scope": "pipeline handoff re-run of shared Subject concept; not a runtime export; prior meshy6 retained"
+  },
+  "generator": {
+    "service": "Meshy",
+    "task_type": "multi-image-to-3d",
+    "task_id": "01a16653-6775-7468-8025-365233db76a3",
+    "model": "meshy-6",
+    "status": "SUCCEEDED",
+    "credits_before": 1100,
+    "credits_after": 1070,
+    "credits_consumed": 30
+  },
+  "generation_parameters": {
+    "model_type": "standard",
+    "pose_mode": "t-pose",
+    "should_texture": true,
+    "should_remesh": false,
+    "enable_pbr": true,
+    "remove_lighting": true,
+    "hd_texture": true,
+    "image_enhancement": true,
+    "alpha_thumbnail": true,
+    "multi_view_thumbnails": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "source_artifact": {
+    "path": "assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb",
+    "bytes": 31361764,
+    "sha256": "9bc0e67c533ae22d6d862ca6d9b2687cd800f758f0f75dfc8a6aa0642c983922",
+    "self_contained_glb": true
+  },
+  "blender_inspection": {
+    "blender_version": "5.2.0 LTS",
+    "input_path": "/workspace/VerbEndings/assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb",
+    "file_size_bytes": 31361764,
+    "sha256": "9bc0e67c533ae22d6d862ca6d9b2687cd800f758f0f75dfc8a6aa0642c983922",
+    "object_count": 1,
+    "mesh_count": 1,
+    "objects": [
+      {
+        "name": "Mesh_0",
+        "vertices": 161604,
+        "edges": 460026,
+        "polygons": 298732,
+        "triangles": 298732,
+        "connected_components": 310,
+        "welded_connected_components": 2,
+        "welded_vertices": 149354,
+        "raw_non_manifold_edges": 23856,
+        "non_manifold_edges": 0,
+        "degenerate_polygons": 0,
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "dimensions": [
+          1.348985,
+          1.129501,
+          1.898535
+        ],
+        "materials": [
+          "Material_0"
+        ]
+      }
+    ],
+    "total_vertices": 161604,
+    "total_edges": 460026,
+    "total_polygons": 298732,
+    "total_triangles": 298732,
+    "total_connected_components": 310,
+    "total_welded_connected_components": 2,
+    "total_raw_non_manifold_edges": 23856,
+    "total_non_manifold_edges": 0,
+    "total_degenerate_polygons": 0,
+    "material_names": [
+      "Material_0"
+    ],
+    "bounds_min": [
+      -0.674925,
+      -0.563112,
+      -0.950224
+    ],
+    "bounds_max": [
+      0.67406,
+      0.566389,
+      0.948311
+    ],
+    "dimensions": [
+      1.348985,
+      1.129501,
+      1.898535
+    ],
+    "floor_offset": -0.950224,
+    "root_objects": [
+      {
+        "name": "Mesh_0",
+        "type": "MESH",
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "source_disposition": {
+    "production_source": "PASS",
+    "direct_runtime": "FAIL",
+    "direct_rigging": "FAIL",
+    "required_next_stage": "Blender reference-driven retopology/reconstruction (VerbEndings Bench / tidy), then Godot-owned integration."
+  }
+}
