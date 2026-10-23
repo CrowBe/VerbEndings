@@ -47,12 +47,12 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
-| Shared Subject | **Context Reference.** Four project-owned turnarounds and Meshy input crops establish intended anatomy. Wrong-design Meshy concept GLBs were pruned (2026-10-23). | Approved concept mesh (or authored reconstruction); separate body, eyes, suit, and identity surfaces; neutral default presentation; floor-contact origin; exact scale; rig; deformation evidence; semantic animation clips; runtime GLB. |
+| Shared Subject | **Context Reference.** Neutral production turnaround (batch 1, 2026-10-23) plus prior Verb-colour turnarounds and `meshy_inputs/`. Wrong-design Meshy concept GLBs were pruned. | Benjamin acceptance of neutral sheet; Meshy crops from neutral sheet; approved concept mesh; separate body, eyes, suit, and identity surfaces; rig; semantic animation clips; runtime GLB. |
 | Subject identity | Partial within the shared Subject sheets. | Stable suit-number treatment and replaceable identity panel that remain independent from any claimed Verb. Generated `SAD SHIELD` text, barcode detail, and permanent Verb colour are excluded. |
 | Subject Verb Effects | Written per-Verb colour, silhouette, icon, and motion contract only. | One treatment sheet for each of BURN, SHIELD, GROW, STRETCH, ROLL, JUMP, BOUNCE, FREEZE, and REWIND, shown on the same neutral Subject and readable without colour alone. |
 | Subject physical states | Greybox animation hooks only. | Idle, movement, jump, landing, basic Impact, Stability Loss, Critical Stability, Destabilisation, Drop, and Recall deformation keys. |
-| Researcher | FLUX intro Context Reference only. | Canonical turnaround, face and hair sheet, hands and practical clothing details, scale view, booth performance poses, and clumsy physical-comedy keys. |
-| Residual | Greybox Contract only. | Neutral turnaround derived from shared Droplet ancestry without copying stable Subject identity; garment/disposal evidence; deforming topology; assumed-Verb compatibility. |
+| Researcher | **Context Reference.** Batch 1 production sheet under `docs/art/actors/researcher/` (turnaround, face/hands, Subject scale, booth, comedy). FLUX intro remains secondary. | Benjamin acceptance; fix any residual non-canon scale/UI artefacts; booth attachment to Assignment Deck greybox. |
+| Residual | **Context Reference.** Batch 1 production sheet under `docs/art/actors/residual/` (worn wrap turnaround, Subject comparison, deformation keys). | Benjamin acceptance; assumed-Verb treatment sheet later; runtime Residual mesh. |
 | Residual Adverb overlay | Runtime hook and written behaviour contract only. | Separate material and motion grammar for unsanctioned Adverbs that cannot be mistaken for a tenth Verb. |
 | Material resource | Greybox Contract only. | Resting, shed-on-Impact, airborne, and absorption forms with a readable soft-substrate silhouette and no resemblance to ordinary rendering material. |
 

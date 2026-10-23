@@ -17,12 +17,12 @@ The Subject has no weapons, gore, body-horror treatment, facility authority symb
 
 ## Approved Production Sources
 
-- `references/subject_shield_turnaround.png` is the primary common-anatomy turnaround.
-- `references/subject_grow_turnaround.png` and `references/subject_bounce_turnaround.png` confirm the shared anatomy across different generated substrate colours.
+- `references/subject_neutral_production_turnaround.png` is the **primary** neutral common-anatomy turnaround for future Meshy / reconstruction (batch 1, 2026-10-23): mouthless, neutral cream substrate, no SAD SHIELD text, no barcode.
+- `references/subject_shield_turnaround.png`, `subject_grow_turnaround.png`, and `subject_bounce_turnaround.png` remain lineage / Verb-colour consistency refs; markings and permanent Verb colour are not production identity.
 - `references/subject_group_dispense_reference.png` confirms mouthless group performance and approximate scale.
-- `meshy_inputs/` contains unretouched crops of the SHIELD turnaround for a future Meshy run.
+- `meshy_inputs/` still holds SHIELD crops; regenerate crops from the neutral turnaround before the next paid Meshy run.
 
-Written canon overrides generated details. The body colour in these sources does not permanently identify a Verb. `SAD SHIELD` text, barcode marks, and generated rear status details are concept artefacts rather than production identity.
+Written canon overrides generated details. The body colour in Verb-colour sheets does not permanently identify a Verb.
 
 ## Runtime Envelope
 

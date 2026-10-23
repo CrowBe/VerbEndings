@@ -79,3 +79,6 @@ docs/art/subjects/shared_subject/references/subject_bounce_turnaround.png filter
 docs/art/subjects/shared_subject/references/subject_group_dispense_reference.png filter=lfs diff=lfs merge=lfs -text
 docs/art/subjects/shared_subject/references/subject_grow_turnaround.png filter=lfs diff=lfs merge=lfs -text
 docs/art/subjects/shared_subject/references/subject_shield_turnaround.png filter=lfs diff=lfs merge=lfs -text
+docs/art/subjects/shared_subject/references/subject_neutral_production_turnaround.png filter=lfs diff=lfs merge=lfs -text
+docs/art/actors/researcher/references/** filter=lfs diff=lfs merge=lfs -text
+docs/art/actors/residual/references/** filter=lfs diff=lfs merge=lfs -text
