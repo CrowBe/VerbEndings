@@ -60,7 +60,6 @@ def glb_public(repo_path: str | None) -> str | None:
     name = Path(repo_path).name
     # Existing symlinks under wiki/public/models
     mapping = {
-        "shared_subject_meshy6b_concept.glb": "models/shared_subject_meshy6b_concept.glb",
         "material_dispenser.glb": "models/material_dispenser.glb",
     }
     return mapping.get(name)
@@ -288,7 +287,7 @@ def gen_catalog(catalog: dict) -> None:
       <h1>Asset catalog</h1>
       <p class="lede">{count} mapped families. Cards show retained reference art even when no GLB exists.</p>
       <p class="callout">Generated sheets are modelling references; they do not by themselves mark an asset production-ready (<code>reference_sheets/README.md</code>).</p>
-      <p><a href="sheets.html">Browse reference sheets →</a> · <a href="shared-subject.html">Shared Subject (GLB)</a> · <a href="material-dispenser.html">Material Dispenser (GLB)</a></p>
+      <p><a href="sheets.html">Browse reference sheets →</a> · <a href="shared-subject.html">Shared Subject</a> · <a href="material-dispenser.html">Material Dispenser (GLB)</a></p>
 {chr(10).join(sections_html)}
 """
     write(WIKI / "assets/index.html", shell("Asset catalog", "../", "catalog", body, "../styles/wiki.css", "../nav.js"))

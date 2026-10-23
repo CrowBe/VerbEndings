@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Shared Subject · VerbEndings Wiki</title>
   <link rel="stylesheet" href="../styles/wiki.css" />
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
 <!-- generated: tools/wiki/generate.py — edit sources, not this file -->
 
-    <header class="topbar">
+  <header class="topbar">
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
     <p class="brand">VerbEndings</p>
   </header>
@@ -34,36 +33,21 @@
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
-        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/reference_sheets">reference_sheets/</a>
-        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/intro/flux">intro/flux/</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/wiki_catalog.json">wiki_catalog.json</a>
       </nav>
     </aside>
     <main class="main">
 
       <p class="crumb"><a href="../">Wiki</a> / <a href="./">Assets</a> / Shared Subject</p>
       <h1>Shared Subject</h1>
-      <p class="lede">Common playable anatomy. Concept mesh for Blender retopology — not rigged, not under <code>assets/exports/</code>.</p>
-      <p class="callout"><span class="badge source">Production Source</span> Written brief overrides generated markings (SAD SHIELD text, Verb colour, barcodes).</p>
-
-      <div class="viewer-wrap">
-        <model-viewer
-          src="../models/shared_subject_meshy6b_concept.glb"
-          alt="Shared Subject Meshy 6b concept"
-          camera-controls
-          touch-action="pan-y"
-          shadow-intensity="0.6"
-          exposure="1.05"
-          auto-rotate
-          ar-status="not-presenting"
-        ></model-viewer>
-      </div>
+      <p class="lede">Common playable anatomy. Wrong-design Meshy concept GLBs were pruned — turnarounds and Meshy input crops remain as Context Reference.</p>
+      <p class="callout"><span class="badge context">Context Reference</span> Written brief overrides generated markings (SAD SHIELD text, Verb colour, barcodes). No concept GLB until a new approved Meshy run.</p>
 
       <table class="meta-table">
-        <tr><th>Disposition</th><td>Production Source (Meshy 6b re-run)</td></tr>
-        <tr><th>GLB</th><td><code class="path">assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb</code></td></tr>
+        <tr><th>Disposition</th><td>Context Reference (2D turnarounds + crops)</td></tr>
+        <tr><th>GLB</th><td>None — concept meshes pruned 2026-10-23</td></tr>
         <tr><th>Brief</th><td><code class="path">docs/art/subjects/shared_subject/BRIEF.md</code></td></tr>
         <tr><th>Provenance</th><td><code class="path">docs/art/subjects/shared_subject/PROVENANCE.md</code></td></tr>
-        <tr><th>Viewer</th><td>@google/model-viewer 4.0.0 (CDN)</td></tr>
       </table>
 
       <h2>Canon (from brief)</h2>
@@ -78,7 +62,7 @@
         </ul>
       </div>
 
-      <h2>Reference crops</h2>
+      <h2>Meshy input crops</h2>
       <div class="card-grid">
         <div class="card"><img src="../art/shared_subject_inputs/subject_shield_front.png" alt="Front crop" /><div class="body"><h3>Front</h3></div></div>
         <div class="card"><img src="../art/shared_subject_inputs/subject_shield_front_three_quarter.png" alt="Front three-quarter crop" /><div class="body"><h3>Front ¾</h3></div></div>
@@ -86,9 +70,8 @@
         <div class="card"><img src="../art/shared_subject_inputs/subject_shield_back.png" alt="Back crop" /><div class="body"><h3>Back</h3></div></div>
       </div>
 
-
       <h2>Retained turnaround references</h2>
-      <p class="lede">Project-owned sheets under <code>docs/art/subjects/shared_subject/references/</code> (Production Source package).</p>
+      <p class="lede">Project-owned sheets under <code>docs/art/subjects/shared_subject/references/</code>.</p>
       <div class="card-grid">
         <div class="card"><img class="sheet" src="../art/shared_subject_references/subject_shield_turnaround.png" alt="SHIELD turnaround" loading="lazy" /><div class="body"><h3>SHIELD turnaround</h3></div></div>
         <div class="card"><img class="sheet" src="../art/shared_subject_references/subject_grow_turnaround.png" alt="GROW turnaround" loading="lazy" /><div class="body"><h3>GROW turnaround</h3></div></div>
