@@ -1,0 +1,49 @@
+{
+  "schema": "verbendings.wiki_story/v1",
+  "description": "Wiki story pages are assembled from headings in canon docs. Edit GLOSSARY.md / WORLD_DESIGN.md; regenerate the wiki.",
+  "pages": [
+    {
+      "id": "story",
+      "title": "Story & world",
+      "out": "wiki/story/index.html",
+      "lede": "Domain language and Compound topology from the project glossary and world design.",
+      "blocks": [
+        {
+          "source": "GLOSSARY.md",
+          "heading": "Domain Model",
+          "as": "h2"
+        },
+        {
+          "source": "GLOSSARY.md",
+          "heading": "Experiments And The Compound",
+          "as": "h2"
+        },
+        {
+          "source": "docs/WORLD_DESIGN.md",
+          "heading": "Creative Direction",
+          "as": "h2"
+        },
+        {
+          "source": "docs/WORLD_DESIGN.md",
+          "heading": "Compound Topology",
+          "as": "h2"
+        },
+        {
+          "source": "docs/WORLD_DESIGN.md",
+          "heading": "Laboratories",
+          "as": "h2"
+        },
+        {
+          "source": "docs/WORLD_DESIGN.md",
+          "heading": "The Collapse",
+          "as": "h2"
+        },
+        {
+          "source": "docs/WORLD_DESIGN.md",
+          "heading": "Visual Language",
+          "as": "h2"
+        }
+      ]
+    }
+  ]
+}

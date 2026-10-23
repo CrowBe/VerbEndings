@@ -3,76 +3,182 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Story & world · VerbEndings Wiki</title>
+  <title>Story &amp; world · VerbEndings Wiki</title>
   <link rel="stylesheet" href="../styles/wiki.css" />
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-    <header class="topbar">
+<!-- generated: tools/wiki/generate.py — edit sources, not this file -->
+  <header class="topbar">
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
     <p class="brand">VerbEndings</p>
   </header>
   <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
-<div class="layout">
+  <div class="layout">
     <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
-            <nav class="nav" aria-label="Wiki">
+      <nav class="nav" aria-label="Wiki">
         <div class="nav-section">Overview</div>
-        <a href="../" >Home</a>
-        <a href="./" aria-current="page">Story &amp; world</a>
-        <a href="../media/" >FLUX intro</a>
+        <a href=".././">Home</a>
+        <a href="../story/" aria-current="page">Story &amp; world</a>
+        <a href="../media/">FLUX intro</a>
         <div class="nav-section">Assets</div>
-        <a href="../assets/" >Catalog</a>
-        <a href="../assets/sheets.html" >Reference sheets</a>
-        <a href="../assets/shared-subject.html" >Shared Subject</a>
-        <a href="../assets/material-dispenser.html" >Material Dispenser</a>
+        <a href="../assets/">Catalog</a>
+        <a href="../assets/sheets.html">Reference sheets</a>
+        <a href="../assets/shared-subject.html">Shared Subject</a>
+        <a href="../assets/material-dispenser.html">Material Dispenser</a>
         <div class="nav-section">Sources</div>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
-        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/reference_sheets">reference_sheets/</a>
-        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/intro/flux">intro/flux/</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/wiki_catalog.json">wiki_catalog.json</a>
       </nav>
     </aside>
     <main class="main">
-
       <p class="crumb"><a href="../">Wiki</a> / Story</p>
       <h1>Story &amp; world</h1>
-      <p class="lede">Excerpts only. Written contracts override any image or mesh.</p>
-      <p class="source">From <code>GLOSSARY.md</code> and <code>docs/WORLD_DESIGN.md</code>.</p>
-
-      <h2>Creative direction</h2>
-      <p class="source">Source: <code>docs/WORLD_DESIGN.md</code> · Creative Direction</p>
+      <p class="lede">Domain language and Compound topology from the project glossary and world design.</p>
+      <p class="source">Assembled by <code>tools/wiki/generate.py</code> from <code>docs/wiki/story_sources.json</code>.</p>
+      <h2>Domain Model</h2>
+      <p class="source">From <code>GLOSSARY.md</code></p>
       <div class="prose">
-        <p>VerbEndings is <strong>clinical, buoyant, tactile, overconfident, and quietly uncanny</strong>. Friendly physical comedy sits inside an industrial research facility that treats language and living Subjects as measurable inputs.</p>
-        <p>The Semantic Engine communicates through plans, panels, lights, printers, and machinery. It has no avatar or conversational persona. The Researcher is the sole regular speaking character.</p>
+<h3>Participants And Subjects</h3>
+<ul class="prose">
+<li>A <strong>Player</strong> is the human or network participant.</li>
+<li>A <strong>Subject</strong> is the living playable entity controlled by a Player during a Trial.</li>
+<li><strong>Semantic Adaptation Droplet (SAD)</strong> is the facility&#x27;s formal classification for the adaptive substrate from which a Subject originates.</li>
+<li><strong>Blob</strong> is the Researcher&#x27;s sole affectionate colloquialism for a Subject.</li>
+<li>A <strong>Verb</strong> is a single-word capability issued by the Semantic Engine and always written in capitals: GROW, BURN, FREEZE.</li>
+<li>A Subject claims one unique Verb during Verb Selection and keeps it for the whole Trial.</li>
+</ul>
+<p>Do not use <code>character</code>, <code>unit</code>, <code>avatar</code>, <code>Droplet</code>, <code>Drop</code> or <code>blob</code> interchangeably with Subject. Droplet describes classification and origin; Drop has a separate lifecycle meaning below.</p>
+<h3>Programme And Trial Lifecycle</h3>
+<ul class="prose">
+<li>The <strong>Ultimate Lexical Trial Programme</strong> is the ongoing institutional programme.</li>
+<li>A <strong>Trial</strong> is one complete game session.</li>
+<li>A Trial contains exactly three <strong>Rounds</strong>.</li>
+<li>Each Round contains one scored <strong>Experiment</strong>.</li>
+<li><strong>Match</strong> is not a domain term.</li>
+</ul>
+<p><strong>Verb Selection</strong> — each Subject claiming its unique Verb — occurs once at the start of a Trial. Each Round then follows this lifecycle:</p>
+<p>1. <strong>Pair Draft</strong> 2. <strong>Experiment Brief</strong> 3. <strong>Laboratory Entry</strong> 4. <strong>Experiment</strong> 5. <strong>Recall</strong> 6. <strong>Result Announcement</strong> 7. Optional <strong>Thematic Moment</strong></p>
+<p>The next Round creates new Pairs. A Subject retains its Verb but not its Partner.</p>
+<h3>Pairing And Verb Chains</h3>
+<ul class="prose">
+<li>A <strong>Pair</strong> is the temporary grouping of two Subjects for one Round, formed when one Subject chooses another during the Pair Draft.</li>
+<li>Each Subject in a Pair is the other&#x27;s <strong>Partner</strong>.</li>
+<li>A <strong>Verb Chain</strong> is the gameplay bond formed from the Pair&#x27;s two Verbs.</li>
+<li>A <strong>Synergy Coefficient</strong> expresses compatibility between those Verbs and may modify shared effects and scoring.</li>
+<li>A <strong>Self-Chain</strong> is the single-Subject Verb Chain used when an odd roster leaves one Subject without a Partner.</li>
+<li><strong>Overdrive</strong> is the solo operating state available only to a Self-Chain and to every surviving Subject during the Collapse.</li>
+<li><strong>Chain Severance</strong> is a Verb Chain ending early because a Partner is Eliminated during an Experiment.</li>
+</ul>
+<p>A Subject draws part of its cohesion from its Partner&#x27;s Verb, so Chain Severance costs the survivor Stability (its Severance Loss) and grants nothing in return — no points and no Overdrive. The orphaned Subject finishes that Experiment alone, unaided and on its normal cooldown. A Partner&#x27;s mistakes and successes both reach the Subject beside them; that shared exposure is the point of being Paired. A Self-Chain has no Partner to lose and can never be Severed.</p>
+<p>Scheduled dissolution is not Severance: a Pair and its Verb Chain end after every Experiment at no cost, and the Collapse dissolving all Pairs at once is a lifecycle transition rather than a loss. Competitive Stress retains its configured knockout bonus; Severance itself is never a scoring event. Points belong to Subjects, never to a Pair. <code>Team</code>, <code>partnership</code> and <code>Pair Score</code> are not canonical domain nouns.</p>
       </div>
-
-      <h2>Domain model (participants)</h2>
-      <p class="source">Source: <code>GLOSSARY.md</code> · Participants And Subjects</p>
+      <h2>Experiments And The Compound</h2>
+      <p class="source">From <code>GLOSSARY.md</code></p>
       <div class="prose">
-        <ul>
-          <li>A <strong>Player</strong> is the human or network participant.</li>
-          <li>A <strong>Subject</strong> is the living playable entity controlled by a Player during a Trial.</li>
-          <li><strong>Semantic Adaptation Droplet (SAD)</strong> is the facility's formal classification for the adaptive substrate from which a Subject originates.</li>
-          <li><strong>Blob</strong> is the Researcher's sole affectionate colloquialism for a Subject.</li>
-          <li>A <strong>Verb</strong> is a single-word capability issued by the Semantic Engine and always written in capitals: GROW, BURN, FREEZE.</li>
-        </ul>
+<h3>Experiment Definition</h3>
+<ul class="prose">
+<li>An <strong>Experiment Protocol</strong> is the authored ruleset defining objectives, hazards, scoring and completion conditions for an Experiment.</li>
+<li>An <strong>Experiment Brief</strong> is the player-facing explanation of the selected Protocol before Laboratory Entry.</li>
+<li>An <strong>Objective</strong> is a concrete task established by the Protocol.</li>
+<li>Environment, PVP and PVE are development and marketing classifications, not in-world names.</li>
+</ul>
+<h3>Facility Language</h3>
+<ul class="prose">
+<li>The <strong>Compound</strong> is the complete faceted hemispherical facility.</li>
+<li>The <strong>Assignment Deck</strong> is the elevated annular hub used for Verb Selection, Pair Drafts and Result Announcements.</li>
+<li>The <strong>Central Core</strong> contains the Semantic Engine&#x27;s physical infrastructure and primary machinery.</li>
+<li>A <strong>Laboratory</strong> is one of the three named experimental environments.</li>
+<li>The <strong>Test Floor</strong> is the continuous playable area within a Laboratory.</li>
+<li>A <strong>Separator Spine</strong> is a non-zero-width radial structure between neighbouring Laboratories. It belongs to the Compound rather than either Test Floor and contains observation, utility, shutter, and connective infrastructure.</li>
+<li>A <strong>Service Route</strong> is a normally sealed corridor through a Separator Spine or around the Compound perimeter. Service Routes become playable only during an authored transition such as the Collapse.</li>
+<li><strong>Sector</strong> is limited to literal radial geometry or streaming boundaries.</li>
+<li><strong>Zone</strong> is limited to generic spatial triggers in technical discussion.</li>
+</ul>
+<p>The three Laboratories are:</p>
+<ul class="prose">
+<li><strong>Applied Attrition Laboratory</strong> — tests how long a Subject holds its form in an unstable environment.</li>
+<li><strong>Competitive Stress Laboratory</strong> — measures dominance, displacement and resilience.</li>
+<li><strong>Adaptive Containment Laboratory</strong> — tests survival against contained creatures and failed predecessors.</li>
+</ul>
+<p><code>Arena</code> and <code>chamber</code> do not mean Laboratory or Test Floor. Use Australian/British <strong>greybox</strong> in prose.</p>
+<h3>Laboratory Entry And Recall</h3>
+<ul class="prose">
+<li><strong>Laboratory Entry</strong> is the Round phase before the Experiment.</li>
+<li>The <strong>Dispensing Line</strong> is the overhead conveyor and tube system carrying Subjects from the Assignment Deck.</li>
+<li>The <strong>Drop</strong> is the playable entry sequence: <strong>Release</strong> (the Player-controlled moment a Subject exits its tube), steerable descent, then <strong>Landing</strong> (arrival on the Test Floor).</li>
+<li><strong>Recall</strong> is the post-Experiment return to the Assignment Deck: the Dispensing Line reverses pressure and floor collection apertures pull Subjects into the shared tube network before presentation returns to the Assignment Deck.</li>
+</ul>
+<p>Partners travel in adjacent tubes, independently coordinate their Releases and steer their Drops to land within useful Verb Chain range.</p>
+<p><code>Insertion Vector</code>, <code>Landing Point</code>, <code>deployment</code>, <code>extraction</code>, <code>recovery</code> and <code>return</code> are not canonical lifecycle terms. <code>Spawn</code> remains technical implementation language only.</p>
+<h3>Residuals</h3>
+<ul class="prose">
+<li>A <strong>Residual</strong> is a previous-generation Droplet that survived disposal and now inhabits the Compound.</li>
+<li>All initial PVE hostiles are Residuals.</li>
+<li><strong>Creature</strong> is the generic term used in Experiment Briefs before their identity is revealed.</li>
+<li><strong>Swarm</strong> describes group behaviour or encounter shape, not a species.</li>
+<li><strong>Enemy</strong> and <strong>hostile</strong> describe gameplay relationships only.</li>
+</ul>
+<p>The Residual reveal occurs through the environment first, then is accidentally confirmed by the Researcher during a Thematic Moment.</p>
+<h3>Residual Grammar</h3>
+<ul class="prose">
+<li><strong>Assumption</strong> is a Residual taking the Verb of a Subject it Destabilises. An assumed Verb is always taken, never self-developed.</li>
+<li>An <strong>Adverb</strong> is the unsanctioned modifier a Residual develops itself after surviving long enough. It modifies every action the Residual performs, including ordinary movement, attacks and an assumed Verb.</li>
+<li>A Residual holds at most one assumed Verb and at most one Adverb. Both strengthen it; the survival threshold and the magnitude of any strengthening are configurable balance values, not domain rules.</li>
+<li>The Semantic Engine issues only Verbs. No Subject holds an Adverb, and no facility system sanctions one.</li>
+</ul>
       </div>
-
-      <h2>Trial lifecycle</h2>
-      <p class="source">Source: <code>GLOSSARY.md</code> · Programme And Trial Lifecycle</p>
+      <h2>Creative Direction</h2>
+      <p class="source">From <code>docs/WORLD_DESIGN.md</code></p>
       <div class="prose">
-        <p>The <strong>Ultimate Lexical Trial Programme</strong> is the ongoing institutional programme. A <strong>Trial</strong> is one complete game session and contains exactly three <strong>Rounds</strong>. Each Round contains one scored <strong>Experiment</strong>.</p>
-        <p>After Verb Selection, each Round follows: Pair Draft → Experiment Brief → Laboratory Entry → Experiment → Recall → Result Announcement → optional Thematic Moment.</p>
+<p>VerbEndings is <strong>clinical, buoyant, tactile, overconfident, and quietly uncanny</strong>. Friendly physical comedy sits inside an industrial research facility that treats language and living Subjects as measurable inputs.</p>
+<p>The visual style is stylised PBR: rounded, simplified forms with believable material response, mass, lighting, and contact. Physics supplies play and humour. Horror remains implied and bloodless, emerging through classification labels, obsolete equipment, discarded identity bands, hidden nests, and the facility&#x27;s routine treatment of failed Droplets.</p>
+<p>The Semantic Engine communicates through plans, panels, lights, printers, and machinery. It has no avatar or conversational persona. The Researcher is the sole regular speaking character: sincere, subordinate to the Engine, physically clumsy, and careless enough to reveal what the institution conceals.</p>
       </div>
-
-      <h2>Compound topology</h2>
-      <p class="source">Source: <code>docs/WORLD_DESIGN.md</code> · Compound Topology</p>
+      <h2>Compound Topology</h2>
+      <p class="source">From <code>docs/WORLD_DESIGN.md</code></p>
       <div class="prose">
-        <p>The Compound is a faceted hemisphere with a hexagonal plan around a vertical Central Core. Its main floor is organised as three repeating nominal 120-degree territories, each with one wedge-shaped Laboratory. An elevated annular Assignment Deck surrounds the Core.</p>
+<p>The Compound is a faceted hemisphere with a hexagonal plan around a vertical Central Core. Its main floor is organised as three repeating nominal 120-degree territories. Each territory contains one wedge-shaped Laboratory and shares the separator structures on its two radial boundaries; the Laboratories never meet along a zero-width line.</p>
+<p>Thick, non-zero-width radial separator spines sit between neighbouring Laboratories. They belong to the Compound rather than either Test Floor and contain service corridors, observation rooms, utilities, shutters, concealed connections, and other facility machinery. A repeating planning cell therefore reads as half a separator spine, one Laboratory, and half a separator spine. A perimeter maintenance route provides a longer connection between Laboratories.</p>
+<p>An elevated annular Assignment Deck surrounds the Core. It hosts Verb Selection, Pair Drafts, Experiment Briefs, Result Announcements, and the Researcher&#x27;s booth. The Dispensing Line runs from this deck along ceiling rails to each Laboratory.</p>
+<p>Normal Rounds confine Subjects to the active Laboratory and keep separator service routes sealed from the Test Floor. Previously used Laboratories remain visible and retain authored state. During the Collapse, separator routes, the perimeter route, and dangerous Core shortcuts connect the complete Compound; the Assignment Deck is inaccessible.</p>
+<p>The primary partition is three repeating 120-degree planning cells aligned to the hexagonal plan. Smaller 15- or 30-degree radial modules may structure specialised details inside that envelope, but they do not define Laboratory boundaries. Test Floors and most apparatus use a 2 m orthogonal planning grid with 1 m detail increments. Provisional Laboratory spans are 48–56 m, measured independently of separator-spine and service-route width, and must accommodate 8–12 Subjects comfortably while preserving a viable path to 24-Subject validation.</p>
+      </div>
+      <h2>Laboratories</h2>
+      <p class="source">From <code>docs/WORLD_DESIGN.md</code></p>
+      <div class="prose">
+<h3>Applied Attrition Laboratory</h3>
+<p>This Laboratory tests how long a Subject holds its form in an unstable environment. An elevated dispensing armature is its dominant silhouette: the Semantic Engine&#x27;s Material supply, deliberately placed out of easy reach. The atmosphere itself causes continuous Stability Loss, so the Experiment is a race between attrition and access rather than a contest against any occupant. No Residuals are contained here.</p>
+<p>Apparatus covers momentum transfer, counterweights, trajectory, gravity, and linked machine chains, serving as the obstacle and traversal field rather than as Objectives. A swinging mass knocks a Subject off a route, a gravity funnel drags it away from a dispenser, and a turbine or counterweight platform launches or lifts it toward one. Cause, transfer, and outcome still read through geometry and motion rather than small labels, so a Subject can predict what a machine will do to it before committing.</p>
+<p>Selected hero props hold Material behind breakable housings, giving damage-focused Verbs a route to the supply. The Laboratory nonetheless favours mobility Verbs, and that bias is intentional; a Verb&#x27;s usefulness is meant to vary across the three Laboratories rather than be flat in all of them.</p>
+<h3>Competitive Stress Laboratory</h3>
+<p>This Laboratory measures dominance, displacement, and resilience. A reinforced impact crucible and measurement pylons dominate the space. Force plates, launch measurement, shelters, and test barricades create positional choices without turning the floor into hard lanes or sub-rooms.</p>
+<h3>Adaptive Containment Laboratory</h3>
+<p>This Laboratory tests survival against contained Creatures and Residuals. A specimen-delivery column connects to perimeter pens, vents, wall cavities, bait machinery, emergency shutters, and a defensive power node. Hostiles enter through physical facility openings, never generic spawn effects in player-facing presentation.</p>
+      </div>
+      <h2>The Collapse</h2>
+      <p class="source">From <code>docs/WORLD_DESIGN.md</code></p>
+      <div class="prose">
+<p>The Collapse uses the complete damaged Compound. Eligible Subjects enter individually through fair, seeded sockets and receive a brief protected orientation window. Separator shutters and the perimeter route then open, followed by increasingly dangerous Core shortcuts and authored Laboratory failures.</p>
+<p>The state ledger guarantees comparable initial hazard exposure, no initial dead ends, at least two exits from occupied areas, a dependable perimeter connection, and clear telegraphs before lethal transitions. Safe space contracts through comprehensible apparatus and route failures rather than a generic shrinking circle. Simultaneous Eliminations use survival time and a deterministic tie rule.</p>
+      </div>
+      <h2>Visual Language</h2>
+      <p class="source">From <code>docs/WORLD_DESIGN.md</code></p>
+      <div class="prose">
+<h3>Facility Palette</h3>
+<p>The facility stays neutral enough for Subjects, Verbs, hazards, and active apparatus to own saturated colour.</p>
+<h3>Verb Readability</h3>
+<p>Subject identity and Verb state remain separate. Identity uses a stable suit treatment and number; Verb Effects use temporary material, silhouette, icon, and motion changes.</p>
+<p>Each Verb reads from silhouette or motion within roughly 150 ms, keeps effects close to the Subject, and explains the physical interaction without obscuring it.</p>
+<p>An assumed Verb on a Residual uses the same per-Verb treatment so learned readability transfers. A Residual&#x27;s Adverb reads as a separate behavioural and material overlay that modifies motion without imitating any Verb treatment, so unsanctioned grammar is never mistaken for a tenth Verb.</p>
+<h3>Lighting</h3>
+<p>Large warm-white overhead fixtures and neutral-cool ambient light provide party-game readability. Cyan indicates normal operation, amber staging, and coral danger. Contact shadows and moderate SSAO ground actors and machinery. Glow is limited to indicators and active effects. Volumetric fog is reserved for selected breaches and Collapse events.</p>
+<p>Player and Verb cues remain protected from aggressive grading. SDFGI, SSR, motion blur, chromatic aberration, and general film grain are outside the visual baseline.</p>
       </div>
 
     </main>

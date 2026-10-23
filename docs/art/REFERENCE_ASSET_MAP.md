@@ -12,6 +12,10 @@ This document records the current visual-reference coverage for the complete Ver
 
 These evidence classes are separate from the Greybox, Proxy, Production, and Polish runtime-readiness levels defined by the visual asset pipeline.
 
+## Wiki machine index
+
+[`wiki_catalog.json`](wiki_catalog.json) mirrors the family rows below for the static wiki build (`tools/wiki/generate.py`). Evidence wording in this document remains authoritative; the JSON only adds paths and ids. See [`WIKI_CATALOG.md`](WIKI_CATALOG.md).
+
 ## Generated Sheet Coverage
 
 [`reference_sheets/`](reference_sheets/) contains 47 generated focused sheets. Together with the existing shared Subject turnaround, the package provides visual-development coverage for all 48 asset-family rows below. The generated sheets are candidate modelling and review inputs: they do not change an evidence class until a focused asset review accepts the relevant geometry, scale, origin, material boundaries, collision ownership, and runtime target. The evidence classifications and remaining canonical requirements below therefore continue to describe the approved project state.

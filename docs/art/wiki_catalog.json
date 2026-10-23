@@ -1,0 +1,591 @@
+{
+  "schema": "verbendings.wiki_catalog/v1",
+  "description": "Machine index for the wiki build. Evidence classes and family names mirror docs/art/REFERENCE_ASSET_MAP.md; that document remains the human-facing canon.",
+  "map": "docs/art/REFERENCE_ASSET_MAP.md",
+  "media": [
+    {
+      "id": "flux_intro_third_pass",
+      "title": "FLUX intro (third pass)",
+      "evidence": "Context Reference",
+      "kind": "video",
+      "path": "docs/art/intro/flux/verbendings_intro_third_pass.mp4",
+      "poster": "docs/art/intro/flux/contact_sheet.png",
+      "frames_dir": "docs/art/intro/flux/frames",
+      "readme": "docs/art/intro/flux/README.md",
+      "wiki_page": "media"
+    }
+  ],
+  "sheets_root": "docs/art/reference_sheets",
+  "sections": [
+    {
+      "id": "shared_visual_language",
+      "title": "Shared visual language",
+      "assets": [
+        {
+          "id": "facility_form_material",
+          "title": "Facility form and material language",
+          "evidence": "Partial",
+          "sheet": "docs/art/reference_sheets/shared/facility_material_board.png",
+          "thumb": "docs/art/reference_sheets/shared/facility_material_board.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Material board sheet; Material Dispenser is Integrated Production; FLUX intro is Context Reference.",
+          "map_row": "Facility form and material language"
+        },
+        {
+          "id": "facility_lighting_state",
+          "title": "Facility lighting and state language",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/shared/facility_state_language.png",
+          "thumb": "docs/art/reference_sheets/shared/facility_state_language.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Written contract and greybox hooks; generated state-language sheet.",
+          "map_row": "Facility lighting and state language"
+        },
+        {
+          "id": "scale_detail_density",
+          "title": "Scale and detail density",
+          "evidence": "Partial",
+          "sheet": "docs/art/reference_sheets/shared/scale_and_detail_lineup.png",
+          "thumb": "docs/art/reference_sheets/shared/scale_and_detail_lineup.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Partial Subject, Material Dispenser, and video context; lineup sheet.",
+          "map_row": "Scale and detail density"
+        },
+        {
+          "id": "semantic_engine_interfaces",
+          "title": "Semantic Engine interfaces",
+          "evidence": "Context Reference",
+          "sheet": "docs/art/reference_sheets/shared/semantic_engine_interfaces.png",
+          "thumb": "docs/art/reference_sheets/shared/semantic_engine_interfaces.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Video Context Reference plus generated interface sheet.",
+          "map_row": "Semantic Engine interfaces"
+        }
+      ]
+    },
+    {
+      "id": "actors",
+      "title": "Actors and living Material",
+      "assets": [
+        {
+          "id": "shared_subject",
+          "title": "Shared Subject",
+          "evidence": "Production Source",
+          "sheet": "docs/art/subjects/shared_subject/renders/front_three_quarter.png",
+          "thumb": "docs/art/subjects/shared_subject/renders/front_three_quarter.png",
+          "glb": "assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb",
+          "detail_page": "shared-subject",
+          "blurb": "Turnarounds, crops, controlled renders, meshy6b concept GLB. Not a runtime export.",
+          "map_row": "Shared Subject"
+        },
+        {
+          "id": "subject_identity",
+          "title": "Subject identity",
+          "evidence": "Partial",
+          "sheet": "docs/art/reference_sheets/actors/subject_identity.png",
+          "thumb": "docs/art/reference_sheets/actors/subject_identity.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Suit-number / identity panel treatment sheet.",
+          "map_row": "Subject identity"
+        },
+        {
+          "id": "subject_verb_effects",
+          "title": "Subject Verb Effects",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/actors/subject_verb_effects.png",
+          "thumb": "docs/art/reference_sheets/actors/subject_verb_effects.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Nine Verb treatments on a neutral Subject.",
+          "map_row": "Subject Verb Effects"
+        },
+        {
+          "id": "subject_physical_states",
+          "title": "Subject physical states",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/actors/subject_physical_states.png",
+          "thumb": "docs/art/reference_sheets/actors/subject_physical_states.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Idle, Impact, Stability Loss, Drop, Recall keys.",
+          "map_row": "Subject physical states"
+        },
+        {
+          "id": "researcher",
+          "title": "Researcher",
+          "evidence": "Context Reference",
+          "sheet": "docs/art/reference_sheets/actors/researcher.png",
+          "thumb": "docs/art/reference_sheets/actors/researcher.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "FLUX intro Context Reference; generated turnaround sheet.",
+          "map_row": "Researcher"
+        },
+        {
+          "id": "residual",
+          "title": "Residual",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/actors/residual.png",
+          "thumb": "docs/art/reference_sheets/actors/residual.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Greybox Contract; generated turnaround from Droplet ancestry.",
+          "map_row": "Residual"
+        },
+        {
+          "id": "residual_adverb_overlay",
+          "title": "Residual Adverb overlay",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/actors/residual_adverb_overlay.png",
+          "thumb": "docs/art/reference_sheets/actors/residual_adverb_overlay.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Runtime hook + written behaviour; separate grammar from Verbs.",
+          "map_row": "Residual Adverb overlay"
+        },
+        {
+          "id": "material_resource",
+          "title": "Material resource",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/actors/material_resource.png",
+          "thumb": "docs/art/reference_sheets/actors/material_resource.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Resting / shed / airborne / absorption forms.",
+          "map_row": "Material resource"
+        }
+      ]
+    },
+    {
+      "id": "compound",
+      "title": "Compound and reusable environment kit",
+      "assets": [
+        {
+          "id": "complete_compound",
+          "title": "Complete Compound",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/complete_compound.png",
+          "thumb": "docs/art/reference_sheets/compound/complete_compound.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Hexagonal-plan / section sheet; greybox authoritative for collision.",
+          "map_row": "Complete Compound"
+        },
+        {
+          "id": "central_core",
+          "title": "Central Core",
+          "evidence": "Context Reference",
+          "sheet": "docs/art/reference_sheets/compound/central_core.png",
+          "thumb": "docs/art/reference_sheets/compound/central_core.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "FLUX intro Context Reference and greybox dimensions.",
+          "map_row": "Central Core"
+        },
+        {
+          "id": "assignment_deck",
+          "title": "Assignment Deck",
+          "evidence": "Context Reference",
+          "sheet": "docs/art/reference_sheets/compound/assignment_deck.png",
+          "thumb": "docs/art/reference_sheets/compound/assignment_deck.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "FLUX intro Context Reference and greybox annulus.",
+          "map_row": "Assignment Deck"
+        },
+        {
+          "id": "researcher_booth",
+          "title": "Researcher booth",
+          "evidence": "Context Reference",
+          "sheet": "docs/art/reference_sheets/compound/researcher_booth.png",
+          "thumb": "docs/art/reference_sheets/compound/researcher_booth.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Elevated Researcher context in FLUX intro; reserved greybox footprint.",
+          "map_row": "Researcher booth"
+        },
+        {
+          "id": "separator_spine",
+          "title": "Separator Spine and Service Route",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/separator_spine_service_route.png",
+          "thumb": "docs/art/reference_sheets/compound/separator_spine_service_route.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Core/perimeter junctions, observation, sealed shutter variants.",
+          "map_row": "Separator Spine and Service Route"
+        },
+        {
+          "id": "perimeter_route",
+          "title": "Perimeter maintenance route",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/perimeter_maintenance_route.png",
+          "thumb": "docs/art/reference_sheets/compound/perimeter_maintenance_route.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Annular route segment and Collapse-damaged state.",
+          "map_row": "Perimeter maintenance route"
+        },
+        {
+          "id": "dome_shell",
+          "title": "Dome shell",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/dome_shell.png",
+          "thumb": "docs/art/reference_sheets/compound/dome_shell.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Faceted shell bay, rib, apex ring.",
+          "map_row": "Dome shell"
+        },
+        {
+          "id": "orthogonal_kit",
+          "title": "Orthogonal kit",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/orthogonal_kit.png",
+          "thumb": "docs/art/reference_sheets/compound/orthogonal_kit.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Floor/wall bays, 4 m door/shutter, barriers.",
+          "map_row": "Orthogonal kit"
+        },
+        {
+          "id": "radial_annular_kit",
+          "title": "Radial and annular kit",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/radial_annular_kit.png",
+          "thumb": "docs/art/reference_sheets/compound/radial_annular_kit.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Bounded specialised radial/annular atlas.",
+          "map_row": "Radial and annular kit"
+        },
+        {
+          "id": "dispensing_line",
+          "title": "Dispensing Line",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/dispensing_line.png",
+          "thumb": "docs/art/reference_sheets/compound/dispensing_line.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Overhead carrier and Laboratory branch.",
+          "map_row": "Dispensing Line"
+        },
+        {
+          "id": "drop_recall",
+          "title": "Drop and Recall infrastructure",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/compound/drop_recall_infrastructure.png",
+          "thumb": "docs/art/reference_sheets/compound/drop_recall_infrastructure.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Tube exit, Drop silhouette, Recall pressure state.",
+          "map_row": "Drop and Recall infrastructure"
+        }
+      ]
+    },
+    {
+      "id": "applied_attrition",
+      "title": "Applied Attrition Laboratory",
+      "assets": [
+        {
+          "id": "aa_lab_composition",
+          "title": "Laboratory composition",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/laboratory_composition.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/laboratory_composition.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Plan, section, Drop and player-camera key views.",
+          "map_row": "Laboratory composition"
+        },
+        {
+          "id": "elevated_armature",
+          "title": "Elevated dispensing armature",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/elevated_dispensing_armature.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/elevated_dispensing_armature.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Support column, truss, elevated Material supply.",
+          "map_row": "Elevated dispensing armature"
+        },
+        {
+          "id": "material_dispenser",
+          "title": "Material Dispenser",
+          "evidence": "Integrated Production",
+          "sheet": "docs/art/material_dispenser/renders/front_three_quarter.png",
+          "thumb": "docs/art/material_dispenser/renders/front_three_quarter.png",
+          "glb": "assets/exports/props/material_dispenser.glb",
+          "detail_page": "material-dispenser",
+          "blurb": "Approved turnaround, Blender source, runtime GLB, controlled renders.",
+          "map_row": "Material Dispenser"
+        },
+        {
+          "id": "breakable_housing",
+          "title": "Breakable Material housing",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/breakable_material_housing.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/breakable_material_housing.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Closed\u2192broken states and release socket.",
+          "map_row": "Breakable Material housing"
+        },
+        {
+          "id": "counterweight_plate",
+          "title": "Counterweight Plate",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/counterweight_plate.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/counterweight_plate.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Plate, mass crates, loaded/unloaded states.",
+          "map_row": "Counterweight Plate"
+        },
+        {
+          "id": "wrecking_pendulum",
+          "title": "Wrecking Pendulum",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/wrecking_pendulum.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/wrecking_pendulum.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Support frame, pin joint, heavy bob, safe arc.",
+          "map_row": "Wrecking Pendulum"
+        },
+        {
+          "id": "gravity_funnel",
+          "title": "Gravity Funnel",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/gravity_funnel.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/gravity_funnel.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Catch basin, balls, attraction-field hardware.",
+          "map_row": "Gravity Funnel"
+        },
+        {
+          "id": "domino_tower",
+          "title": "Domino Tower",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/domino_tower.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/domino_tower.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Stable stack through fully toppled states.",
+          "map_row": "Domino Tower"
+        },
+        {
+          "id": "momentum_turbine",
+          "title": "Momentum Turbine",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/applied_attrition/momentum_turbine.png",
+          "thumb": "docs/art/reference_sheets/applied_attrition/momentum_turbine.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Rotor, protected hub, spinning state.",
+          "map_row": "Momentum Turbine"
+        }
+      ]
+    },
+    {
+      "id": "competitive_stress",
+      "title": "Competitive Stress Laboratory",
+      "assets": [
+        {
+          "id": "cs_lab_composition",
+          "title": "Laboratory composition",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/competitive_stress/laboratory_composition.png",
+          "thumb": "docs/art/reference_sheets/competitive_stress/laboratory_composition.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Open contest space, shelters, circulation.",
+          "map_row": "Laboratory composition"
+        },
+        {
+          "id": "impact_crucible",
+          "title": "Reinforced impact crucible",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/competitive_stress/reinforced_impact_crucible.png",
+          "thumb": "docs/art/reference_sheets/competitive_stress/reinforced_impact_crucible.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Dominance boundary and impact-resistant barriers.",
+          "map_row": "Reinforced impact crucible"
+        },
+        {
+          "id": "measurement_pylons",
+          "title": "Measurement pylons",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/competitive_stress/measurement_pylons.png",
+          "thumb": "docs/art/reference_sheets/competitive_stress/measurement_pylons.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Displacement / dominance / resilience indicators.",
+          "map_row": "Measurement pylons"
+        },
+        {
+          "id": "force_plates",
+          "title": "Force plates and launch measurement",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/competitive_stress/force_plate_launch_measurement.png",
+          "thumb": "docs/art/reference_sheets/competitive_stress/force_plate_launch_measurement.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Plate family and launch-height gauge.",
+          "map_row": "Force plates and launch measurement"
+        },
+        {
+          "id": "shelters_barricades",
+          "title": "Shelters and test barricades",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/competitive_stress/shelters_test_barricades.png",
+          "thumb": "docs/art/reference_sheets/competitive_stress/shelters_test_barricades.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Low shelter, deflector, movable barricade.",
+          "map_row": "Shelters and test barricades"
+        }
+      ]
+    },
+    {
+      "id": "adaptive_containment",
+      "title": "Adaptive Containment Laboratory",
+      "assets": [
+        {
+          "id": "ac_lab_composition",
+          "title": "Laboratory composition",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/laboratory_composition.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/laboratory_composition.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Containment perimeter and hostile-entry paths.",
+          "map_row": "Laboratory composition"
+        },
+        {
+          "id": "specimen_column",
+          "title": "Specimen-delivery column",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/specimen_delivery_column.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/specimen_delivery_column.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Intake/release machinery and failure states.",
+          "map_row": "Specimen-delivery column"
+        },
+        {
+          "id": "pens_shutters",
+          "title": "Perimeter pens and shutters",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/perimeter_pens_shutters.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/perimeter_pens_shutters.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Modular pen bay and shutter states.",
+          "map_row": "Perimeter pens and shutters"
+        },
+        {
+          "id": "vents_cavities",
+          "title": "Vents and wall cavities",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/vents_wall_cavities.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/vents_wall_cavities.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Standard/torn vents and emergence sequence.",
+          "map_row": "Vents and wall cavities"
+        },
+        {
+          "id": "bait_machinery",
+          "title": "Bait machinery",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/bait_machinery.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/bait_machinery.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Reservoir, delivery arm, spent state.",
+          "map_row": "Bait machinery"
+        },
+        {
+          "id": "defensive_power_node",
+          "title": "Defensive power node",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/defensive_power_node.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/defensive_power_node.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Protected node and overload states.",
+          "map_row": "Defensive power node"
+        },
+        {
+          "id": "residual_nests",
+          "title": "Residual nests and concealed evidence",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/adaptive_containment/residual_nests_concealed_evidence.png",
+          "thumb": "docs/art/reference_sheets/adaptive_containment/residual_nests_concealed_evidence.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Bloodless nests and disposal evidence.",
+          "map_row": "Residual nests and concealed evidence"
+        }
+      ]
+    },
+    {
+      "id": "facility_state",
+      "title": "Facility state and the Collapse",
+      "assets": [
+        {
+          "id": "shared_structural_state",
+          "title": "Shared structural state",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/facility_state/shared_structural_state.png",
+          "thumb": "docs/art/reference_sheets/facility_state/shared_structural_state.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Clean / stressed / breached surfaces.",
+          "map_row": "Shared structural state"
+        },
+        {
+          "id": "authored_prop_thresholds",
+          "title": "Authored prop thresholds",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/facility_state/authored_prop_thresholds.png",
+          "thumb": "docs/art/reference_sheets/facility_state/authored_prop_thresholds.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Pristine\u2192destroyed for dominant Laboratory apparatus.",
+          "map_row": "Authored prop thresholds"
+        },
+        {
+          "id": "event_overlays",
+          "title": "Event overlays",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/facility_state/event_overlays.png",
+          "thumb": "docs/art/reference_sheets/facility_state/event_overlays.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Machinery/power/containment overlays.",
+          "map_row": "Event overlays"
+        },
+        {
+          "id": "collapse_compound",
+          "title": "Complete Collapse Compound",
+          "evidence": "Greybox Contract",
+          "sheet": "docs/art/reference_sheets/facility_state/complete_collapse_compound.png",
+          "thumb": "docs/art/reference_sheets/facility_state/complete_collapse_compound.png",
+          "glb": null,
+          "detail_page": null,
+          "blurb": "Damaged full-Compound key view.",
+          "map_row": "Complete Collapse Compound"
+        }
+      ]
+    }
+  ]
+}
