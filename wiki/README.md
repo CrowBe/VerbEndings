@@ -1,8 +1,8 @@
-# VerbEndings wiki (spike)
+# VerbEndings wiki
 
 In-repo static wiki for story, art, and 3D concept models. Styled like a game wiki (sidebar + article pages), not a marketing site.
 
-## Run (spike)
+## Run locally
 
 ```bash
 cd wiki

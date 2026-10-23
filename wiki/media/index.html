@@ -8,8 +8,13 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
@@ -36,7 +41,7 @@
       <p class="crumb"><a href="../">Wiki</a> / FLUX intro</p>
       <h1>FLUX intro (third pass)</h1>
       <p class="lede">Context Reference clip retained at <code>docs/art/intro/flux/verbendings_intro_third_pass.mp4</code>. Not a runtime asset. Disposition from <code>docs/art/intro/flux/README.md</code>.</p>
-      <div class="note"><span class="badge context">Context Reference</span> Useful for Compound mass, elevated Researcher context, Semantic Engine machinery, and synchronised audio. Dark detail density, adjacent coloured outlets, and permanently Verb-coloured Subjects are <strong>not</strong> canonical asset specifications — <code>WORLD_DESIGN.md</code> stays authoritative.</div>
+      <p class="callout"><span class="badge context">Context Reference</span> Compound mass, elevated Researcher context, Semantic Engine machinery, and synchronised audio. Dark detail density, adjacent coloured outlets, and permanently Verb-coloured Subjects are not canonical — see <code>WORLD_DESIGN.md</code>.</p>
       <h2>Clip</h2>
       <video class="media-player" controls preload="metadata" poster="../art/intro_flux/contact_sheet.png">
         <source src="../art/intro_flux/verbendings_intro_third_pass.mp4" type="video/mp4" />
@@ -71,5 +76,6 @@
 
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>

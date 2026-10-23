@@ -8,8 +8,13 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
@@ -36,7 +41,7 @@
       <p class="crumb"><a href="../">Wiki</a> / <a href="./">Assets</a> / Material Dispenser</p>
       <h1>Material Dispenser</h1>
       <p class="lede">Semantic Engine facility machinery that dispenses Material during an Experiment. Integrated production prop.</p>
-      <div class="note">Runtime export shown below. Meshy concept comparison lives under <code>docs/art/material_dispenser_comparison/</code>.</div>
+      <p class="source">Runtime export. Comparison package: <code>docs/art/material_dispenser_comparison/</code>.</p>
 
       <div class="viewer-wrap">
         <model-viewer
@@ -72,5 +77,6 @@
 
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>

@@ -8,8 +8,13 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
@@ -36,7 +41,7 @@
       <p class="crumb"><a href="../">Wiki</a> / <a href="./">Assets</a> / Reference sheets</p>
       <h1>Generated reference sheets</h1>
       <p class="lede">47 sheets under <code>docs/art/reference_sheets/</code>. Use boundary and provenance stay in-repo — this page only displays them.</p>
-      <div class="note">Cite <code>reference_sheets/README.md</code>, <code>PROMPTS.md</code>, and <code>PROVENANCE.md</code>. Do not treat generated text or ambiguous geometry as canon.</div>
+      <p class="callout">See <code>reference_sheets/README.md</code> for use boundary. Generated text or ambiguous geometry is not canon.</p>
       <section class="family-block">
         <h2>actors</h2>
         <div class="card-grid">
@@ -263,5 +268,6 @@
 
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>

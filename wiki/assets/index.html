@@ -8,8 +8,13 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
@@ -36,7 +41,7 @@
       <p class="crumb"><a href="../">Wiki</a> / Assets</p>
       <h1>Asset catalog</h1>
       <p class="lede">48 mapped families. Cards show retained reference art even when no GLB exists. Labels and evidence classes cite <code>docs/art/REFERENCE_ASSET_MAP.md</code> only.</p>
-      <div class="note"><strong>Boundary.</strong> Generated sheets are candidate modelling inputs — they do not promote an asset to Production Source or runtime readiness (<code>reference_sheets/README.md</code>).</div>
+      <p class="callout">Generated sheets are modelling references; they do not by themselves mark an asset production-ready (<code>reference_sheets/README.md</code>).</p>
       <p><a href="sheets.html">Browse all 47 generated sheets →</a> · <a href="shared-subject.html">Shared Subject (GLB)</a> · <a href="material-dispenser.html">Material Dispenser (GLB)</a></p>
       <section class="family-block">
         <h2>Shared visual language</h2>
@@ -515,5 +520,6 @@
 
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>

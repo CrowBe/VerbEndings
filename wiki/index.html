@@ -8,8 +8,13 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
@@ -35,7 +40,7 @@
 
       <p class="crumb">Wiki</p>
       <h1>VerbEndings wiki</h1>
-      <p class="lede">Story, full reference-sheet coverage, and concept models from CrowBe/VerbEndings. No invented lore — prose cites existing docs.</p>
+      <p class="lede">Story, art references, and 3D concept models for VerbEndings — drawn from the project docs and asset packages.</p>
       <div class="token-strip" aria-label="Facility palette from WORLD_DESIGN.md">
         <span class="token-swatch" style="background:#F1EEE6" title="Warm off-white"></span>
         <span class="token-swatch" style="background:#C8CED1" title="Cool light grey"></span>
@@ -48,7 +53,6 @@
         <span class="token-swatch" style="background:#69C779" title="Validation green"></span>
         <span class="token-swatch" style="background:#F8F4E8" title="Soft white"></span>
       </div>
-      <div class="note">Theme tokens from <code>docs/WORLD_DESIGN.md</code> Facility Palette and <code>TrialPresentation.gd</code> HUD panels.</div>
       <h2>Start here</h2>
       <div class="card-grid">
         <a class="card" href="story/">
@@ -68,5 +72,6 @@
 
     </main>
   </div>
+  <script src="nav.js" defer></script>
 </body>
 </html>

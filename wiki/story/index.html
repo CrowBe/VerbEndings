@@ -8,8 +8,13 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
       <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
@@ -36,7 +41,7 @@
       <p class="crumb"><a href="../">Wiki</a> / Story</p>
       <h1>Story &amp; world</h1>
       <p class="lede">Excerpts only. Written contracts override any image or mesh.</p>
-      <div class="note">Sourced from <code>GLOSSARY.md</code> and <code>docs/WORLD_DESIGN.md</code>. Nothing below is new lore.</div>
+      <p class="source">From <code>GLOSSARY.md</code> and <code>docs/WORLD_DESIGN.md</code>.</p>
 
       <h2>Creative direction</h2>
       <p class="source">Source: <code>docs/WORLD_DESIGN.md</code> · Creative Direction</p>
@@ -72,5 +77,6 @@
 
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>
