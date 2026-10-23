@@ -19,7 +19,9 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         story: resolve(__dirname, 'story/index.html'),
+        media: resolve(__dirname, 'media/index.html'),
         assets: resolve(__dirname, 'assets/index.html'),
+        sheets: resolve(__dirname, 'assets/sheets.html'),
         sharedSubject: resolve(__dirname, 'assets/shared-subject.html'),
         materialDispenser: resolve(__dirname, 'assets/material-dispenser.html'),
       },

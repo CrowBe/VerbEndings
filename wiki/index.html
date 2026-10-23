@@ -11,28 +11,31 @@
   <div class="layout">
     <aside class="sidebar">
       <p class="brand">VerbEndings</p>
-      <p class="brand-sub">In-repo game wiki (spike)</p>
+      <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
       <nav class="nav" aria-label="Wiki">
         <div class="nav-section">Overview</div>
-        <a href="./" aria-current="page">Home</a>
+        <a href="./" aria-current="page" >Home</a>
         <a href="story/" >Story &amp; world</a>
+        <a href="media/" >FLUX intro</a>
         <div class="nav-section">Assets</div>
         <a href="assets/" >Catalog</a>
+        <a href="assets/sheets.html" >Reference sheets</a>
         <a href="assets/shared-subject.html" >Shared Subject</a>
         <a href="assets/material-dispenser.html" >Material Dispenser</a>
         <div class="nav-section">Sources</div>
-        <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
-        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
-        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md" >GLOSSARY.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md" >WORLD_DESIGN.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md" >REFERENCE_ASSET_MAP.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/reference_sheets" >reference_sheets/</a>
+        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/intro/flux" >intro/flux/</a>
       </nav>
     </aside>
     <main class="main">
 
       <p class="crumb">Wiki</p>
       <h1>VerbEndings wiki</h1>
-      <p class="lede">Browse story, art references, and 3D concept models from the CrowBe/VerbEndings repo. This spike is a shell only — no invented lore; every prose block cites an existing doc.</p>
-      
+      <p class="lede">Story, full reference-sheet coverage, and concept models from CrowBe/VerbEndings. No invented lore — prose cites existing docs.</p>
       <div class="token-strip" aria-label="Facility palette from WORLD_DESIGN.md">
         <span class="token-swatch" style="background:#F1EEE6" title="Warm off-white"></span>
         <span class="token-swatch" style="background:#C8CED1" title="Cool light grey"></span>
@@ -45,17 +48,21 @@
         <span class="token-swatch" style="background:#69C779" title="Validation green"></span>
         <span class="token-swatch" style="background:#F8F4E8" title="Soft white"></span>
       </div>
-<div class="note"><strong>Spike.</strong> Theme tokens from <code>docs/WORLD_DESIGN.md</code> Facility Palette and <code>TrialPresentation.gd</code> HUD panels. Do not merge until Benjamin OKs.</div>
+      <div class="note">Theme tokens from <code>docs/WORLD_DESIGN.md</code> Facility Palette and <code>TrialPresentation.gd</code> HUD panels.</div>
       <h2>Start here</h2>
       <div class="card-grid">
         <a class="card" href="story/">
           <div class="body"><span class="badge">Story</span><h3>Story &amp; world</h3><p>Domain language and Compound topology from GLOSSARY and WORLD_DESIGN.</p></div>
         </a>
         <a class="card" href="assets/">
-          <div class="body"><span class="badge">Assets</span><h3>Asset catalog</h3><p>Production Source meshes and integrated props with gallery links.</p></div>
+          <div class="body"><span class="badge source">Assets</span><h3>Full asset catalog</h3><p>All mapped families with reference sheets — including planned rows without a GLB.</p></div>
         </a>
-        <a class="card" href="assets/shared-subject.html">
-          <div class="body"><span class="badge source">3D</span><h3>Shared Subject</h3><p>Meshy 6b concept GLB in model-viewer.</p></div>
+        <a class="card" href="media/">
+          <img class="sheet" src="art/intro_flux/contact_sheet.png" alt="FLUX intro contact sheet" />
+          <div class="body"><span class="badge context">Context Reference</span><h3>FLUX intro</h3><p>Third-pass MP4 + frames from <code>docs/art/intro/flux/</code>.</p></div>
+        </a>
+        <a class="card" href="assets/sheets.html">
+          <div class="body"><span class="badge partial">Sheets</span><h3>47 reference sheets</h3><p>Generated suite covering every asset-family row.</p></div>
         </a>
       </div>
 
