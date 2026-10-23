@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Material Dispenser · VerbEndings Wiki</title>
+  <link rel="stylesheet" href="/styles/wiki.css" />
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <p class="brand">VerbEndings</p>
+      <p class="brand-sub">In-repo game wiki (spike)</p>
+      <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
+      <nav class="nav" aria-label="Wiki">
+        <div class="nav-section">Overview</div>
+        <a href="/" >Home</a>
+        <a href="/story/" >Story &amp; world</a>
+        <div class="nav-section">Assets</div>
+        <a href="/assets/" >Catalog</a>
+        <a href="/assets/shared-subject.html" >Shared Subject</a>
+        <a href="/assets/material-dispenser.html" aria-current="page">Material Dispenser</a>
+        <div class="nav-section">Sources</div>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
+      </nav>
+    </aside>
+    <main class="main">
+
+      <p class="crumb"><a href="/">Wiki</a> / <a href="/assets/">Assets</a> / Material Dispenser</p>
+      <h1>Material Dispenser</h1>
+      <p class="lede">Semantic Engine facility machinery that dispenses Material during an Experiment. Integrated production prop.</p>
+      <div class="note">Runtime export shown below. Meshy concept comparison lives under <code>docs/art/material_dispenser_comparison/</code>.</div>
+
+      <div class="viewer-wrap">
+        <model-viewer
+          src="/models/material_dispenser.glb"
+          alt="Material Dispenser runtime GLB"
+          camera-controls
+          touch-action="pan-y"
+          shadow-intensity="0.75"
+          exposure="1.0"
+          auto-rotate
+        ></model-viewer>
+      </div>
+
+      <table class="meta-table">
+        <tr><th>Disposition</th><td>Integrated Production (runtime export)</td></tr>
+        <tr><th>GLB</th><td><code class="path">assets/exports/props/material_dispenser.glb</code></td></tr>
+        <tr><th>Brief</th><td><code class="path">docs/art/material_dispenser/BRIEF.md</code></td></tr>
+        <tr><th>Greybox</th><td>1.6 m diameter × 2.0 m high; DispenseSocket at (0, 0.4, 1.1)</td></tr>
+      </table>
+
+      <h2>Canon (from comparison brief)</h2>
+      <p class="source">Source: <code>docs/art/material_dispenser_comparison/BRIEF.md</code></p>
+      <div class="prose">
+        <p>Freestanding industrial dispenser: squat cylindrical body, floor contact at origin, readable front nozzle, systems-cyan status ring plus physical shutter cue. No text, logos, face, or Engine persona.</p>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
