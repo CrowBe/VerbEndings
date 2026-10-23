@@ -13,6 +13,26 @@ npm run dev
 Open the printed local URL. GLBs, reference sheets, and the FLUX intro are symlinked from the repo (`public/models`, `public/art/*`) — no duplicated binaries. CI pulls Git LFS.
 
 
+
+## Generation (source of truth)
+
+Canon stays in docs. The wiki HTML is build output:
+
+| Source | Consumed by |
+| --- | --- |
+| `docs/art/wiki_catalog.json` | catalog, sheets paths, media, home counts |
+| `docs/art/REFERENCE_ASSET_MAP.md` | human evidence prose (linked; not scraped) |
+| `docs/wiki/story_sources.json` | which GLOSSARY / WORLD_DESIGN headings become story HTML |
+| `tools/wiki/generate.py` | writes `wiki/**/*.html` |
+
+```bash
+python3 tools/wiki/generate.py   # from repo root
+# or
+cd wiki && npm run generate && npm run build
+```
+
+See `docs/art/WIKI_CATALOG.md`. Detail pages with model-viewer (`shared-subject`, `material-dispenser`) remain hand-tuned shells; the generator only refreshes chrome markers.
+
 ## Theme (repo tokens only)
 
 | Token source | Use in wiki |
