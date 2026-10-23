@@ -1,7 +1,12 @@
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
+// Project Pages URL is https://crowbe.github.io/VerbEndings/
+// Local `npm run dev` keeps base '/'. CI sets WIKI_BASE=/VerbEndings/
+const base = process.env.WIKI_BASE || '/'
+
 export default defineConfig({
+  base,
   root: resolve(__dirname),
   publicDir: 'public',
   server: {

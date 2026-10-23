@@ -58,8 +58,7 @@ Repo canon stays where it is (`GLOSSARY.md`, `docs/WORLD_DESIGN.md`, `docs/art/*
 
 - Generate catalog pages from `REFERENCE_ASSET_MAP.md` + `docs/art/**/BRIEF.md`
 - Search (Pagefind or VitePress search)
-- GitHub Pages / `npm run build` artifact
-- Godot `.gdignore` already keeps `assets/source` out of the editor; keep `wiki/dist` gitignored
+- Godot `.gdignore` keeps `wiki/` out of the editor; keep `wiki/dist` gitignored
 
 ## Spike coverage
 
@@ -72,6 +71,14 @@ Repo canon stays where it is (`GLOSSARY.md`, `docs/WORLD_DESIGN.md`, `docs/art/*
 | Material Dispenser + model-viewer (runtime export) | done |
 | Labs / full map / search | not in spike |
 
-## Merge gate
+## GitHub Pages
 
-Do not merge until Benjamin OKs this layout. Branch: `docs/wiki-spike`.
+Deploy is Actions-only (no `/docs` folder publish). Workflow: `.github/workflows/wiki-pages.yml`.
+
+1. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions** (one-time).
+2. Merge this wiring to `main`, or run **Actions → Deploy wiki (GitHub Pages) → Run workflow**.
+3. When the deploy job is green, open **https://crowbe.github.io/VerbEndings/**.
+
+Build uses `WIKI_BASE=/VerbEndings/` so asset URLs match project Pages. Locally `npm run dev` still uses `/`. Site-internal links are relative so both modes work.
+
+Symlinked GLBs/art under `wiki/public` need Git LFS on the runner (`lfs: true` in the workflow).
