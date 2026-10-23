@@ -8,51 +8,518 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
-      <p class="brand-sub">In-repo game wiki (spike)</p>
+      <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
       <nav class="nav" aria-label="Wiki">
         <div class="nav-section">Overview</div>
-        <a href="../" >Home</a>
+        <a href=".././" >Home</a>
         <a href="../story/" >Story &amp; world</a>
+        <a href="../media/" >FLUX intro</a>
         <div class="nav-section">Assets</div>
-        <a href="./" aria-current="page">Catalog</a>
-        <a href="shared-subject.html" >Shared Subject</a>
-        <a href="material-dispenser.html" >Material Dispenser</a>
+        <a href="../assets/" aria-current="page" >Catalog</a>
+        <a href="../assets/sheets.html" >Reference sheets</a>
+        <a href="../assets/shared-subject.html" >Shared Subject</a>
+        <a href="../assets/material-dispenser.html" >Material Dispenser</a>
         <div class="nav-section">Sources</div>
-        <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
-        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
-        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md" >GLOSSARY.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md" >WORLD_DESIGN.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md" >REFERENCE_ASSET_MAP.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/reference_sheets" >reference_sheets/</a>
+        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/intro/flux" >intro/flux/</a>
       </nav>
     </aside>
     <main class="main">
 
       <p class="crumb"><a href="../">Wiki</a> / Assets</p>
       <h1>Asset catalog</h1>
-      <p class="lede">Entries mirror retained packages under <code>docs/art/</code> and <code>assets/</code>. Labels follow <code>REFERENCE_ASSET_MAP.md</code>.</p>
-      <div class="card-grid">
+      <p class="lede">48 mapped families. Cards show retained reference art even when no GLB exists. Labels and evidence classes cite <code>docs/art/REFERENCE_ASSET_MAP.md</code> only.</p>
+      <p class="callout">Generated sheets are modelling references; they do not by themselves mark an asset production-ready (<code>reference_sheets/README.md</code>).</p>
+      <p><a href="sheets.html">Browse all 47 generated sheets →</a> · <a href="shared-subject.html">Shared Subject (GLB)</a> · <a href="material-dispenser.html">Material Dispenser (GLB)</a></p>
+      <section class="family-block">
+        <h2>Shared visual language</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/shared/facility_material_board.png" alt="Facility form and material language reference" loading="lazy" />
+          <div class="body">
+            <span class="badge partial">Partial</span>
+            <h3>Facility form and material language</h3>
+            <p>Material board sheet; Material Dispenser is Integrated Production; FLUX intro is Context Reference.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/shared/facility_state_language.png" alt="Facility lighting and state language reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Facility lighting and state language</h3>
+            <p>Written contract and greybox hooks; generated state-language sheet.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/shared/scale_and_detail_lineup.png" alt="Scale and detail density reference" loading="lazy" />
+          <div class="body">
+            <span class="badge partial">Partial</span>
+            <h3>Scale and detail density</h3>
+            <p>Partial Subject, Material Dispenser, and video context; lineup sheet.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/shared/semantic_engine_interfaces.png" alt="Semantic Engine interfaces reference" loading="lazy" />
+          <div class="body">
+            <span class="badge context">Context Reference</span>
+            <h3>Semantic Engine interfaces</h3>
+            <p>Video Context Reference plus generated interface sheet — not a conversational persona.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="family-block">
+        <h2>Actors and living Material</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
         <a class="card" href="shared-subject.html">
-          <img src="../art/shared_subject_renders/front_three_quarter.png" alt="Shared Subject controlled render" />
+          <img class="sheet" src="../art/shared_subject_renders/front_three_quarter.png" alt="Shared Subject reference" loading="lazy" />
           <div class="body">
             <span class="badge source">Production Source</span>
             <h3>Shared Subject</h3>
-            <p>Meshy 6b concept mesh + SHIELD crops. Not a runtime export.</p>
+            <p>Turnarounds, crops, controlled renders, meshy6b concept GLB. Not a runtime export.</p>
+            
           </div>
         </a>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/subject_identity.png" alt="Subject identity reference" loading="lazy" />
+          <div class="body">
+            <span class="badge partial">Partial</span>
+            <h3>Subject identity</h3>
+            <p>Suit-number / identity panel treatment sheet; stable Verb colour excluded.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/subject_verb_effects.png" alt="Subject Verb Effects reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Subject Verb Effects</h3>
+            <p>Nine Verb treatments on a neutral Subject; written colour/silhouette contract only until production.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/subject_physical_states.png" alt="Subject physical states reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Subject physical states</h3>
+            <p>Idle, Impact, Stability Loss, Drop, Recall keys — greybox animation hooks.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/researcher.png" alt="Researcher reference" loading="lazy" />
+          <div class="body">
+            <span class="badge context">Context Reference</span>
+            <h3>Researcher</h3>
+            <p>FLUX intro Context Reference; generated turnaround sheet is candidate input only.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/residual.png" alt="Residual reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Residual</h3>
+            <p>Greybox Contract; generated turnaround from Droplet ancestry.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/residual_adverb_overlay.png" alt="Residual Adverb overlay reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Residual Adverb overlay</h3>
+            <p>Runtime hook + written behaviour; separate grammar from Verbs.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/actors/material_resource.png" alt="Material resource reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Material resource</h3>
+            <p>Resting / shed / airborne / absorption forms — greybox only.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="family-block">
+        <h2>Compound and reusable environment kit</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/complete_compound.png" alt="Complete Compound reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Complete Compound</h3>
+            <p>Hexagonal-plan / section sheet; implemented greybox remains authoritative.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/central_core.png" alt="Central Core reference" loading="lazy" />
+          <div class="body">
+            <span class="badge context">Context Reference</span>
+            <h3>Central Core</h3>
+            <p>FLUX intro Context Reference and greybox dimensions.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/assignment_deck.png" alt="Assignment Deck reference" loading="lazy" />
+          <div class="body">
+            <span class="badge context">Context Reference</span>
+            <h3>Assignment Deck</h3>
+            <p>FLUX intro Context Reference and greybox annulus.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/researcher_booth.png" alt="Researcher booth reference" loading="lazy" />
+          <div class="body">
+            <span class="badge context">Context Reference</span>
+            <h3>Researcher booth</h3>
+            <p>Elevated Researcher context in FLUX intro; reserved greybox footprint.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/separator_spine_service_route.png" alt="Separator Spine and Service Route reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Separator Spine and Service Route</h3>
+            <p>Core/perimeter junctions, observation, sealed shutter variants.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/perimeter_maintenance_route.png" alt="Perimeter maintenance route reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Perimeter maintenance route</h3>
+            <p>Annular route segment and Collapse-damaged state.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/dome_shell.png" alt="Dome shell reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Dome shell</h3>
+            <p>Faceted shell bay, rib, apex ring.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/orthogonal_kit.png" alt="Orthogonal kit reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Orthogonal kit</h3>
+            <p>Floor/wall bays, 4 m door/shutter, barriers at 1 m / 2 m increments.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/radial_annular_kit.png" alt="Radial and annular kit reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Radial and annular kit</h3>
+            <p>Bounded specialised radial/annular atlas.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/dispensing_line.png" alt="Dispensing Line reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Dispensing Line</h3>
+            <p>Overhead carrier and Laboratory branch; FLUX nozzle is a different machine.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/compound/drop_recall_infrastructure.png" alt="Drop and Recall infrastructure reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Drop and Recall infrastructure</h3>
+            <p>Tube exit, Drop silhouette, Recall pressure state.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="family-block">
+        <h2>Applied Attrition Laboratory</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/laboratory_composition.png" alt="Laboratory composition reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Laboratory composition</h3>
+            <p>Plan, section, Drop and player-camera key views.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/elevated_dispensing_armature.png" alt="Elevated dispensing armature reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Elevated dispensing armature</h3>
+            <p>Support column, truss, elevated Material supply; pristine→destroyed states.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
         <a class="card" href="material-dispenser.html">
-          <img src="../art/material_dispenser_renders/front_three_quarter.png" alt="Material Dispenser render" />
+          <img class="sheet" src="../art/material_dispenser_renders/front_three_quarter.png" alt="Material Dispenser reference" loading="lazy" />
           <div class="body">
             <span class="badge runtime">Integrated Production</span>
             <h3>Material Dispenser</h3>
-            <p>Runtime GLB under <code>assets/exports/props/</code> plus Meshy concept comparison.</p>
+            <p>Approved turnaround, Blender source, runtime GLB, controlled renders.</p>
+            
           </div>
         </a>
-      </div>
-      <p class="source">Planned (not spiked): reference_sheets families, Residuals, Researcher, Laboratory apparatus rows from the asset map.</p>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/breakable_material_housing.png" alt="Breakable Material housing reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Breakable Material housing</h3>
+            <p>Closed→broken states and release socket.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/counterweight_plate.png" alt="Counterweight Plate reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Counterweight Plate</h3>
+            <p>Plate, mass crates, loaded/unloaded states.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/wrecking_pendulum.png" alt="Wrecking Pendulum reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Wrecking Pendulum</h3>
+            <p>Support frame, pin joint, heavy bob, safe arc.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/gravity_funnel.png" alt="Gravity Funnel reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Gravity Funnel</h3>
+            <p>Catch basin, balls, attraction-field hardware.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/domino_tower.png" alt="Domino Tower reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Domino Tower</h3>
+            <p>Stable stack through fully toppled states.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/applied_attrition/momentum_turbine.png" alt="Momentum Turbine reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Momentum Turbine</h3>
+            <p>Rotor, protected hub, spinning state.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="family-block">
+        <h2>Competitive Stress Laboratory</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/competitive_stress/laboratory_composition.png" alt="Laboratory composition reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Laboratory composition</h3>
+            <p>Open contest space, shelters, circulation.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/competitive_stress/reinforced_impact_crucible.png" alt="Reinforced impact crucible reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Reinforced impact crucible</h3>
+            <p>Dominance boundary and impact-resistant barriers.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/competitive_stress/measurement_pylons.png" alt="Measurement pylons reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Measurement pylons</h3>
+            <p>Displacement / dominance / resilience indicators.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/competitive_stress/force_plate_launch_measurement.png" alt="Force plates and launch measurement reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Force plates and launch measurement</h3>
+            <p>Written contract + generated plate/gauge sheet.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/competitive_stress/shelters_test_barricades.png" alt="Shelters and test barricades reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Shelters and test barricades</h3>
+            <p>Low shelter, deflector, movable barricade.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="family-block">
+        <h2>Adaptive Containment Laboratory</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/laboratory_composition.png" alt="Laboratory composition reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Laboratory composition</h3>
+            <p>Containment perimeter and hostile-entry paths.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/specimen_delivery_column.png" alt="Specimen-delivery column reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Specimen-delivery column</h3>
+            <p>Intake/release machinery and failure states.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/perimeter_pens_shutters.png" alt="Perimeter pens and shutters reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Perimeter pens and shutters</h3>
+            <p>Modular pen bay and shutter states.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/vents_wall_cavities.png" alt="Vents and wall cavities reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Vents and wall cavities</h3>
+            <p>Standard/torn vents and emergence sequence.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/bait_machinery.png" alt="Bait machinery reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Bait machinery</h3>
+            <p>Reservoir, delivery arm, spent state.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/defensive_power_node.png" alt="Defensive power node reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Defensive power node</h3>
+            <p>Protected node and overload states.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/adaptive_containment/residual_nests_concealed_evidence.png" alt="Residual nests and concealed evidence reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Residual nests and concealed evidence</h3>
+            <p>Narrative contract; bloodless nests and disposal evidence.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="family-block">
+        <h2>Facility state and the Collapse</h2>
+        <p class="lede">Evidence classes from <code>REFERENCE_ASSET_MAP.md</code>. Sheets from <code>docs/art/reference_sheets/</code> unless noted.</p>
+        <div class="card-grid">
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/facility_state/shared_structural_state.png" alt="Shared structural state reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Shared structural state</h3>
+            <p>Clean / stressed / breached surfaces; collision preserved.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/facility_state/authored_prop_thresholds.png" alt="Authored prop thresholds reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Authored prop thresholds</h3>
+            <p>Pristine→destroyed for dominant Laboratory apparatus.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/facility_state/event_overlays.png" alt="Event overlays reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Event overlays</h3>
+            <p>Machinery/power/containment overlays that never visually repair.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        <div class="card no-glb">
+          <img class="sheet" src="../art/reference_sheets/facility_state/complete_collapse_compound.png" alt="Complete Collapse Compound reference" loading="lazy" />
+          <div class="body">
+            <span class="badge greybox">Greybox Contract</span>
+            <h3>Complete Collapse Compound</h3>
+            <p>Damaged full-Compound key view; coral failure telegraphs.</p>
+            <p class="meta">No production/concept GLB in catalog yet — reference sheet only.</p>
+          </div>
+        </div>
+        </div>
+      </section>
 
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>

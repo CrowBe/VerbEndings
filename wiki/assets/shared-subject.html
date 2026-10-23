@@ -8,23 +8,32 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
+    <header class="topbar">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="wiki-nav">Menu</button>
+    <p class="brand">VerbEndings</p>
+  </header>
+  <button type="button" class="nav-backdrop" aria-label="Close menu"></button>
+<div class="layout">
+    <aside class="sidebar" id="wiki-nav">
       <p class="brand">VerbEndings</p>
-      <p class="brand-sub">In-repo game wiki (spike)</p>
+      <p class="brand-sub">In-repo game wiki</p>
       <div class="status-pill" title="Systems cyan — normal infrastructure state">Systems nominal</div>
-      <nav class="nav" aria-label="Wiki">
+            <nav class="nav" aria-label="Wiki">
         <div class="nav-section">Overview</div>
         <a href="../" >Home</a>
         <a href="../story/" >Story &amp; world</a>
+        <a href="../media/" >FLUX intro</a>
         <div class="nav-section">Assets</div>
         <a href="./" >Catalog</a>
+        <a href="sheets.html" >Reference sheets</a>
         <a href="shared-subject.html" aria-current="page">Shared Subject</a>
         <a href="material-dispenser.html" >Material Dispenser</a>
         <div class="nav-section">Sources</div>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/GLOSSARY.md">GLOSSARY.md</a>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/WORLD_DESIGN.md">WORLD_DESIGN.md</a>
         <a href="https://github.com/CrowBe/VerbEndings/blob/main/docs/art/REFERENCE_ASSET_MAP.md">REFERENCE_ASSET_MAP.md</a>
+        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/reference_sheets">reference_sheets/</a>
+        <a href="https://github.com/CrowBe/VerbEndings/tree/main/docs/art/intro/flux">intro/flux/</a>
       </nav>
     </aside>
     <main class="main">
@@ -32,7 +41,7 @@
       <p class="crumb"><a href="../">Wiki</a> / <a href="./">Assets</a> / Shared Subject</p>
       <h1>Shared Subject</h1>
       <p class="lede">Common playable anatomy. Concept mesh for Blender retopology — not rigged, not under <code>assets/exports/</code>.</p>
-      <div class="note"><strong>Production Source.</strong> Written brief overrides generated markings (SAD SHIELD text, Verb colour, barcodes).</div>
+      <p class="callout"><span class="badge source">Production Source</span> Written brief overrides generated markings (SAD SHIELD text, Verb colour, barcodes).</p>
 
       <div class="viewer-wrap">
         <model-viewer
@@ -75,7 +84,20 @@
         <div class="card"><img src="../art/shared_subject_inputs/subject_shield_back.png" alt="Back crop" /><div class="body"><h3>Back</h3></div></div>
       </div>
 
+
+      <h2>Retained turnaround references</h2>
+      <p class="lede">Project-owned sheets under <code>docs/art/subjects/shared_subject/references/</code> (Production Source package).</p>
+      <div class="card-grid">
+        <div class="card"><img class="sheet" src="../art/shared_subject_references/subject_shield_turnaround.png" alt="SHIELD turnaround" loading="lazy" /><div class="body"><h3>SHIELD turnaround</h3></div></div>
+        <div class="card"><img class="sheet" src="../art/shared_subject_references/subject_grow_turnaround.png" alt="GROW turnaround" loading="lazy" /><div class="body"><h3>GROW turnaround</h3></div></div>
+        <div class="card"><img class="sheet" src="../art/shared_subject_references/subject_bounce_turnaround.png" alt="BOUNCE turnaround" loading="lazy" /><div class="body"><h3>BOUNCE turnaround</h3></div></div>
+        <div class="card"><img class="sheet" src="../art/shared_subject_references/subject_group_dispense_reference.png" alt="Group dispense reference" loading="lazy" /><div class="body"><h3>Group dispense</h3></div></div>
+      </div>
+      <h2>Related generated sheets</h2>
+      <p><a href="sheets.html">Subject identity / Verb effects / physical states</a> in the actors suite — candidate inputs only.</p>
+
     </main>
   </div>
+  <script src="../nav.js" defer></script>
 </body>
 </html>

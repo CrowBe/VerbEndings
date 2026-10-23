@@ -1,8 +1,8 @@
-# VerbEndings wiki (spike)
+# VerbEndings wiki
 
 In-repo static wiki for story, art, and 3D concept models. Styled like a game wiki (sidebar + article pages), not a marketing site.
 
-## Run (spike)
+## Run locally
 
 ```bash
 cd wiki
@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Open the printed local URL. GLBs and art thumbs are symlinked from the repo (`public/models`, `public/art`) — no duplicated binaries.
+Open the printed local URL. GLBs, reference sheets, and the FLUX intro are symlinked from the repo (`public/models`, `public/art/*`) — no duplicated binaries. CI pulls Git LFS.
 
 
 ## Theme (repo tokens only)
@@ -60,16 +60,18 @@ Repo canon stays where it is (`GLOSSARY.md`, `docs/WORLD_DESIGN.md`, `docs/art/*
 - Search (Pagefind or VitePress search)
 - Godot `.gdignore` keeps `wiki/` out of the editor; keep `wiki/dist` gitignored
 
-## Spike coverage
+## Coverage
 
 | Page | Status |
 | --- | --- |
 | Home + sidebar shell | done |
 | Story & world (cited excerpts) | done |
-| Asset catalog (2 cards) | done |
-| Shared Subject + model-viewer (meshy6b) | done |
-| Material Dispenser + model-viewer (runtime export) | done |
-| Labs / full map / search | not in spike |
+| FLUX intro media page (MP4 + frames) | done |
+| Asset catalog (48 map families + evidence badges) | done |
+| Reference sheets gallery (47 generated sheets) | done |
+| Shared Subject + model-viewer + turnaround refs | done |
+| Material Dispenser + model-viewer + state sheet | done |
+| Search | not built |
 
 ## GitHub Pages
 
