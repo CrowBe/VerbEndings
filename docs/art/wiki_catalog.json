@@ -75,11 +75,11 @@
           "id": "shared_subject",
           "title": "Shared Subject",
           "evidence": "Context Reference",
-          "sheet": "docs/art/subjects/shared_subject/references/subject_shield_turnaround.png",
-          "thumb": "docs/art/subjects/shared_subject/references/subject_shield_turnaround.png",
+          "sheet": "docs/art/subjects/shared_subject/references/subject_neutral_production_turnaround.png",
+          "thumb": "docs/art/subjects/shared_subject/references/subject_neutral_production_turnaround.png",
           "glb": null,
           "detail_page": "shared-subject",
-          "blurb": "Turnarounds + Meshy input crops retained. Wrong-design concept GLBs pruned; not a Production Source.",
+          "blurb": "Neutral production turnaround (batch 1) + prior Verb-colour turnarounds and meshy_inputs. No concept GLB.",
           "map_row": "Shared Subject"
         },
         {
@@ -119,22 +119,22 @@
           "id": "researcher",
           "title": "Researcher",
           "evidence": "Context Reference",
-          "sheet": "docs/art/reference_sheets/actors/researcher.png",
+          "sheet": "docs/art/actors/researcher/references/researcher_production_sheet.png",
           "thumb": "docs/art/reference_sheets/actors/researcher.png",
           "glb": null,
           "detail_page": null,
-          "blurb": "FLUX intro Context Reference; generated turnaround sheet.",
+          "blurb": "Batch 1 production sheet: turnaround, face/hands, Subject scale, booth and comedy keys. Candidate until accepted.",
           "map_row": "Researcher"
         },
         {
           "id": "residual",
           "title": "Residual",
-          "evidence": "Greybox Contract",
-          "sheet": "docs/art/reference_sheets/actors/residual.png",
+          "evidence": "Context Reference",
+          "sheet": "docs/art/actors/residual/references/residual_production_sheet.png",
           "thumb": "docs/art/reference_sheets/actors/residual.png",
           "glb": null,
           "detail_page": null,
-          "blurb": "Greybox Contract; generated turnaround from Droplet ancestry.",
+          "blurb": "Batch 1 production sheet: worn Droplet ancestry turnaround vs clean Subject. Candidate until accepted.",
           "map_row": "Residual"
         },
         {
