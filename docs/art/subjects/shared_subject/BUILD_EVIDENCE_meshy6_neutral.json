@@ -1,0 +1,135 @@
+{
+  "portfolio_role": {
+    "evidence_class": "Production Source",
+    "scope": "batch-1 neutral Shared Subject concept; not runtime"
+  },
+  "generator": {
+    "service": "Meshy",
+    "task_type": "multi-image-to-3d",
+    "task_id": "01a166f6-2acc-702a-8d41-d73f35b8b8f2",
+    "model": "meshy-6",
+    "status": "SUCCEEDED",
+    "credits_before": 1070,
+    "credits_after": 1040,
+    "credits_consumed": 30
+  },
+  "generation_parameters": {
+    "pose_mode": "t-pose",
+    "should_texture": true,
+    "should_remesh": false,
+    "enable_pbr": true,
+    "remove_lighting": true,
+    "hd_texture": true,
+    "image_enhancement": true,
+    "alpha_thumbnail": true,
+    "multi_view_thumbnails": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "source_artifact": {
+    "path": "assets/source/subjects/shared_subject/shared_subject_meshy6_neutral_concept.glb",
+    "bytes": 20879680,
+    "sha256": "81c488d40636ccb016ebe61c6815d78de7eaf285b7736ca33efa688c43eb0efd"
+  },
+  "blender_inspection": {
+    "blender_version": "5.2.0 LTS",
+    "input_path": "/workspace/ve-main/assets/source/subjects/shared_subject/shared_subject_meshy6_neutral_concept.glb",
+    "file_size_bytes": 20879680,
+    "sha256": "81c488d40636ccb016ebe61c6815d78de7eaf285b7736ca33efa688c43eb0efd",
+    "object_count": 1,
+    "mesh_count": 1,
+    "objects": [
+      {
+        "name": "Mesh_0",
+        "vertices": 104116,
+        "edges": 295428,
+        "polygons": 191470,
+        "triangles": 191470,
+        "connected_components": 158,
+        "welded_connected_components": 1,
+        "welded_vertices": 95737,
+        "raw_non_manifold_edges": 16446,
+        "non_manifold_edges": 0,
+        "degenerate_polygons": 0,
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "dimensions": [
+          1.899441,
+          0.619489,
+          1.740024
+        ],
+        "materials": [
+          "Material_0"
+        ]
+      }
+    ],
+    "total_vertices": 104116,
+    "total_edges": 295428,
+    "total_polygons": 191470,
+    "total_triangles": 191470,
+    "total_connected_components": 158,
+    "total_welded_connected_components": 1,
+    "total_raw_non_manifold_edges": 16446,
+    "total_non_manifold_edges": 0,
+    "total_degenerate_polygons": 0,
+    "material_names": [
+      "Material_0"
+    ],
+    "bounds_min": [
+      -0.950653,
+      -0.308885,
+      -0.871073
+    ],
+    "bounds_max": [
+      0.948788,
+      0.310604,
+      0.868951
+    ],
+    "dimensions": [
+      1.899441,
+      0.619489,
+      1.740024
+    ],
+    "floor_offset": -0.871073,
+    "root_objects": [
+      {
+        "name": "Mesh_0",
+        "type": "MESH",
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "source_disposition": {
+    "production_source": "PASS",
+    "direct_runtime": "FAIL",
+    "required_next_stage": "Blender retopo/reconstruction by VerbEndings Bench"
+  }
+}
