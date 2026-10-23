@@ -4,6 +4,17 @@
 
 This directory contains the project-owned visual and generated three-dimensional sources for the common Subject body. `GLOSSARY.md`, `docs/WORLD_DESIGN.md`, and `docs/VISUAL_ASSET_PIPELINE.md` remain authoritative wherever generated evidence is ambiguous.
 
+## Prune (2026-10-23)
+
+Benjamin approved removal of the wrong-design Shared Subject concept meshes and related Meshy outputs:
+
+- deleted `assets/source/subjects/shared_subject/shared_subject_meshy6_concept.glb`
+- deleted `assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb`
+- deleted `docs/art/subjects/shared_subject/renders/` and `BUILD_EVIDENCE.json` / `BUILD_EVIDENCE_meshy6b.json`
+- removed wiki model symlink / shared_subject_renders symlink; detail page demoted to 2D refs only
+
+**Retained:** `references/` turnarounds and `meshy_inputs/` crops (direction for a future run). Generation records below are audit history only — the GLB files are gone.
+
 ## Reference Lineage
 
 The SHIELD, GROW, BOUNCE, and group-dispensing sheets were authored for VerbEndings intro and visual-development work. They establish one common mouthless droplet anatomy and garment construction. The exact retained files are:
@@ -42,19 +53,19 @@ The four inputs are deterministic, unretouched crops of the SHIELD turnaround. C
 - Format: self-contained GLB.
 - No rigging, animation, retexture, resize, conversion, or additional generation is applied.
 
-The retained source is `assets/source/subjects/shared_subject/shared_subject_meshy6_concept.glb`, `28,025,972` bytes, SHA-256 `215880e66b5bd76a528565cc1eff37b3d37d5dfbf0a82db7e706263972c7a6e7`. Four texture images are embedded in the GLB; redundant extracted copies are not retained.
+The (now pruned) source was `assets/source/subjects/shared_subject/shared_subject_meshy6_concept.glb`, `28,025,972` bytes, SHA-256 `215880e66b5bd76a528565cc1eff37b3d37d5dfbf0a82db7e706263972c7a6e7`. Four texture images are embedded in the GLB; redundant extracted copies are not retained.
 
 ## Inspection And Disposition
 
 Blender 5.2.0 LTS inspection records one mesh and one material with `145,482` vertices and `271,798` triangles. Raw bounds are approximately `1.333 × 1.091 × 1.899 m`, centred around the source origin. Positional-weld inspection records one connected shell, zero non-manifold edges, and zero degenerate polygons. The GLB contains no skin, animation, camera, collision, or gameplay data.
 
-Controlled `1.2 m`-high renders establish model negative Y as front and model positive Y as back. The mesh is retained as a Production Source for Blender retopology or reconstruction. It is not a runtime export and does not satisfy the rigging contract. Exact machine-readable evidence remains in `BUILD_EVIDENCE.json`.
+Controlled `1.2 m`-high renders establish model negative Y as front and model positive Y as back. This mesh was later pruned as wrong design. Evidence files were removed with it.
 
 The Blender inspection and rendering environment used its nonfatal OpenColorIO fallback because the packaged configuration was newer than the linked library. Both operations completed and their output evidence validated.
 
 ## Generation Record (pipeline handoff re-run — meshy6b)
 
-Live Meshy Desk pipeline test (Benjamin OK on Shared Subject re-run, ~30 credits). Prior `shared_subject_meshy6_concept.glb` retained unchanged.
+Live Meshy Desk pipeline test (Benjamin OK on Shared Subject re-run, ~30 credits). Both concept GLBs later pruned (wrong design).
 
 - Service: Meshy multi-image-to-3D.
 - Model: Meshy 6 (`meshy-6`).
@@ -70,10 +81,10 @@ Live Meshy Desk pipeline test (Benjamin OK on Shared Subject re-run, ~30 credits
 - Format: self-contained GLB.
 - No rigging, animation, retexture, resize, conversion, or additional generation is applied.
 
-The retained source is `assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb`, `31,361,764` bytes, SHA-256 `9bc0e67c533ae22d6d862ca6d9b2687cd800f758f0f75dfc8a6aa0642c983922`.
+The (now pruned) source was `assets/source/subjects/shared_subject/shared_subject_meshy6b_concept.glb`, `31,361,764` bytes, SHA-256 `9bc0e67c533ae22d6d862ca6d9b2687cd800f758f0f75dfc8a6aa0642c983922`.
 
 ### Inspection (meshy6b)
 
 Blender 5.2.0 LTS inspection records one mesh and one material with `161,604` vertices and `298,732` triangles. Raw bounds are approximately `1.349 × 1.130 × 1.899 m`, centred around the source origin. Zero non-manifold edges after positional weld; two welded connected components. Machine-readable evidence: `BUILD_EVIDENCE_meshy6b.json`.
 
-This file is Production Source for Blender retopology or reconstruction, not a runtime export. Tidy/retopo/Godot export remains with VerbEndings Bench.
+This file was later pruned as wrong design. Do not retopo from it. Evidence files were removed with it.

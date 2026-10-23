@@ -47,7 +47,7 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
-| Shared Subject | **Production Source.** Four project-owned turnarounds, exact reconstruction crops, controlled renders, and `shared_subject_meshy6_concept.glb` establish the common anatomy and garment silhouette. | Blender reconstruction or retopology with separate body, eyes, suit, and identity surfaces; neutral default presentation; floor-contact origin; exact scale; rig; deformation evidence; semantic animation clips; runtime GLB. |
+| Shared Subject | **Context Reference.** Four project-owned turnarounds and Meshy input crops establish intended anatomy. Wrong-design Meshy concept GLBs were pruned (2026-10-23). | Approved concept mesh (or authored reconstruction); separate body, eyes, suit, and identity surfaces; neutral default presentation; floor-contact origin; exact scale; rig; deformation evidence; semantic animation clips; runtime GLB. |
 | Subject identity | Partial within the shared Subject sheets. | Stable suit-number treatment and replaceable identity panel that remain independent from any claimed Verb. Generated `SAD SHIELD` text, barcode detail, and permanent Verb colour are excluded. |
 | Subject Verb Effects | Written per-Verb colour, silhouette, icon, and motion contract only. | One treatment sheet for each of BURN, SHIELD, GROW, STRETCH, ROLL, JUMP, BOUNCE, FREEZE, and REWIND, shown on the same neutral Subject and readable without colour alone. |
 | Subject physical states | Greybox animation hooks only. | Idle, movement, jump, landing, basic Impact, Stability Loss, Critical Stability, Destabilisation, Drop, and Recall deformation keys. |
@@ -119,6 +119,6 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 
 ## Retained Source Disposition
 
-The shared Subject GLB and its four-view evidence are Production Source assets. They are never placed under `assets/exports/`, referenced by `Player.tscn`, or described as rig-ready. The exact structural blockers are recorded in its focused brief and build evidence.
+Shared Subject concept GLBs and their controlled renders were pruned as wrong design. Retained turnarounds and `meshy_inputs/` are Context Reference only. `Player.tscn` still uses greybox presentation. A future concept mesh needs Benjamin’s ask-before-paid Meshy gate.
 
 The third-pass FLUX intro is Context Reference. Its Compound mass, elevated Researcher context, Semantic Engine machinery, generated motion, and synchronised audio are useful; its dark detail density, adjacent coloured outlets, and permanently Verb-coloured Subject presentation are not canonical asset specifications.

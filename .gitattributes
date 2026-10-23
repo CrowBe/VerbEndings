@@ -79,8 +79,3 @@ docs/art/subjects/shared_subject/references/subject_bounce_turnaround.png filter
 docs/art/subjects/shared_subject/references/subject_group_dispense_reference.png filter=lfs diff=lfs merge=lfs -text
 docs/art/subjects/shared_subject/references/subject_grow_turnaround.png filter=lfs diff=lfs merge=lfs -text
 docs/art/subjects/shared_subject/references/subject_shield_turnaround.png filter=lfs diff=lfs merge=lfs -text
-docs/art/subjects/shared_subject/renders/back.png filter=lfs diff=lfs merge=lfs -text
-docs/art/subjects/shared_subject/renders/front.png filter=lfs diff=lfs merge=lfs -text
-docs/art/subjects/shared_subject/renders/front_three_quarter.png filter=lfs diff=lfs merge=lfs -text
-docs/art/subjects/shared_subject/renders/model_neg_x_side.png filter=lfs diff=lfs merge=lfs -text
-docs/art/subjects/shared_subject/renders/model_pos_x_side.png filter=lfs diff=lfs merge=lfs -text

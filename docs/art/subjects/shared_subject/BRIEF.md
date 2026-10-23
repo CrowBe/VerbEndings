@@ -20,9 +20,7 @@ The Subject has no weapons, gore, body-horror treatment, facility authority symb
 - `references/subject_shield_turnaround.png` is the primary common-anatomy turnaround.
 - `references/subject_grow_turnaround.png` and `references/subject_bounce_turnaround.png` confirm the shared anatomy across different generated substrate colours.
 - `references/subject_group_dispense_reference.png` confirms mouthless group performance and approximate scale.
-- `meshy_inputs/` contains the exact unretouched crops used to create the retained high-detail concept mesh.
-- `assets/source/subjects/shared_subject/shared_subject_meshy6_concept.glb` is the retained three-dimensional shape source.
-- `renders/` contains controlled `1.2 m`-high review views of that mesh.
+- `meshy_inputs/` contains unretouched crops of the SHIELD turnaround for a future Meshy run.
 
 Written canon overrides generated details. The body colour in these sources does not permanently identify a Verb. `SAD SHIELD` text, barcode marks, and generated rear status details are concept artefacts rather than production identity.
 
@@ -50,12 +48,10 @@ The runtime actor provides:
 - applied transforms, metre scale, exact origin and facing, one predictable root, and no gameplay collision; and
 - editable Blender source under `assets/source/subjects/` plus a runtime GLB under `assets/exports/subjects/`.
 
-## Retained Mesh Disposition
+## Mesh Disposition (pruned)
 
-`shared_subject_meshy6_concept.glb` is a **Production Source**, not a runtime model. It preserves the approved silhouette, two-eye mouthless face, short arms, broad feet, jacket, pockets, and rear garment panel well enough to guide retopology or reconstruction.
-
-It does not satisfy the Production mesh contract because it contains `271,798` triangles in one fused mesh and one material, has no skin or animations, uses a vertically centred source origin, is approximately `1.899 m` high before normalisation, and bakes generated Verb-specific markings into its texture. It remains outside `assets/exports/` and is not referenced by `Player.tscn`.
+Meshy concept GLBs (`shared_subject_meshy6_concept.glb`, `shared_subject_meshy6b_concept.glb`), their controlled `renders/`, and `BUILD_EVIDENCE*.json` were **pruned** (2026-10-23). The 3D design did not match the intended Subject. Do not retopo from those meshes. A future concept mesh requires a new approved Meshy run from the retained turnarounds / `meshy_inputs/`.
 
 ## Acceptance Evidence
 
-The focused source package retains exact generation parameters, hashes, topology, dimensions, facing, controlled renders, and source disposition in `BUILD_EVIDENCE.json` and `PROVENANCE.md`. A future runtime Subject is accepted only after structural inspection, rig and deformation review, Godot 4.3 import, semantic-animation coverage, gameplay-camera readability, and hidden-visual boundary checks all pass.
+A future runtime Subject is accepted only after a new approved concept mesh (or authored reconstruction), structural inspection, rig and deformation review, Godot 4.3 import, semantic-animation coverage, gameplay-camera readability, and hidden-visual boundary checks all pass. Exact generation parameters for pruned meshes remain in `PROVENANCE.md` for audit only.
