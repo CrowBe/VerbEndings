@@ -13,7 +13,7 @@ Benjamin approved removal of the wrong-design Shared Subject concept meshes and 
 - deleted `docs/art/subjects/shared_subject/renders/` and `BUILD_EVIDENCE.json` / `BUILD_EVIDENCE_meshy6b.json`
 - removed wiki model symlink / shared_subject_renders symlink; detail page demoted to 2D refs only
 
-**Retained:** `references/` turnarounds and `meshy_inputs/` crops (direction for a future run). Generation records below are audit history only — the GLB files are gone.
+**Retained:** `references/` turnarounds and legacy SHIELD `meshy_inputs/` crops. Generation records for meshy6/meshy6b below are audit history only — those GLB files are gone. Batch-1 **neutral** concept GLB is retained under Generation Record (batch 1 — neutral meshy6).
 
 ## Reference Lineage
 
@@ -88,3 +88,23 @@ The (now pruned) source was `assets/source/subjects/shared_subject/shared_subjec
 Blender 5.2.0 LTS inspection records one mesh and one material with `161,604` vertices and `298,732` triangles. Raw bounds are approximately `1.349 × 1.130 × 1.899 m`, centred around the source origin. Zero non-manifold edges after positional weld; two welded connected components. Machine-readable evidence: `BUILD_EVIDENCE_meshy6b.json`.
 
 This file was later pruned as wrong design. Do not retopo from it. Evidence files were removed with it.
+
+## Generation Record (batch 1 — neutral meshy6)
+
+- Service: Meshy multi-image-to-3D.
+- Model: Meshy 6 (`meshy-6`).
+- Task identifier: `01a166f6-2acc-702a-8d41-d73f35b8b8f2`.
+- Result: succeeded.
+- Credits: `1070` before, `1040` after, `30` consumed.
+- Inputs (crops from `references/subject_neutral_production_turnaround.png`):
+
+| Path | SHA-256 |
+| --- | --- |
+| `meshy_inputs/subject_neutral_front.png` | `b3e8643df2f3752e77525e5d8457479624e1af9c41bd7a2ab56226341b158b55` |
+| `meshy_inputs/subject_neutral_front_three_quarter.png` | `31830922182f30e07fb24c3814b71e1a2d924842ad4da7f5569e87d45d9cfe2e` |
+| `meshy_inputs/subject_neutral_side.png` | `ae95aba4ef01e99e765db1fe6419d55fc8da49484fdf1240dfa8cee471ecd3ca` |
+| `meshy_inputs/subject_neutral_back.png` | `d07d200856943f1c7ad54cadc6ecadd2c8827a697d02fdcc41b270610f9230ff` |
+
+- Pose: T-pose. Remesh off. PBR + HD texture, baked-light removal, image enhancement, alpha + multi-view thumbnails on. Format: GLB.
+- Retained source: `assets/source/subjects/shared_subject/shared_subject_meshy6_neutral_concept.glb`, `20,879,680` bytes, SHA-256 `81c488d40636ccb016ebe61c6815d78de7eaf285b7736ca33efa688c43eb0efd`.
+- Blender 5.2.0 LTS: `191,470` triangles; evidence `BUILD_EVIDENCE_meshy6_neutral.json`. Production Source only — not a runtime export.

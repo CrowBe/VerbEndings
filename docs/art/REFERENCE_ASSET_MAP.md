@@ -47,12 +47,12 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
-| Shared Subject | **Context Reference.** Neutral production turnaround (batch 1, 2026-10-23) plus prior Verb-colour turnarounds and `meshy_inputs/`. Wrong-design Meshy concept GLBs were pruned. | Benjamin acceptance of neutral sheet; Meshy crops from neutral sheet; approved concept mesh; separate body, eyes, suit, and identity surfaces; rig; semantic animation clips; runtime GLB. |
+| Shared Subject | **Production Source.** Neutral Meshy-6 concept `assets/source/subjects/shared_subject/shared_subject_meshy6_neutral_concept.glb` (batch 1) plus production turnaround and `meshy_inputs/subject_neutral_*`. Prior Verb-colour turnarounds retained as lineage. Wrong-design meshy6/6b pruned. | Blender retopo/reconstruction; separate body, eyes, suit, and identity surfaces; rig; semantic animation clips; runtime GLB under `assets/exports/`. |
 | Subject identity | Partial within the shared Subject sheets. | Stable suit-number treatment and replaceable identity panel that remain independent from any claimed Verb. Generated `SAD SHIELD` text, barcode detail, and permanent Verb colour are excluded. |
 | Subject Verb Effects | Written per-Verb colour, silhouette, icon, and motion contract only. | One treatment sheet for each of BURN, SHIELD, GROW, STRETCH, ROLL, JUMP, BOUNCE, FREEZE, and REWIND, shown on the same neutral Subject and readable without colour alone. |
 | Subject physical states | Greybox animation hooks only. | Idle, movement, jump, landing, basic Impact, Stability Loss, Critical Stability, Destabilisation, Drop, and Recall deformation keys. |
-| Researcher | **Context Reference.** Batch 1 production sheet under `docs/art/actors/researcher/` (turnaround, face/hands, Subject scale, booth, comedy). FLUX intro remains secondary. | Benjamin acceptance; fix any residual non-canon scale/UI artefacts; booth attachment to Assignment Deck greybox. |
-| Residual | **Context Reference.** Batch 1 production sheet under `docs/art/actors/residual/` (worn wrap turnaround, Subject comparison, deformation keys). | Benjamin acceptance; assumed-Verb treatment sheet later; runtime Residual mesh. |
+| Researcher | **Production Source.** Meshy-6 concept `assets/source/actors/researcher/researcher_meshy6_concept.glb` (batch 1) plus production sheet and `meshy_inputs/`. FLUX intro remains secondary. | Blender retopo; booth attachment to Assignment Deck greybox; runtime export. |
+| Residual | **Production Source.** Meshy-6 concept `assets/source/actors/residual/residual_meshy6_concept.glb` (batch 1) plus production sheet and `meshy_inputs/`. | Blender retopo; assumed-Verb treatment sheet later; runtime Residual mesh. |
 | Residual Adverb overlay | Runtime hook and written behaviour contract only. | Separate material and motion grammar for unsanctioned Adverbs that cannot be mistaken for a tenth Verb. |
 | Material resource | Greybox Contract only. | Resting, shed-on-Impact, airborne, and absorption forms with a readable soft-substrate silhouette and no resemblance to ordinary rendering material. |
 
@@ -119,6 +119,6 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 
 ## Retained Source Disposition
 
-Shared Subject concept GLBs and their controlled renders were pruned as wrong design. Retained turnarounds and `meshy_inputs/` are Context Reference only. `Player.tscn` still uses greybox presentation. A future concept mesh needs Benjamin’s ask-before-paid Meshy gate.
+Wrong-design Shared Subject concept GLBs (meshy6/6b) and their controlled renders were pruned. Batch-1 **neutral** concept is Production Source under `assets/source/subjects/shared_subject/`. `Player.tscn` still uses greybox presentation; retopo/runtime export remain open.
 
 The third-pass FLUX intro is Context Reference. Its Compound mass, elevated Researcher context, Semantic Engine machinery, generated motion, and synchronised audio are useful; its dark detail density, adjacent coloured outlets, and permanently Verb-coloured Subject presentation are not canonical asset specifications.

@@ -1,0 +1,149 @@
+{
+  "portfolio_role": {
+    "evidence_class": "Production Source",
+    "scope": "batch-1 Residual concept; not runtime"
+  },
+  "generator": {
+    "service": "Meshy",
+    "task_type": "multi-image-to-3d",
+    "task_id": "01a16700-0f62-735f-91d6-d74a41a60fdd",
+    "model": "meshy-6",
+    "status": "SUCCEEDED",
+    "credits_before": 1010,
+    "credits_after": 980,
+    "credits_consumed": 30
+  },
+  "generation_parameters": {
+    "pose_mode": "t-pose",
+    "should_texture": true,
+    "should_remesh": false,
+    "enable_pbr": true,
+    "remove_lighting": true,
+    "hd_texture": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "source_artifact": {
+    "path": "assets/source/actors/residual/residual_meshy6_concept.glb",
+    "bytes": 34823044,
+    "sha256": "9b5eed203b408aa5524bda0abfa8340df97e23c14c52ac97c2790d4a7b0e0865"
+  },
+  "inputs": {
+    "residual_front.png": {
+      "bytes": 110858,
+      "sha256": "a1037138ac8984f4eeca1450328966fb3c05858fc6e20936ce48db4a74f42f6a"
+    },
+    "residual_front_three_quarter.png": {
+      "bytes": 106590,
+      "sha256": "ecd7196023960d746af381502de5eacda92380c4a3dfd65ec5e25ca57af6cd1a"
+    },
+    "residual_side.png": {
+      "bytes": 96052,
+      "sha256": "c1312c4ecadfb4bba229492359c4a0b1864beb92e10f8c2c570944994424eea5"
+    },
+    "residual_back.png": {
+      "bytes": 108965,
+      "sha256": "37e44505451823ed0cfa87ab48176e98b060842ff84bfebcda80c2e36f4e732c"
+    }
+  },
+  "blender_inspection": {
+    "blender_version": "5.2.0 LTS",
+    "input_path": "/workspace/ve-main/assets/source/actors/residual/residual_meshy6_concept.glb",
+    "file_size_bytes": 34823044,
+    "sha256": "9b5eed203b408aa5524bda0abfa8340df97e23c14c52ac97c2790d4a7b0e0865",
+    "object_count": 1,
+    "mesh_count": 1,
+    "objects": [
+      {
+        "name": "Mesh_0",
+        "vertices": 296824,
+        "edges": 837983,
+        "polygons": 541778,
+        "triangles": 541778,
+        "connected_components": 619,
+        "welded_connected_components": 1,
+        "welded_vertices": 270763,
+        "raw_non_manifold_edges": 50632,
+        "non_manifold_edges": 0,
+        "degenerate_polygons": 0,
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "dimensions": [
+          1.899248,
+          0.765875,
+          1.802844
+        ],
+        "materials": [
+          "Material_0"
+        ]
+      }
+    ],
+    "total_vertices": 296824,
+    "total_edges": 837983,
+    "total_polygons": 541778,
+    "total_triangles": 541778,
+    "total_connected_components": 619,
+    "total_welded_connected_components": 1,
+    "total_raw_non_manifold_edges": 50632,
+    "total_non_manifold_edges": 0,
+    "total_degenerate_polygons": 0,
+    "material_names": [
+      "Material_0"
+    ],
+    "bounds_min": [
+      -0.950587,
+      -0.383574,
+      -0.902548
+    ],
+    "bounds_max": [
+      0.948661,
+      0.382301,
+      0.900296
+    ],
+    "dimensions": [
+      1.899248,
+      0.765875,
+      1.802844
+    ],
+    "floor_offset": -0.902548,
+    "root_objects": [
+      {
+        "name": "Mesh_0",
+        "type": "MESH",
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "source_disposition": {
+    "production_source": "PASS",
+    "direct_runtime": "FAIL"
+  }
+}
