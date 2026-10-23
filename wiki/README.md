@@ -12,6 +12,18 @@ npm run dev
 
 Open the printed local URL. GLBs and art thumbs are symlinked from the repo (`public/models`, `public/art`) — no duplicated binaries.
 
+
+## Theme (repo tokens only)
+
+| Token source | Use in wiki |
+| --- | --- |
+| `docs/WORLD_DESIGN.md` Facility Palette | CSS variables `--ve-*` (off-white, equipment grey, charcoal, near-black, systems cyan, amber, coral, validation green, soft white) |
+| `scripts/presentation/TrialPresentation.gd` | Dark HUD/lifecycle panels, cyan rim borders, banner text tint |
+| `scripts/environment/Compound.gd` | Confirms the same hex values in runtime environment consts |
+| Typeface | None specified in-repo → system UI stack (Godot Control default behaviour) |
+
+Do not invent a marketing brand or a second palette. Verb colours stay for Verb pages later; the shell uses facility/infrastructure colours only.
+
 ## Viewer
 
 Asset pages use [`@google/model-viewer`](https://modelviewer.dev/) from the Google CDN. Three.js is not used in this spike.
