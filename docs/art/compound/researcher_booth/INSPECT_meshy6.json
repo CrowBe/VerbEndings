@@ -1,0 +1,95 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "input_path": "/workspace/ve-meshy-batch2ac/assets/source/compound/researcher_booth/researcher_booth_meshy6_concept.glb",
+  "file_size_bytes": 78981568,
+  "sha256": "9022d77c88a007086e0c2dbaae8e03f1058c744736277d49e00151657a5c233e",
+  "object_count": 1,
+  "mesh_count": 1,
+  "objects": [
+    {
+      "name": "Mesh_0",
+      "vertices": 1060442,
+      "edges": 3013467,
+      "polygons": 1955282,
+      "triangles": 1955282,
+      "connected_components": 2257,
+      "welded_connected_components": 2,
+      "welded_vertices": 976246,
+      "raw_non_manifold_edges": 161088,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.899077,
+        1.899047,
+        1.603564
+      ],
+      "materials": [
+        "Material_0"
+      ]
+    }
+  ],
+  "total_vertices": 1060442,
+  "total_edges": 3013467,
+  "total_polygons": 1955282,
+  "total_triangles": 1955282,
+  "total_connected_components": 2257,
+  "total_welded_connected_components": 2,
+  "total_raw_non_manifold_edges": 161088,
+  "total_non_manifold_edges": 0,
+  "total_degenerate_polygons": 0,
+  "material_names": [
+    "Material_0"
+  ],
+  "bounds_min": [
+    -0.950494,
+    -0.948641,
+    -0.800836
+  ],
+  "bounds_max": [
+    0.948583,
+    0.950406,
+    0.802728
+  ],
+  "dimensions": [
+    1.899077,
+    1.899047,
+    1.603564
+  ],
+  "floor_offset": -0.800836,
+  "root_objects": [
+    {
+      "name": "Mesh_0",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}

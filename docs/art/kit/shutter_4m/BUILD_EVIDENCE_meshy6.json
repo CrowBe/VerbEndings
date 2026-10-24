@@ -1,0 +1,137 @@
+{
+  "portfolio_role": {
+    "evidence_class": "Production Source",
+    "scope": "sheet-batch-2 Shutter 4m closed 2-view concept; not runtime"
+  },
+  "generator": {
+    "service": "Meshy",
+    "task_type": "multi-image-to-3d",
+    "task_id": "01a17017-157c-7496-84b1-db3322645fc9",
+    "model": "meshy-6",
+    "status": "SUCCEEDED",
+    "credits_before": 950,
+    "credits_after": 920,
+    "credits_consumed": 30
+  },
+  "generation_parameters": {
+    "should_texture": true,
+    "should_remesh": false,
+    "enable_pbr": true,
+    "remove_lighting": true,
+    "hd_texture": true,
+    "texture_resolution": "4k",
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "source_artifact": {
+    "path": "assets/source/kit/shutter_4m/shutter_4m_meshy6_concept.glb",
+    "bytes": 36412780,
+    "sha256": "ce3046c6052907a321ecf6428b09b2d84e6e6fad574530abedb414d0c87026b3"
+  },
+  "inputs": {
+    "docs/art/kit/shutter_4m/meshy_inputs/front_closed.png": {
+      "bytes": 103316,
+      "sha256": "720fa8d69aa6f942f6965ad73b7a7810de5959c07ee900fb4bb7ed841452f4e1"
+    },
+    "docs/art/kit/shutter_4m/meshy_inputs/rear_three_quarter.png": {
+      "bytes": 108594,
+      "sha256": "56fea31042b3edf6e58a249dfbda3ae0aa542b7b500bcbca4e3e7cbf499b41a1"
+    }
+  },
+  "blender_inspection": {
+    "blender_version": "5.2.0 LTS",
+    "input_path": "/workspace/ve-meshy-batch2ac/assets/source/kit/shutter_4m/shutter_4m_meshy6_concept.glb",
+    "file_size_bytes": 36412780,
+    "sha256": "ce3046c6052907a321ecf6428b09b2d84e6e6fad574530abedb414d0c87026b3",
+    "object_count": 1,
+    "mesh_count": 1,
+    "objects": [
+      {
+        "name": "Mesh_0",
+        "vertices": 384236,
+        "edges": 1062114,
+        "polygons": 679384,
+        "triangles": 679384,
+        "connected_components": 1506,
+        "welded_connected_components": 9,
+        "welded_vertices": 339336,
+        "raw_non_manifold_edges": 86076,
+        "non_manifold_edges": 0,
+        "degenerate_polygons": 0,
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "dimensions": [
+          1.670558,
+          0.330702,
+          1.899693
+        ],
+        "materials": [
+          "Material_0"
+        ]
+      }
+    ],
+    "total_vertices": 384236,
+    "total_edges": 1062114,
+    "total_polygons": 679384,
+    "total_triangles": 679384,
+    "total_connected_components": 1506,
+    "total_welded_connected_components": 9,
+    "total_raw_non_manifold_edges": 86076,
+    "total_non_manifold_edges": 0,
+    "total_degenerate_polygons": 0,
+    "material_names": [
+      "Material_0"
+    ],
+    "bounds_min": [
+      -0.83853,
+      -0.164324,
+      -0.950793
+    ],
+    "bounds_max": [
+      0.832028,
+      0.166378,
+      0.9489
+    ],
+    "dimensions": [
+      1.670558,
+      0.330702,
+      1.899693
+    ],
+    "floor_offset": -0.950793,
+    "root_objects": [
+      {
+        "name": "Mesh_0",
+        "type": "MESH",
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  }
+}
