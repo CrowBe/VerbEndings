@@ -1,0 +1,145 @@
+{
+  "portfolio_role": {
+    "evidence_class": "Production Source",
+    "scope": "sheet-batch-2 Researcher Booth concept; not runtime"
+  },
+  "generator": {
+    "service": "Meshy",
+    "task_type": "multi-image-to-3d",
+    "task_id": "01a17011-c644-718c-8a6b-cb5da7c0e96c",
+    "model": "meshy-6",
+    "status": "SUCCEEDED",
+    "credits_before": 980,
+    "credits_after": 950,
+    "credits_consumed": 30
+  },
+  "generation_parameters": {
+    "should_texture": true,
+    "should_remesh": false,
+    "enable_pbr": true,
+    "remove_lighting": true,
+    "hd_texture": true,
+    "texture_resolution": "4k",
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "source_artifact": {
+    "path": "assets/source/compound/researcher_booth/researcher_booth_meshy6_concept.glb",
+    "bytes": 78981568,
+    "sha256": "9022d77c88a007086e0c2dbaae8e03f1058c744736277d49e00151657a5c233e"
+  },
+  "inputs": {
+    "docs/art/compound/researcher_booth/meshy_inputs/front.png": {
+      "bytes": 110134,
+      "sha256": "c194835cfce86fedc199df1b5a2f5a225bd652a9e053bc4810aff5867e482532"
+    },
+    "docs/art/compound/researcher_booth/meshy_inputs/three_quarter.png": {
+      "bytes": 117803,
+      "sha256": "c9b4d34fa559657b4ebb5b95df0ddc0663d2b74b6b7a10fd5c75f3527ce1c03b"
+    },
+    "docs/art/compound/researcher_booth/meshy_inputs/side.png": {
+      "bytes": 77971,
+      "sha256": "68a3b35fcddcd8f791ec5bfcc394134d54e3b5b7ce35cbd46990433fdfc95912"
+    },
+    "docs/art/compound/researcher_booth/meshy_inputs/back.png": {
+      "bytes": 81345,
+      "sha256": "3e0dd1b57002a8d9cde36a7a274ea2fad9e09659af99301bf0d5bb69ce973a09"
+    }
+  },
+  "blender_inspection": {
+    "blender_version": "5.2.0 LTS",
+    "input_path": "/workspace/ve-meshy-batch2ac/assets/source/compound/researcher_booth/researcher_booth_meshy6_concept.glb",
+    "file_size_bytes": 78981568,
+    "sha256": "9022d77c88a007086e0c2dbaae8e03f1058c744736277d49e00151657a5c233e",
+    "object_count": 1,
+    "mesh_count": 1,
+    "objects": [
+      {
+        "name": "Mesh_0",
+        "vertices": 1060442,
+        "edges": 3013467,
+        "polygons": 1955282,
+        "triangles": 1955282,
+        "connected_components": 2257,
+        "welded_connected_components": 2,
+        "welded_vertices": 976246,
+        "raw_non_manifold_edges": 161088,
+        "non_manifold_edges": 0,
+        "degenerate_polygons": 0,
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "dimensions": [
+          1.899077,
+          1.899047,
+          1.603564
+        ],
+        "materials": [
+          "Material_0"
+        ]
+      }
+    ],
+    "total_vertices": 1060442,
+    "total_edges": 3013467,
+    "total_polygons": 1955282,
+    "total_triangles": 1955282,
+    "total_connected_components": 2257,
+    "total_welded_connected_components": 2,
+    "total_raw_non_manifold_edges": 161088,
+    "total_non_manifold_edges": 0,
+    "total_degenerate_polygons": 0,
+    "material_names": [
+      "Material_0"
+    ],
+    "bounds_min": [
+      -0.950494,
+      -0.948641,
+      -0.800836
+    ],
+    "bounds_max": [
+      0.948583,
+      0.950406,
+      0.802728
+    ],
+    "dimensions": [
+      1.899077,
+      1.899047,
+      1.603564
+    ],
+    "floor_offset": -0.800836,
+    "root_objects": [
+      {
+        "name": "Mesh_0",
+        "type": "MESH",
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_euler": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ]
+  }
+}
