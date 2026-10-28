@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.hvac_vent_system_straight_a01.2026.10.09_054802667426",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "2f033f4d932a111cecec568cda27048dd9769e28332efae416db65b4184b73e3"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "b653125d62d675bf4847001baa383a9f150c9c5d90efe9f42e58e9e7052646d3"
+  },
+  "package_hash": {
+    "sha256": "757a7c33bce43be42b4012164f45408aaf6c3cf42e842094dd444f52c3af53ec"
+  }
+}

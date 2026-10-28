@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.structure_wall_entrance_a01.2026.10.09_210637762257",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "ba04c9d3286d1331a9f3e67b4cfd07c3721f25e89a29972a2142f08081bac6aa"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "054e6d1cfa334151892299809573d163c04e530403dc3d019fda6d4cab9c775f"
+  },
+  "package_hash": {
+    "sha256": "74895f26d35d896178f847ca454db52456b492b263381fa878231f482f20babd"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.barrier_gate_safety_a02.2026.10.09_225556442045",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "f487fcbbc3a3b9172b7b48d33ced5f1fb225958e2628e464012e1cbc7dcb5ac5"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "1b037f32cf0156c62f4c4428e39e2f71385850b4627dc5a7d4e0609cfd5b08af"
+  },
+  "package_hash": {
+    "sha256": "b2d99340efc0adbf554538976aac990a1fb0bde2283608c12d8f03a078e151ca"
+  }
+}

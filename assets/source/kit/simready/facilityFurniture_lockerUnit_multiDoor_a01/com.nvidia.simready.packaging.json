@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.facilityFurniture_lockerUnit_multiDoor_a01.2026.10.09_031429498576",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "5e57d7700486fc55e613ba84b58945bbe08fb2c79d3049cb37af69fb55a913d6"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "3779433f9cc5d910526d916fcffe735ed9203584cebc7a1d017a8d1e1189ea46"
+  },
+  "package_hash": {
+    "sha256": "01773c2fa1f190fc53383923d945b19953a8e91f16c91204506503345fc360f7"
+  }
+}

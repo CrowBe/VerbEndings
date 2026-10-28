@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.blinds_window_4m_closed_a01.2026.10.08_221405380684",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "41a0c6eb2252c67c6179b4c5a8324154d8be8da8ef202136b317ea11a1181cd8"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "52fa3a7a70f8aeda7035e68afbf61bc07455485e7d397ccb4f211331dbf5fd89"
+  },
+  "package_hash": {
+    "sha256": "778bb3be26b7acf048e6503d0274dce623cd29ce3315a75427f558ec9109654b"
+  }
+}

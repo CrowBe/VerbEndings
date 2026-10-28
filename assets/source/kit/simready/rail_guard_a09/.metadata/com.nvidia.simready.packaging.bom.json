@@ -1,0 +1,384 @@
+{
+  "format_version": "1.0",
+  "items": [
+    {
+      "relative_path": "simready_usd/sm_rail_guard_a09_01.usd",
+      "size": 24878,
+      "hash": {
+        "sha256": "9f8a70453cda9196e84d485396b27da523761e18b842fad17cbae80b18e7550a"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/sm_rail_guard_a09_01_thumbnail.png",
+      "size": 516903,
+      "hash": {
+        "sha256": "94b7a14de0ef953115cad9d8a9ddf16929397a245fe8df846d5351d6ca0d9bd7"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/sm_rail_guard_a09_01_thumbnail_dark.png",
+      "size": 428345,
+      "hash": {
+        "sha256": "fccd89abb6881fa27c46bf94b855682736ef25ff71224e369a3f07358076a119"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_rail_guard_a09_01.usd.png",
+      "size": 765395,
+      "hash": {
+        "sha256": "f7de03ae6834aed8fd09946f5847af76dee0a245956a6421ac2d5d4203f2db35"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_rail_guard_a09_01.usd_dark.png",
+      "size": 516325,
+      "hash": {
+        "sha256": "d9a69b6901ec7a8296c0817598db82cc1e7ccf46849470abb12ca68967f46ced"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_rail_guard_a09_01.usd_light.png",
+      "size": 379592,
+      "hash": {
+        "sha256": "19d527dd5366cec39de1c57a76d07e285e18a7e8a146cd399ebc13630e9dd795"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_rail_guard_a09_01.usd_transparent.png",
+      "size": 280999,
+      "hash": {
+        "sha256": "8a74367f5c125de926ef303fa33cafa8a3b6b8bc4f6c37469ffb6c207d48e6cd"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/T_MetalPainted_White_Glossy_A_Normal.png",
+      "size": 548912,
+      "hash": {
+        "sha256": "4afde307066d971a1535dce49b4605a9e58810bd11e591285ba834b9e58b4723"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/T_MetalPainted_White_Glossy_A_ORM.png",
+      "size": 440396,
+      "hash": {
+        "sha256": "b0e3182b3ba4892cd23a359f7ce37c00612636c3dab824a000654be230c03614"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/T_Metal_Glossy_A_Albedo_1.png",
+      "size": 634053,
+      "hash": {
+        "sha256": "4e233488d3d42d94fc8889dde78ca8e546cd5fed08d51f5373384964c9b3a6e5"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/T_Metal_Glossy_A_Normal_1.png",
+      "size": 56586,
+      "hash": {
+        "sha256": "e8254a2ca1b07a70fd151f752acb75b763bbcafb38681ddbb8a000f3452d2da3"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/T_Metal_Glossy_A_ORM_1.png",
+      "size": 531802,
+      "hash": {
+        "sha256": "48f7f6d85358d271f393382ee013635e970bf1ff4d5d66d91537a2f423f1361c"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/T_MetalPainted_White_Glossy_A_Normal.png.png",
+      "size": 39140,
+      "hash": {
+        "sha256": "c827c4452d8220b3289a9a393d237a4bf10ebb7519de9a4672e4ebab9c5c33b4"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/T_MetalPainted_White_Glossy_A_ORM.png.png",
+      "size": 41334,
+      "hash": {
+        "sha256": "06fc5000a529233f995f9d408bb7acf62f60fc3c89ee4a37294491567e49b544"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/T_Metal_Glossy_A_Albedo_1.png.png",
+      "size": 63946,
+      "hash": {
+        "sha256": "08311ce4d6c7bd7a70c1b0640d2a3b83d2f32c705a8dc251fdf8973dee4de54f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/T_Metal_Glossy_A_Normal_1.png.png",
+      "size": 12313,
+      "hash": {
+        "sha256": "d9532b849fafcb546a5730c391e40d82d21bc6b2a1f2336ab362bac7d59a92b8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/T_Metal_Glossy_A_ORM_1.png.png",
+      "size": 46968,
+      "hash": {
+        "sha256": "ee7def5e75fd7a440e4b758319db9599f2db548f674ab56caa1ea2158f1baf29"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/T_MetalPainted_White_Glossy_A_Normal.png.png",
+      "size": 202256,
+      "hash": {
+        "sha256": "1504f23ebec31ab504825f643de0d004c8289649fc557b792ec244daf07b0b6f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/T_MetalPainted_White_Glossy_A_ORM.png.png",
+      "size": 181470,
+      "hash": {
+        "sha256": "ab9e1c12f9282e8381a0b28e29a8b76605a2c52bf5bbe370d93cf473bae2db86"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/T_Metal_Glossy_A_Albedo_1.png.png",
+      "size": 282597,
+      "hash": {
+        "sha256": "470d1a848ae8d1bd59935229c4a54b825f2c2409e85dea872f632597de59de74"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/T_Metal_Glossy_A_Normal_1.png.png",
+      "size": 36314,
+      "hash": {
+        "sha256": "a5d66b8b7f66bbf4421b3b06ccea9aceda39d185aea4209de60beb6c7d582449"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/T_Metal_Glossy_A_ORM_1.png.png",
+      "size": 205714,
+      "hash": {
+        "sha256": "02d2483653668bc08578d6a84bc8b7cc7f06ae6058eaec192a46693dd84cea78"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/base.usda",
+      "size": 8916,
+      "hash": {
+        "sha256": "4df00d6253f43fc531e067d2e908a011110ff06eac812c20cdf6f7245a478270"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/geometries.usd",
+      "size": 9276073,
+      "hash": {
+        "sha256": "cfe410c26e5b169e6ff24fa6570d34dc6e3c5a1c0e246c4f616b853ec0b5a40c",
+        "sha256-first1m": "ac9935f0adb23114769c8829644db4564e7f5f74b17a59d2b0ffe1b674ee1cc8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances.usda",
+      "size": 8011,
+      "hash": {
+        "sha256": "4d6f9962f86c728201885d12b435de876c018bfc9dbc0c27e88c093d0ad7a680"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances_mujoco.usda",
+      "size": 8283,
+      "hash": {
+        "sha256": "003964652d4aaa24923225dfe4eb18a2ec141623ffd431b3ad8576216e8777ee"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances_newton.usda",
+      "size": 8134,
+      "hash": {
+        "sha256": "9aa9b27ba5a8171be719e809e25de21eb94871c6d4b73d5d2a6fe6b2df9a62de"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances_physx.usda",
+      "size": 8151,
+      "hash": {
+        "sha256": "9a1f8d94e0bb123eb9fb285158fb562b22356654405b7ad41af9b09326c0da55"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/materials.usda",
+      "size": 16558,
+      "hash": {
+        "sha256": "27b76c836ce60c56b252302bdd67d6dd56e8526fe38e2e99ff4261536f850f38"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/MuJoCo/disabled.usda",
+      "size": 6013,
+      "hash": {
+        "sha256": "c258d0aaf7fe57d331af98a65b97aa1e411cd05a6dbc54b9932f209fa104660e"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/MuJoCo/enabled.usda",
+      "size": 6730,
+      "hash": {
+        "sha256": "2581787b5784b343c64fca34d16175100cd8f377471a70037116d39b5ec5b9ba"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/Newton/disabled.usda",
+      "size": 6013,
+      "hash": {
+        "sha256": "c258d0aaf7fe57d331af98a65b97aa1e411cd05a6dbc54b9932f209fa104660e"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/Newton/enabled.usda",
+      "size": 6842,
+      "hash": {
+        "sha256": "0fd87e79758e6f298e6ab8d127d6835dc022737728f357f9243582d13a5f9e87"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/PhysX/disabled.usda",
+      "size": 6013,
+      "hash": {
+        "sha256": "c258d0aaf7fe57d331af98a65b97aa1e411cd05a6dbc54b9932f209fa104660e"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/PhysX/enabled.usda",
+      "size": 6312,
+      "hash": {
+        "sha256": "1b3bd4d46682c4afa1815c4352e7f23c864722a0b47abaad0cd479becd03b25c"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/Physics/physics.usda",
+      "size": 6868,
+      "hash": {
+        "sha256": "ebe251cbaa89d5a13f2a8611407631ce7afcbf1b53dab203630794c17026af42"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/OmniPBR.mdl",
+      "size": 16010,
+      "hash": {
+        "sha256": "6e6b3acbccd236e21a6c29964a431d2a53e77251cc6b8b1bc975eb1c62da1781"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/OmniPBRBase.mdl",
+      "size": 19369,
+      "hash": {
+        "sha256": "a8fd9fe174e91892e94d06da90ba453a124024c2ce2c033be9d82c9e2f76a3b7"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/OmniPBR_ClearCoat.mdl",
+      "size": 29789,
+      "hash": {
+        "sha256": "d84c5ba482561c0eaea2e0c5b607358af549e36cd921773462f92dbc4f32cbc3"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/T_MetalPainted_White_Glossy_A_Normal.png",
+      "size": 548912,
+      "hash": {
+        "sha256": "4afde307066d971a1535dce49b4605a9e58810bd11e591285ba834b9e58b4723"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/T_MetalPainted_White_Glossy_A_ORM.png",
+      "size": 440396,
+      "hash": {
+        "sha256": "b0e3182b3ba4892cd23a359f7ce37c00612636c3dab824a000654be230c03614"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/T_Metal_Glossy_A_Albedo_1.png",
+      "size": 634053,
+      "hash": {
+        "sha256": "4e233488d3d42d94fc8889dde78ca8e546cd5fed08d51f5373384964c9b3a6e5"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/T_Metal_Glossy_A_Normal_1.png",
+      "size": 56586,
+      "hash": {
+        "sha256": "e8254a2ca1b07a70fd151f752acb75b763bbcafb38681ddbb8a000f3452d2da3"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/T_Metal_Glossy_A_ORM_1.png",
+      "size": 531802,
+      "hash": {
+        "sha256": "48f7f6d85358d271f393382ee013635e970bf1ff4d5d66d91537a2f423f1361c"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/T_MetalPainted_White_Glossy_A_Normal.png.png",
+      "size": 39140,
+      "hash": {
+        "sha256": "c827c4452d8220b3289a9a393d237a4bf10ebb7519de9a4672e4ebab9c5c33b4"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/T_MetalPainted_White_Glossy_A_ORM.png.png",
+      "size": 41334,
+      "hash": {
+        "sha256": "06fc5000a529233f995f9d408bb7acf62f60fc3c89ee4a37294491567e49b544"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/T_Metal_Glossy_A_Albedo_1.png.png",
+      "size": 63946,
+      "hash": {
+        "sha256": "08311ce4d6c7bd7a70c1b0640d2a3b83d2f32c705a8dc251fdf8973dee4de54f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/T_Metal_Glossy_A_Normal_1.png.png",
+      "size": 12313,
+      "hash": {
+        "sha256": "d9532b849fafcb546a5730c391e40d82d21bc6b2a1f2336ab362bac7d59a92b8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/T_Metal_Glossy_A_ORM_1.png.png",
+      "size": 46968,
+      "hash": {
+        "sha256": "ee7def5e75fd7a440e4b758319db9599f2db548f674ab56caa1ea2158f1baf29"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/T_MetalPainted_White_Glossy_A_Normal.png.png",
+      "size": 202256,
+      "hash": {
+        "sha256": "1504f23ebec31ab504825f643de0d004c8289649fc557b792ec244daf07b0b6f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/T_MetalPainted_White_Glossy_A_ORM.png.png",
+      "size": 181470,
+      "hash": {
+        "sha256": "ab9e1c12f9282e8381a0b28e29a8b76605a2c52bf5bbe370d93cf473bae2db86"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/T_Metal_Glossy_A_Albedo_1.png.png",
+      "size": 282597,
+      "hash": {
+        "sha256": "470d1a848ae8d1bd59935229c4a54b825f2c2409e85dea872f632597de59de74"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/T_Metal_Glossy_A_Normal_1.png.png",
+      "size": 36314,
+      "hash": {
+        "sha256": "a5d66b8b7f66bbf4421b3b06ccea9aceda39d185aea4209de60beb6c7d582449"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/T_Metal_Glossy_A_ORM_1.png.png",
+      "size": 205714,
+      "hash": {
+        "sha256": "02d2483653668bc08578d6a84bc8b7cc7f06ae6058eaec192a46693dd84cea78"
+      }
+    }
+  ]
+}
