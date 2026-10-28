@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.panel_control_surgery_room_a01.2026.10.09_210258953588",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "22da30b8562212d40c08a1bb6062094b6a088f0f7344e3bd40b9d712f79d2d6d"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "dfca2012b07c777241da099b2b7fcc4de0a839a022d59a2e87455467b46e5c76"
+  },
+  "package_hash": {
+    "sha256": "9c32bb8dff4e7ede2aad15b798a54ec4c5aeab37fd19567a726b925185825f0f"
+  }
+}

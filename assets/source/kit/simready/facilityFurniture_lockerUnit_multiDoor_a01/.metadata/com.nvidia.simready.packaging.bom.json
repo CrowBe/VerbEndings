@@ -1,0 +1,512 @@
+{
+  "format_version": "1.0",
+  "items": [
+    {
+      "relative_path": "simready_usd/sm_facilityFurniture_lockerUnit_multiDoor_a01_01.usd",
+      "size": 21424,
+      "hash": {
+        "sha256": "d8c26ab4eb94777f6c08568a8e35c8c00c89bab545452b6f7b9d94794b11b704"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/sm_facilityFurniture_lockerUnit_multiDoor_a01_01_thumbnail.png",
+      "size": 502758,
+      "hash": {
+        "sha256": "35b92c036a742438baa480cb41a20c57f504fe1f8adb941beadd58b7972de15f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_facilityFurniture_lockerUnit_multiDoor_a01_01.usd.png",
+      "size": 741760,
+      "hash": {
+        "sha256": "35815c8928bada569c6bcb29f0d5a31eea36ea4b56cfdf034dadd4f74fb403da"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_facilityFurniture_lockerUnit_multiDoor_a01_01.usd_light.png",
+      "size": 690060,
+      "hash": {
+        "sha256": "bfa2429223f3794082177d046c930f5150464f7106f052fa95fce9742371dd8a"
+      }
+    },
+    {
+      "relative_path": "simready_usd/.thumbs/256x256/sm_facilityFurniture_lockerUnit_multiDoor_a01_01.usd_transparent.png",
+      "size": 412385,
+      "hash": {
+        "sha256": "887381cb3954ce4ca1cb2d7fc8d7fbf57267e353d69289ce77a0b9cd9a3d9d4f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_metal_painted_gray_a01_tile_nor.png",
+      "size": 10390884,
+      "hash": {
+        "sha256": "03f598a85db402a5807006cf218e051d56786493c074d912ee927f25c9125238",
+        "sha256-first1m": "a9cfd3f249fb5a2ce47cfc12140ced7f5ac6cb7fe81720c44a0d95b413148a98"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_metal_painted_gray_a01_tile_orm.png",
+      "size": 9598384,
+      "hash": {
+        "sha256": "6f7f9860122cb0d88b43a6ef255da3b6cda275fecae70463758b0a30d2cd9848",
+        "sha256-first1m": "0d5e7b0626916dd0aac331821baec502696de6344ac263d441cf5074d3e8442f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_metal_steelStainless_clean_a01_tile_alb.png",
+      "size": 38407354,
+      "hash": {
+        "sha256": "52a7df4cd76a31c6f00b4bde562ec880ed4d4446793d9e2d91aecd6df94b2e92",
+        "sha256-first1m": "4c3df435328cb6fe9f18f9c52fe607798dd56034625535b223f5a91412d458bc"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_metal_steelStainless_clean_a01_tile_nor.png",
+      "size": 9069490,
+      "hash": {
+        "sha256": "c878d92cda05e0ee1043ba253431fa2439ecc41315ec99d2f73d49ee68469f63",
+        "sha256-first1m": "8bfa94f4708b5afb2e16c2950a4bbdcd64e2c880f01a1ba2f18f359f9fab0878"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_metal_steelStainless_clean_a01_tile_orm.png",
+      "size": 8181183,
+      "hash": {
+        "sha256": "394f71f414aef43409560ce9e7dc827a82efa83c125a15ddc7c0256db874e4fc",
+        "sha256-first1m": "911264b56db963ff7257833a86ea743bfed7e8ed1a42ddc09167afd444416a05"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_plastic_scratched_white_a01_tile_alb.png",
+      "size": 4838853,
+      "hash": {
+        "sha256": "4f53f7593ba8451f0d6c3501fa460f8bfda7c7f0869812b2c93aebe5633d2afc",
+        "sha256-first1m": "66e299710cbf12000c4e73ba13aa7ad7e07592beac644bd6afc570794fcf2d09"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_plastic_scratched_white_a01_tile_nor.png",
+      "size": 14874400,
+      "hash": {
+        "sha256": "cd2a52f86871fae8916ab06ca03d27bb163f47a6c4cabb421730a6bee170e179",
+        "sha256-first1m": "5e93c81d12db7cab6f6afdff19e63ae7d25a63da8b29e51f893f64a9dda65961"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/t_plastic_scratched_white_a01_tile_orm.png",
+      "size": 4396358,
+      "hash": {
+        "sha256": "d7ecd93844e186a52c68f95d11ee605a77ece3c865abfd18b1c9bd1f31462f6b",
+        "sha256-first1m": "071a3b6a478f916e67490e743e4f1f018350e718feb5bc5c6b6cecdedc18eda5"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_metal_painted_gray_a01_tile_nor.png.png",
+      "size": 50596,
+      "hash": {
+        "sha256": "6380a076b9d269740573d459cd737269d1f7f05d3f3ca912778e9986a12092ae"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_metal_painted_gray_a01_tile_orm.png.png",
+      "size": 54438,
+      "hash": {
+        "sha256": "fbd44a0e11691023d0c81e763e501daf8385098b1f2988340993237b9e7773d7"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_metal_steelStainless_clean_a01_tile_alb.png.png",
+      "size": 84365,
+      "hash": {
+        "sha256": "2a80d7ea752910b372a55a4f516077eeb85730ffbe381efb75f5d5871f6553ce"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_metal_steelStainless_clean_a01_tile_nor.png.png",
+      "size": 37840,
+      "hash": {
+        "sha256": "79a9981d3eb785851cc977311d153176d3d905aecdb8577856ffd868c4a1bcba"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_metal_steelStainless_clean_a01_tile_orm.png.png",
+      "size": 49460,
+      "hash": {
+        "sha256": "32317245995966cbda6a388c4417dbb4cb69520a17e18ba07c324bcf61a1adc4"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_plastic_scratched_white_a01_tile_alb.png.png",
+      "size": 70840,
+      "hash": {
+        "sha256": "1b8868c38a8fb112342bdbdaec121062d379f051b5804c483b478bf784a5e6fd"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_plastic_scratched_white_a01_tile_nor.png.png",
+      "size": 65348,
+      "hash": {
+        "sha256": "f4c8a95799e32580f4cd8fcd0ceae11abcb994b6133626e970aaaca92f1fc124"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/256x256/t_plastic_scratched_white_a01_tile_orm.png.png",
+      "size": 62690,
+      "hash": {
+        "sha256": "d597ac011c4407f1c1ad390aea9bacd9713ce7c91f63b071acd2854c62ce32a2"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_metal_painted_gray_a01_tile_nor.png.png",
+      "size": 225495,
+      "hash": {
+        "sha256": "fa63ab2b448d150feabc6d14f8dcc5df87001e8fcc55dbc91ff43310764f6902"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_metal_painted_gray_a01_tile_orm.png.png",
+      "size": 221107,
+      "hash": {
+        "sha256": "f9f12b03f22d721f39eba1b96c124a2331f16a3ee4561ef4ae3180dadf4db846"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_metal_steelStainless_clean_a01_tile_alb.png.png",
+      "size": 355031,
+      "hash": {
+        "sha256": "e14efe61c577d570c632a9ae93dced8168e2d3394589a2ccaa8f8d8de787c6e8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_metal_steelStainless_clean_a01_tile_nor.png.png",
+      "size": 169573,
+      "hash": {
+        "sha256": "a5a232d056f8fdd215784074c563bff3ed792cc0c0284249d70f4a5a16a757e1"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_metal_steelStainless_clean_a01_tile_orm.png.png",
+      "size": 179837,
+      "hash": {
+        "sha256": "2e6fe9d0224a3d443fc77b9545c37dfa6a9d242d488e8fa325aecb7adbce500b"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_plastic_scratched_white_a01_tile_alb.png.png",
+      "size": 306218,
+      "hash": {
+        "sha256": "d7ac9172597b89ef71c20841c7f1dd47739205786fb6dd901a93254237c87e6c"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_plastic_scratched_white_a01_tile_nor.png.png",
+      "size": 257094,
+      "hash": {
+        "sha256": "cd2df4a9b7abc54fb398137befb38a4a565544d1d8e104ec7db82431fe547474"
+      }
+    },
+    {
+      "relative_path": "simready_usd/Textures/.thumbs/512x512/t_plastic_scratched_white_a01_tile_orm.png.png",
+      "size": 256932,
+      "hash": {
+        "sha256": "6df301ffe156a7071cf4a8c827cd04dd3dede3ed394a957d3b3a2c44af9bcd6a"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/base.usda",
+      "size": 33705,
+      "hash": {
+        "sha256": "f90a0cf9ffe4ea8feeb1b8d596e770302b5ab47670682c59c862a7644a582721"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/geometries.usd",
+      "size": 74389807,
+      "hash": {
+        "sha256": "792a0b1c4d77fa2534ad84e5b212f0e60399f1ae7b090b70dc8276d4528f2ee5",
+        "sha256-first1m": "0a8cb6cb86c03d43689c735d1143bb4cbf9b7f2b2ac82d1b0b26b764a1545f95"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances.usda",
+      "size": 32320,
+      "hash": {
+        "sha256": "19b80f4d7b0b6b3801200c1def9ad75262937a5d84ba8244e3ceb359ec7ff8f8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances_mujoco.usda",
+      "size": 35040,
+      "hash": {
+        "sha256": "262e2e953bb1ddb417778cedad8528a6cb2efb3d90760dca530384cffef883e0"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances_newton.usda",
+      "size": 33550,
+      "hash": {
+        "sha256": "fefce6e2c9669b797dec3e9b14dadeb9dc6caeeec5554c11c23146a4124860ca"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/instances_physx.usda",
+      "size": 33720,
+      "hash": {
+        "sha256": "8a58ea62e0ff2b8a7f75c160c63960675c4dc76e65dd38bc9d02e46bc47bea67"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/materials.usda",
+      "size": 28971,
+      "hash": {
+        "sha256": "6528a2d1eb923ad1ea7483badbff9fec1f4d07f9707c7e763dc1fe88f3aaef9b"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/MuJoCo/disabled.usda",
+      "size": 6648,
+      "hash": {
+        "sha256": "f74bc96865b835ed9f274dada2ca18a0a11d69984859e2c6018fd57d56483dbb"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/MuJoCo/enabled.usda",
+      "size": 11284,
+      "hash": {
+        "sha256": "a483704bcc0e804ad18e589326a59752d7628973e41538cc36f5371580cf99b8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/Newton/disabled.usda",
+      "size": 6648,
+      "hash": {
+        "sha256": "f74bc96865b835ed9f274dada2ca18a0a11d69984859e2c6018fd57d56483dbb"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/Newton/enabled.usda",
+      "size": 9679,
+      "hash": {
+        "sha256": "a8a226d0bc65e1dad707f98adcf8e1c08853c49b5094f986c647ee9d1a7e8354"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/PhysX/disabled.usda",
+      "size": 6648,
+      "hash": {
+        "sha256": "f74bc96865b835ed9f274dada2ca18a0a11d69984859e2c6018fd57d56483dbb"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/PhysX/enabled.usda",
+      "size": 8613,
+      "hash": {
+        "sha256": "aca76ffcd93160e86c14e941cbe03bd78b6242a4cea9bb075868574c58aa8a1d"
+      }
+    },
+    {
+      "relative_path": "simready_usd/payloads/Physics/physics.usda",
+      "size": 17484,
+      "hash": {
+        "sha256": "f8d31f3ebf788eac5e56ca4182d056546597d8fc5178ee768c3b4e153009ccb4"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/OmniPBR.mdl",
+      "size": 16010,
+      "hash": {
+        "sha256": "6e6b3acbccd236e21a6c29964a431d2a53e77251cc6b8b1bc975eb1c62da1781"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/OmniPBRBase.mdl",
+      "size": 19369,
+      "hash": {
+        "sha256": "a8fd9fe174e91892e94d06da90ba453a124024c2ce2c033be9d82c9e2f76a3b7"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/OmniPBR_ClearCoat.mdl",
+      "size": 29789,
+      "hash": {
+        "sha256": "d84c5ba482561c0eaea2e0c5b607358af549e36cd921773462f92dbc4f32cbc3"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_metal_painted_gray_a01_tile_nor.png",
+      "size": 10390884,
+      "hash": {
+        "sha256": "03f598a85db402a5807006cf218e051d56786493c074d912ee927f25c9125238",
+        "sha256-first1m": "a9cfd3f249fb5a2ce47cfc12140ced7f5ac6cb7fe81720c44a0d95b413148a98"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_metal_painted_gray_a01_tile_orm.png",
+      "size": 9598384,
+      "hash": {
+        "sha256": "6f7f9860122cb0d88b43a6ef255da3b6cda275fecae70463758b0a30d2cd9848",
+        "sha256-first1m": "0d5e7b0626916dd0aac331821baec502696de6344ac263d441cf5074d3e8442f"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_metal_steelStainless_clean_a01_tile_alb.png",
+      "size": 38407354,
+      "hash": {
+        "sha256": "52a7df4cd76a31c6f00b4bde562ec880ed4d4446793d9e2d91aecd6df94b2e92",
+        "sha256-first1m": "4c3df435328cb6fe9f18f9c52fe607798dd56034625535b223f5a91412d458bc"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_metal_steelStainless_clean_a01_tile_nor.png",
+      "size": 9069490,
+      "hash": {
+        "sha256": "c878d92cda05e0ee1043ba253431fa2439ecc41315ec99d2f73d49ee68469f63",
+        "sha256-first1m": "8bfa94f4708b5afb2e16c2950a4bbdcd64e2c880f01a1ba2f18f359f9fab0878"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_metal_steelStainless_clean_a01_tile_orm.png",
+      "size": 8181183,
+      "hash": {
+        "sha256": "394f71f414aef43409560ce9e7dc827a82efa83c125a15ddc7c0256db874e4fc",
+        "sha256-first1m": "911264b56db963ff7257833a86ea743bfed7e8ed1a42ddc09167afd444416a05"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_plastic_scratched_white_a01_tile_alb.png",
+      "size": 4838853,
+      "hash": {
+        "sha256": "4f53f7593ba8451f0d6c3501fa460f8bfda7c7f0869812b2c93aebe5633d2afc",
+        "sha256-first1m": "66e299710cbf12000c4e73ba13aa7ad7e07592beac644bd6afc570794fcf2d09"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_plastic_scratched_white_a01_tile_nor.png",
+      "size": 14874400,
+      "hash": {
+        "sha256": "cd2a52f86871fae8916ab06ca03d27bb163f47a6c4cabb421730a6bee170e179",
+        "sha256-first1m": "5e93c81d12db7cab6f6afdff19e63ae7d25a63da8b29e51f893f64a9dda65961"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/t_plastic_scratched_white_a01_tile_orm.png",
+      "size": 4396358,
+      "hash": {
+        "sha256": "d7ecd93844e186a52c68f95d11ee605a77ece3c865abfd18b1c9bd1f31462f6b",
+        "sha256-first1m": "071a3b6a478f916e67490e743e4f1f018350e718feb5bc5c6b6cecdedc18eda5"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_metal_painted_gray_a01_tile_nor.png.png",
+      "size": 50596,
+      "hash": {
+        "sha256": "6380a076b9d269740573d459cd737269d1f7f05d3f3ca912778e9986a12092ae"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_metal_painted_gray_a01_tile_orm.png.png",
+      "size": 54438,
+      "hash": {
+        "sha256": "fbd44a0e11691023d0c81e763e501daf8385098b1f2988340993237b9e7773d7"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_metal_steelStainless_clean_a01_tile_alb.png.png",
+      "size": 84365,
+      "hash": {
+        "sha256": "2a80d7ea752910b372a55a4f516077eeb85730ffbe381efb75f5d5871f6553ce"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_metal_steelStainless_clean_a01_tile_nor.png.png",
+      "size": 37840,
+      "hash": {
+        "sha256": "79a9981d3eb785851cc977311d153176d3d905aecdb8577856ffd868c4a1bcba"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_metal_steelStainless_clean_a01_tile_orm.png.png",
+      "size": 49460,
+      "hash": {
+        "sha256": "32317245995966cbda6a388c4417dbb4cb69520a17e18ba07c324bcf61a1adc4"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_plastic_scratched_white_a01_tile_alb.png.png",
+      "size": 70840,
+      "hash": {
+        "sha256": "1b8868c38a8fb112342bdbdaec121062d379f051b5804c483b478bf784a5e6fd"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_plastic_scratched_white_a01_tile_orm.png.png",
+      "size": 62690,
+      "hash": {
+        "sha256": "d597ac011c4407f1c1ad390aea9bacd9713ce7c91f63b071acd2854c62ce32a2"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/256x256/t_plastic_scratched_white_a01_tile_nor.png.png",
+      "size": 65348,
+      "hash": {
+        "sha256": "f4c8a95799e32580f4cd8fcd0ceae11abcb994b6133626e970aaaca92f1fc124"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_metal_painted_gray_a01_tile_nor.png.png",
+      "size": 225495,
+      "hash": {
+        "sha256": "fa63ab2b448d150feabc6d14f8dcc5df87001e8fcc55dbc91ff43310764f6902"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_metal_painted_gray_a01_tile_orm.png.png",
+      "size": 221107,
+      "hash": {
+        "sha256": "f9f12b03f22d721f39eba1b96c124a2331f16a3ee4561ef4ae3180dadf4db846"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_metal_steelStainless_clean_a01_tile_alb.png.png",
+      "size": 355031,
+      "hash": {
+        "sha256": "e14efe61c577d570c632a9ae93dced8168e2d3394589a2ccaa8f8d8de787c6e8"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_metal_steelStainless_clean_a01_tile_nor.png.png",
+      "size": 169573,
+      "hash": {
+        "sha256": "a5a232d056f8fdd215784074c563bff3ed792cc0c0284249d70f4a5a16a757e1"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_metal_steelStainless_clean_a01_tile_orm.png.png",
+      "size": 179837,
+      "hash": {
+        "sha256": "2e6fe9d0224a3d443fc77b9545c37dfa6a9d242d488e8fa325aecb7adbce500b"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_plastic_scratched_white_a01_tile_alb.png.png",
+      "size": 306218,
+      "hash": {
+        "sha256": "d7ac9172597b89ef71c20841c7f1dd47739205786fb6dd901a93254237c87e6c"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_plastic_scratched_white_a01_tile_nor.png.png",
+      "size": 257094,
+      "hash": {
+        "sha256": "cd2df4a9b7abc54fb398137befb38a4a565544d1d8e104ec7db82431fe547474"
+      }
+    },
+    {
+      "relative_path": "simready_usd/source_assets/.thumbs/512x512/t_plastic_scratched_white_a01_tile_orm.png.png",
+      "size": 256932,
+      "hash": {
+        "sha256": "6df301ffe156a7071cf4a8c827cd04dd3dede3ed394a957d3b3a2c44af9bcd6a"
+      }
+    }
+  ]
+}

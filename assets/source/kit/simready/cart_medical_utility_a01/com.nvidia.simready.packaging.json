@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.cart_medical_utility_a01.2026.10.08_231602871868",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "8e8bb54a87c14cf250e73d59201c8587c860875d3163fdf3b91705c76b23d1ea"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "1fbbd92fc9291d1d18d582f9073180da08124ebd30a17d2e2c9278eb309e31e8"
+  },
+  "package_hash": {
+    "sha256": "3baa17312e93fdcbb5589ea8f920e5d6940386e99685c9df7b1c4538022b70be"
+  }
+}

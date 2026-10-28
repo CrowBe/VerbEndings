@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.rail_guard_a09.2026.10.09_153957752765",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "2952394763057b20662ca56e252f0716cfab122115d72ad34cc6fa33590b12bd"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "ab7befb44de0162a3880f9804d3871d549b1ff9a7445d827bb7b05aaafa24b39"
+  },
+  "package_hash": {
+    "sha256": "8d8a44f5ce053217c7257b34357b09ae4a36db306e1dcd927b7cd9b57a128c32"
+  }
+}

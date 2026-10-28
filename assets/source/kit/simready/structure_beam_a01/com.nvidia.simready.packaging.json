@@ -1,0 +1,19 @@
+{
+  "format_version": "1.0",
+  "package_id": "simready.hf.nvidia.simready-assets.structure_beam_a01.2026.10.09_172710118879",
+  "license": "CC-BY-4.0",
+  "metadata": [
+    {
+      "name": "com.nvidia.simready.packaging.bom.json",
+      "hash": {
+        "sha256": "336f43700269e3ed293085cccf2939c87c32a78c913c5cd02a47f28a23febb2c"
+      }
+    }
+  ],
+  "content_hash": {
+    "sha256": "3f6bc8728b4567619ac6333a7c57e971b83f81bf17b8263fc591710a0c4eb22d"
+  },
+  "package_hash": {
+    "sha256": "8422c6ca3993b10dbb9886cb68fa7a0eada604855dda60137ff016cdc74e1c9e"
+  }
+}

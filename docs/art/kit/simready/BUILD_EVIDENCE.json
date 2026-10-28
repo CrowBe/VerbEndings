@@ -1,0 +1,192 @@
+{
+  "source": "nvidia/simready-assets",
+  "revision": "a72e6a76d53501cbf5a719910a674eb2c1f6f161",
+  "license": "CC-BY-4.0",
+  "credit": "NVIDIA SimReady Assets (CC-BY-4.0)",
+  "pulled_at": "2026-10-28T00:39:22.888493+00:00",
+  "mode": "usd_only_lean",
+  "includes": [
+    "geometries.usd",
+    "sm_*.usd",
+    "base.usda",
+    "materials.usda",
+    "LICENSE.txt",
+    "packaging.json"
+  ],
+  "excludes": [
+    "Textures/",
+    ".thumbs/",
+    "*.png",
+    "payloads/MuJoCo|Newton|PhysX|Physics",
+    "instances_*.usda",
+    "source_assets/"
+  ],
+  "benjamin_ok": "Wave 1+2 via Media Desk 2026-10-28",
+  "packages": [
+    {
+      "package_id": "blinds_window_4m_open_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "4 m shutter / observation window (true 4.00 m span)",
+      "extents_m": "0.06 x 4.00 x 2.57",
+      "geometries_usd_bytes": 10627896,
+      "geometries_usd_sha256": "990f80d5eb56e4519618cd0a07d397a54a7853209a3368d30d9cd93e02417124",
+      "path": "assets/source/kit/simready/blinds_window_4m_open_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/blinds_window_4m_open_a01"
+    },
+    {
+      "package_id": "blinds_window_4m_closed_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "4 m shutter rolled housing only (0.44 m tall)",
+      "extents_m": "0.06 x 4.00 x 0.44",
+      "geometries_usd_bytes": 21955551,
+      "geometries_usd_sha256": "74a6d0f904bcc37a5e0db65b1db5721ebf265d10f0a2f227675dcaa348145256",
+      "path": "assets/source/kit/simready/blinds_window_4m_closed_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/blinds_window_4m_closed_a01"
+    },
+    {
+      "package_id": "structure_wall_entrance_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "4 m door frame donor",
+      "extents_m": "4.77 x 12.00 x 11.10",
+      "geometries_usd_bytes": 20227121,
+      "geometries_usd_sha256": "28430c925f0a24bb8f5d67972c6ff78d87673e56331ed15cb878f69df16e0f59",
+      "path": "assets/source/kit/simready/structure_wall_entrance_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/structure_wall_entrance_a01"
+    },
+    {
+      "package_id": "structure_wall_straight_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "wall bay (hangar-tall \u2014 crop)",
+      "extents_m": "0.74 x 6.00 x 11.10",
+      "geometries_usd_bytes": 4764906,
+      "geometries_usd_sha256": "ea9baf096e286c774529362a966c52e1b75558b36d7d2b3d8d069e3a34bdaa6d",
+      "path": "assets/source/kit/simready/structure_wall_straight_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/structure_wall_straight_a01"
+    },
+    {
+      "package_id": "structure_wall_column_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "column",
+      "extents_m": "0.74 x 0.74 x 8.50",
+      "geometries_usd_bytes": 366615,
+      "geometries_usd_sha256": "b6370c55f83a80947912c63af9c286d07c427f7f9f5c213979dab838da99a0c2",
+      "path": "assets/source/kit/simready/structure_wall_column_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/structure_wall_column_a01"
+    },
+    {
+      "package_id": "structure_beam_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "truss / Separator Spine span",
+      "extents_m": "5.40 x 0.27 x 1.90",
+      "geometries_usd_bytes": 617789,
+      "geometries_usd_sha256": "57ad773c73c7c2018aa08c74401b1f5a22921e52f1e30602237beabef9579955",
+      "path": "assets/source/kit/simready/structure_beam_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/structure_beam_a01"
+    },
+    {
+      "package_id": "structure_beam_center_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "truss node / spine junction",
+      "extents_m": "1.75 x 1.75 x 2.15",
+      "geometries_usd_bytes": 1574945,
+      "geometries_usd_sha256": "3bed9f141d0da857c395244833943469506570c045ba455571955bf10ec3294c",
+      "path": "assets/source/kit/simready/structure_beam_center_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/structure_beam_center_a01"
+    },
+    {
+      "package_id": "environment_floor_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "floor bay (6 m \u2014 rescale to 1/2 m grid)",
+      "extents_m": "6.00 x 6.00 x 0.10",
+      "geometries_usd_bytes": 605998,
+      "geometries_usd_sha256": "d7de3e4e9ba16c16ca7e7cb94283ed2a1368bdd83530b9ec4f043d13501e838f",
+      "path": "assets/source/kit/simready/environment_floor_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/environment_floor_a01"
+    },
+    {
+      "package_id": "hvac_vent_system_straight_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "vent / duct module",
+      "extents_m": "1.00 x 1.10 x 0.61",
+      "geometries_usd_bytes": 478528,
+      "geometries_usd_sha256": "bdf87bb4b468a52e7765d84302460e221573d7f1a3f7d458629de351c40b8031",
+      "path": "assets/source/kit/simready/hvac_vent_system_straight_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/hvac_vent_system_straight_a01"
+    },
+    {
+      "package_id": "rail_guard_a09",
+      "wave": 1,
+      "family": "kit",
+      "why": "Assignment Deck rail",
+      "extents_m": "2.79 x 0.25 x 1.01",
+      "geometries_usd_bytes": 9276073,
+      "geometries_usd_sha256": "cfe410c26e5b169e6ff24fa6570d34dc6e3c5a1c0e246c4f616b853ec0b5a40c",
+      "path": "assets/source/kit/simready/rail_guard_a09/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/rail_guard_a09"
+    },
+    {
+      "package_id": "barrier_gate_safety_a02",
+      "wave": 1,
+      "family": "kit",
+      "why": "industrial barrier/gate",
+      "extents_m": "6.11 x 0.49 x 1.66",
+      "geometries_usd_bytes": 11624496,
+      "geometries_usd_sha256": "2af71691889625983db539609b75935a537bbea908039ace080f6dc64f8143d2",
+      "path": "assets/source/kit/simready/barrier_gate_safety_a02/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/barrier_gate_safety_a02"
+    },
+    {
+      "package_id": "panel_control_surgery_room_a01",
+      "wave": 1,
+      "family": "kit",
+      "why": "wall / control panel",
+      "extents_m": "0.20 x 1.82 x 0.62",
+      "geometries_usd_bytes": 7549653,
+      "geometries_usd_sha256": "9dede929ecf110cc8c0914688e83995918a7387892f1c8dc6b2bca4f7ebe8221",
+      "path": "assets/source/kit/simready/panel_control_surgery_room_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/panel_control_surgery_room_a01"
+    },
+    {
+      "package_id": "cart_medical_utility_a01",
+      "wave": 2,
+      "family": "setdress",
+      "why": "lab/medical cart setdress",
+      "extents_m": "0.75 x 0.91 x 1.46",
+      "geometries_usd_bytes": 40881450,
+      "geometries_usd_sha256": "b99fd0be4d32dc14ff7db08e4fc66a64533baa73d361bab3dfbddd5116c2a483",
+      "path": "assets/source/kit/simready/cart_medical_utility_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/cart_medical_utility_a01"
+    },
+    {
+      "package_id": "facilityFurniture_lockerUnit_multiDoor_a01",
+      "wave": 2,
+      "family": "setdress",
+      "why": "cabinets/fixtures setdress",
+      "extents_m": "0.51 x 1.04 x 2.00",
+      "geometries_usd_bytes": 74389807,
+      "geometries_usd_sha256": "792a0b1c4d77fa2534ad84e5b212f0e60399f1ae7b090b70dc8276d4528f2ee5",
+      "path": "assets/source/kit/simready/facilityFurniture_lockerUnit_multiDoor_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/facilityFurniture_lockerUnit_multiDoor_a01"
+    },
+    {
+      "package_id": "rack_large_empty_a01",
+      "wave": 2,
+      "family": "setdress",
+      "why": "utility bay / storage wall (4 m)",
+      "extents_m": "4.00 x 2.07 x 3.01",
+      "geometries_usd_bytes": 3297376,
+      "geometries_usd_sha256": "900dfcc15582dc9b73ed74118b2a7dcd6b761a6586efcd6c949402f94e7c0e6e",
+      "path": "assets/source/kit/simready/rack_large_empty_a01/simready_usd/payloads/geometries.usd",
+      "hf_path": "https://huggingface.co/datasets/nvidia/simready-assets/tree/a72e6a76d53501cbf5a719910a674eb2c1f6f161/rack_large_empty_a01"
+    }
+  ]
+}
