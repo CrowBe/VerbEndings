@@ -1,0 +1,50 @@
+{
+  "service": "Meshy",
+  "endpoint": "multi-image-to-3d",
+  "ai_model": "meshy-6",
+  "task_id": "01a19176-913e-731b-bb2c-5ea342f834d2",
+  "status": "SUCCEEDED",
+  "created_at": "2026-10-31T10:17:11.275000+00:00",
+  "finished_at": "2026-10-31T10:19:55.906000+00:00",
+  "credits": {
+    "before": 920,
+    "after": 890,
+    "consumed": 30
+  },
+  "settings": {
+    "should_texture": true,
+    "enable_pbr": true,
+    "hd_texture": true,
+    "texture_resolution": "4k",
+    "should_remesh": false,
+    "remove_lighting": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "output": {
+    "path": "assets/source/compound/dispensing_line/dispensing_line_meshy6_concept.glb",
+    "bytes": 29941784,
+    "sha256": "2ced7534d1ff86ca5ddf3bf6c2303f564b3172e45348ed88d5489c4a991532f4"
+  },
+  "inputs": {
+    "/workspace/briefs/ve-dispensing-line-2026-10-31/meshy_inputs_ceiling/wormseye_three_quarter.png": {
+      "bytes": 572296,
+      "sha256": "59b15eafb13f67a61cf4d853d4d8ea41704629c27f7aec19df99c9fa9a16e87f"
+    },
+    "/workspace/briefs/ve-dispensing-line-2026-10-31/meshy_inputs_ceiling/front.png": {
+      "bytes": 423095,
+      "sha256": "3c302c8e08b6151761112ea29bf1079c8d97b5be971ab8c810972db10f6579b9"
+    },
+    "/workspace/briefs/ve-dispensing-line-2026-10-31/meshy_inputs_ceiling/side.png": {
+      "bytes": 242192,
+      "sha256": "8c362adb1c3baa67c02d2edffe239d0896c8c32ec1a3e5b43f10da55c59a9ea0"
+    },
+    "/workspace/briefs/ve-dispensing-line-2026-10-31/meshy_inputs_ceiling/underside.png": {
+      "bytes": 489594,
+      "sha256": "86bbc4b2725e112e2e07af4653974a9aca0f94ddab6a2c04e540c60e196014df"
+    }
+  },
+  "thumbnail_url": "https://assets.meshy.ai/39c183ff-df0d-40a1-bc30-5bbea9225b3f/tasks/01a19176-913e-731b-bb2c-5ea342f834d2/output/preview.png?Expires=1793701195&Signature=JdsNdxiWOJIj8REmIZqEWJydvaFivbqtwP-l0tQ-ANUFay5rXcPG9N9gLXTGFyJ7YR2Dy9O6cCEyYAqF6-bCi9JtFpLTSY-3jm72kcQn71QSZWLxC~9Pz36R6RkApAxfANpH8EXho7RefEp-o3kpLpfEQM1PTuUE9pHCnuIbwa8s5SnnPjsrl7o7005eAZVV~jjAdfG3nNH-V6qFlA-y5epa9zY69xHa0uavG2zg-gEo5ygqb3wWxpa1MtWFfEBBmk9j8UmFUK7~x~8pZVeSTLa1OoqNzbPIWk0MaRLEMpYIHvU0Hd~gxDf9YfhOEYSMwOVljXB3PqZ0~U1OpDFcHQ__&Key-Pair-Id=K1VGYTHIYLM9UM",
+  "approved": "Benjamin OK t34u Dispensing Line + 30"
+}
