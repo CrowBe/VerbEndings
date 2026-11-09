@@ -1,0 +1,95 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "input_path": "/workspace/ve-briefs-nov/assets/source/applied_attrition/elevated_dispensing_armature/elevated_dispensing_armature_meshy6_concept.glb",
+  "file_size_bytes": 40654680,
+  "sha256": "e8757b602406889284f87eb0384d2db8bf365f1c96914c107b69b2e6f98487ef",
+  "object_count": 1,
+  "mesh_count": 1,
+  "objects": [
+    {
+      "name": "Mesh_0",
+      "vertices": 234674,
+      "edges": 647896,
+      "polygons": 414098,
+      "triangles": 414098,
+      "connected_components": 876,
+      "welded_connected_components": 1,
+      "welded_vertices": 206631,
+      "raw_non_manifold_edges": 53498,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.898683,
+        0.564199,
+        1.869049
+      ],
+      "materials": [
+        "Material_0"
+      ]
+    }
+  ],
+  "total_vertices": 234674,
+  "total_edges": 647896,
+  "total_polygons": 414098,
+  "total_triangles": 414098,
+  "total_connected_components": 876,
+  "total_welded_connected_components": 1,
+  "total_raw_non_manifold_edges": 53498,
+  "total_non_manifold_edges": 0,
+  "total_degenerate_polygons": 0,
+  "material_names": [
+    "Material_0"
+  ],
+  "bounds_min": [
+    -0.949854,
+    -0.281245,
+    -0.935579
+  ],
+  "bounds_max": [
+    0.948829,
+    0.282954,
+    0.93347
+  ],
+  "dimensions": [
+    1.898683,
+    0.564199,
+    1.869049
+  ],
+  "floor_offset": -0.935579,
+  "root_objects": [
+    {
+      "name": "Mesh_0",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}
