@@ -71,16 +71,16 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | 4 m shutter (hero concept) | **Production Source (concept) + scale donor.** Meshy-6 closed concept (~1.7 m span) plus SimReady `blinds_window_4m_open_a01` / `blinds_window_4m_closed_a01` (true 4.00 m). | Blender kitbash to 4 m kit frame using SimReady scale; retopo Meshy or discard. |
 | Radial and annular kit | Greybox Contract only. | Radial floor, annular floor, rail, Core junction, perimeter junction, and dome-interface atlas for the bounded specialised subset. |
 | Dispensing Line | **Production Source (concept).** Meshy-6 ceiling pipette rack `assets/source/compound/dispensing_line/dispensing_line_meshy6_concept.glb` (~296k tris, ~1.90×0.50×1.05 m) plus sheet/crops. FLUX Subject-forming nozzle remains a different machine. | Retopo/dock to greybox: overhead carrier, Subject tubes, rail junctions, Laboratory branch, Release opening, flexible pressure tube, normal/offline. |
-| Drop and Recall infrastructure | Greybox Contract only. | Tube exit, Drop-time silhouette, Laboratory ceiling socket, floor collection aperture, reversed-pressure Recall state, and 24-Subject layout evidence. |
+| Drop and Recall infrastructure | Wave-3 production sheet + Meshy-6 concept GLB (assets/source/compound/drop_recall/, not imported; needs Blender retopo). | Tube exit, Drop-time silhouette, Laboratory ceiling socket, floor collection aperture, reversed-pressure Recall state, and 24-Subject layout evidence. |
 
 ## Applied Attrition Laboratory
 
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
 | Laboratory composition | Greybox Contract only. | Plan, section, Drop key view, player-camera view, three Landing strategies, elevated supply silhouette, broad circulation, and sightline to the Assignment Deck. |
-| Elevated dispensing armature | Greybox Contract only. | Support column, dispensing truss, elevated Material supply, access interfaces, and authored pristine/stressed/breached/destroyed states. |
+| Elevated dispensing armature | Wave-3 production sheet + Meshy-6 concept GLB (assets/source/applied_attrition/elevated_dispensing_armature/, not imported; needs Blender retopo). | Support column, dispensing truss, elevated Material supply, access interfaces, and authored pristine/stressed/breached/destroyed states. |
 | Material Dispenser | **Integrated Production.** Approved turnaround, Blender source, runtime GLB, controlled renders, and evidence are retained. | No base-form evidence is missing. Shutter and power-state evidence is absent; any such state remains subordinate to the existing dimensions and socket. |
-| Breakable Material housing | Greybox Contract only. | Closed, stressed, breached, and broken states; internal Material containment; release socket; clear damage-focused Verb affordance. |
+| Breakable Material housing | Wave-3 production sheet + Meshy-6 concept GLB (assets/source/applied_attrition/breakable_material_housing/, not imported; needs Blender retopo). | Closed, stressed, breached, and broken states; internal Material containment; release socket; clear damage-focused Verb affordance. |
 | Counterweight Plate | Greybox Contract only. | Plate, mass crates, threshold mechanism, loaded/unloaded states, and large-scale force relationships. |
 | Wrecking Pendulum | Greybox Contract only. | Support frame, pin joint, heavy bob, target wall, safe arc, and wide-swing state. |
 | Gravity Funnel | Greybox Contract only. | Catch basin, loose balls, rim/bank surfaces, intake state, and readable attraction field hardware. |
