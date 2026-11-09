@@ -41,7 +41,7 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | Facility form and material language | Partial. The Material Dispenser is Integrated Production; the FLUX intro is Context Reference. | A neutral material board covering warm off-white panels, cool floors, equipment grey, charcoal recesses, near-black service spaces, glazing, rubber, painted composite, rough metal, and bounded emissions. |
 | Facility lighting and state language | Written contract and greybox hooks only. | Controlled normal, staging, danger, success, power-loss, and Collapse views with geometry, icon, and motion cues alongside colour. |
 | Scale and detail density | Partial Subject, Material Dispenser, and video context. | One shared lineup containing a Subject, Researcher, Residual, 4 m door, barrier, kit bay, dispenser, and dominant Laboratory apparatus. |
-| Semantic Engine interfaces | Video Context Reference only. | Physical panel, printer, indicator, and machinery families with no avatar, face, or floating conversational persona. |
+| Semantic Engine interfaces | Wave-4 combined console sheet + Meshy-6 concept GLB (assets/source/shared/semantic_engine_panel/, ~292k tris, not imported; needs Blender retopo). Prior production sheet of six modules retained; video remains Context Reference. | Physical panel, printer, indicator, and machinery families with no avatar, face, or floating conversational persona. |
 
 ## Actors And Living Material
 
@@ -81,11 +81,11 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | Elevated dispensing armature | Wave-3 production sheet + Meshy-6 concept GLB (assets/source/applied_attrition/elevated_dispensing_armature/, not imported; needs Blender retopo). | Support column, dispensing truss, elevated Material supply, access interfaces, and authored pristine/stressed/breached/destroyed states. |
 | Material Dispenser | **Integrated Production.** Approved turnaround, Blender source, runtime GLB, controlled renders, and evidence are retained. | No base-form evidence is missing. Shutter and power-state evidence is absent; any such state remains subordinate to the existing dimensions and socket. |
 | Breakable Material housing | Wave-3 production sheet + Meshy-6 concept GLB (assets/source/applied_attrition/breakable_material_housing/, not imported; needs Blender retopo). | Closed, stressed, breached, and broken states; internal Material containment; release socket; clear damage-focused Verb affordance. |
-| Counterweight Plate | Greybox Contract only. | Plate, mass crates, threshold mechanism, loaded/unloaded states, and large-scale force relationships. |
-| Wrecking Pendulum | Greybox Contract only. | Support frame, pin joint, heavy bob, target wall, safe arc, and wide-swing state. |
-| Gravity Funnel | Greybox Contract only. | Catch basin, loose balls, rim/bank surfaces, intake state, and readable attraction field hardware. |
-| Domino Tower | Greybox Contract only. | Stable stacked blocks, crown, weakened base, partially fallen state, and fully toppled state. |
-| Momentum Turbine | Greybox Contract only. | Rotor, protected hub, bearing housing, interaction faces, direction cue, and spinning state. |
+| Counterweight Plate | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/counterweight_plate/, ~673k tris, plate-to-pulley cable missing; not imported; needs Blender retopo). | Plate, mass crates, threshold mechanism, loaded/unloaded states, and large-scale force relationships. |
+| Wrecking Pendulum | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/wrecking_pendulum/, ~584k tris, not imported; needs Blender retopo). | Support frame, pin joint, heavy bob, target wall, safe arc, and wide-swing state. |
+| Gravity Funnel | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/gravity_funnel/, ~263k tris, test balls fused; not imported; needs Blender retopo). | Catch basin, loose balls, rim/bank surfaces, intake state, and readable attraction field hardware. |
+| Domino Tower | Wave-4 sheet + states + Meshy crops (docs/art/applied_attrition/domino_tower/); no model yet. | Stable stacked blocks, crown, weakened base, partially fallen state, and fully toppled state. |
+| Momentum Turbine | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/momentum_turbine/, ~554k tris, not imported; needs Blender retopo). | Rotor, protected hub, bearing housing, interaction faces, direction cue, and spinning state. |
 
 ## Competitive Stress Laboratory
 

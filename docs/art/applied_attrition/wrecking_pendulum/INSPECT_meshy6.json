@@ -1,0 +1,95 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "input_path": "/workspace/ve-briefs-nov/assets/source/applied_attrition/wrecking_pendulum/wrecking_pendulum_meshy6_concept.glb",
+  "file_size_bytes": 38149148,
+  "sha256": "52c562a81fc0ee5dfb82cacb5bb0a847fd73b83ecdbd3617cec050f9dc85abe6",
+  "object_count": 1,
+  "mesh_count": 1,
+  "objects": [
+    {
+      "name": "Mesh_0",
+      "vertices": 309349,
+      "edges": 892812,
+      "polygons": 583768,
+      "triangles": 583768,
+      "connected_components": 305,
+      "welded_connected_components": 2,
+      "welded_vertices": 291884,
+      "raw_non_manifold_edges": 34320,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        1.786452,
+        1.727521,
+        1.898411
+      ],
+      "materials": [
+        "Material_0"
+      ]
+    }
+  ],
+  "total_vertices": 309349,
+  "total_edges": 892812,
+  "total_polygons": 583768,
+  "total_triangles": 583768,
+  "total_connected_components": 305,
+  "total_welded_connected_components": 2,
+  "total_raw_non_manifold_edges": 34320,
+  "total_non_manifold_edges": 0,
+  "total_degenerate_polygons": 0,
+  "material_names": [
+    "Material_0"
+  ],
+  "bounds_min": [
+    -0.898191,
+    -0.862922,
+    -0.949578
+  ],
+  "bounds_max": [
+    0.888261,
+    0.864599,
+    0.948833
+  ],
+  "dimensions": [
+    1.786452,
+    1.727521,
+    1.898411
+  ],
+  "floor_offset": -0.949578,
+  "root_objects": [
+    {
+      "name": "Mesh_0",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}
