@@ -1,0 +1,69 @@
+{
+  "service": "Meshy",
+  "endpoint": "multi-image-to-3d",
+  "ai_model": "meshy-6",
+  "task_id": "01a1c28e-c8f6-751e-907c-38a23ae808dd",
+  "status": "SUCCEEDED",
+  "created_at": "2026-11-09T23:05:02.174000+00:00",
+  "finished_at": "2026-11-09T23:09:25.496000+00:00",
+  "credits": {
+    "consumed": 30,
+    "balance_before": 740,
+    "balance_after": 710,
+    "wave4_cap": 150,
+    "approval": "\"Let's run those. Any weak references we can rerun. Any strong ones without 3D models start handing off to Media Desk. You/Media Desk have approval for 150 meshy Credits\" (Benjamin to VerbEndings Bench, 2026-11-10 09:45 AEDT; wave-4 cap 150 = 5 runs x 30)"
+  },
+  "prompt": null,
+  "prompt_note": "multi-image-to-3d takes no text prompt; geometry/texture from the input images only",
+  "seed": null,
+  "seed_note": "no seed parameter sent (Meshy default)",
+  "settings": {
+    "should_texture": true,
+    "enable_pbr": true,
+    "hd_texture": true,
+    "texture_resolution": "4k",
+    "should_remesh": false,
+    "remove_lighting": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "output": {
+    "path": "assets/source/applied_attrition/wrecking_pendulum/wrecking_pendulum_meshy6_concept.glb",
+    "bytes": 38149148,
+    "sha256": "52c562a81fc0ee5dfb82cacb5bb0a847fd73b83ecdbd3617cec050f9dc85abe6"
+  },
+  "preview": {
+    "path": "assets/source/applied_attrition/wrecking_pendulum/wrecking_pendulum_meshy6_preview.png",
+    "sha256": "12f3b4a043c3c72db772e8175c4bac0184070e135dc1e5b63138373d7b1ec7a8",
+    "source": "Meshy task thumbnail"
+  },
+  "inputs": {
+    "docs/art/applied_attrition/wrecking_pendulum/meshy_inputs_wave4/front.png": {
+      "bytes": 818162,
+      "sha256": "6738493ec2b429bbbd15be1c034ccc079bb035713afa933af3b8ff115c51ea19"
+    },
+    "docs/art/applied_attrition/wrecking_pendulum/meshy_inputs_wave4/side.png": {
+      "bytes": 630162,
+      "sha256": "7c6ab170c6a81d020d5ba2bb53a6ebb1a81efaf97f591374e099085919d9e2fe"
+    },
+    "docs/art/applied_attrition/wrecking_pendulum/meshy_inputs_wave4/rear_three_quarter.png": {
+      "bytes": 607096,
+      "sha256": "25a5fa2dc7b0d8d0340555909d26f06384b813f9ed37f5ec160b3489127a2143"
+    },
+    "docs/art/applied_attrition/wrecking_pendulum/meshy_inputs_wave4/top.png": {
+      "bytes": 552300,
+      "sha256": "dcea905a16585efc1f4db2893bc1cd4363b4eba578250ef2a2d855bf1abdc4c7"
+    }
+  },
+  "sheet": "docs/art/applied_attrition/wrecking_pendulum/references/wrecking_pendulum_wave4_sheet.png",
+  "states": "docs/art/applied_attrition/wrecking_pendulum/references/wrecking_pendulum_wave4_states.png",
+  "sheet_generation": "Built-in Grok Imagine (GenerateImage, free), wave 4 2026-11-10; 3 design tries (tries 1-2 rejected: target wall beside the frame, inconsistent with swing plane). Passing design: swing-set gantry (crossbeam + A-frame ends), oversized pin joint, rigid box-beam arm, faceted bob, separate reinforced target wall in the swing line, raised curved kerb as arc geometry. Side elevation generated first as master; front, rear 3/4, plan and front 3/4 generated from it; composited with PIL (front, side, rear 3/4, top, front 3/4, 1.0 m capsule scale panel at ~6 m).",
+  "flaws": [
+    "No strict rear orthographic panel; rear 3/4 used (apparatus is front/back symmetric).",
+    "Front 3/4 panel places the target wall slightly offset right of the swing line versus the side elevation.",
+    "Floor arc kerb is a short separate segment, not a full 8 m arc; bob face detail varies slightly between views.",
+    "States strip: panel 2 (narrow swing) reads almost identical to rest."
+  ],
+  "runner": "/workspace/meshyjob/run.py (box)"
+}

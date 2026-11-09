@@ -1,0 +1,69 @@
+{
+  "service": "Meshy",
+  "endpoint": "multi-image-to-3d",
+  "ai_model": "meshy-6",
+  "task_id": "01a1c293-e8f6-73c5-9968-b2a3fa3ee02a",
+  "status": "SUCCEEDED",
+  "created_at": "2026-11-09T23:10:38.590000+00:00",
+  "finished_at": "2026-11-09T23:13:49.058000+00:00",
+  "credits": {
+    "consumed": 30,
+    "balance_before": 710,
+    "balance_after": 680,
+    "wave4_cap": 150,
+    "approval": "\"Let's run those. Any weak references we can rerun. Any strong ones without 3D models start handing off to Media Desk. You/Media Desk have approval for 150 meshy Credits\" (Benjamin to VerbEndings Bench, 2026-11-10 09:45 AEDT; wave-4 cap 150 = 5 runs x 30)"
+  },
+  "prompt": null,
+  "prompt_note": "multi-image-to-3d takes no text prompt; geometry/texture from the input images only",
+  "seed": null,
+  "seed_note": "no seed parameter sent (Meshy default)",
+  "settings": {
+    "should_texture": true,
+    "enable_pbr": true,
+    "hd_texture": true,
+    "texture_resolution": "4k",
+    "should_remesh": false,
+    "remove_lighting": true,
+    "target_formats": [
+      "glb"
+    ]
+  },
+  "output": {
+    "path": "assets/source/applied_attrition/momentum_turbine/momentum_turbine_meshy6_concept.glb",
+    "bytes": 37227284,
+    "sha256": "946c09390e833f1c5a81fe79ced365167d5ff81cadd1f1c317265b4a239cb818"
+  },
+  "preview": {
+    "path": "assets/source/applied_attrition/momentum_turbine/momentum_turbine_meshy6_preview.png",
+    "sha256": "27b82aa08a9aa92ebc652086cc3282addae992ab065851da6aa91570e32214e0",
+    "source": "Meshy task thumbnail"
+  },
+  "inputs": {
+    "docs/art/applied_attrition/momentum_turbine/meshy_inputs_wave4/front.png": {
+      "bytes": 1002614,
+      "sha256": "938628a612e3f1d0d92137fa446b1f3a48af994f2f3f846f0810b39c0eba207e"
+    },
+    "docs/art/applied_attrition/momentum_turbine/meshy_inputs_wave4/side.png": {
+      "bytes": 518863,
+      "sha256": "aad851923407c9b845a967dcd75e927c3c52d92b544b5d70a97ac5b7dab507b1"
+    },
+    "docs/art/applied_attrition/momentum_turbine/meshy_inputs_wave4/rear_three_quarter.png": {
+      "bytes": 825851,
+      "sha256": "b3972e8b2efcb514a1a400f0114c529e025eea0352c6ec432ab8f775723d942b"
+    },
+    "docs/art/applied_attrition/momentum_turbine/meshy_inputs_wave4/three_quarter.png": {
+      "bytes": 889313,
+      "sha256": "f079e26ff816a90dba72b10fc22b6fc6a98d279a57d53cf889481b15fe826c27"
+    }
+  },
+  "sheet": "docs/art/applied_attrition/momentum_turbine/references/momentum_turbine_wave4_sheet.png",
+  "states": "docs/art/applied_attrition/momentum_turbine/references/momentum_turbine_wave4_states.png",
+  "sheet_generation": "Built-in Grok Imagine (GenerateImage, free), wave 4 2026-11-10; 3 design tries (try 1: pedestals left/right contradicted a face-on rotor; try 2: uneven paddle count/spacing). Passing design: cantilevered rotor, exactly six broad flat paddles at 60 degrees as interaction faces, caged hub, single bearing pedestal on a wide plinth, asymmetric chevron tip fins (all swept clockwise) as the direction cue. Moss clump from the material-board reference removed by an edit pass. Composited with PIL (rotor face-on, edge-on with axle, rear 3/4, top, front 3/4, 1.0 m capsule scale panel at ~5.6 m).",
+  "flaws": [
+    "Single cantilevered bearing pedestal rather than a two-sided bearing frame.",
+    "Top panel is a high-angle near-plan (pedestal and paddles partly read as elevation); Meshy got front 3/4 instead of top.",
+    "Meshy input naming: front.png = rotor face-on (sheet panel 1), side.png = edge-on with axle.",
+    "States strip: jammed panel shows a missing lower paddle and a clamp in the cage; slow-spin blur is subtle."
+  ],
+  "runner": "/workspace/meshyjob/run.py (box)"
+}
