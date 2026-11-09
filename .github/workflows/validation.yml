@@ -6,7 +6,8 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 the smoke check's timeout returns 137, not 124; unpin once the check is image-independent.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     steps:
