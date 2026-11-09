@@ -39,8 +39,8 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
 | Facility form and material language | Partial. The Material Dispenser is Integrated Production; the FLUX intro is Context Reference. | A neutral material board covering warm off-white panels, cool floors, equipment grey, charcoal recesses, near-black service spaces, glazing, rubber, painted composite, rough metal, and bounded emissions. |
-| Facility lighting and state language | Written contract and greybox hooks only. | Controlled normal, staging, danger, success, power-loss, and Collapse views with geometry, icon, and motion cues alongside colour. |
-| Scale and detail density | Partial Subject, Material Dispenser, and video context. | One shared lineup containing a Subject, Researcher, Residual, 4 m door, barrier, kit bay, dispenser, and dominant Laboratory apparatus. |
+| Facility lighting and state language | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Written contract and greybox hooks only. | Controlled normal, staging, danger, success, power-loss, and Collapse views with geometry, icon, and motion cues alongside colour. |
+| Scale and detail density | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Partial Subject, Material Dispenser, and video context. | One shared lineup containing a Subject, Researcher, Residual, 4 m door, barrier, kit bay, dispenser, and dominant Laboratory apparatus. |
 | Semantic Engine interfaces | Wave-4 combined console sheet + Meshy-6 concept GLB (assets/source/shared/semantic_engine_panel/, ~292k tris, not imported; needs Blender retopo). Prior production sheet of six modules retained; video remains Context Reference. | Physical panel, printer, indicator, and machinery families with no avatar, face, or floating conversational persona. |
 
 ## Actors And Living Material
@@ -49,12 +49,12 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | --- | --- | --- |
 | Shared Subject | **Production Source.** Neutral Meshy-6 concept `assets/source/subjects/shared_subject/shared_subject_meshy6_neutral_concept.glb` (batch 1) plus production turnaround and `meshy_inputs/subject_neutral_*`. Prior Verb-colour turnarounds retained as lineage. Wrong-design meshy6/6b pruned. | Blender retopo/reconstruction; separate body, eyes, suit, and identity surfaces; rig; semantic animation clips; runtime GLB under `assets/exports/`. |
 | Subject identity | Partial within the shared Subject sheets. | Stable suit-number treatment and replaceable identity panel that remain independent from any claimed Verb. Generated `SAD SHIELD` text, barcode detail, and permanent Verb colour are excluded. |
-| Subject Verb Effects | Written per-Verb colour, silhouette, icon, and motion contract only. | One treatment sheet for each of BURN, SHIELD, GROW, STRETCH, ROLL, JUMP, BOUNCE, FREEZE, and REWIND, shown on the same neutral Subject and readable without colour alone. |
-| Subject physical states | Greybox animation hooks only. | Idle, movement, jump, landing, basic Impact, Stability Loss, Critical Stability, Destabilisation, Drop, and Recall deformation keys. |
+| Subject Verb Effects | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Written per-Verb colour, silhouette, icon, and motion contract only. | One treatment sheet for each of BURN, SHIELD, GROW, STRETCH, ROLL, JUMP, BOUNCE, FREEZE, and REWIND, shown on the same neutral Subject and readable without colour alone. |
+| Subject physical states | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox animation hooks only. | Idle, movement, jump, landing, basic Impact, Stability Loss, Critical Stability, Destabilisation, Drop, and Recall deformation keys. |
 | Researcher | **Production Source.** Meshy-6 concept `assets/source/actors/researcher/researcher_meshy6_concept.glb` (batch 1) plus production sheet and `meshy_inputs/`. FLUX intro remains secondary. | Blender retopo; booth attachment to Assignment Deck greybox; runtime export. |
 | Residual | **Production Source.** Meshy-6 concept `assets/source/actors/residual/residual_meshy6_concept.glb` (batch 1) plus production sheet and `meshy_inputs/`. | Blender retopo; assumed-Verb treatment sheet later; runtime Residual mesh. |
-| Residual Adverb overlay | Runtime hook and written behaviour contract only. | Separate material and motion grammar for unsanctioned Adverbs that cannot be mistaken for a tenth Verb. |
-| Material resource | Greybox Contract only. | Resting, shed-on-Impact, airborne, and absorption forms with a readable soft-substrate silhouette and no resemblance to ordinary rendering material. |
+| Residual Adverb overlay | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Runtime hook and written behaviour contract only. | Separate material and motion grammar for unsanctioned Adverbs that cannot be mistaken for a tenth Verb. |
+| Material resource | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Resting, shed-on-Impact, airborne, and absorption forms with a readable soft-substrate silhouette and no resemblance to ordinary rendering material. |
 
 ## Compound And Reusable Environment Kit
 
@@ -64,12 +64,12 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | Central Core | Meshy-6 exterior concept GLB (assets/source/compound/central_core/, ~954k tris, not imported; needs Blender retopo) plus FLUX intro Context Reference and greybox dimensions. | Exterior machinery turnaround, base and upper-service details, Assignment Deck relationship, dangerous Collapse shortcuts, and normal/offline states. |
 | Assignment Deck | FLUX intro Context Reference and greybox annulus. SimReady `rail_guard_a09` donor under `assets/source/kit/simready/`. | Third-person key view plus annular floor, restylised rails, Laboratory sightline fascia, Brief/Result machinery, and inaccessible Collapse state. |
 | Researcher booth | **Production Source (concept).** Meshy-6 `assets/source/compound/researcher_booth/researcher_booth_meshy6_concept.glb` (batch 2) plus production sheet and `meshy_inputs/`. FLUX gondola remains Context Reference. | Blender retopo/dock to Assignment Deck greybox; runtime export. |
-| Separator Spine and Service Route | Greybox Contract only. | Core junction, perimeter junction, corridor bay, observation window, utility wall, sealed shutter, open route, and breach variants. |
-| Perimeter maintenance route | Greybox Contract only. | Annular route segment, Laboratory connection, utility clutter, dependable navigation cues, and damaged Collapse state. |
-| Dome shell | Greybox Contract only. | Faceted shell bay, structural rib, apex service ring, inner acoustic/utility treatment, and exterior cutaway. |
+| Separator Spine and Service Route | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Core junction, perimeter junction, corridor bay, observation window, utility wall, sealed shutter, open route, and breach variants. |
+| Perimeter maintenance route | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Annular route segment, Laboratory connection, utility clutter, dependable navigation cues, and damaged Collapse state. |
+| Dome shell | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Faceted shell bay, structural rib, apex service ring, inner acoustic/utility treatment, and exterior cutaway. |
 | Orthogonal kit | **Partial kitbash donors (SimReady Wave 1+2).** USD-only under `assets/source/kit/simready/` — floor, wall straight/entrance/column, beams, 4 m blinds open/closed, HVAC straight, rail_guard, barrier_gate, control panel (+ setdress cart/locker/rack). See `docs/art/SIMREADY_FACILITY_WAVE.md`. Hangar-tall walls / 6 m floor need crop/rescale. | Restylised Blender kit on 1 m / 2 m grid; runtime exports; Scenario door still optional. |
 | 4 m shutter (hero concept) | **Production Source (concept) + scale donor.** Meshy-6 closed concept (~1.7 m span) plus SimReady `blinds_window_4m_open_a01` / `blinds_window_4m_closed_a01` (true 4.00 m). | Blender kitbash to 4 m kit frame using SimReady scale; retopo Meshy or discard. |
-| Radial and annular kit | Greybox Contract only. | Radial floor, annular floor, rail, Core junction, perimeter junction, and dome-interface atlas for the bounded specialised subset. |
+| Radial and annular kit | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Radial floor, annular floor, rail, Core junction, perimeter junction, and dome-interface atlas for the bounded specialised subset. |
 | Dispensing Line | **Production Source (concept).** Meshy-6 ceiling pipette rack `assets/source/compound/dispensing_line/dispensing_line_meshy6_concept.glb` (~296k tris, ~1.90×0.50×1.05 m) plus sheet/crops. FLUX Subject-forming nozzle remains a different machine. | Retopo/dock to greybox: overhead carrier, Subject tubes, rail junctions, Laboratory branch, Release opening, flexible pressure tube, normal/offline. |
 | Drop and Recall infrastructure | Wave-3 production sheet + Meshy-6 concept GLB (assets/source/compound/drop_recall/, not imported; needs Blender retopo). | Tube exit, Drop-time silhouette, Laboratory ceiling socket, floor collection aperture, reversed-pressure Recall state, and 24-Subject layout evidence. |
 
@@ -92,21 +92,21 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
 | Laboratory composition | Greybox Contract only. | Plan, section, Drop key view, player-camera view, three Landing strategies, open central contest space, shelters, and broad circulation. |
-| Reinforced impact crucible | Greybox Contract only. | Dominance boundary, impact-resistant barrier family, floor measurement ring, entrances, and authored state variants. |
-| Measurement pylons | Greybox Contract only. | Four-view prop sheet with displacement, dominance, and resilience physical indicators; idle/live/resolve states. |
-| Force plates and launch measurement | Written contract only. | Plate family, mechanical travel indicator, launch-height gauge, and readable cause-to-measurement relationships. |
-| Shelters and test barricades | Greybox barriers only. | Low shelter, angled deflector, movable test barricade, damaged state, and layouts that do not form hard lanes. |
+| Reinforced impact crucible | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Dominance boundary, impact-resistant barrier family, floor measurement ring, entrances, and authored state variants. |
+| Measurement pylons | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Four-view prop sheet with displacement, dominance, and resilience physical indicators; idle/live/resolve states. |
+| Force plates and launch measurement | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Written contract only. | Plate family, mechanical travel indicator, launch-height gauge, and readable cause-to-measurement relationships. |
+| Shelters and test barricades | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox barriers only. | Low shelter, angled deflector, movable test barricade, damaged state, and layouts that do not form hard lanes. |
 
 ## Adaptive Containment Laboratory
 
 | Asset family | Current evidence | Missing canonical evidence |
 | --- | --- | --- |
 | Laboratory composition | Greybox Contract only. | Plan, section, Drop key view, player-camera view, three Landing strategies, containment perimeter, and physical hostile-entry paths. |
-| Specimen-delivery column | Greybox Contract only. | Column turnaround, intake and release machinery, restraint interfaces, idle/live/failure states, and authored structural thresholds. |
-| Perimeter pens and shutters | Written contract only. | Modular pen bay, inspection window, feed hatch, closed/open/jammed shutter states, and Residual-scale comparison. |
-| Vents and wall cavities | Greybox vent hooks only. | Standard vent, torn vent, wall aperture, service-cavity interior, and physical emergence sequence. |
-| Bait machinery | Written contract only. | Reservoir, delivery arm, floor lure, spent state, and service connection. |
-| Defensive power node | Written contract only. | Protected node, conduits, powered/unpowered/overloaded states, and interaction clearance. |
+| Specimen-delivery column | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox Contract only. | Column turnaround, intake and release machinery, restraint interfaces, idle/live/failure states, and authored structural thresholds. |
+| Perimeter pens and shutters | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Written contract only. | Modular pen bay, inspection window, feed hatch, closed/open/jammed shutter states, and Residual-scale comparison. |
+| Vents and wall cavities | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Greybox vent hooks only. | Standard vent, torn vent, wall aperture, service-cavity interior, and physical emergence sequence. |
+| Bait machinery | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Written contract only. | Reservoir, delivery arm, floor lure, spent state, and service connection. |
+| Defensive power node | Wave-4 free sheet (see `docs/art/WAVE4_FREE_SHEETS.md`; flaws listed there). Written contract only. | Protected node, conduits, powered/unpowered/overloaded states, and interaction clearance. |
 | Residual nests and concealed evidence | Narrative contract only. | Bloodless nests, obsolete equipment, discarded identity bands, hidden routes, and disposal evidence using restrained environmental horror. |
 
 ## Facility State And The Collapse
