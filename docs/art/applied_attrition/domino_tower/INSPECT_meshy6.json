@@ -1,0 +1,95 @@
+{
+  "blender_version": "5.2.0 LTS",
+  "input_path": "/workspace/gw-work/VE-016b/assets/source/applied_attrition/domino_tower/domino_tower_meshy6_concept.glb",
+  "file_size_bytes": 36453856,
+  "sha256": "5edc80edc64a38ac798338b1d7de654aaf0b1069c95d5921be1487f581dbf1de",
+  "object_count": 1,
+  "mesh_count": 1,
+  "objects": [
+    {
+      "name": "Mesh_0",
+      "vertices": 212060,
+      "edges": 601422,
+      "polygons": 389818,
+      "triangles": 389818,
+      "connected_components": 456,
+      "welded_connected_components": 1,
+      "welded_vertices": 194887,
+      "raw_non_manifold_edges": 33390,
+      "non_manifold_edges": 0,
+      "degenerate_polygons": 0,
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dimensions": [
+        0.629484,
+        0.629564,
+        1.899761
+      ],
+      "materials": [
+        "Material_0"
+      ]
+    }
+  ],
+  "total_vertices": 212060,
+  "total_edges": 601422,
+  "total_polygons": 389818,
+  "total_triangles": 389818,
+  "total_connected_components": 456,
+  "total_welded_connected_components": 1,
+  "total_raw_non_manifold_edges": 33390,
+  "total_non_manifold_edges": 0,
+  "total_degenerate_polygons": 0,
+  "material_names": [
+    "Material_0"
+  ],
+  "bounds_min": [
+    -0.315657,
+    -0.313706,
+    -0.950824
+  ],
+  "bounds_max": [
+    0.313827,
+    0.315858,
+    0.948937
+  ],
+  "dimensions": [
+    0.629484,
+    0.629564,
+    1.899761
+  ],
+  "floor_offset": -0.950824,
+  "root_objects": [
+    {
+      "name": "Mesh_0",
+      "type": "MESH",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_euler": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ]
+}
