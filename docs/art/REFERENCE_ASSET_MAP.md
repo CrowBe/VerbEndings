@@ -84,7 +84,7 @@ Actor packages also contain a neutral shared-identity turnaround, semantic surfa
 | Counterweight Plate | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/counterweight_plate/, ~673k tris, plate-to-pulley cable missing; not imported; needs Blender retopo). | Plate, mass crates, threshold mechanism, loaded/unloaded states, and large-scale force relationships. |
 | Wrecking Pendulum | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/wrecking_pendulum/, ~584k tris, not imported; needs Blender retopo). | Support frame, pin joint, heavy bob, target wall, safe arc, and wide-swing state. |
 | Gravity Funnel | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/gravity_funnel/, ~263k tris, test balls fused; not imported; needs Blender retopo). | Catch basin, loose balls, rim/bank surfaces, intake state, and readable attraction field hardware. |
-| Domino Tower | Wave-4 sheet + states + Meshy crops (docs/art/applied_attrition/domino_tower/); no model yet. | Stable stacked blocks, crown, weakened base, partially fallen state, and fully toppled state. |
+| Domino Tower | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/domino_tower/, ~390k tris, single fused mesh, square ~2.65 m footprint, column stacking; not imported; needs Blender retopo and block separation). | Stable stacked blocks, crown, weakened base, partially fallen state, and fully toppled state. |
 | Momentum Turbine | Wave-4 sheet + states + Meshy-6 concept GLB (assets/source/applied_attrition/momentum_turbine/, ~554k tris, not imported; needs Blender retopo). | Rotor, protected hub, bearing housing, interaction faces, direction cue, and spinning state. |
 
 ## Competitive Stress Laboratory
