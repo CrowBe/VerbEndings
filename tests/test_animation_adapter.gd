@@ -24,6 +24,8 @@ func _run() -> void:
 		_expect(player.has_animation(clip), "Subject has %s animation" % clip)
 		if player.has_animation(clip):
 			_expect(player.get_animation(clip).loop_mode == Animation.LOOP_LINEAR, "%s loops" % clip)
+	if player.has_animation(&"move"):
+		_test_move_in_place(player.get_animation(&"move"))
 	_expect(subject.animation_adapter.play_semantic(&"idle") and player.current_animation == &"idle", "semantic idle plays")
 	subject.animation_adapter.update_locomotion(1.0, true)
 	_expect(player.current_animation == &"move", "locomotion selects move")
@@ -89,6 +91,32 @@ func _run() -> void:
 		for failure: String in _failures:
 			push_error(failure)
 		get_tree().quit(1)
+
+
+func _test_move_in_place(animation: Animation) -> void:
+	var track := animation.find_track(^"Armature/Skeleton3D:mixamorig_Hips", Animation.TYPE_POSITION_3D)
+	_expect(track >= 0, "move has a hip position track")
+	if track < 0:
+		return
+	var count := animation.track_get_key_count(track)
+	_expect(count >= 2, "move has hip position keys")
+	if count < 2:
+		return
+	var start: Vector3 = animation.track_get_key_value(track, 0)
+	var finish: Vector3 = animation.track_get_key_value(track, count - 1)
+	var reference := Vector2(start.x, start.z)
+	var max_drift := 0.0
+	var min_y := start.y
+	var max_y := start.y
+	for key in range(count):
+		var position: Vector3 = animation.track_get_key_value(track, key)
+		max_drift = maxf(max_drift, reference.distance_to(Vector2(position.x, position.z)))
+		min_y = minf(min_y, position.y)
+		max_y = maxf(max_y, position.y)
+	_expect(max_drift < 0.02, "move hip XZ drift stays below 2 cm (%.6f m)" % max_drift)
+	_expect(reference.distance_to(Vector2(finish.x, finish.z)) < 0.001,
+			"move hip start and end XZ match within 1 mm")
+	_expect(max_y - min_y > 0.002, "move retains vertical hip bob (%.6f m)" % (max_y - min_y))
 
 
 func _test_proxy_basic_hit(adapter: AnimationAdapter) -> void:
