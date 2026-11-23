@@ -1,0 +1,22 @@
+# Feature: host and join (features/host-join.md), client side. Start about 2 s after the host.
+wait_screen main_menu 15
+wait 4.0
+click "JOIN SESSION"
+wait_text "claim one unique Verb" 20
+# The grid is rebuilt by each early authoritative snapshot; a click during a rebuild is lost.
+wait 2.0
+shot 01-client-verb-selection
+click "SHIELD"
+wait_screen pair_draft 60
+wait_text "SUBJECT 1 — BURN" 15
+wait 1.0
+snapshot 02-client-pair-draft
+shot 02-client-pair-draft
+click "SUBJECT 1 — BURN"
+wait_screen experiment_brief 30
+# The chooser (the client) is listed first: "Subject <client id> + Subject 1".
+expect_text "+ Subject 1"
+expect "VerbChainManager.get_partner_id(1) > 1"
+snapshot 03-client-experiment-brief
+shot 03-client-experiment-brief
+quit

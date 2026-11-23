@@ -1,0 +1,23 @@
+# Feature: host and join (features/host-join.md), host side. Start first, then host-join-client.steps.
+wait_screen main_menu 15
+click "HOST SESSION"
+wait_screen verb_selection 10
+click "BURN"
+# START TRIAL appears as soon as every *connected* Subject has a Verb; wait for the client's claim.
+wait_text "— SHIELD" 60
+shot 01-host-roster
+click "START TRIAL"
+wait_screen pair_draft 30
+wait_text "chooses a Partner" 10
+snapshot 02-host-pair-draft
+shot 02-host-pair-draft
+# The slowest claimer (the client) chooses; the host only observes.
+wait_screen experiment_brief 60
+# The chooser (the client) is listed first: "Subject <client id> + Subject 1".
+expect_text "+ Subject 1"
+expect "VerbChainManager.get_partner_id(1) > 1"
+snapshot 03-host-experiment-brief
+shot 03-host-experiment-brief
+# Stay up so the client can capture the same Brief before the session closes.
+wait 8.0
+quit

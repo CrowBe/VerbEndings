@@ -368,6 +368,24 @@ For graphical inspection, run:
 godot4.3 --path .
 ```
 
+## Scripted Gameplay Driver
+
+`.claude/skills/verify/` drives the running game through player input and
+captures evidence. Its wrapper checks prerequisites, builds the import cache,
+and runs plain-text journeys against the real main scene with a real renderer:
+
+```bash
+.claude/skills/verify/scripts/verify.sh doctor
+.claude/skills/verify/scripts/verify.sh prepare
+.claude/skills/verify/scripts/verify.sh run .claude/skills/verify/journeys/local-trial-entry.steps
+```
+
+Each run isolates `user://` under `/tmp/verbendings-verify/<run-id>/data`,
+writes screenshots, UI snapshots and logs to
+`/tmp/verbendings-verify/<run-id>/evidence`, and fails on any engine error.
+The maintained journeys and their player-facing proof criteria are indexed in
+`.claude/skills/verify/features/README.md`. A graphical session is required.
+
 ## Continuous Integration
 
 GitHub Actions runs the static, native import and parse, and timed runtime
