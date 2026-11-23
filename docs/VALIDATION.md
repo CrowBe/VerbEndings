@@ -204,7 +204,10 @@ canonical three-Round lifecycle and compares their final replicated roster,
 Verbs, Pair state, Stability, scores, Protocol history, lifecycle, and result.
 A second real-peer scenario disconnects the client during an Experiment and
 verifies that the host records the disconnect, safely releases the Subject,
-and completes the Trial. The JSON summary includes per-scenario wall-clock
+and completes the Trial. A third real-peer scenario starts the Trial with
+player-driven Pair Drafts: the client, which claimed its Verb last, must learn
+from replicated state that it chooses first, then pairs with the host, and both
+peers must reach the same Experiment Brief. The JSON summary includes per-scenario wall-clock
 duration, physical socket spacing, divergence status, and disconnect count.
 This is not a 24-peer soak and does not establish 24-Player support.
 

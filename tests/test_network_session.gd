@@ -18,6 +18,8 @@ var _trial_started: bool = false
 var _reported: bool = false
 var _verb_requested: bool = false
 var _disconnect_scenario: bool = false
+var _interactive_draft: bool = false
+var _pairing_requested: bool = false
 var _deadline_msec: int = 0
 
 
@@ -25,6 +27,7 @@ func _ready() -> void:
 	var arguments: PackedStringArray = OS.get_cmdline_user_args()
 	_is_server = "--server" in arguments
 	_disconnect_scenario = "--disconnect" in arguments
+	_interactive_draft = "--interactive-draft" in arguments
 	var port: int = _argument_value(arguments, "--port", 28714)
 	_test_seed = _argument_value(arguments, "--seed", _test_seed)
 	_deadline_msec = Time.get_ticks_msec() + 15000
@@ -72,6 +75,9 @@ func _on_state_received(_snapshot: Dictionary) -> void:
 			and not _verb_requested:
 		_verb_requested = true
 		NetworkSession.request_verb(Enums.VerbType.SHIELD)
+	if _interactive_draft:
+		_drive_client_draft(own_id)
+		return
 	if TrialCoordinator.current_phase == TrialCoordinator.Phase.COMPLETE:
 		var own_subject: Node = _subject_for(multiplayer.get_unique_id())
 		if own_subject != null and own_subject.stability < 100.0:
@@ -86,6 +92,10 @@ func _on_phase_changed(phase: TrialCoordinator.Phase, _round_index: int,
 		_protocol: ExperimentProtocol) -> void:
 	if not _is_server:
 		return
+	if _interactive_draft:
+		if phase == TrialCoordinator.Phase.EXPERIMENT_BRIEF:
+			_finish_interactive_draft(1)
+		return
 	if phase == TrialCoordinator.Phase.LABORATORY_ENTRY:
 		TrialCoordinator.call_deferred("complete_laboratory_entry")
 	elif phase == TrialCoordinator.Phase.RECALL:
@@ -98,7 +108,8 @@ func _physics_process(_delta: float) -> void:
 	if LobbyManager.lobby_players.size() != 2 \
 			or not LobbyManager.verb_selection_complete():
 		return
-	_trial_started = TrialCoordinator.start_trial(_test_seed, true, 0.03)
+	_trial_started = TrialCoordinator.start_trial(
+			_test_seed, not _interactive_draft, 0.03)
 	NetworkSession.publish_now()
 
 
@@ -123,6 +134,28 @@ func _on_trial_completed(_winner_id: int) -> void:
 	get_tree().quit(0)
 
 
+## The client claimed its Verb last, so it chooses first in Round One. It
+## must learn that from replicated state alone, then pick the host.
+func _drive_client_draft(own_id: int) -> void:
+	match TrialCoordinator.current_phase:
+		TrialCoordinator.Phase.PAIR_DRAFT:
+			if LobbyManager.current_chooser_id == own_id and not _pairing_requested:
+				_pairing_requested = true
+				NetworkSession.request_pairing(1)
+		TrialCoordinator.Phase.EXPERIMENT_BRIEF:
+			_finish_interactive_draft(own_id)
+
+
+func _finish_interactive_draft(own_id: int) -> void:
+	var partner_id: int = VerbChainManager.get_partner_id(own_id)
+	if partner_id == own_id or partner_id == -1:
+		_fail("Subject %d left the Pair Draft without a Partner" % own_id)
+		return
+	_print_success()
+	await get_tree().create_timer(0.4).timeout
+	get_tree().quit(0)
+
+
 func _report_success() -> void:
 	if _reported:
 		return
@@ -139,8 +172,11 @@ func _print_success() -> void:
 		return
 	_reported = true
 	var role: String = "SERVER" if _is_server else "CLIENT"
-	var prefix: String = "NETWORK_DISCONNECT" if _disconnect_scenario \
-			else "NETWORK_SCENARIO"
+	var prefix: String = "NETWORK_SCENARIO"
+	if _disconnect_scenario:
+		prefix = "NETWORK_DISCONNECT"
+	elif _interactive_draft:
+		prefix = "NETWORK_DRAFT"
 	var digest: Dictionary = NetworkSession.state_digest()
 	if _disconnect_scenario and _is_server:
 		digest["diagnostic_disconnect_count"] = SessionDiagnostics.summary() \
