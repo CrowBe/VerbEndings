@@ -34,9 +34,9 @@ Preconditions:
 
 ## Gotchas
 
-- Currently fails at **Draft**. The client stays on `The Semantic Engine is assigning the Dispensing Line.` and never gets Partner buttons, while the host waits on the client. The host eventually proceeds with Self-Chains, so **Brief** fails on the host too. The cause: `LobbyManager._start_draft` emits `draft_started`, which publishes a full snapshot, before `_advance_draft_turn` assigns `current_chooser_id`, and `NetworkSession` does not publish on `draft_turn_started`. Clients therefore never receive the first chooser. Keep the journey strict and record the failure.
+- A client that shows `The Semantic Engine is assigning the Dispensing Line.` while the host reads `Subject <client id> chooses a Partner.` has not received the chooser. Clients learn each draft turn only from the full snapshot `NetworkSession` publishes on `draft_turn_started`.
 - Each early authoritative snapshot rebuilds the client's Verb grid, and a click that lands during a rebuild is lost. The client waits 2 s after the grid appears before claiming.
 - Two windows open, and a tiling compositor resizes the first when the second appears. Coordinates are recomputed per click, so this is harmless, but screenshot sizes differ between peers.
 - `START TRIAL` appears as soon as every *connected* Subject has a Verb, including when the host is alone. Wait for the client's claim before choosing it.
 - When the host process exits, the client falls back to the main menu (`server_disconnected`). A client failure after the host's last step is not a client defect. Keep the host up (`wait 8.0`) until the client has captured its proof.
-- `tests/run_network_session_test.py` passes because it drives peers through domain calls with automatic Pair Drafts. It does not cover this journey.
+- `tests/run_network_session_test.py` covers the replicated chooser through domain calls (its `interactive-draft` scenario), not through the Pair Draft UI. This journey is the proof that the client can choose on screen.

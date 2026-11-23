@@ -39,6 +39,7 @@ func _ready() -> void:
 	ScoreManager.trial_ranking_updated.connect(_on_trial_ranking_updated)
 	LobbyManager.verb_selected.connect(_on_verb_selected)
 	LobbyManager.draft_started.connect(_on_draft_started)
+	LobbyManager.draft_turn_started.connect(_on_draft_turn_started)
 	LobbyManager.pair_locked.connect(_on_pair_locked)
 	CollapseManager.collapse_triggered.connect(_on_collapse_triggered)
 	CollapseManager.collapse_stage_changed.connect(_on_collapse_stage_changed)
@@ -300,6 +301,12 @@ func _on_verb_selected(_player_id: int, _verb: Enums.VerbType,
 
 
 func _on_draft_started(_round_index: int, _draft_order: Array) -> void:
+	publish_now()
+
+
+## draft_started fires before the first chooser is assigned, so each turn
+## publishes again; otherwise clients never learn they are choosing.
+func _on_draft_turn_started(_chooser_id: int) -> void:
 	publish_now()
 
 

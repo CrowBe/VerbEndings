@@ -36,4 +36,4 @@ Each feature file starts with an H1 title and one paragraph describing the playe
 | [Session diagnostics](./diagnostics.md) | `journeys/diagnostics.steps` | Passes |
 | [Local Trial](./local-trial.md) | `journeys/local-trial-entry.steps` | Passes through the Experiment HUD; Trial completion has no journey yet |
 | [Developer quick start](./quick-start.md) | `journeys/quick-start.steps` | Passes |
-| [Host and join](./host-join.md) | `journeys/host-join-host.steps` + `journeys/host-join-client.steps` | Fails at the client's Pair Draft (see Gotchas) |
+| [Host and join](./host-join.md) | `journeys/host-join-host.steps` + `journeys/host-join-client.steps` | Passes through the shared Experiment Brief |
