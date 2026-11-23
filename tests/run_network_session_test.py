@@ -13,6 +13,13 @@ import time
 
 
 DIAGNOSTIC_MARKERS = ("ERROR:", "SCRIPT ERROR", "Parse Error", "WARNING:")
+# Each scenario's success-marker prefix; every non-direct scenario passes its
+# name as a flag to both peers.
+SCENARIO_PREFIXES = {
+    "direct": "NETWORK_SCENARIO",
+    "disconnect": "NETWORK_DISCONNECT",
+    "interactive-draft": "NETWORK_DRAFT",
+}
 
 
 def _free_port() -> int:
@@ -22,7 +29,7 @@ def _free_port() -> int:
 
 
 def _command(
-    godot: str, role: str, port: int, disconnect: bool, seed: int
+    godot: str, role: str, port: int, scenario: str, seed: int
 ) -> list[str]:
     command = [
         godot,
@@ -35,8 +42,8 @@ def _command(
         f"--port={port}",
         f"--seed={seed}",
     ]
-    if disconnect:
-        command.append("--disconnect")
+    if scenario != "direct":
+        command.append(f"--{scenario}")
     return command
 
 
@@ -58,13 +65,13 @@ def _digest(output: str, marker: str) -> dict[str, object] | None:
 
 
 def _run_scenario(
-    godot: str, timeout_seconds: float, disconnect: bool, seed: int
+    godot: str, timeout_seconds: float, scenario: str, seed: int
 ) -> tuple[bool, dict[str, object]]:
     port = _free_port()
     environment = os.environ.copy()
     started = time.monotonic()
     server = subprocess.Popen(
-        _command(godot, "server", port, disconnect, seed),
+        _command(godot, "server", port, scenario, seed),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
@@ -72,7 +79,7 @@ def _run_scenario(
     )
     time.sleep(0.4)
     client = subprocess.Popen(
-        _command(godot, "client", port, disconnect, seed),
+        _command(godot, "client", port, scenario, seed),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
@@ -94,9 +101,9 @@ def _run_scenario(
     ):
         print("network peers reported unexpected diagnostics", file=sys.stderr)
         return False, {"duration_seconds": time.monotonic() - started}
-    prefix = "NETWORK_DISCONNECT" if disconnect else "NETWORK_SCENARIO"
+    prefix = SCENARIO_PREFIXES[scenario]
     server_digest = _digest(server_output, f"{prefix}_SERVER")
-    if disconnect:
+    if scenario == "disconnect":
         if server_digest is None or server_digest.get("phase") != 10:
             print("host did not complete after the client disconnected", file=sys.stderr)
             return False, {"duration_seconds": time.monotonic() - started}
@@ -108,7 +115,7 @@ def _run_scenario(
             "disconnect_count": server_digest["diagnostic_disconnect_count"],
             "host_completed": True,
         }
-    client_digest = _digest(client_output, "NETWORK_SCENARIO_CLIENT")
+    client_digest = _digest(client_output, f"{prefix}_CLIENT")
     if server_digest is None or client_digest is None:
         print("network peer success markers were missing", file=sys.stderr)
         return False, {"duration_seconds": time.monotonic() - started}
@@ -130,23 +137,20 @@ def main() -> int:
     parser.add_argument("--timeout-seconds", type=float, default=20.0)
     parser.add_argument("--seed", type=int, default=91427)
     args = parser.parse_args()
-    direct_ok, direct_metrics = _run_scenario(
-        args.godot, args.timeout_seconds, False, args.seed
-    )
-    if not direct_ok:
-        return 1
-    disconnect_ok, disconnect_metrics = _run_scenario(
-        args.godot, args.timeout_seconds, True, args.seed
-    )
-    if not disconnect_ok:
-        return 1
+    metrics: dict[str, dict[str, object]] = {}
+    for scenario in SCENARIO_PREFIXES:
+        scenario_ok, metrics[scenario] = _run_scenario(
+            args.godot, args.timeout_seconds, scenario, args.seed
+        )
+        if not scenario_ok:
+            print(f"network scenario failed: {scenario}", file=sys.stderr)
+            return 1
     print(
         "NETWORK_SESSION_SUMMARY "
         + json.dumps(
             {
                 "seed": args.seed,
-                "direct": direct_metrics,
-                "disconnect": disconnect_metrics,
+                **metrics,
             },
             sort_keys=True,
         )

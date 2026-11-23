@@ -204,7 +204,10 @@ canonical three-Round lifecycle and compares their final replicated roster,
 Verbs, Pair state, Stability, scores, Protocol history, lifecycle, and result.
 A second real-peer scenario disconnects the client during an Experiment and
 verifies that the host records the disconnect, safely releases the Subject,
-and completes the Trial. The JSON summary includes per-scenario wall-clock
+and completes the Trial. A third real-peer scenario starts the Trial with
+player-driven Pair Drafts: the client, which claimed its Verb last, must learn
+from replicated state that it chooses first, then pairs with the host, and both
+peers must reach the same Experiment Brief. The JSON summary includes per-scenario wall-clock
 duration, physical socket spacing, divergence status, and disconnect count.
 This is not a 24-peer soak and does not establish 24-Player support.
 
@@ -367,6 +370,24 @@ For graphical inspection, run:
 ```bash
 godot4.3 --path .
 ```
+
+## Scripted Gameplay Driver
+
+`.claude/skills/verify/` drives the running game through player input and
+captures evidence. Its wrapper checks prerequisites, builds the import cache,
+and runs plain-text journeys against the real main scene with a real renderer:
+
+```bash
+.claude/skills/verify/scripts/verify.sh doctor
+.claude/skills/verify/scripts/verify.sh prepare
+.claude/skills/verify/scripts/verify.sh run .claude/skills/verify/journeys/local-trial-entry.steps
+```
+
+Each run isolates `user://` under `/tmp/verbendings-verify/<run-id>/data`,
+writes screenshots, UI snapshots and logs to
+`/tmp/verbendings-verify/<run-id>/evidence`, and fails on any engine error.
+The maintained journeys and their player-facing proof criteria are indexed in
+`.claude/skills/verify/features/README.md`. A graphical session is required.
 
 ## Continuous Integration
 

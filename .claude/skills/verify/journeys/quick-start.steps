@@ -1,0 +1,21 @@
+# Feature: developer quick start (features/quick-start.md): F5, F6, F7.
+wait_screen main_menu 15
+key F5
+wait_text "SEED 20260812" 5
+expect "active_seed == 20260812 and TrialCoordinator.current_phase != TrialCoordinator.Phase.IDLE"
+wait 2.0
+snapshot 01-f5-started
+shot 01-f5-started
+key F7
+wait_text "SEED 20260813" 5
+expect "active_seed == 20260813"
+wait 2.0
+shot 02-f7-next-seed
+key F6
+wait 1.0
+expect "active_seed == 20260813"
+wait_text "SEED 20260813" 5
+snapshot 03-f6-same-seed
+shot 03-f6-same-seed
+key Escape
+quit

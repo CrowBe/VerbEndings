@@ -1,0 +1,30 @@
+# Feature: local Trial entry (features/local-trial.md), main menu to the Experiment HUD.
+wait_screen main_menu 15
+click "LOCAL TRIAL"
+wait_screen verb_selection 10
+wait_text "claim one unique Verb" 5
+shot 01-verb-selection
+click "BURN"
+# A one-Subject roster forms a Self-Chain without showing the Pair Draft.
+wait_screen experiment_brief 30
+wait_text "OBJECTIVE" 5
+expect_text "Subject 1 forms a Self-Chain"
+snapshot 03-experiment-brief
+shot 03-experiment-brief
+click "ENTER LABORATORY"
+wait_phase LABORATORY_ENTRY 10
+wait_text "SPACE TO RELEASE" 5
+shot 04-laboratory-entry
+key Space
+# Automatic Release fires at 3.0 s; a Release before that came from Space.
+expect "laboratory_transit._released.get(local_player.get_multiplayer_authority(), false) and laboratory_transit._elapsed < 3.0"
+inspect 04-release "{'elapsed': laboratory_transit._elapsed, 'y': local_player.global_position.y}"
+hold W 1.0
+shot 04-drop
+wait_screen hud 60
+wait_text "STABILITY" 5
+wait 1.0
+snapshot 05-experiment-hud
+shot 05-experiment-hud
+key Escape
+quit
