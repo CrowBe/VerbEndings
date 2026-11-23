@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cvbendplayer01"]
+[gd_scene load_steps=9 format=3 uid="uid://cvbendplayer01"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/presentation/AnimationAdapter.gd" id="2_adapter"]
+
+[ext_resource type="PackedScene" path="res://assets/exports/subjects/shared_subject/shared_subject_meshy6_chain_rigged.glb" id="3_subject"]
+[ext_resource type="AnimationLibrary" path="res://assets/animation/shared_subject_locomotion.tres" id="4_locomotion"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.45
@@ -28,8 +31,17 @@ shape = SubResource("CapsuleShape3D_body")
 [node name="Visual" type="Node3D" parent="."]
 
 [node name="BlobMesh" type="MeshInstance3D" parent="Visual"]
+visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 mesh = SubResource("CapsuleMesh_blob")
+
+[node name="SharedSubject" parent="Visual" instance=ExtResource("3_subject")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Visual"]
+root_node = NodePath("../SharedSubject")
+libraries = {
+&"": ExtResource("4_locomotion")
+}
 
 [node name="FistPivot" type="Node3D" parent="Visual"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.3)
@@ -47,6 +59,7 @@ shape = SubResource("BoxShape3D_hitbox")
 [node name="AnimationAdapter" type="Node" parent="."]
 script = ExtResource("2_adapter")
 visual_root_path = NodePath("../Visual")
+animation_player_path = NodePath("../Visual/AnimationPlayer")
 
 [node name="CameraRig" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)

@@ -14,6 +14,21 @@ func _run() -> void:
 	var subject := PLAYER_SCENE.instantiate()
 	get_tree().root.add_child(subject)
 	var collision: CollisionShape3D = subject.get_node("CollisionShape3D")
+	var player: AnimationPlayer = subject.get_node("Visual/AnimationPlayer")
+	_expect(subject.animation_adapter.animation_player == player, "adapter is wired to the Subject animation player")
+	_expect(not subject.get_node("Visual/BlobMesh").visible, "proxy capsule mesh is hidden")
+	_expect(collision.shape is CapsuleShape3D and is_equal_approx(collision.shape.height, 1.2)
+			and is_equal_approx(collision.shape.radius, 0.45)
+			and collision.position.is_equal_approx(Vector3(0, 0.6, 0)), "gameplay capsule retains its dimensions and position")
+	for clip in [&"idle", &"move"]:
+		_expect(player.has_animation(clip), "Subject has %s animation" % clip)
+		if player.has_animation(clip):
+			_expect(player.get_animation(clip).loop_mode == Animation.LOOP_LINEAR, "%s loops" % clip)
+	_expect(subject.animation_adapter.play_semantic(&"idle") and player.current_animation == &"idle", "semantic idle plays")
+	subject.animation_adapter.update_locomotion(1.0, true)
+	_expect(player.current_animation == &"move", "locomotion selects move")
+	subject.animation_adapter.update_locomotion(0.0, true)
+	_expect(player.current_animation == &"idle", "locomotion selects idle")
 	subject.animation_adapter.set_visual_visible(false)
 	_expect(not subject.get_node("Visual").visible,
 			"Subject presentation can be hidden independently")
